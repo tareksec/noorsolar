@@ -1,4 +1,6 @@
-﻿import React from "react";
+import Link from "next/link";
+import { KeyRound } from "lucide-react";
+import React from "react";
 import { getSiteSettings, updateSiteSettings } from "@/lib/data/settings";
 import { revalidatePath } from "next/cache";
 import { getSession } from "@/lib/auth";
@@ -56,13 +58,23 @@ export default async function AdminSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2l-font-bold text-[#111311] tracking-tight">
-          Site & Company Settings
-        </h1>
-        <p className="text-xs text-[#5C605C]">
-          Configure commercial contact channels, marketing copy, and custom CTAs
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-[#111311] tracking-tight">
+            Site & Company Settings
+          </h1>
+          <p className="text-xs text-[#5C605C]">
+            Configure commercial contact channels, marketing copy, and custom CTAs
+          </p>
+        </div>
+
+        <Link
+          href="/admin/settings/password"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] text-xs font-semibold tracking-tight shadow-sm transition-colors w-fit"
+        >
+          <KeyRound className="w-3.5 h-3.5" />
+          <span>Change Password</span>
+        </Link>
       </div>
 
       <div className="p-8 rounded-[36px] bg-white border border-[#DDE1DC] shadow-sm max-w-4xl">

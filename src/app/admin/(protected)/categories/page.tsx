@@ -17,13 +17,18 @@ export default async function AdminCategoriesPage() {
           Equipment Categories
         </h1>
         <p className="text-xs text-[#5C605C]">
-          The three primary B2B product lines ({categories.length} lines configured)
+          The three primary B2B product lines ({categories.length} lines configured). Use arrows to reorder display sequence.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {categories.map((cat) => (
-          <CategoryCardClient key={cat.id} category={cat} />
+        {categories.map((cat, idx) => (
+          <CategoryCardClient
+            key={cat.id}
+            category={cat}
+            isFirst={idx === 0}
+            isLast={idx === categories.length - 1}
+          />
         ))}
       </div>
     </div>

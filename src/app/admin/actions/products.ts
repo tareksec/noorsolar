@@ -272,3 +272,151 @@ export async function deleteProductAction(formData: FormData) {
   revalidatePath("/admin/products");
   redirect("/admin/products");
 }
+
+export async function duplicateProductAction(formData: FormData) {
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  const id = formData.get("id") as string;
+  if (!id) return;
+
+  const original = await db.product.findUnique({
+    where: { id },
+    include: {
+      images: { orderBy: { sortOrder: "asc" } },
+      specs: { orderBy: { sortOrder: "asc" } },
+    },
+  });
+
+  if (!original) return;
+
+  const copySuffix = Date.now().toString().slice(-4);
+  const newSlug = `${original.slug}-copy-${copySuffix}`;
+  const newName = `${original.name} (Copy)`;
+
+  await db.product.create({
+    data: {
+      name: newName,
+      slug: newSlug,
+      categoryId: original.categoryId,
+      shortDescription: original.shortDescription,
+      description: original.description,
+      brand: original.brand,
+      model: original.model,
+      stockStatus: original.stockStatus,
+      moq: original.moq,
+      leadTime: original.leadTime,
+      priceBdt: original.priceBdt,
+      showPrice: original.showPrice,
+      datasheetUrl: original.datasheetUrl,
+      isFeatured: false,
+      isActive: false, // Inactive by default per Task E!
+      isDemo: false,
+      sortOrder: original.sortOrder + 1,
+      images: {
+        create: original.images.map((img, idx) => ({
+          url: img.url,
+          alt: `${newName} image ${idx + 1}`,
+          sortOrder: img.sortOrder,
+        })),
+      },
+      specs: {
+        create: original.specs.map((spec) => ({
+          label: spec.label,
+          value: spec.value,
+          sortOrder: spec.sortOrder,
+        })),
+      },
+    },
+  });
+
+  revalidatePath("/admin/products");
+  revalidatePath("/products");
+  revalidatePath("/");
+}
+
+export async function reorderProductImageAction(formData: FormData) {
+  const session = await getSession();
+  if (!session) throw new Error("Unauthorized");
+
+  const imageId = formData.get("imageId") as string;
+  const direction = formData.get("direction") as "up" | "down";
+  const productId = formData.get("productId") as string;
+
+  const images = await db.productImage.findMany({
+    where: { productId },
+    orderBy: { sortOrder: "asc" },
+  });
+
+  const index = images.findIndex((img) => img.id === imageId);
+  if (index === -1) return;
+
+  const targetIndex = direction === "up" ? index - 1 : index + 1;
+  if (targetIndex < 0 || targetIndex >= images.length) return;
+
+  const currentImg = images[index];
+  const targetImg = images[targetIndex];
+
+  const currentOrder = currentImg.sortOrder;
+  const targetOrder = targetImg.sortOrder === currentOrder
+    ? (direction === "up" ? currentOrder - 1 : currentOrder + 1)
+    : targetImg.sortOrder;
+
+  await db.$transaction([
+    db.productImage.update({
+      where: { id: currentImg.id },
+      data: { sortOrder: targetOrder },
+    }),
+    db.productImage.update({
+      where: { id: targetImg.id },
+      data: { sortOrder: currentOrder },
+    }),
+  ]);
+
+  revalidatePath(`/admin/products/${productId}`);
+  revalidatePath(`/product/${productId}`);
+}
+
+export async function reorderProductSpecAction(formData: FormData) {
+  const session = await getSession();
+  if (!session) throw new Error("Unauthorized");
+
+  const specId = formData.get("specId") as string;
+  const direction = formData.get("direction") as "up" | "down";
+  const productId = formData.get("productId") as string;
+
+  const specs = await db.productSpec.findMany({
+    where: { productId },
+    orderBy: { sortOrder: "asc" },
+  });
+
+  const index = specs.findIndex((s) => s.id === specId);
+  if (index === -1) return;
+
+  const targetIndex = direction === "up" ? index - 1 : index + 1;
+  if (targetIndex < 0 || targetIndex >= specs.length) return;
+
+  const currentSpec = specs[index];
+  const targetSpec = specs[targetIndex];
+
+  const currentOrder = currentSpec.sortOrder;
+  const targetOrder = targetSpec.sortOrder === currentOrder
+    ? (direction === "up" ? currentOrder - 1 : currentOrder + 1)
+    : targetSpec.sortOrder;
+
+  await db.$transaction([
+    db.productSpec.update({
+      where: { id: currentSpec.id },
+      data: { sortOrder: targetOrder },
+    }),
+    db.productSpec.update({
+      where: { id: targetSpec.id },
+      data: { sortOrder: currentOrder },
+    }),
+  ]);
+
+  revalidatePath(`/admin/products/${productId}`);
+  revalidatePath(`/product/${productId}`);
+}

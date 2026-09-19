@@ -3,8 +3,8 @@
 import React, { useState, useActionState } from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
-import { updateCategoryAction, CategoryActionResult } from "@/app/admin/actions/categories";
-import { ExternalLink, Edit2, Check, X } from "lucide-react";
+import { updateCategoryAction, reorderCategoryAction, CategoryActionResult } from "@/app/admin/actions/categories";
+import { ExternalLink, Edit2, Check, X, ArrowUp, ArrowDown } from "lucide-react";
 
 interface CategoryCardProps {
   category: {
@@ -16,11 +16,13 @@ interface CategoryCardProps {
     sortOrder: number;
     _count: { products: number };
   };
+  isFirst?: boolean;
+  isLast?: boolean;
 }
 
 const initialState: CategoryActionResult = { success: false };
 
-export function CategoryCardClient({ category }: CategoryCardProps) {
+export function CategoryCardClient({ category, isFirst, isLast }: CategoryCardProps) {
   const [editing, setEditing] = useState(false);
   const [state, formAction, isPending] = useActionState(updateCategoryAction, initialState);
   const isFormOpen = editing && !state.success;
@@ -90,13 +92,40 @@ export function CategoryCardClient({ category }: CategoryCardProps) {
           <>
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-bold text-base text-[#111311]">{category.name}</h3>
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#EDEDED] text-[#111311]">
-                  Order: {category.sortOrder}
+              <div className="flex items-center gap-1.5">
+                <form action={reorderCategoryAction}>
+                  <input type="hidden" name="id" value={category.id} />
+                  <input type="hidden" name="direction" value="up" />
+                  <button
+                    type="submit"
+                    disabled={isFirst}
+                    title="Move Category Up"
+                    className="w-7 h-7 rounded-full bg-[#EDEDED] hover:bg-[#DDE1DC] disabled:opacity-25 disabled:pointer-events-none flex items-center justify-center text-[#111311] transition-colors"
+                  >
+                    <ArrowUp className="w-3.5 h-3.5" />
+                  </button>
+                </form>
+
+                <form action={reorderCategoryAction}>
+                  <input type="hidden" name="id" value={category.id} />
+                  <input type="hidden" name="direction" value="down" />
+                  <button
+                    type="submit"
+                    disabled={isLast}
+                    title="Move Category Down"
+                    className="w-7 h-7 rounded-full bg-[#EDEDED] hover:bg-[#DDE1DC] disabled:opacity-25 disabled:pointer-events-none flex items-center justify-center text-[#111311] transition-colors"
+                  >
+                    <ArrowDown className="w-3.5 h-3.5" />
+                  </button>
+                </form>
+
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#EDEDED] text-[#111311] ml-1">
+                  #{category.sortOrder}
                 </span>
+
                 <button
                   onClick={() => setEditing(true)}
-                  className="p-1 text-[#5C605C] hover:text-[#111311] transition-colors"
+                  className="p-1 text-[#5C605C] hover:text-[#111311] transition-colors ml-1"
                   title="Quick edit description and order"
                 >
                   <Edit2 className="w-3.5 h-3.5" />
@@ -121,7 +150,7 @@ export function CategoryCardClient({ category }: CategoryCardProps) {
           target="_blank"
           className="inline-flex items-center gap-1 font-mono text-[#111311] hover:underline"
         >
-          <span>Live Page</span>
+          <span>View Public</span>
           <ExternalLink className="w-3 h-3" />
         </Link>
       </div>

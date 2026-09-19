@@ -122,3 +122,45 @@ export async function updateCategoryAction(
     };
   }
 }
+
+export async function reorderCategoryAction(formData: FormData) {
+  const session = await getSession();
+  if (!session) throw new Error("Unauthorized");
+
+  const id = formData.get("id") as string;
+  const direction = formData.get("direction") as "up" | "down";
+
+  const categories = await db.category.findMany({
+    orderBy: { sortOrder: "asc" },
+  });
+
+  const index = categories.findIndex((c) => c.id === id);
+  if (index === -1) return;
+
+  const targetIndex = direction === "up" ? index - 1 : index + 1;
+  if (targetIndex < 0 || targetIndex >= categories.length) return;
+
+  const currentCat = categories[index];
+  const targetCat = categories[targetIndex];
+
+  // If both have same sortOrder, ensure distinct order
+  const currentOrder = currentCat.sortOrder;
+  const targetOrder = targetCat.sortOrder === currentOrder 
+    ? (direction === "up" ? currentOrder - 1 : currentOrder + 1)
+    : targetCat.sortOrder;
+
+  await db.$transaction([
+    db.category.update({
+      where: { id: currentCat.id },
+      data: { sortOrder: targetOrder },
+    }),
+    db.category.update({
+      where: { id: targetCat.id },
+      data: { sortOrder: currentOrder },
+    }),
+  ]);
+
+  revalidatePath("/admin/categories");
+  revalidatePath("/");
+  revalidatePath("/products");
+}

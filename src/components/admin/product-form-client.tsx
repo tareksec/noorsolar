@@ -7,9 +7,10 @@ import {
   createProductAction,
   updateProductAction,
   deleteProductAction,
+  reorderProductImageAction,
   ProductActionResult,
 } from "@/app/admin/actions/products";
-import { Plus, Trash2, Upload, AlertCircle, Save } from "lucide-react";
+import { Plus, Trash2, Upload, AlertCircle, Save, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
 
 interface CategoryOption {
   id: string;
@@ -91,6 +92,16 @@ export function ProductFormClient({
     setSpecs(specs.filter((_, i) => i !== index));
   };
 
+  const moveSpecRow = (index: number, direction: "up" | "down") => {
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= specs.length) return;
+    const next = [...specs];
+    const temp = next[index];
+    next[index] = next[targetIndex];
+    next[targetIndex] = temp;
+    setSpecs(next);
+  };
+
   const handleSpecChange = (index: number, field: "label" | "value", val: string) => {
     const next = [...specs];
     next[index][field] = val;
@@ -109,7 +120,7 @@ export function ProductFormClient({
   };
 
   return (
-    <form action={formAction} className="space-y-8">
+    <form action={formAction} encType="multipart/form-data" className="space-y-8">
       {state.error && (
         <div className="p-4 rounded-2xl bg-red-50 border border-red-200 flex items-start gap-3 text-xs text-red-800">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
@@ -369,14 +380,34 @@ export function ProductFormClient({
                 placeholder="Value (e.g. 22.6%)"
                 className="w-1/2 px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs font-mono text-[#111311] outline-none"
               />
-              <button
-                type="button"
-                onClick={() => removeSpecRow(index)}
-                className="p-2 text-[#5C605C] hover:text-red-600 transition-colors"
-                title="Remove specification row"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  type="button"
+                  disabled={index === 0}
+                  onClick={() => moveSpecRow(index, "up")}
+                  className="p-1.5 rounded-lg text-[#5C605C] hover:text-[#111311] hover:bg-white disabled:opacity-25 transition-colors"
+                  title="Move Spec Up"
+                >
+                  <ArrowUp className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  disabled={index === specs.length - 1}
+                  onClick={() => moveSpecRow(index, "down")}
+                  className="p-1.5 rounded-lg text-[#5C605C] hover:text-[#111311] hover:bg-white disabled:opacity-25 transition-colors"
+                  title="Move Spec Down"
+                >
+                  <ArrowDown className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeSpecRow(index)}
+                  className="p-1.5 rounded-lg text-[#5C605C] hover:text-red-600 hover:bg-red-50 transition-colors"
+                  title="Remove specification row"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -395,12 +426,48 @@ export function ProductFormClient({
               Existing Images:
             </span>
             <div className="flex gap-4 overflow-x-auto pb-2">
-              {initialProduct.images.map((img) => (
-                <div
-                  key={img.id}
-                  className="relative w-24 h-24 rounded-2xl overflow-hidden bg-[#EDEDED] border border-[#DDE1DC] shrink-0"
-                >
-                  <Image src={img.url} alt={img.alt} fill className="object-cover" />
+              {initialProduct.images.map((img, idx) => (
+                <div key={img.id} className="flex flex-col items-center gap-1.5 shrink-0">
+                  <div className="relative w-24 h-24 rounded-2xl overflow-hidden bg-[#EDEDED] border border-[#DDE1DC]">
+                    <Image src={img.url} alt={img.alt} fill className="object-cover" />
+                    <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/60 text-[9px] font-mono text-white">
+                      #{idx + 1}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      disabled={idx === 0}
+                      onClick={async () => {
+                        const fd = new FormData();
+                        fd.append("imageId", img.id);
+                        fd.append("direction", "up");
+                        fd.append("productId", initialProduct.id);
+                        await reorderProductImageAction(fd);
+                        router.refresh();
+                      }}
+                      title="Move Image Left"
+                      className="p-1 rounded-full bg-white hover:bg-[#DDE1DC] disabled:opacity-25 text-[#111311] border border-[#DDE1DC] shadow-xs"
+                    >
+                      <ArrowLeft className="w-3 h-3" />
+                    </button>
+                    <button
+                      type="button"
+                      disabled={idx === initialProduct.images.length - 1}
+                      onClick={async () => {
+                        const fd = new FormData();
+                        fd.append("imageId", img.id);
+                        fd.append("direction", "down");
+                        fd.append("productId", initialProduct.id);
+                        await reorderProductImageAction(fd);
+                        router.refresh();
+                      }}
+                      title="Move Image Right"
+                      className="p-1 rounded-full bg-white hover:bg-[#DDE1DC] disabled:opacity-25 text-[#111311] border border-[#DDE1DC] shadow-xs"
+                    >
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
