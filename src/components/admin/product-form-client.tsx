@@ -2,7 +2,7 @@
 
 import React, { useState, useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { AppImage as Image } from "@/components/ui/app-image";
 import {
   createProductAction,
   updateProductAction,

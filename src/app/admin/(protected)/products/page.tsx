@@ -1,7 +1,7 @@
 import React from "react";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import Image from "next/image";
+import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
 import { ExternalLink, Plus, Edit } from "lucide-react";
 

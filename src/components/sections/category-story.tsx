@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
+import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
 import { ArrowUpRight, Check, Zap, BatteryCharging, Cpu } from "lucide-react";
 

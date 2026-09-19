@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useActionState } from "react";
-import Image from "next/image";
+import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
 import { updateCategoryAction, CategoryActionResult } from "@/app/admin/actions/categories";
 import { ExternalLink, Edit2, Check, X } from "lucide-react";
