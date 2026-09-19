@@ -2,7 +2,7 @@ import Image, { type ImageProps } from "next/image";
 
 export type AppImageProps = ImageProps;
 
-export function AppImage({ src, unoptimized, ...props }: AppImageProps) {
+export function AppImage({ src, alt = "", unoptimized, ...props }: AppImageProps) {
   const isSvg =
     typeof src === "string"
       ? src.toLowerCase().split("?")[0].endsWith(".svg")
@@ -13,6 +13,7 @@ export function AppImage({ src, unoptimized, ...props }: AppImageProps) {
   return (
     <Image
       src={src}
+      alt={alt}
       unoptimized={unoptimized ?? (isSvg ? true : undefined)}
       {...props}
     />
