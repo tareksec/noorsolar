@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "check:overflow": "node scripts/check-mobile-overflow.js"
+    "check:overflow": "node scripts/check-mobile-overflow.js",
+    "seed:demo": "npx tsx prisma/seed.ts --demo-only"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
