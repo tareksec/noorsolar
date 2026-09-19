@@ -41,7 +41,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
       specs: [
         { label: "Efficiency", value: "22.6% - 23.1%" },
         { label: "Bifacial Gain", value: "Up to +25%" },
-        { label: "Degradation", value: "<0.4% Annual" },
+        { label: "Cell Format", value: "16BB Half-Cut" },
       ],
       bullets: [
         "Anti-PID & low temperature coefficient for tropical climate",
@@ -62,7 +62,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
         { label: "BMS Protocols", value: "CAN / RS485 / RS232" },
       ],
       bullets: [
-        "Intelligent multi-tier Battery Management System (BMS)",
+        "Intelligent multi-stage Battery Management System (BMS)",
         "Parallel expansion up to 15 modules without external controller",
         "Zero maintenance sealed prismatic Grade-A cells",
       ],

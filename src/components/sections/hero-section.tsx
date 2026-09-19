@@ -121,7 +121,7 @@ export function HeroSection({
                 </div>
               </div>
 
-              {/* Floating Glass Card A: Logistics dispatch */}
+              {/* Floating Glass Card A: Logistics */}
               <div
                 style={{
                   transform: `translate(${mousePos.x * -18}px, ${mousePos.y * -18}px)`,
@@ -136,7 +136,7 @@ export function HeroSection({
                   </span>
                 </div>
                 <p className="text-xs text-[#262826] font-medium leading-snug">
-                  24–48h Wholesale dispatch across Bangladesh
+                  Prompt wholesale delivery across Bangladesh
                 </p>
               </div>
 

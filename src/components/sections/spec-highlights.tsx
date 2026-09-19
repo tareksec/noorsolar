@@ -8,7 +8,7 @@ interface SpecHighlightsProps {
     maxPanelWatt: number;
     maxBatteryKwh: number;
     maxInverterKw: number;
-    totalTier1Models: number;
+    totalCatalogModels: number;
   };
 }
 
@@ -57,7 +57,7 @@ export function SpecHighlights({ highlights }: SpecHighlightsProps) {
     },
     {
       label: "Product Models",
-      value: highlights.totalTier1Models,
+      value: highlights.totalCatalogModels,
       suffix: "+",
       subtext: "Catalog Models Available for Indent and Wholesale",
       icon: CheckCircle2,
@@ -74,7 +74,7 @@ export function SpecHighlights({ highlights }: SpecHighlightsProps) {
 
           <div className="relative z-10 mb-12 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[11px] font-mono text-[#CEF23E] mb-3">
-              <span>Verified Hardware Specs</span>
+              <span>Hardware Technical Specs</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
               Data-Backed Engineering Capacity .

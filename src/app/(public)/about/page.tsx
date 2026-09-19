@@ -59,7 +59,7 @@ export default async function AboutPage() {
               Direct Factory Partnerships
             </h3>
             <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed">
-              We source directly from verified international manufacturers, supplying authentic solar modules, battery units, and inverters with complete technical specifications.
+              We source directly from international manufacturers, supplying authentic solar modules, battery units, and inverters with complete technical specifications.
             </p>
           </div>
 
@@ -83,7 +83,7 @@ export default async function AboutPage() {
               Technical Verification
             </h3>
             <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed">
-              Every shipment is verified for electrical parameters, flash test results, and battery internal resistance to ensure flawless integration into Bangladesh solar grids.
+              Every shipment is inspected for electrical parameters, flash test results, and battery internal resistance to ensure flawless integration into Bangladesh solar grids.
             </p>
           </div>
         </div>

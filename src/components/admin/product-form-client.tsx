@@ -275,7 +275,7 @@ export function ProductFormClient({
               type="text"
               name="leadTime"
               defaultValue={initialProduct?.leadTime || ""}
-              placeholder="e.g. Immediate dispatch from Dhaka"
+              placeholder="e.g. Immediate delivery from Dahka"
               className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
             />
           </div>

@@ -11,14 +11,19 @@ export interface SiteConfig {
   hours: string;
   heroHeadline: string;
   heroSubheadline: string;
+  heroPrimaryCta: string;
+  heroSecondaryCta: string;
+  closingCtaHeadline: string;
+  closingCtaSubheadline: string;
+  aboutHeadline: string;
+  aboutBody: string;
   socials: {
     facebook?: string;
     linkedin?: string;
   };
-  faq: Array<{
-    question: string;
-    answer: string;
-  }>;
+  faq: Array<
+    { question: string; answer: string }
+  >;
 }
 
 export const defaultSiteConfig: SiteConfig = {
@@ -36,6 +41,14 @@ export const defaultSiteConfig: SiteConfig = {
   heroHeadline: "Solar panels, lithium batteries and inverters, supplied in bulk.",
   heroSubheadline:
     "Direct B2B importer providing engineering-grade solar equipment and wholesale delivery across Bangladesh.",
+  heroPrimaryCta: "Request Quote",
+  heroSecondaryCta: "Browse Products",
+  closingCtaHeadline: "Ready to Order or Inquire About Container Pricing?",
+  closingCtaSubheadline:
+    "Submit your project specifications or required equipment quantity below. Our commercial sales engineers respond with formal quotations within working hours.",
+  aboutHeadline: "Engineering-Grade Solar Equipment for Bangladesh .",
+  aboutBody:
+    "Supplying Solar Panels, High-Capacity Lithium-ion Batteries, and Industrial/Commercial Inverters across Bangladesh.",
   socials: {
     facebook: "https://facebook.com",
     linkedin: "https://linkedin.com",
@@ -47,9 +60,9 @@ export const defaultSiteConfig: SiteConfig = {
         "Select your required products or categories, specify your estimated quantity, and submit our quotation form. You can also reach our technical sales team directly via WhatsApp or phone for immediate pricing.",
     },
     {
-      question: "Do you supply engineering datasheets and warranties?",
+      question: "Do you supply engineering datasheets and factory specifications?",
       answer:
-        "Yes, all solar panels, lithium batteries, and inverters include official technical datasheets and factory specifications.",
+        "Yes, all solar panels, lithium batteries, and inverters include technical datasheets and factory specifications.",
     },
     {
       question: "What is your typical delivery lead time in Bangladesh?",

@@ -18,13 +18,13 @@ export function OrderingSteps() {
     {
       num: "03",
       title: "Commercial Quotation",
-      desc: "Receive formal wholesale pricing with official manufacturer certificates and technical datasheets.",
+      desc: "Receive formal wholesale pricing with manufacturer certificates and technical datasheets.",
       icon: CheckSquare,
     },
     {
       num: "04",
-      title: "Warehouse Dispatch",
-      desc: "Order packaged in containerized pallets and dispatched from our central Dhaka depot to your site or regional hub.",
+      title: "Order Fulfilment",
+      desc: "Order packaged in containerized pallets and delivered from our central Dhaka depot to your site or regional hub.",
       icon: Truck,
     },
   ];

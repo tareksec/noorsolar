@@ -105,10 +105,10 @@ export async function getSpecHighlights() {
   let maxPanelWatt = 700;
   let maxBatteryKwh = 15.36;
   let maxInverterKw = 100;
-  let totalTier1Models = 12;
+  let totalCatalogModels = 12;
 
   const count = await db.product.count({ where: { isActive: true } });
-  if (count > 0) totalTier1Models = count;
+  if (count > 0) totalCatalogModels = count;
 
   for (const s of specs) {
     if (s.product.category.slug === "solar-panels") {
@@ -133,6 +133,6 @@ export async function getSpecHighlights() {
     maxPanelWatt,
     maxBatteryKwh,
     maxInverterKw,
-    totalTier1Models,
+    totalCatalogModels,
   };
 }

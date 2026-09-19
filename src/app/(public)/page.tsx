@@ -38,7 +38,7 @@ export default async function HomePage() {
       {/* 4. Featured Products Carousel */}
       <FeaturedCarousel products={featuredProducts} />
 
-      {/* 5. Verified Data-Driven Spec Highlights */}
+      {/* 5. Data-Driven Spec Highlights */}
       <SpecHighlights highlights={specHighlights} />
 
       {/* 6. Procurement & Ordering Steps */}

@@ -97,12 +97,12 @@ async function main() {
       categoryId: categories["solar-panels"],
       shortDescription: "Ultra-high power dual-glass module with up to 25% bifacial gain for commercial projects.",
       description:
-        "Engineered with advanced 16BB N-Type TOPCon cell technology. Demonstrates superior low-light performance, lower temperature coefficient (-0.30%/°C), and 30-year linear performance warranty. Ideal for factory roofs, commercial sheds, and ground-mounted solar farms in Bangladesh.",
+        "Engineered with advanced 16BB N-Type TOPCon cell technology. Demonstrates superior low-light performance, lower temperature coefficient (-0.30%/°C), and 30-year linear performance design life. Ideal for factory roofs, commercial sheds, and ground-mounted solar farms in Bangladesh.",
       brand: null,
       model: "NS-620TOP-BF",
       stockStatus: "IN_STOCK",
       moq: "1 Container / 620 pcs (Pallet orders on inquiry)",
-      leadTime: "Immediate dispatch from Dhaka",
+      leadTime: "Immediate delivery from Dhaka",
       isFeatured: true,
       sortOrder: 1,
       images: [
@@ -130,7 +130,7 @@ async function main() {
       model: "NS-580DG-BF",
       stockStatus: "IN_STOCK",
       moq: "50 pcs",
-      leadTime: "Immediate warehouse dispatch",
+      leadTime: "Immediate warehouse delivery",
       isFeatured: false,
       sortOrder: 2,
       images: [
@@ -207,7 +207,7 @@ async function main() {
       model: "NS-ESS-51100R",
       stockStatus: "IN_STOCK",
       moq: "2 units",
-      leadTime: "Immediate stock dispatch",
+      leadTime: "Immediate stock delivery",
       isFeatured: true,
       sortOrder: 1,
       images: [
@@ -235,7 +235,7 @@ async function main() {
       model: "NS-WALL-51200",
       stockStatus: "IN_STOCK",
       moq: "1 unit",
-      leadTime: "Immediate dispatch",
+      leadTime: "Immediate delivery",
       isFeatured: true,
       sortOrder: 2,
       images: [
@@ -285,7 +285,7 @@ async function main() {
       model: "NS-DC-12200",
       stockStatus: "IN_STOCK",
       moq: "4 units",
-      leadTime: "Immediate dispatch",
+      leadTime: "Immediate delivery",
       isFeatured: false,
       sortOrder: 4,
       images: [
@@ -310,7 +310,7 @@ async function main() {
       model: "NS-HYB-10K3P",
       stockStatus: "IN_STOCK",
       moq: "1 unit",
-      leadTime: "Immediate dispatch",
+      leadTime: "Immediate delivery",
       isFeatured: true,
       sortOrder: 1,
       images: [
@@ -338,7 +338,7 @@ async function main() {
       model: "NS-GRID-50KT",
       stockStatus: "IN_STOCK",
       moq: "1 unit",
-      leadTime: "Immediate dispatch",
+      leadTime: "Immediate delivery",
       isFeatured: true,
       sortOrder: 2,
       images: [
@@ -364,7 +364,7 @@ async function main() {
       model: "NS-OFF-5K48",
       stockStatus: "IN_STOCK",
       moq: "2 units",
-      leadTime: "Immediate dispatch",
+      leadTime: "Immediate delivery",
       isFeatured: false,
       sortOrder: 3,
       images: [
@@ -389,7 +389,7 @@ async function main() {
       model: "NS-IND-100K",
       stockStatus: "ON_REQUEST",
       moq: "1 unit",
-      leadTime: "2 weeks project dispatch",
+      leadTime: "2 weeks project delivery",
       isFeatured: false,
       sortOrder: 4,
       images: [

@@ -7,7 +7,7 @@ import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
 export const metadata: Metadata = {
   title: "Contact Us & Warehouse — Noor Solar Energy",
   description:
-    "Get in touch with Noor Solar Energy sales and logistics team. Office in Motijheel Dhaka, warehouse dispatch nationwide.",
+    "Get in touch with Noor Solar Energy sales and logistics team. Office in Motijheel Dhaka, warehouse delivery nationwide.",
 };
 
 export default async function ContactPage() {
@@ -57,14 +57,14 @@ export default async function ContactPage() {
             >
               {settings.whatsappDisplay}
             </a>
-            <span className="text-[11px] text-[#5C605C] block mt-1">Instant datasheet & quote dispatch</span>
+            <span className="text-[11px] text-[#5C605C] block mt-1">Instant datasheet & quote delivery</span>
           </div>
 
           <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC]">
             <div className="w-10 h-10 rounded-full bg-[#EDEDED] flex items-center justify-center text-[#111311] mb-4">
               <Mail className="w-4 h-4" />
             </div>
-            <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">Official Email</span>
+            <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">Commercial Email</span>
             <a href={`mailto:${settings.email}`} className="text-base font-bold text-[#111311] hover:underline truncate block">
               {settings.email}
             </a>

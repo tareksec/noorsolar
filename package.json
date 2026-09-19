@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check:overflow": "node scripts/check-mobile-overflow.js"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -33,6 +34,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "prisma": "^6.4.1",
+    "puppeteer-core": "^25.11.0",
     "tailwindcss": "^4",
     "tsx": "^4.23.13",
     "typescript": "^5"

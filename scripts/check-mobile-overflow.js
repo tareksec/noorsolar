@@ -1,8 +1,29 @@
 /**
- * check-mobile-overflow.js
+ * scripts/check-mobile-overflow.js
  * Verifies document.documentElement.scrollWidth <= window.innerWidth
- * across 360px, 390px, 768px, 1440px on all public and admin routes.
+ * across 360px, 390px, 768px, and 1440px viewports on all public and admin routes.
  */
+
+const fs = require("fs");
+
+const CHROME_PATH =
+  process.env.CHROME_PATH ||
+  "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+
+if (!fs.existsSync(CHROME_PATH)) {
+  console.error(`FATAL: Chrome executable not found at: ${CHROME_PATH}`);
+  console.error("Please set the CHROME_PATH environment variable to a valid Chrome or Chromium executable.");
+  process.exit(1);
+}
+
+let puppeteer;
+try {
+  puppeteer = require("puppeteer-core");
+} catch (err) {
+  console.error(`FATAL: Could not load puppeteer-core: ${err.message}`);
+  console.error("Please run: npm install --save-dev puppeteer-core");
+  process.exit(1);
+}
 
 const VIEWPORTS = [
   { width: 360, height: 800, name: "360px (Small Mobile)" },
@@ -11,7 +32,7 @@ const VIEWPORTS = [
   { width: 1440, height: 900, name: "1440px (Desktop)" },
 ];
 
-const ROUTES = [
+const PUBLIC_ROUTES = [
   "/",
   "/products",
   "/category/solar-panels",
@@ -21,6 +42,9 @@ const ROUTES = [
   "/about",
   "/contact",
   "/admin/login",
+];
+
+const ADMIN_ROUTES = [
   "/admin",
   "/admin/products",
   "/admin/categories",
@@ -28,70 +52,132 @@ const ROUTES = [
   "/admin/settings",
 ];
 
-async function run() {
-  let puppeteer;
-  try {
-    puppeteer = require("puppeteer");
-  } catch {
-    try {
-      puppeteer = require("puppeteer-core");
-    } catch {
-      console.log("Puppeteer not found in local node_modules.");
-      console.log("Script is prepared for puppeteer execution once package is available.");
-      console.log("Automated verification of all routes and viewports was verified via browser runtime.");
-      process.exit(0);
-    }
-  }
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "owner@example.com";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "change-me-on-first-login";
+const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
 
+async function run() {
   const browser = await puppeteer.launch({
+    executablePath: CHROME_PATH,
     headless: "new",
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+    ],
   });
 
-  const baseUrl = process.env.BASE_URL || "http://localhost:3000";
-  let hasFailure = false;
+  let totalTests = 0;
+  let passedTests = 0;
+  let failedTests = 0;
+  const failures = [];
 
-  console.log(`Checking horizontal overflow across ${ROUTES.length} routes at ${VIEWPORTS.length} viewports on ${baseUrl}...\n`);
+  try {
+    // 1. Authenticate admin once and capture session cookies
+    let adminCookies = [];
+    const authPage = await browser.newPage();
+    console.log(`Authenticating admin on ${BASE_URL}/admin/login with ${ADMIN_EMAIL} ...`);
+    await authPage.goto(`${BASE_URL}/admin/login`, { waitUntil: "domcontentloaded" });
+    
+    // Fill password (email defaults to owner@example.com)
+    await authPage.click('input[name="password"]');
+    await authPage.type('input[name="password"]', ADMIN_PASSWORD);
+    await authPage.click('button[type="submit"]');
 
-  for (const vp of VIEWPORTS) {
-    console.log(`=== Viewport: ${vp.name} ===`);
-    const page = await browser.newPage();
-    await page.setViewport({ width: vp.width, height: vp.height });
+    await authPage.waitForFunction(
+      () => !window.location.href.includes("/admin/login"),
+      { timeout: 10000 }
+    );
+    adminCookies = await authPage.cookies();
+    console.log("Admin authenticated successfully. Session cookies captured.\n");
+    await authPage.close();
 
-    for (const route of ROUTES) {
-      const url = `${baseUrl}${route}`;
-      try {
-        await page.goto(url, { waitUntil: "networkidle2" });
-        const result = await page.evaluate(() => {
-          return {
+    // 2. Iterate through viewports
+    for (const vp of VIEWPORTS) {
+      console.log(`=== Viewport: ${vp.name} (${vp.width}x${vp.height}) ===`);
+      const page = await browser.newPage();
+      await page.setViewport({ width: vp.width, height: vp.height });
+
+      // Check Public Routes
+      for (const route of PUBLIC_ROUTES) {
+        totalTests++;
+        const url = `${BASE_URL}${route}`;
+        try {
+          await page.goto(url, { waitUntil: "domcontentloaded", timeout: 25000 });
+          const result = await page.evaluate(() => ({
             scrollWidth: document.documentElement.scrollWidth,
             innerWidth: window.innerWidth,
             passed: document.documentElement.scrollWidth <= window.innerWidth,
-          };
-        });
+          }));
 
-        if (!result.passed) {
-          console.error(`? FAIL: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
-          hasFailure = true;
-        } else {
-          console.log(`? PASS: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
+          if (result.passed) {
+            passedTests++;
+            console.log(`  ? PASS [${vp.width}px]: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
+          } else {
+            failedTests++;
+            failures.push({ vp: vp.name, route, result });
+            console.error(`  ? FAIL [${vp.width}px]: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
+          }
+        } catch (err) {
+          failedTests++;
+          failures.push({ vp: vp.name, route, error: err.message });
+          console.error(`  ? ERROR [${vp.width}px]: ${route} - ${err.message}`);
         }
-      } catch (err) {
-        console.error(`?? Error loading ${route}:`, err.message);
       }
+
+      // Check Admin Routes (set session cookie)
+      if (adminCookies.length > 0) {
+        await page.setCookie(...adminCookies);
+      }
+
+      for (const route of ADMIN_ROUTES) {
+        totalTests++;
+        const url = `${BASE_URL}${route}`;
+        try {
+          await page.goto(url, { waitUntil: "domcontentloaded", timeout: 25000 });
+          const result = await page.evaluate(() => ({
+            scrollWidth: document.documentElement.scrollWidth,
+            innerWidth: window.innerWidth,
+            passed: document.documentElement.scrollWidth <= window.innerWidth,
+          }));
+
+          if (result.passed) {
+            passedTests++;
+            console.log(`  ? PASS [${vp.width}px]: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
+          } else {
+            failedTests++;
+            failures.push({ vp: vp.name, route, result });
+            console.error(`  ? FAIL [${vp.width}px]: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
+          }
+        } catch (err) {
+          failedTests++;
+          failures.push({ vp: vp.name, route, error: err.message });
+          console.error(`  ? ERROR [${vp.width}px]: ${route} - ${err.message}`);
+        }
+      }
+
+      await page.close();
+      console.log("");
     }
-    await page.close();
-    console.log("");
+  } finally {
+    await browser.close();
   }
 
-  await browser.close();
+  console.log("==========================================");
+  console.log(`SUMMARY: ${passedTests}/${totalTests} passed (${failedTests} failed)`);
+  console.log("==========================================");
 
-  if (hasFailure) {
-    console.error("Some routes failed horizontal overflow checks!");
+  if (failedTests > 0) {
+    console.error(`\nTest failed with ${failedTests} failure(s).`);
     process.exit(1);
   } else {
-    console.log("All routes passed horizontal overflow check on all viewports!");
+    console.log(`\nExact Summary: ${passedTests}/${totalTests} passed.`);
+    process.exit(0);
   }
 }
 
-run();
+run().catch((err) => {
+  console.error("FATAL unexpected error:", err);
+  process.exit(1);
+});
