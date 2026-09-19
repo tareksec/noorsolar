@@ -33,12 +33,52 @@ Status values: `Not started` · `In progress` · `Done` · `Blocked`
 | 10 | About, Contact, 404, SEO, structured data, sitemap | Done | No | 2026-09-19 |
 | 11 | Performance, accessibility and responsive polish pass | In progress | No | 2026-09-19 |
 | 12 | Deployment to Hostinger, production checklist | Not started | No | |
+| B | Foundation: images, security, secrets, admin protection, mobile layout | Done | No | 2026-09-19 |
 
 ---
 
 ## 2. Task log (newest first)
 
 - 2026-09-19: PRD.md and AGENT.md were updated and TASKS.md was added.
+
+### Task B ? Foundation Fixes & Security Hardening ? 2026-09-19
+Branch: task-b-foundation
+Status: Done
+
+Done:
+- Created `src/components/ui/app-image.tsx` thin wrapper that dynamically sets `unoptimized` on SVG image sources; replaced `next/image` imports across all 8 product, category, and hero views (resolves SVG 400 Bad Request blocker without `dangerouslyAllowSVG`).
+- Configured complete security headers in `next.config.ts` (`X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(), microphone=(), geolocation=()`, CSP with `unsafe-eval` restricted to development, and HSTS for production) and disabled `poweredByHeader`.
+- Verified security headers via `curl.exe -I` on `/` and `/admin/login`; verified zero CSP violations in browser console runtime.
+- Hardened secret validation in `src/lib/auth.ts`: in production (`NODE_ENV=production`), auth immediately aborts if `AUTH_SECRET` is missing, shorter than 32 characters, or equal to the default `.env.example` placeholder.
+- Updated `prisma/seed.ts`: in production, verifies `ADMIN_PASSWORD` is explicitly supplied via environment, is not the placeholder, and is at least 12 characters long.
+- Audited all admin server actions and route handlers; implemented server-side `getSession()` validation across `toggleProductFeatured` in `products/page.tsx`, `updateQuoteStatus` in `quotes/page.tsx`, and `saveSettingsAction` in `settings/page.tsx`.
+- Resolved mobile responsive layout issues at 360px and 390px:
+  - Header: responsive logo and title with `min-w-0`, compact quote pill and shrink-0 hamburger button to prevent clipping or overflow.
+  - Hero: responsive button stacking (`flex-col sm:flex-row`), compact kicker badge, and raised frosted glass badge contrast to WCAG AA.
+  - Products page: category filter dock converted to smooth snap-scroll list with `snap-start shrink-0`.
+  - Product details: flex-wrapping breadcrumbs with `min-w-0` and word-breaking product title.
+  - Contact page: responsive title scaling and compact kicker badge.
+  - Admin login: reduced container padding on small viewports (`p-5 sm:p-8`) and wrapping footer text.
+  - WhatsApp button: compact icon-only circular pill on mobile with safe-area insets padding and public layout bottom offset.
+- Replaced inaccurate claims: updated hero badge and spec highlight counter with neutral terms ("Bulk orders", "Custom quotes", "Datasheets", "Product models"); purged unverified Tier-1, warranty, and delivery speed claims across codebase and reseeded database.
+- Created `scripts/check-mobile-overflow.js` and verified that all public and admin routes at 360px, 390px, 768px, and 1440px pass `document.documentElement.scrollWidth <= window.innerWidth`.
+- Passed `npm run lint` (0 errors, 0 warnings) and `npm run build` (17/17 routes compiled cleanly).
+
+Server-Side Auth on Admin Entry Points Audit:
+| File | Function / Route | Checks session before | Checks session after | Unauthenticated Test Result |
+|---|---|---|---|---|
+| `src/app/admin/actions/auth.ts` | `loginAdminAction` | N/A (Public login) | N/A (Public login) | Public login rate limited & credential-checked |
+| `src/app/admin/actions/auth.ts` | `logoutAdminAction` | No (Clears cookie) | No (Clears cookie) | Clears session cookie and redirects |
+| `src/app/admin/actions/categories.ts` | `createCategoryAction` | Yes | Yes | Rejects with `{ success: false, error: 'Unauthorized' }` |
+| `src/app/admin/actions/categories.ts` | `updateCategoryAction` | Yes | Yes | Rejects with `{ success: false, error: 'Unauthorized' }` |
+| `src/app/admin/actions/products.ts` | `createProductAction` | Yes | Yes | Rejects with `{ success: false, error: 'Unauthorized. Please log in.' }` |
+| `src/app/admin/actions/products.ts` | `updateProductAction` | Yes | Yes | Rejects with `{ success: false, error: 'Unauthorized. Please log in.' }` |
+| `src/app/admin/actions/products.ts` | `deleteProductAction` | Yes | Yes | Throws `Error('Unauthorized')` |
+| `src/app/admin/(protected)/products/page.tsx` | `toggleProductFeatured` | No | Yes | Throws `Error('Unauthorized')` |
+| `src/app/admin/(protected)/quotes/page.tsx` | `updateQuoteStatus` | No | Yes | Throws `Error('Unauthorized')` |
+| `src/app/admin/(protected)/settings/page.tsx` | `saveSettingsAction` | No | Yes | Throws `Error('Unauthorized')` |
+| `src/app/admin/quotes/export/route.ts` | `GET` | Yes | Yes | Returns HTTP 307 redirect / 401 Unauthorized |
+
 
 ### Task A — Comprehensive Codebase, Design & Security Audit — 2026-09-19
 Branch: task-09-admin-crud-and-uploads
@@ -130,13 +170,13 @@ Record every decision that changes or interprets the documents, so nobody has to
 
 | # | Issue | Found in task | Severity (low/med/high) | Status |
 |---|---|---|---|---|
-| 1 | `next/image` returns 400 Bad Request on SVG images without `dangerouslyAllowSVG` in `next.config.ts`, breaking catalog thumbnails and rendering hero visual as black box | Task A | Blocker | Open |
-| 2 | Security headers (CSP, X-Frame-Options, X-Content-Type-Options, HSTS, Referrer-Policy, Permissions-Policy) missing from `next.config.ts`; `X-Powered-By` header leaks server technology | Task A | High | Open |
-| 3 | Mobile 360px responsive clipping and overflow on Header, Hero CTA buttons, Category filter pills, Product breadcrumbs/title, Contact card, and Admin login container | Task A | High | Open |
+| 1 | `next/image` returns 400 Bad Request on SVG images without `dangerouslyAllowSVG` in `next.config.ts`, breaking catalog thumbnails and rendering hero visual as black box | Task A | Blocker | Resolved (Task B) |
+| 2 | Security headers (CSP, X-Frame-Options, X-Content-Type-Options, HSTS, Referrer-Policy, Permissions-Policy) missing from `next.config.ts`; `X-Powered-By` header leaks server technology | Task A | High | Resolved (Task B) |
+| 3 | Mobile 360px responsive clipping and overflow on Header, Hero CTA buttons, Category filter pills, Product breadcrumbs/title, Contact card, and Admin login container | Task A | High | Resolved (Task B) |
 | 4 | `gsap` and `motion` dependencies are installed but unused; `prefers-reduced-motion` is not respected in interactive animations | Task A | High | Open |
 | 5 | Hero visual is a single Image rather than an interactive multi-product glass composition (panel, battery, inverter) | Task A | Medium | Open |
-| 6 | Floating WhatsApp button overlaps CTA buttons and bottom cards on 360px viewports | Task A | Medium | Open |
-| 7 | Low contrast text on frosted glass badges in Hero section | Task A | Medium | Open |
+| 6 | Floating WhatsApp button overlaps CTA buttons and bottom cards on 360px viewports | Task A | Medium | Resolved (Task B) |
+| 7 | Low contrast text on frosted glass badges in Hero section | Task A | Medium | Resolved (Task B) |
 | 8 | Product detail gallery zoom/swipe not implemented; products currently only have 1 image each seeded | Task A | Low | Open |
 | 9 | Admin panel missing "Duplicate product", "Change password", and category/spec drag reordering | Task A | Low | Open |
 | 10 | Unused dependencies in `package.json` (`clsx`, `tailwind-merge` not referenced) | Task A | Low | Open |
@@ -148,9 +188,7 @@ Record every decision that changes or interprets the documents, so nobody has to
 
 List anything visible on the site that is a placeholder, unfinished or not wired to real data.
 
-- SVG image optimization: `next.config.ts` must allow SVGs to render product and category illustrations.
 - Interactive hero glass composition: needs procedural composition of solar panel, battery, and inverter.
-- Mobile 360px polish: Header pill, Hero action buttons, Category filter dock, and Admin login card need responsive overflow handling.
 - Admin portal: "Duplicate product" and "Change password" actions not yet implemented.
 - Product gallery: multi-image zoom and swipe missing on product detail page.
 - Official owner logo (currently using procedural SVG sun avatar with Volt Lime circle).
