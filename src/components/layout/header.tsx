@@ -46,17 +46,17 @@ export function Header({
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14 px-4 sm:px-6 rounded-full glass-panel transition-all duration-300">
+        <div className="flex items-center justify-between h-14 px-3 sm:px-6 rounded-full glass-panel transition-all duration-300 min-w-0">
           {/* Brand Logo & Avatar */}
           <Link
             href="/"
-            className="flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-full pr-2"
+            className="flex items-center gap-2 sm:gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-full pr-1 sm:pr-2 min-w-0 shrink-0"
           >
             <div className="w-9 h-9 rounded-full bg-[#CEF23E] flex items-center justify-center font-bold text-[#111311] shadow-[0_2px_10px_rgba(206,242,62,0.4)] transition-transform group-hover:scale-105">
               <Sun className="w-5 h-5 text-[#111311]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-sm sm:text-base tracking-tight text-[#111311] leading-none">
+              <span className="font-bold text-xs sm:text-base tracking-tight text-[#111311] leading-none truncate">
                 NOOR SOLAR
               </span>
               <span className="text-[10px] uppercase font-mono tracking-wider text-[#5C605C] mt-0.5">
@@ -105,17 +105,17 @@ export function Header({
           </div>
 
           {/* Mobile Hamburger Toggle */}
-          <div className="flex lg:hidden items-center gap-2">
+          <div className="flex lg:hidden items-center gap-1.5 shrink-0">
             <Link
               href="/#quote-section"
-              className="px-3 py-1.5 rounded-full bg-[#CEF23E] text-[#111311] text-xs font-semibold tracking-tight sm:hidden"
+              className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#CEF23E] text-[#111311] text-[11px] sm:text-xs font-semibold tracking-tight shrink-0 whitespace-nowrap sm:hidden"
             >
               Quote
             </Link>
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-full text-[#111311] hover:bg-[rgba(255,255,255,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
+              className="p-1.5 sm:p-2 rounded-full text-[#111311] hover:bg-[rgba(255,255,255,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] shrink-0"
               aria-label="Toggle mobile menu"
               aria-expanded={mobileMenuOpen}
             >

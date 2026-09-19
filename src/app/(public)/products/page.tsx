@@ -54,10 +54,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         <div className="p-4 sm:p-5 rounded-3xl bg-white border border-[#DDE1DC] shadow-sm mb-10 flex flex-col md:flex-row items-center justify-between gap-4">
           
           {/* Category Filter Pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
+          <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scroll-smooth snap-x snap-mandatory scrollbar-none max-w-full">
             <Link
               href="/products"
-              className={`px-4 py-2 rounded-full text-xs font-semibold tracking-tight transition-colors whitespace-nowrap ${
+              className={`snap-start shrink-0 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs font-semibold tracking-tight transition-colors whitespace-nowrap ${
                 activeCategorySlug === "all"
                   ? "bg-[#111311] text-[#CEF23E]"
                   : "bg-[#EDEDED] text-[#5C605C] hover:text-[#111311]"
@@ -72,7 +72,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                 <Link
                   key={cat.id}
                   href={`/products?category=${cat.slug}`}
-                  className={`px-4 py-2 rounded-full text-xs font-semibold tracking-tight transition-colors whitespace-nowrap ${
+                  className={`snap-start shrink-0 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs font-semibold tracking-tight transition-colors whitespace-nowrap ${
                     isSelected
                       ? "bg-[#111311] text-[#CEF23E]"
                       : "bg-[#EDEDED] text-[#5C605C] hover:text-[#111311]"

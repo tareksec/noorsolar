@@ -17,7 +17,7 @@ export default async function PublicLayout({
         phoneDisplay={settings.phoneDisplay}
         phoneRaw={settings.phone}
       />
-      <main className="flex-grow">{children}</main>
+      <main className="flex-grow pb-10 sm:pb-0">{children}</main>
       <Footer settings={settings} />
       <WhatsAppButton phone={settings.whatsapp} />
     </div>

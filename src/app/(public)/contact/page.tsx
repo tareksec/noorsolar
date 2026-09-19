@@ -19,11 +19,11 @@ export default async function ContactPage() {
         
         {/* Contact Header */}
         <div className="mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#DDE1DC] text-xs font-mono text-[#111311] mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white border border-[#DDE1DC] text-[11px] sm:text-xs font-mono text-[#111311] mb-3 max-w-full">
             <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-            <span>Commercial Sales & Warehouse Support</span>
+            <span className="truncate">Commercial Sales & Support</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111311]">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#111311] break-words">
             Contact Our Sales Engineers .
           </h1>
           <p className="text-sm sm:text-base text-[#5C605C] max-w-2xl mt-3">

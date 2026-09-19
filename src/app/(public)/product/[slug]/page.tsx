@@ -77,7 +77,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Breadcrumb & Navigation */}
-        <div className="mb-6 flex items-center gap-2 text-xs font-mono text-[#5C605C]">
+        <div className="mb-6 flex flex-wrap items-center gap-2 text-xs font-mono text-[#5C605C] min-w-0">
           <Link href="/products" className="hover:text-[#111311] flex items-center gap-1">
             <ArrowLeft className="w-3 h-3" />
             <span>Catalog</span>
@@ -130,7 +130,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             </div>
 
             {/* Right: Commercial Information & Quote CTA */}
-            <div className="lg:col-span-6 flex flex-col justify-between">
+            <div className="lg:col-span-6 flex flex-col justify-between min-w-0">
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <span className="px-3 py-1 rounded-full bg-[#EDEDED] text-[11px] font-mono text-[#111311]">
@@ -143,7 +143,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   )}
                 </div>
 
-                <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-[#111311] leading-tight mb-4">
+                <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#111311] leading-tight mb-4 break-words min-w-0">
                   {product.name}
                 </h1>
 

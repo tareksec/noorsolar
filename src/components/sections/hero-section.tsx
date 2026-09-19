@@ -36,7 +36,7 @@ export function HeroSection({
             {/* Left Column: Content & Call to Actions */}
             <div className="lg:col-span-7 flex flex-col justify-center">
               {/* Kicker */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-white text-xs font-mono text-[#111311] w-fit mb-6 shadow-sm">
+              <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white/90 border border-white text-[11px] sm:text-xs font-mono text-[#111311] max-w-full mb-6 shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-[#CEF23E] animate-pulse"></span>
                 <span>Power Equipment for a Resilient Bangladesh 🌱</span>
               </div>
@@ -53,17 +53,17 @@ export function HeroSection({
               </p>
 
               {/* Button Group */}
-              <div className="flex flex-wrap items-center gap-4 mb-10">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-10 w-full sm:w-auto">
                 <Link
                   href="/#quote-section"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#CEF23E] hover:bg-[#B8DC2F] text-[#111311] font-semibold text-sm tracking-tight shadow-[0_10px_25px_-5px_rgba(206,242,62,0.4)] transition-all duration-300 hover:scale-[1.02] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111311]"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#CEF23E] hover:bg-[#B8DC2F] text-[#111311] font-semibold text-sm tracking-tight shadow-[0_10px_25px_-5px_rgba(206,242,62,0.4)] transition-all duration-300 hover:scale-[1.02] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111311] w-full sm:w-auto text-center"
                 >
                   <span>↗ Request Bulk Quote</span>
                 </Link>
 
                 <Link
                   href="/products"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/80 hover:bg-white text-[#111311] font-medium text-sm border border-[#DDE1DC] transition-all hover:border-[#111311] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/80 hover:bg-white text-[#111311] font-medium text-sm border border-[#DDE1DC] transition-all hover:border-[#111311] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] w-full sm:w-auto text-center"
                 >
                   <span>Browse Catalog</span>
                   <ArrowRight className="w-4 h-4" />
@@ -72,7 +72,7 @@ export function HeroSection({
 
               {/* Specs & Compliance Footer (Neutral Specs only) */}
               <div className="pt-6 border-t border-[#DDE1DC] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-4 text-xs font-mono text-[#5C605C]">
+                <div className="flex items-center gap-3 sm:gap-4 text-[11px] sm:text-xs font-mono text-[#262826] font-medium">
                   <span>BULK ORDERS</span>
                   <span className="text-[#DDE1DC]">&bull;</span>
                   <span>CUSTOM QUOTES</span>
@@ -135,7 +135,7 @@ export function HeroSection({
                     Wholesale Supply
                   </span>
                 </div>
-                <p className="text-xs text-[#5C605C] leading-snug">
+                <p className="text-xs text-[#262826] font-medium leading-snug">
                   24–48h Wholesale dispatch across Bangladesh
                 </p>
               </div>
@@ -163,7 +163,7 @@ export function HeroSection({
                 <div className="w-full h-2.5 rounded-full bg-[#EDEDED] overflow-hidden p-0.5 border border-[#DDE1DC]">
                   <div className="h-full rounded-full bg-gradient-to-r from-[#CEF23E] to-[#B8DC2F] w-[88%]" />
                 </div>
-                <span className="text-[10px] font-mono text-[#5C605C] mt-1.5 block">
+                <span className="text-[11px] font-mono text-[#262826] font-medium mt-1.5 block">
                   LiFePO4 Safe Prismatic Cells
                 </span>
               </div>

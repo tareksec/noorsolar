@@ -85,7 +85,7 @@ function LoginForm() {
 export default function AdminLoginPage() {
   return (
     <div className="min-h-screen bg-[#E4E7E4] flex items-center justify-center p-4">
-      <div className="w-full max-w-md p-8 sm:p-10 rounded-[36px] bg-white border border-[#DDE1DC] shadow-xl">
+      <div className="w-full max-w-md p-5 sm:p-8 md:p-10 rounded-[28px] sm:rounded-[36px] bg-white border border-[#DDE1DC] shadow-xl">
         
         {/* Brand Header */}
         <div className="text-center mb-8">
@@ -110,7 +110,7 @@ export default function AdminLoginPage() {
           <LoginForm />
         </Suspense>
 
-        <p className="text-center text-[11px] font-mono text-[#5C605C] mt-8">
+        <p className="text-center text-[11px] font-mono text-[#5C605C] mt-8 break-words leading-relaxed px-2">
           Authorized personnel only &bull; Protected by session auth
         </p>
 
