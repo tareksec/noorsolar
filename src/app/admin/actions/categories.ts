@@ -1,0 +1,124 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { db } from "@/lib/db";
+import { getSession } from "@/lib/auth";
+import { processAndSaveImage } from "@/lib/uploads";
+
+function slugify(text: string): string {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-");
+}
+
+export type CategoryActionResult = {
+  success: boolean;
+  error?: string;
+};
+
+export async function createCategoryAction(
+  _prevState: unknown,
+  formData: FormData
+): Promise<CategoryActionResult> {
+  const session = await getSession();
+  if (!session) return { success: false, error: "Unauthorized" };
+
+  try {
+    const name = (formData.get("name") as string)?.trim();
+    if (!name) return { success: false, error: "Category name is required" };
+
+    let slug = (formData.get("slug") as string)?.trim() || slugify(name);
+    const description = (formData.get("description") as string)?.trim() || null;
+    const sortOrderStr = formData.get("sortOrder") as string;
+    const sortOrder = sortOrderStr ? parseInt(sortOrderStr, 10) : 0;
+
+    const existing = await db.category.findUnique({ where: { slug } });
+    if (existing) {
+      slug = `${slug}-${Date.now().toString().slice(-4)}`;
+    }
+
+    let image = "/demo/category-panels.svg";
+    const file = formData.get("image") as File;
+    if (file && file.size > 0 && file.name) {
+      const saved = await processAndSaveImage(file, "cat");
+      if (saved) image = saved.url;
+    }
+
+    await db.category.create({
+      data: {
+        name,
+        slug,
+        description,
+        sortOrder,
+        image,
+        isActive: true,
+      },
+    });
+
+    revalidatePath("/");
+    revalidatePath("/products");
+    revalidatePath("/admin/categories");
+    return { success: true };
+  } catch (err: unknown) {
+    console.error("Create category error:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Failed to create category",
+    };
+  }
+}
+
+export async function updateCategoryAction(
+  _prevState: unknown,
+  formData: FormData
+): Promise<CategoryActionResult> {
+  const session = await getSession();
+  if (!session) return { success: false, error: "Unauthorized" };
+
+  try {
+    const id = formData.get("id") as string;
+    if (!id) return { success: false, error: "Missing category ID" };
+
+    const name = (formData.get("name") as string)?.trim();
+    if (!name) return { success: false, error: "Category name is required" };
+
+    const slug = (formData.get("slug") as string)?.trim() || slugify(name);
+    const description = (formData.get("description") as string)?.trim() || null;
+    const sortOrderStr = formData.get("sortOrder") as string;
+    const sortOrder = sortOrderStr ? parseInt(sortOrderStr, 10) : 0;
+
+    const file = formData.get("image") as File;
+    let newImageUrl: string | undefined = undefined;
+    if (file && file.size > 0 && file.name) {
+      const saved = await processAndSaveImage(file, "cat");
+      if (saved) newImageUrl = saved.url;
+    }
+
+    await db.category.update({
+      where: { id },
+      data: {
+        name,
+        slug,
+        description,
+        sortOrder,
+        ...(newImageUrl ? { image: newImageUrl } : {}),
+      },
+    });
+
+    revalidatePath("/");
+    revalidatePath("/products");
+    revalidatePath(`/category/${slug}`);
+    revalidatePath("/admin/categories");
+    return { success: true };
+  } catch (err: unknown) {
+    console.error("Update category error:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Failed to update category",
+    };
+  }
+}

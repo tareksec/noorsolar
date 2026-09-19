@@ -2,6 +2,8 @@ import React from "react";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
+import { Download } from "lucide-react";
+
 async function updateQuoteStatus(formData: FormData) {
   "use server";
   const id = formData.get("id") as string;
@@ -26,13 +28,24 @@ export default async function AdminQuotesPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-[#111311] tracking-tight">
-          Quote Inbox
-        </h1>
-        <p className="text-xs text-[#5C605C]">
-          Commercial quotation requests received via the website ({quotes.length} total)
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-[#111311] tracking-tight">
+            Quote Inbox
+          </h1>
+          <p className="text-xs text-[#5C605C]">
+            Commercial quotation requests received via the website ({quotes.length} total)
+          </p>
+        </div>
+
+        <a
+          href="/admin/quotes/export"
+          download
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-[#DDE1DC] text-[#111311] hover:border-[#111311] text-xs font-mono font-medium shadow-sm transition-colors"
+        >
+          <Download className="w-3.5 h-3.5 text-[#111311]" />
+          <span>Export All CSV</span>
+        </a>
       </div>
 
       <div className="space-y-4">
