@@ -1,10 +1,9 @@
-﻿"use client";
+"use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight, MessageSquare, Clock, CheckCircle2 } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
 
 interface ProductCardProps {
   product: {
@@ -20,15 +19,26 @@ interface ProductCardProps {
     specs: Array<{ label: string; value: string }>;
     category?: { name: string; slug: string } | null;
   };
+  priority?: boolean;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
-  const shouldReduceMotion = useReducedMotion();
+export function ProductCard({ product, priority = false }: ProductCardProps) {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [isPointerDevice, setIsPointerDevice] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   const imageContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+      setPrefersReducedMotion(mq.matches);
+      const listener = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+      mq.addEventListener("change", listener);
+      return () => mq.removeEventListener("change", listener);
+    }
+  }, []);
 
   const handlePointerEnter = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType === "mouse") {
@@ -38,7 +48,7 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType !== "mouse" || shouldReduceMotion || !imageContainerRef.current) return;
+    if (e.pointerType !== "mouse" || prefersReducedMotion || !imageContainerRef.current) return;
     const rect = imageContainerRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -83,7 +93,7 @@ export function ProductCard({ product }: ProductCardProps) {
     }
   };
 
-  const imageTransform = isPointerDevice && !shouldReduceMotion
+  const imageTransform = isPointerDevice && !prefersReducedMotion
     ? {
         transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${isHovered ? 1.05 : 1})`,
         transition: isHovered ? "transform 0.1s ease-out" : "transform 0.35s ease-out",
@@ -107,6 +117,7 @@ export function ProductCard({ product }: ProductCardProps) {
             src={primaryImage}
             alt={primaryAlt}
             fill
+            priority={priority}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover"
           />
@@ -125,15 +136,11 @@ export function ProductCard({ product }: ProductCardProps) {
         )}
 
         {/* Sliding "Request Quote" Affordance on Pointer Devices */}
-        {isPointerDevice && !shouldReduceMotion && (
-          <motion.div
-            initial={false}
-            animate={{
-              opacity: isHovered ? 1 : 0,
-              y: isHovered ? 0 : 14,
-            }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className="absolute bottom-3 inset-x-3 z-20 pointer-events-auto"
+        {isPointerDevice && !prefersReducedMotion && (
+          <div
+            className={`absolute bottom-3 inset-x-3 z-20 transition-all duration-200 ${
+              isHovered ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-3 pointer-events-none"
+            }`}
           >
             <Link
               href={`/#quote-section?product=${product.slug}`}
@@ -143,7 +150,7 @@ export function ProductCard({ product }: ProductCardProps) {
               <span>Request Quote</span>
               <ArrowRight className="w-3.5 h-3.5 text-white" />
             </Link>
-          </motion.div>
+          </div>
         )}
       </div>
 

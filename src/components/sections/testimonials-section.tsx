@@ -1,8 +1,7 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import type { Testimonial } from "@prisma/client";
-import { AppImage } from "@/components/ui/app-image";
 import { Quote, ArrowLeft, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 
@@ -87,21 +86,17 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
 
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-[#EDEDED]">
                 <div className="flex items-center gap-3">
-                  {current.photo ? (
-                    <div className="w-12 h-12 rounded-full overflow-hidden border border-[#DDE1DC] shrink-0 relative bg-[#EDEDED]">
-                      <AppImage
-                        src={current.photo}
-                        alt={current.authorName}
-                        width={48}
-                        height={48}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-[#EDEDED] border border-[#DDE1DC] flex items-center justify-center text-sm font-bold text-[#111311] shrink-0 font-mono">
-                      {current.authorName.slice(0, 2).toUpperCase()}
-                    </div>
-                  )}
+                  <div className="w-12 h-12 rounded-full bg-[#111311] text-[#CEF23E] border border-[#CEF23E]/30 flex items-center justify-center text-sm font-bold font-mono shrink-0 shadow-xs">
+                    {current.authorName
+                      ? current.authorName
+                          .split(" ")
+                          .filter(Boolean)
+                          .map((n) => n[0])
+                          .slice(0, 2)
+                          .join("")
+                          .toUpperCase()
+                      : "NS"}
+                  </div>
                   <div>
                     <div className="font-bold text-base text-[#111311]">
                       {current.authorName}

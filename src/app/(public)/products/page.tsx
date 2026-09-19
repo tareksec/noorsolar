@@ -5,6 +5,7 @@ import { getAllProducts } from "@/lib/data/products";
 import { ProductCard } from "@/components/product/product-card";
 import Link from "next/link";
 import { Search } from "lucide-react";
+import { EmptyCatalogIllustration } from "@/components/illustrations/empty-catalog-illustration";
 
 export const metadata: Metadata = {
   title: "Equipment Catalog — Solar Panels, Batteries & Inverters",
@@ -111,12 +112,13 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         {/* Products Grid */}
         {products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {products.map((product, idx) => (
+              <ProductCard key={product.id} product={product} priority={idx < 2} />
             ))}
           </div>
         ) : (
-          <div className="p-12 text-center rounded-3xl bg-white border border-[#DDE1DC]">
+          <div className="p-12 text-center rounded-3xl bg-white border border-[#DDE1DC] max-w-lg mx-auto">
+            <EmptyCatalogIllustration className="w-40 h-36 mx-auto mb-2" />
             <h3 className="text-lg font-bold text-[#111311] mb-2">
               No products found matching your search
             </h3>
@@ -125,7 +127,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             </p>
             <Link
               href="/products"
-              className="inline-flex items-center px-5 py-2.5 rounded-full bg-[#111311] text-white text-xs font-medium"
+              className="inline-flex items-center px-5 py-2.5 rounded-full bg-[#111311] text-white text-xs font-medium hover:bg-black transition-colors"
             >
               Reset Filters
             </Link>

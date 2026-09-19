@@ -9,7 +9,14 @@ import { demoProducts } from "./seed-products";
 const prisma = new PrismaClient();
 
 function getProductImagePath(slug: string, view: "front" | "angled" | "detail", defaultSvg: string): string {
-  const photoExts = [".jpg", ".jpeg", ".png", ".webp"];
+  const photoExts = [".webp", ".jpg", ".jpeg", ".png"];
+  for (const ext of photoExts) {
+    const relPath = `/demo/products/${slug}-${view}${ext}`;
+    const fullPath = path.join(process.cwd(), "public", "demo", "products", `${slug}-${view}${ext}`);
+    if (fs.existsSync(fullPath)) {
+      return relPath;
+    }
+  }
   for (const ext of photoExts) {
     const relPath = `/demo/photos/${slug}-${view}${ext}`;
     const fullPath = path.join(process.cwd(), "public", "demo", "photos", `${slug}-${view}${ext}`);
@@ -76,7 +83,7 @@ async function main() {
       name: "Solar Panels",
       description:
         "Monocrystalline, N-Type TOPCon, and bifacial solar modules for commercial rooftop and industrial utility installations.",
-      image: "/demo/category-panels.svg",
+      image: "/photos/cat-solar-panels.webp",
       sortOrder: 1,
     },
     {
@@ -84,7 +91,7 @@ async function main() {
       name: "Lithium-ion Batteries",
       description:
         "High-density LiFePO4 server rack batteries and modular energy storage systems with smart BMS protocols.",
-      image: "/demo/category-batteries.svg",
+      image: "/photos/cat-lithium-batteries.webp",
       sortOrder: 2,
     },
     {
@@ -92,7 +99,7 @@ async function main() {
       name: "Inverters",
       description:
         "Grid-tied, hybrid three-phase, and off-grid pure sine wave solar inverters engineered for commercial reliability and microgrids.",
-      image: "/demo/category-inverters.svg",
+      image: "/photos/cat-solar-inverters.webp",
       sortOrder: 3,
     },
   ];

@@ -5,6 +5,7 @@ import { getCategoryBySlug } from "@/lib/data/categories";
 import { ProductCard } from "@/components/product/product-card";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { EmptyCatalogIllustration } from "@/components/illustrations/empty-catalog-illustration";
 
 interface CategoryPageProps {
   params: Promise<{
@@ -66,7 +67,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <span>Direct Import Line</span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111311]">
-              {category.name} .
+              {category.name}
             </h1>
             {category.description && (
               <p className="text-sm sm:text-base text-[#5C605C] leading-relaxed mt-3">
@@ -79,21 +80,32 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {/* Category Products Grid */}
         {category.products.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {category.products.map((product) => (
+            {category.products.map((product, idx) => (
               <ProductCard
                 key={product.id}
                 product={{
                   ...product,
                   category: { name: category.name, slug: category.slug },
                 }}
+                priority={idx < 2}
               />
             ))}
           </div>
         ) : (
-          <div className="p-12 text-center rounded-3xl bg-white border border-[#DDE1DC]">
-            <p className="text-sm text-[#5C605C]">
-              No active products currently listed under this category.
+          <div className="p-12 text-center rounded-3xl bg-white border border-[#DDE1DC] max-w-lg mx-auto">
+            <EmptyCatalogIllustration className="w-40 h-36 mx-auto mb-2" />
+            <h3 className="text-lg font-bold text-[#111311] mb-2">
+              No active products listed yet
+            </h3>
+            <p className="text-xs text-[#5C605C] mb-6">
+              New container inventory for this category is currently being staged in our warehouse.
             </p>
+            <Link
+              href="/products"
+              className="inline-flex items-center px-5 py-2.5 rounded-full bg-[#111311] text-white text-xs font-medium hover:bg-black transition-colors"
+            >
+              View Full Catalog
+            </Link>
           </div>
         )}
 

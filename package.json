@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "check:overflow": "node scripts/check-mobile-overflow.js",
+    "check:images": "node scripts/check-images.js",
     "seed:demo": "npx tsx prisma/seed.ts --demo-only"
   },
   "dependencies": {

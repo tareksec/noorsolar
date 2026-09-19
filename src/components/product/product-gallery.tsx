@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
@@ -187,8 +187,8 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
         <AnimatePresence mode="wait">
           <motion.div
             key={currentImage.id + activeIndex}
-            initial={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
-            animate={prefersReduced ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+            initial={false}
+            animate={{ opacity: 1, scale: 1 }}
             exit={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.24, ease: "easeOut" }}
             className="relative w-full h-full"
@@ -198,7 +198,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               alt={currentImage.alt || productName}
               fill
               priority={activeIndex === 0}
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              sizes="(max-width: 640px) 330px, (max-width: 1024px) 100vw, 50vw"
               className="object-cover rounded-2xl"
             />
           </motion.div>
