@@ -20,22 +20,13 @@ export function HeroEntrance() {
         duration: 0.4,
       })
         .from(
-          ".hero-headline",
-          {
-            opacity: 0.85,
-            y: 8,
-            duration: 0.5,
-          },
-          "-=0.2"
-        )
-        .from(
           ".hero-subtext",
           {
             opacity: 0.7,
             y: 8,
             duration: 0.45,
           },
-          "-=0.25"
+          "-=0.2"
         )
         .from(
           ".hero-cta-btn",

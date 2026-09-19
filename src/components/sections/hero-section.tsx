@@ -1,13 +1,8 @@
 import React from "react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Box } from "lucide-react";
+import { HeroVisual } from "@/components/sections/hero-visual";
 import { HeroEntrance } from "@/components/sections/hero-entrance";
-
-const HeroVisual = dynamic(
-  () => import("@/components/sections/hero-visual").then((mod) => mod.HeroVisual),
-  { ssr: true }
-);
 
 interface HeroSectionProps {
   headline?: string;

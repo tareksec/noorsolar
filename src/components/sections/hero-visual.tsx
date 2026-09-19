@@ -1,122 +1,9 @@
-"use client";
-
-import React, { useRef, useState } from "react";
+import React from "react";
 import { Zap, Cpu } from "lucide-react";
 
 export function HeroVisual() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<SVGGElement>(null);
-  const batteryRef = useRef<SVGGElement>(null);
-  const inverterRef = useRef<SVGGElement>(null);
-  const card1Ref = useRef<HTMLDivElement>(null);
-  const card2Ref = useRef<HTMLDivElement>(null);
-
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  React.useEffect(() => {
-    if (typeof window === "undefined" || window.innerWidth < 1024) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    import("@/lib/gsap").then(({ gsap }) => {
-      gsap.to(panelRef.current, {
-        y: "+=6",
-        rotation: "+=0.4",
-        duration: 4.2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      gsap.to(batteryRef.current, {
-        y: "-=7",
-        rotation: "-=0.5",
-        duration: 3.6,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 0.5,
-      });
-
-      gsap.to(inverterRef.current, {
-        y: "+=5",
-        rotation: "+=0.3",
-        duration: 4.8,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 1.1,
-      });
-
-      gsap.to(card1Ref.current, {
-        y: "-=5",
-        duration: 3.2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 0.2,
-      });
-
-      gsap.to(card2Ref.current, {
-        y: "+=6",
-        duration: 3.8,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 0.7,
-      });
-    });
-  }, []);
-
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType === "touch") return; // Touch devices do not tilt
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-    setMousePos({ x, y });
-  };
-
-  const handlePointerLeave = () => {
-    setMousePos({ x: 0, y: 0 });
-  };
-
-  // Parallax transforms per layer depth (Desktop mouse pointer only)
-  const panelParallax = {
-    transform: `translate3d(${mousePos.x * 6}px, ${mousePos.y * 6}px, 0px) rotateX(${
-      -mousePos.y * 3
-    }deg) rotateY(${mousePos.x * 3}deg)`,
-    transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
-  };
-
-  const batteryParallax = {
-    transform: `translate3d(${mousePos.x * 12}px, ${mousePos.y * 12}px, 0px) rotateX(${
-      -mousePos.y * 5
-    }deg) rotateY(${mousePos.x * 5}deg)`,
-    transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
-  };
-
-  const inverterParallax = {
-    transform: `translate3d(${mousePos.x * 18}px, ${mousePos.y * 18}px, 0px) rotateX(${
-      -mousePos.y * 7
-    }deg) rotateY(${mousePos.x * 7}deg)`,
-    transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
-  };
-
-  const card1Parallax = {
-    transform: `translate3d(${mousePos.x * 22}px, ${mousePos.y * 22}px, 0px)`,
-    transition: "transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)",
-  };
-
-  const card2Parallax = {
-    transform: `translate3d(${mousePos.x * 26}px, ${mousePos.y * 26}px, 0px)`,
-    transition: "transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)",
-  };
-
   return (
     <div
-      ref={containerRef}
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
       className="relative w-full max-w-[560px] aspect-[4/3] mx-auto select-none perspective-[1000px] flex items-center justify-center"
       aria-label="Layered glass composition of high-efficiency solar panel, lithium battery rack, and hybrid inverter"
     >
@@ -152,7 +39,7 @@ export function HeroVisual() {
           </defs>
 
           {/* LAYER 1: N-Type Solar Panel (Background Layer, angled back right) */}
-          <g ref={panelRef} id="hero-layer-panel" style={panelParallax}>
+          <g id="hero-layer-panel" className="hv-anim-panel">
             {/* Panel Aluminum Alloy Frame */}
             <rect
               x="160"
@@ -200,7 +87,7 @@ export function HeroVisual() {
           </g>
 
           {/* LAYER 2: Lithium Battery Server Rack Unit (Middle Layer, angled left-center) */}
-          <g ref={batteryRef} id="hero-layer-battery" style={batteryParallax}>
+          <g id="hero-layer-battery" className="hv-anim-battery">
             {/* Rack Chassis Enclosure */}
             <rect
               x="70"
@@ -244,7 +131,7 @@ export function HeroVisual() {
           </g>
 
           {/* LAYER 3: Hybrid Solar Inverter (Foreground Layer, front center-right) */}
-          <g ref={inverterRef} id="hero-layer-inverter" style={inverterParallax}>
+          <g id="hero-layer-inverter" className="hv-anim-inverter">
             {/* Clean White Architectural Casing */}
             <rect
               x="250"
@@ -273,7 +160,6 @@ export function HeroVisual() {
             {/* Glowing Circular State Halo (Volt Lime) */}
             <circle cx="360" cy="255" r="26" stroke="#CEF23E" strokeWidth="3.5" strokeDasharray="120 40" />
             <circle cx="360" cy="255" r="18" fill="#CEF23E" fillOpacity="0.15" />
-            {/* Central Power Metric Display Text */}
             {/* Central Power Metric Display LED */}
             <rect x="352" y="251" width="16" height="8" rx="2" fill="#CEF23E" />
             {/* Bottom Status LED Indicators */}
@@ -289,9 +175,7 @@ export function HeroVisual() {
 
       {/* Floating Glass Info Card 1: Panel Metric (Top Left) */}
       <div
-        ref={card1Ref}
-        style={card1Parallax}
-        className="absolute -top-2 left-2 sm:-left-3 p-3 sm:p-3.5 rounded-2xl glass-card bg-white/90 border border-white shadow-[0_12px_28px_-6px_rgba(0,0,0,0.12)] backdrop-blur-md max-w-[190px] pointer-events-none"
+        className="absolute -top-2 left-2 sm:-left-3 p-3 sm:p-3.5 rounded-2xl glass-card bg-white/90 border border-white shadow-[0_12px_28px_-6px_rgba(0,0,0,0.12)] backdrop-blur-md max-w-[190px] pointer-events-none hv-anim-card1"
       >
         <div className="flex items-center gap-2 mb-1">
           <div className="w-5 h-5 rounded-full bg-[#111311] text-[#CEF23E] flex items-center justify-center shrink-0">
@@ -308,9 +192,7 @@ export function HeroVisual() {
 
       {/* Floating Glass Info Card 2: Battery Metric (Bottom Right) */}
       <div
-        ref={card2Ref}
-        style={card2Parallax}
-        className="absolute -bottom-3 right-2 sm:-right-4 p-3 sm:p-3.5 rounded-2xl glass-card bg-white/90 border border-white shadow-[0_12px_28px_-6px_rgba(0,0,0,0.12)] backdrop-blur-md min-w-[180px] pointer-events-none"
+        className="absolute -bottom-3 right-2 sm:-right-4 p-3 sm:p-3.5 rounded-2xl glass-card bg-white/90 border border-white shadow-[0_12px_28px_-6px_rgba(0,0,0,0.12)] backdrop-blur-md min-w-[180px] pointer-events-none hv-anim-card2"
       >
         <div className="flex items-center justify-between gap-2 mb-1.5">
           <div className="flex items-center gap-1.5">

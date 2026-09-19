@@ -17,8 +17,13 @@ import { StatsBand } from "@/components/sections/stats-band";
 import { CertificationsSection } from "@/components/sections/certifications-section";
 import { OrderingSteps } from "@/components/sections/ordering-steps";
 import { PartnersStrip } from "@/components/sections/partners-strip";
-import { ClosingCTA } from "@/components/sections/closing-cta";
+import dynamic from "next/dynamic";
 import { DynamicHomeSections } from "@/components/sections/dynamic-home-sections";
+
+const ClosingCTA = dynamic(
+  () => import("@/components/sections/closing-cta").then((mod) => mod.ClosingCTA),
+  { ssr: true }
+);
 
 export const revalidate = 60; // On-demand or 60s cache revalidation
 
