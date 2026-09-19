@@ -160,6 +160,71 @@ model SiteSetting {
   key   String @id
   value String // plain text or a JSON string
 }
+
+
+  model Stat {
+    id          String   @id @default(cuid())
+    label       String
+    value       Float
+    prefix      String?
+    suffix      String?
+    description String?
+    sortOrder   Int      @default(0)
+    isActive    Boolean  @default(true)
+    isSample    Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+  }
+
+  model Certification {
+    id          String   @id @default(cuid())
+    name        String
+    issuer      String?
+    description String?
+    image       String?
+    sortOrder   Int      @default(0)
+    isActive    Boolean  @default(true)
+    isSample    Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+  }
+
+  model Partner {
+    id        String   @id @default(cuid())
+    name      String
+    logo      String?
+    url       String?
+    sortOrder Int      @default(0)
+    isActive  Boolean  @default(true)
+    isSample  Boolean  @default(true)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+  }
+
+  model Testimonial {
+    id         String   @id @default(cuid())
+    quote      String
+    authorName String
+    authorRole String?
+    company    String?
+    photo      String?
+    sortOrder  Int      @default(0)
+    isActive   Boolean  @default(true)
+    isSample   Boolean  @default(true)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+  }
+
+  model FaqItem {
+    id        String   @id @default(cuid())
+    question  String
+    answer    String
+    sortOrder Int      @default(0)
+    isActive  Boolean  @default(true)
+    isSample  Boolean  @default(true)
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+  }
 ```
 
 Spec rows are free-form, so each category can show different specs (panel wattage and efficiency, battery voltage and capacity, inverter rating and MPPT) without schema changes.
