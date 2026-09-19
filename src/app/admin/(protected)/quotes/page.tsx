@@ -1,11 +1,16 @@
 import React from "react";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { getSession } from "@/lib/auth";
 
 import { Download } from "lucide-react";
 
 async function updateQuoteStatus(formData: FormData) {
   "use server";
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
   const id = formData.get("id") as string;
   const status = formData.get("status") as string;
   const note = formData.get("note") as string;

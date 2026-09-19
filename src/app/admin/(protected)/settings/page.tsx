@@ -1,9 +1,14 @@
 import React from "react";
 import { getSiteSettings, updateSiteSettings } from "@/lib/data/settings";
 import { revalidatePath } from "next/cache";
+import { getSession } from "@/lib/auth";
 
 async function saveSettingsAction(formData: FormData) {
   "use server";
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
   const companyName = formData.get("companyName") as string;
   const phone = formData.get("phone") as string;
   const phoneDisplay = formData.get("phoneDisplay") as string;

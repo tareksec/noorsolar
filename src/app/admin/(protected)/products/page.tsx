@@ -1,12 +1,17 @@
 import React from "react";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { getSession } from "@/lib/auth";
 import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
 import { ExternalLink, Plus, Edit } from "lucide-react";
 
 async function toggleProductFeatured(formData: FormData) {
   "use server";
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
   const id = formData.get("id") as string;
   const current = formData.get("current") === "true";
 
