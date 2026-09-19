@@ -38,6 +38,8 @@ Status values: `Not started` · `In progress` · `Done` · `Blocked`
 
 ## 2. Task log (newest first)
 
+- 2026-09-19: PRD.md and AGENT.md were updated and TASKS.md was added.
+
 ### Task A — Comprehensive Codebase, Design & Security Audit — 2026-09-19
 Branch: task-09-admin-crud-and-uploads
 Status: Done

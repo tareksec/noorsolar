@@ -25,6 +25,7 @@ Goal of the design: an **interactive, modern, impressive** site with excellent a
 - Do **only** the current task. Do not start the next one. Do not add features that were not requested.
 - Work on a git branch per task (`task-NN-short-name`). Commit small, meaningful commits. Never commit `.env`, databases, or uploads.
 - After the task, run and report: `npm run lint`, `npm run build`, and the manual checks listed in the task.
+- **Update `WORKED.md` at the end of every task**: set the task's row in the status board, add a Task log entry (newest first), and record any decisions, open issues, known gaps and environment notes. Only write what is true and verified. Never delete old entries. Your chat report and the `WORKED.md` entry must match.
 - Report format (always): **1) What I did, 2) Files created/changed, 3) Commands run, 4) Problems, warnings, deviations, 5) What I need from the lead.**
 - If a skill or MCP listed below is **not available** in your environment, say so at the top of your report, continue using the guidance in this file, and never pretend you used it.
 - Do not add a new dependency that is not in `TRD.md` without asking first. Propose it in the report with the reason.
@@ -62,8 +63,8 @@ Use these deliberately, in this order for any UI work: **plan → pick component
 `DESIGN.md` defines colors, typography, radii, shadows and components (eco-futuristic minimalism with glass surfaces, volt-lime accent, pill buttons). It was written for an EV-charger dashboard. **Reuse the visual system, replace the content**:
 
 - Hero and dock content become Noor Solar content (solar panel, lithium-ion battery, inverter). See `PRD.md` section 5.
-- **Do not show CE, ISO, Recyclable or any certification/compliance icons or numbers** unless the owner has confirmed them. Use neutral feature icons instead (Bulk orders, Custom quotes, Datasheets).
-- Do not invent statistics, clients, customer reviews or project counts.
+- **Do not put CE, ISO or other certification icons into the hero, the feature row or product data.** Certifications appear only in the editable Certifications section, as sample content (see `PRD.md` section 7). The hero feature row uses neutral icons (Bulk orders, Custom quotes, Datasheets).
+- Statistics, certifications, partners and testimonials follow the **sample content policy** in `PRD.md` section 7: editable, flagged `isSample`, generic, never presented as verified fact in code comments or docs. Anything else about the company (delivery times, warranty terms, years, awards, guarantees) must not be invented: read it from site settings or leave it out.
 - Any brand color from the earlier setup task (dark green `#031E17`, amber `#F5A623`) is **replaced** by the `DESIGN.md` tokens. Migrate tokens into Tailwind theme variables and delete unused ones.
 - `DESIGN.md` defines a light theme only. Keep the site light. The dark-mode toggle from the earlier setup task is removed in the design-migration task; add a dark theme later only if a task asks for it.
 
@@ -83,6 +84,12 @@ These are commercial templates. **Do not copy their layout, images, text or code
 - Hover-reveal lists (row expands or an image follows the cursor)
 - Accordion FAQ
 - Large closing call-to-action section with a background image and a compact footer
+
+### 4.2b How to use the references well
+
+- If the task names a reference section (for example "the counter section from the Progress site"), **open the URL in a browser tool if you have one** and study how it behaves: timing, easing, what triggers it, what happens on mobile. Text descriptions alone lose this.
+- If the owner attaches screenshots, match the **structure and feel**, then make it ours with `DESIGN.md` tokens and Noor Solar content.
+- In your report, say which reference pattern you used and how your version differs.
 
 ### 4.3 Animation principles
 
@@ -136,9 +143,10 @@ Everything else: keep quiet. Do not fade-and-slide-up every section. Do not add 
 ## 6. Content rules (demo data)
 
 - Everything on the site is **demo** until the owner edits it. Mark demo products with the `isDemo` flag in the database, and show a small "Demo" tag only inside the admin.
-- Product names must be generic and clearly fictional or generic-spec style (for example "N-Type TOPCon 620W Bifacial Module", "48V 100Ah LiFePO4 Rack Battery", "10kW Hybrid Inverter"). **No real brand names, no fake certifications, no fake reviews.**
+- Product names must be generic and clearly fictional or generic-spec style (for example "N-Type TOPCon 620W Bifacial Module", "48V 100Ah LiFePO4 Rack Battery", "10kW Hybrid Inverter"). **No real brand names or logos.** Certifications, statistics, partners and testimonials follow the sample content policy in `PRD.md` section 7.
 - Product specs must be plausible and internally consistent (a 620W panel has a realistic voltage/current, a 5kWh battery has a realistic capacity, and so on).
-- Images: generate **procedural placeholder images** (SVG or gradient-based illustrations that fit the design). Do not download images from the internet. Every image needs meaningful `alt` text.
+- Images: use **owner-supplied photos** from `public/demo/photos/` when they exist. Otherwise generate **procedural placeholder images** (SVG or gradient-based illustrations that fit the design). Do not download images from the internet yourself. Every image needs meaningful `alt` text.
+- The full demo product list and per-product requirements are in `PRD.md` section 7.
 - Copy: short, plain, specific. Active voice. Sentence case. Buttons say what they do ("Request quote", not "Submit").
 - All text that the owner may change must come from the database or `site-settings`, not be hard-coded in components.
 
