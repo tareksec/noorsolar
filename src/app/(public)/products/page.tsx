@@ -9,7 +9,7 @@ import { Search } from "lucide-react";
 export const metadata: Metadata = {
   title: "Equipment Catalog — Solar Panels, Batteries & Inverters",
   description:
-    "Explore our complete inventory of Tier-1 Solar Panels, Lithium-ion Storage Batteries, and Industrial Inverters available for bulk wholesale in Bangladesh.",
+    "Explore our complete inventory of Solar Panels, Lithium-ion Storage Batteries, and Industrial Inverters available for bulk wholesale in Bangladesh.",
 };
 
 interface ProductsPageProps {
@@ -46,7 +46,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             Solar Equipment Catalog .
           </h1>
           <p className="text-sm sm:text-base text-[#5C605C] max-w-2xl mt-3">
-            Directly imported tier-1 solar modules, high-capacity LiFePO4 batteries, and industrial solar inverters with factory warranties.
+            Directly imported solar modules, high-capacity LiFePO4 batteries, and industrial solar inverters with complete specifications.
           </p>
         </div>
 

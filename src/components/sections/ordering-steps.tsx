@@ -18,7 +18,7 @@ export function OrderingSteps() {
     {
       num: "03",
       title: "Commercial Quotation",
-      desc: "Receive formal wholesale pricing with tier-1 manufacturer warranty certificates and technical datasheets.",
+      desc: "Receive formal wholesale pricing with official manufacturer certificates and technical datasheets.",
       icon: CheckSquare,
     },
     {

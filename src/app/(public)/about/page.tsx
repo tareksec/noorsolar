@@ -59,7 +59,7 @@ export default async function AboutPage() {
               Direct Factory Partnerships
             </h3>
             <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed">
-              We source directly from tier-1 manufacturers without middleman markups, ensuring authentic components, intact serial numbers, and manufacturer warranty coverage.
+              We source directly from verified international manufacturers, supplying authentic solar modules, battery units, and inverters with complete technical specifications.
             </p>
           </div>
 

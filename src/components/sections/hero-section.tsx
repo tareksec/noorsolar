@@ -12,7 +12,7 @@ interface HeroSectionProps {
 
 export function HeroSection({
   headline = "Solar panels, lithium batteries and inverters, supplied in bulk .",
-  subheadline = "Direct B2B importer providing engineering-grade solar equipment, guaranteed tier-1 quality, and wholesale delivery across Bangladesh.",
+  subheadline = "Direct B2B importer providing engineering-grade solar equipment, bulk orders, and wholesale delivery across Bangladesh.",
 }: HeroSectionProps) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
@@ -73,11 +73,11 @@ export function HeroSection({
               {/* Specs & Compliance Footer (Neutral Specs only) */}
               <div className="pt-6 border-t border-[#DDE1DC] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-4 text-xs font-mono text-[#5C605C]">
-                  <span>TIER-1 QUALITY</span>
+                  <span>BULK ORDERS</span>
                   <span className="text-[#DDE1DC]">&bull;</span>
-                  <span>DHAKA STOCK</span>
+                  <span>CUSTOM QUOTES</span>
                   <span className="text-[#DDE1DC]">&bull;</span>
-                  <span>B2B INDENT</span>
+                  <span>DATASHEETS</span>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -87,7 +87,7 @@ export function HeroSection({
                   </span>
                   <span className="inline-flex items-center gap-1.5 text-xs text-[#111311] font-medium px-2.5 py-1 rounded-full bg-white border border-[#DDE1DC]">
                     <Box className="w-3.5 h-3.5 text-[#111311]" />
-                    Container Wholesale
+                    Bulk Orders
                   </span>
                 </div>
               </div>
@@ -110,7 +110,7 @@ export function HeroSection({
                 <div className="relative w-full h-full rounded-2xl overflow-hidden bg-[#111311] flex items-center justify-center border border-white/20">
                   <Image
                     src="/demo/panel-620w-topcon.svg"
-                    alt="Tier-1 Solar Panels and Equipment"
+                    alt="Solar Panels and Equipment"
                     fill
                     priority
                     sizes="(max-width: 1024px) 100vw, 40vw"
@@ -132,7 +132,7 @@ export function HeroSection({
                 <div className="flex items-center gap-2 mb-1.5">
                   <Truck className="w-4 h-4 text-[#111311]" />
                   <span className="text-[11px] font-mono uppercase font-bold text-[#111311]">
-                    Central Depot
+                    Wholesale Supply
                   </span>
                 </div>
                 <p className="text-xs text-[#5C605C] leading-snug">

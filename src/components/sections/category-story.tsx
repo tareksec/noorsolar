@@ -33,7 +33,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
   > = {
     "solar-panels": {
       kicker: "Power Generation",
-      title: "Tier-1 N-Type TOPCon & Bifacial Panels",
+      title: "N-Type TOPCon & Bifacial Panels",
       highlight: "Up to 700W Peak Module Ratings",
       body: "We import advanced dual-glass bifacial modules designed for extreme ambient humidity and solar irradiance. Higher bifaciality factor ensures significant rear-side harvest for industrial factories, rooftop garments, and EPC utility plants.",
       icon: Zap,
@@ -41,7 +41,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
       specs: [
         { label: "Efficiency", value: "22.6% - 23.1%" },
         { label: "Bifacial Gain", value: "Up to +25%" },
-        { label: "Degradation", value: "30-Year Warranty" },
+        { label: "Degradation", value: "<0.4% Annual" },
       ],
       bullets: [
         "Anti-PID & low temperature coefficient for tropical climate",

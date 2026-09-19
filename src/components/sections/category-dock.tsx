@@ -19,7 +19,7 @@ interface CategoryDockProps {
 export function CategoryDock({ categories }: CategoryDockProps) {
   const dockMeta: Record<string, { subtitle: string; spec: string }> = {
     "solar-panels": {
-      subtitle: "Tier-1 TOPCon & Bifacial",
+      subtitle: "N-Type TOPCon & Bifacial",
       spec: "Up to 700W Modules",
     },
     "lithium-batteries": {

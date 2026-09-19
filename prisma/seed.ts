@@ -8,8 +8,23 @@ async function main() {
   console.log("Seeding database...");
 
   // 1. Admin User
+  const isProduction = process.env.NODE_ENV === "production";
   const adminEmail = process.env.ADMIN_EMAIL || "owner@example.com";
   const rawPassword = process.env.ADMIN_PASSWORD || "change-me-on-first-login";
+
+  if (isProduction) {
+    if (
+      !process.env.ADMIN_PASSWORD ||
+      process.env.ADMIN_PASSWORD === "change-me-on-first-login" ||
+      process.env.ADMIN_PASSWORD.length < 12
+    ) {
+      console.error(
+        "FATAL: In production, ADMIN_PASSWORD must be provided via environment variable, cannot be the default placeholder, and must be at least 12 characters long."
+      );
+      process.exit(1);
+    }
+  }
+
   const passwordHash = await bcrypt.hash(rawPassword, 12);
 
   await prisma.adminUser.upsert({
@@ -39,7 +54,7 @@ async function main() {
       slug: "solar-panels",
       name: "Solar Panels",
       description:
-        "Tier-1 monocrystalline, N-Type TOPCon, and bifacial solar modules for commercial rooftop and industrial utility installations.",
+        "Monocrystalline, N-Type TOPCon, and bifacial solar modules for commercial rooftop and industrial utility installations.",
       image: "/demo/category-panels.svg",
       sortOrder: 1,
     },
@@ -83,7 +98,7 @@ async function main() {
       shortDescription: "Ultra-high power dual-glass module with up to 25% bifacial gain for commercial projects.",
       description:
         "Engineered with advanced 16BB N-Type TOPCon cell technology. Demonstrates superior low-light performance, lower temperature coefficient (-0.30%/°C), and 30-year linear performance warranty. Ideal for factory roofs, commercial sheds, and ground-mounted solar farms in Bangladesh.",
-      brand: "Tier-1 Partner Spec",
+      brand: null,
       model: "NS-620TOP-BF",
       stockStatus: "IN_STOCK",
       moq: "1 Container / 620 pcs (Pallet orders on inquiry)",
@@ -110,8 +125,8 @@ async function main() {
       categoryId: categories["solar-panels"],
       shortDescription: "Heavy-duty commercial panel designed for high humidity and industrial roof temperatures.",
       description:
-        "Featuring robust 2.0mm dual-glass structure with PID resistance and exceptional wind/snow load rating. Delivers consistent yield throughout 30 years with minimal degradation.",
-      brand: "Tier-1 Partner Spec",
+        "Featuring robust 2.0mm dual-glass structure with PID resistance and exceptional wind/snow load rating. Delivers consistent yield throughout operation with minimal degradation.",
+      brand: null,
       model: "NS-580DG-BF",
       stockStatus: "IN_STOCK",
       moq: "50 pcs",
@@ -137,7 +152,7 @@ async function main() {
       shortDescription: "Heterojunction (HJT) technology for maximum power density in MW-scale utility power plants.",
       description:
         "High-efficiency HJT cells with ultra-low degradation and 90% bifaciality factor. Engineered for EPC developers seeking minimal balance-of-system (BOS) costs and maximum kWh generation per square meter.",
-      brand: "Tier-1 Partner Spec",
+      brand: null,
       model: "NS-700HJT-UT",
       stockStatus: "ON_REQUEST",
       moq: "1 MW Project Consignment",
@@ -162,7 +177,7 @@ async function main() {
       shortDescription: "Compact form-factor monocrystalline panel for residential and small commercial roofs.",
       description:
         "High space utilization and easy handling for space-constrained rooftops. Standard black frame with anti-reflective high-transmittance tempered glass.",
-      brand: "Tier-1 Partner Spec",
+      brand: null,
       model: "NS-450PERC-C",
       stockStatus: "INCOMING",
       moq: "20 pcs",

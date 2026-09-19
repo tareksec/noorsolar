@@ -234,7 +234,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </p>
                 <div className="pt-4 border-t border-[#EDEDED] flex items-center gap-2 text-xs font-mono text-[#111311]">
                   <ShieldCheck className="w-4 h-4 text-[#111311]" />
-                  <span>Factory Sealed with Importer Warranty</span>
+                  <span>Factory Sealed with Technical Datasheet</span>
                 </div>
               </div>
             </div>

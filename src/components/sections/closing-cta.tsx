@@ -246,7 +246,7 @@ export function ClosingCTA({
                   </button>
 
                   <p className="text-center text-[11px] font-mono text-[#5C605C] pt-2">
-                    No spam guaranteed &bull; Direct B2B importer pricing with official warranty
+                    Direct B2B importer pricing with official technical datasheets
                   </p>
                 </form>
               )}

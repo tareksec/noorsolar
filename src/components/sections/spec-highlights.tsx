@@ -56,10 +56,10 @@ export function SpecHighlights({ highlights }: SpecHighlightsProps) {
       icon: Cpu,
     },
     {
-      label: "Verified Catalog Models",
+      label: "Product Models",
       value: highlights.totalTier1Models,
       suffix: "+",
-      subtext: "Direct Factory Sealed In-Stock Inventory",
+      subtext: "Catalog Models Available for Indent and Wholesale",
       icon: CheckCircle2,
     },
   ];

@@ -199,7 +199,7 @@ export function ProductFormClient({
               type="text"
               name="brand"
               defaultValue={initialProduct?.brand || ""}
-              placeholder="e.g. Tier-1 Partner Spec"
+              placeholder="e.g. Partner Series"
               className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
             />
           </div>

@@ -25,7 +25,7 @@ export const defaultSiteConfig: SiteConfig = {
   companyName: "Noor Solar Energy",
   tagline: "Direct Importer & Bulk B2B Supplier",
   description:
-    "Supplying Tier-1 Solar Panels, High-Capacity Lithium-ion Batteries, and Industrial/Commercial Inverters across Bangladesh.",
+    "Supplying Solar Panels, High-Capacity Lithium-ion Batteries, and Industrial/Commercial Inverters across Bangladesh.",
   phone: "+8801700000000",
   phoneDisplay: "+880 1700-000000",
   whatsapp: "8801700000000",
@@ -35,7 +35,7 @@ export const defaultSiteConfig: SiteConfig = {
   hours: "Sat - Thu: 9:00 AM - 7:00 PM (Friday Closed)",
   heroHeadline: "Solar panels, lithium batteries and inverters, supplied in bulk.",
   heroSubheadline:
-    "Direct B2B importer providing engineering-grade solar equipment, guaranteed tier-1 quality, and wholesale delivery across Bangladesh.",
+    "Direct B2B importer providing engineering-grade solar equipment and wholesale delivery across Bangladesh.",
   socials: {
     facebook: "https://facebook.com",
     linkedin: "https://linkedin.com",
@@ -49,12 +49,12 @@ export const defaultSiteConfig: SiteConfig = {
     {
       question: "Do you supply engineering datasheets and warranties?",
       answer:
-        "Yes, all solar panels, lithium batteries, and inverters include manufacturer technical datasheets and official importer warranty coverage.",
+        "Yes, all solar panels, lithium batteries, and inverters include official technical datasheets and factory specifications.",
     },
     {
       question: "What is your typical delivery lead time in Bangladesh?",
       answer:
-        "In-stock equipment is dispatched within 24 to 48 hours from our central Dhaka warehouse. Indent and bulk project consignments arrive according to container schedules.",
+        "Contact our sales team for current delivery schedules and stock availability for container and pallet orders.",
     },
     {
       question: "Do you offer installation or EPC services?",

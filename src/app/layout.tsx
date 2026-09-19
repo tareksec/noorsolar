@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | Noor Solar Energy",
   },
   description:
-    "Direct importer and bulk supplier of Tier-1 Solar Panels, Lithium-ion Batteries, and Solar Inverters in Bangladesh.",
+    "Direct importer and bulk supplier of solar panels, Lithium-ion Batteries, and Solar Inverters in Bangladesh.",
   keywords: [
     "Solar Panels Bangladesh",
     "Lithium Battery Bangladesh",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Noor Solar Energy — Solar Panels, Batteries & Inverters",
     description:
-      "Direct importer and bulk supplier of Tier-1 Solar Panels, Lithium-ion Batteries, and Solar Inverters in Bangladesh.",
+      "Direct importer and bulk supplier of solar panels, Lithium-ion Batteries, and Solar Inverters in Bangladesh.",
     type: "website",
     locale: "en_BD",
   },
