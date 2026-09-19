@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useRef } from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
@@ -48,7 +48,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
       highlight: "Up to 620W Peak Commercial Ratings",
       body: "We import advanced dual-glass bifacial modules designed for extreme ambient humidity and solar irradiance. Higher bifaciality factor ensures significant rear-side harvest for industrial factories, rooftop garments, and EPC utility plants.",
       icon: Zap,
-      previewImage: "/demo/panel-620w-topcon-front.svg",
+      previewImage: "/photos/story-panels.webp",
       counters: [
         { label: "Nominal Max Power", value: 620, prefix: "", suffix: " W", decimals: 0, subtext: "16BB N-Type TOPCon" },
         { label: "Module Efficiency", value: 22.6, prefix: "", suffix: "%", decimals: 1, subtext: "Anti-PID Dual Glass" },
@@ -67,7 +67,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
       highlight: "6,000+ Cycles @ 80% Depth of Discharge",
       body: "Safe, durable Lithium Iron Phosphate (LiFePO4) storage batteries. Available in standard 3U/4U 51.2V rack-mountable units as well as high-voltage modular systems for three-phase commercial hybrid solar backups.",
       icon: BatteryCharging,
-      previewImage: "/demo/battery-51v-280ah-rack-front.svg",
+      previewImage: "/photos/story-batteries.webp",
       counters: [
         { label: "Nominal Pack Energy", value: 14.33, prefix: "", suffix: " kWh", decimals: 2, subtext: "51.2V 280Ah Grade-A" },
         { label: "Cycle Life Rating", value: 6000, prefix: "", suffix: "+", decimals: 0, subtext: "@ 80% Depth of Discharge" },
@@ -86,7 +86,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
       highlight: "Up to 30kW Industrial Units & 98.7% Peak Efficiency",
       body: "High-efficiency pure sine wave solar inverters engineered for maximum uptime and grid stability. Featuring dual and 3-channel MPPT tracking, IP65/IP66 outdoor enclosures, and sub-10ms automatic UPS transfer for mission-critical industrial loads.",
       icon: Cpu,
-      previewImage: "/demo/inverter-10kw-hybrid-front.svg",
+      previewImage: "/photos/story-inverters.webp",
       counters: [
         { label: "Rated AC Output", value: 10, prefix: "", suffix: " kW", decimals: 0, subtext: "3-Phase 380V/400V" },
         { label: "Max Peak Efficiency", value: 98.7, prefix: "", suffix: "%", decimals: 1, subtext: "Multi-MPPT High Yield" },
@@ -207,17 +207,17 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
                     className={`story-desktop-panel absolute inset-0 grid grid-cols-12 gap-8 items-center bg-[#EDEDED] border border-[#DDE1DC] rounded-[40px] p-10 shadow-sm transition-all will-change-transform`}
                   >
                     {/* Left Column: Product Visual */}
-                    <div className="col-span-5 h-[480px] rounded-3xl bg-white/60 border border-white flex items-center justify-center p-6 relative overflow-hidden group">
-                      <div className="relative w-full h-full">
+                    <div className="col-span-5 h-[480px] rounded-3xl bg-white/60 border border-white flex items-center justify-center p-3 relative overflow-hidden group">
+                      <div className="relative w-full h-full rounded-2xl overflow-hidden">
                         <Image
                           src={story.previewImage}
                           alt={story.title}
                           fill
                           sizes="40vw"
-                          className="object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
-                      <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-[#DDE1DC] text-[11px] font-mono text-[#111311]">
+                      <div className="absolute top-5 left-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-xs border border-[#DDE1DC] text-[11px] font-mono text-[#111311] z-10 shadow-xs">
                         <IconComponent className="w-3.5 h-3.5 text-[#111311]" />
                         <span>{story.kicker}</span>
                       </div>
@@ -315,15 +315,15 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
                   key={story.slug}
                   className="rounded-3xl bg-[#EDEDED] border border-[#DDE1DC] p-6 shadow-sm flex flex-col space-y-6"
                 >
-                  <div className="relative w-full aspect-4/3 rounded-2xl bg-white/60 border border-white flex items-center justify-center p-4">
+                  <div className="relative w-full aspect-4/3 rounded-2xl bg-white/60 border border-white overflow-hidden">
                     <Image
                       src={story.previewImage}
                       alt={story.title}
                       fill
-                      sizes="90vw"
-                      className="object-contain p-2"
+                      sizes="(max-width: 768px) 100vw, 500px"
+                      className="object-cover"
                     />
-                    <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 border border-[#DDE1DC] text-[10px] font-mono text-[#111311]">
+                    <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-xs border border-[#DDE1DC] text-[10px] font-mono text-[#111311] z-10 shadow-xs">
                       <IconComponent className="w-3 h-3 text-[#111311]" />
                       <span>{story.kicker}</span>
                     </div>

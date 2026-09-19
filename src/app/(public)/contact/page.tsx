@@ -1,8 +1,9 @@
 import React from "react";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { getSiteSettings } from "@/lib/data/settings";
 import { ClosingCTA } from "@/components/sections/closing-cta";
-import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, MessageCircle, Sun, Headphones } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contact & Warehouse Logistics — Noor Solar Energy",
@@ -94,8 +95,8 @@ export default async function ContactPage() {
         <div className="p-8 sm:p-10 rounded-[36px] bg-white border border-[#DDE1DC] mb-16">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
             <div>
-              <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">Logistics Location</span>
-              <h2 className="text-2xl font-bold text-[#111311]">Central Commercial Depot</h2>
+              <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">Logistics & Assistance</span>
+              <h2 className="text-2xl font-bold text-[#111311]">Central Commercial Depot & Technical Liaison</h2>
             </div>
             <div className="flex items-center gap-2 text-xs font-mono text-[#111311] bg-[#EDEDED] px-4 py-2 rounded-full">
               <MapPin className="w-4 h-4 text-[#111311]" />
@@ -103,18 +104,42 @@ export default async function ContactPage() {
             </div>
           </div>
 
-          {/* Interactive Styled Map Container */}
-          <div className="w-full h-64 sm:h-80 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC] relative flex items-center justify-center overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(#DDE1DC_1px,transparent_1px)] [background-size:16px_16px] opacity-70" />
-            <div className="relative z-10 flex flex-col items-center text-center p-6 glass-card rounded-2xl border border-white max-w-sm">
-              <div className="w-10 h-10 rounded-full bg-[#CEF23E] flex items-center justify-center text-[#111311] mb-2 font-bold">
-                ☀
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Interactive Styled Map Container */}
+            <div className="lg:col-span-7 h-72 sm:h-80 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC] relative flex items-center justify-center overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(#DDE1DC_1px,transparent_1px)] [background-size:16px_16px] opacity-70" />
+              <div className="relative z-10 flex flex-col items-center text-center p-6 glass-card rounded-2xl border border-white max-w-sm">
+                <div className="w-10 h-10 rounded-full bg-[#CEF23E] flex items-center justify-center text-[#111311] mb-2 font-bold shadow-xs">
+                  <Sun className="w-5 h-5 text-[#111311]" />
+                </div>
+                <span className="font-bold text-sm text-[#111311]">Noor Solar Energy Central Office</span>
+                <span className="text-xs text-[#5C605C] mt-1">{settings.address}</span>
+                <span className="text-[10px] font-mono text-[#111311] mt-3 px-2.5 py-1 rounded-full bg-[#EDEDED]">
+                  Warehouse Loading Bay Available
+                </span>
               </div>
-              <span className="font-bold text-sm text-[#111311]">Noor Solar Energy Central Office</span>
-              <span className="text-xs text-[#5C605C] mt-1">{settings.address}</span>
-              <span className="text-[10px] font-mono text-[#111311] mt-3 px-2.5 py-1 rounded-full bg-[#EDEDED]">
-                Warehouse Loading Bay Available
-              </span>
+            </div>
+
+            {/* Field Engineering Liaison Photo Card */}
+            <div className="lg:col-span-5 flex flex-col justify-between p-6 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC]">
+              <div className="relative aspect-16/10 w-full rounded-xl overflow-hidden mb-4 bg-white">
+                <Image
+                  src="/photos/contact-sales-desk.webp"
+                  alt="Noor Solar Energy technical sales engineer providing phone consultation"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 400px"
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 text-xs font-mono text-[#111311] font-semibold mb-1">
+                  <Headphones className="w-4 h-4 text-[#111311]" />
+                  <span>Direct Technical Desk</span>
+                </div>
+                <p className="text-xs text-[#5C605C] leading-relaxed">
+                  Connect with our qualified electrical engineers for string calculation, single-line diagram review, and inverter warranty documentation.
+                </p>
+              </div>
             </div>
           </div>
         </div>

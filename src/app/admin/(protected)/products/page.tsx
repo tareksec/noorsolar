@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { getSession } from "@/lib/auth";
 import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
-import { ExternalLink, Plus, Edit, Copy, Search } from "lucide-react";
+import { ExternalLink, Plus, Edit, Copy, Search, Star } from "lucide-react";
 import { duplicateProductAction } from "@/app/admin/actions/products";
 
 async function toggleProductFeatured(formData: FormData) {
@@ -262,13 +262,14 @@ export default async function AdminProductsPage({ searchParams }: AdminProductsP
                     <button
                       type="submit"
                       title="Toggle featured status"
-                      className={`px-3 py-1.5 rounded-full text-xs font-mono transition-colors ${
+                      className={`px-3 py-1.5 rounded-full text-xs font-mono inline-flex items-center gap-1.5 transition-colors ${
                         p.isFeatured
                           ? "bg-[#111311] text-[#CEF23E]"
                           : "bg-[#EDEDED] text-[#5C605C] hover:bg-[#DDE1DC]"
                       }`}
                     >
-                      ★ {p.isFeatured ? "Featured" : "Make Featured"}
+                      <Star className={`w-3.5 h-3.5 ${p.isFeatured ? "fill-[#CEF23E]" : ""}`} />
+                      <span>{p.isFeatured ? "Featured" : "Make Featured"}</span>
                     </button>
                   </form>
 

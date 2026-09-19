@@ -1,14 +1,13 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowLeft, Sun } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { NotFoundIllustration } from "@/components/illustrations/not-found-illustration";
 
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-[#E4E7E4] flex items-center justify-center p-4">
       <div className="max-w-md w-full p-8 sm:p-10 rounded-[36px] bg-white border border-[#DDE1DC] text-center shadow-xl">
-        <div className="w-14 h-14 rounded-full bg-[#CEF23E] flex items-center justify-center mx-auto mb-6 text-[#111311]">
-          <Sun className="w-7 h-7" />
-        </div>
+        <NotFoundIllustration className="w-48 h-40 mx-auto mb-4" />
 
         <span className="text-xs font-mono font-bold text-[#CEF23E] bg-[#111311] px-3 py-1 rounded-full">
           ERROR 404

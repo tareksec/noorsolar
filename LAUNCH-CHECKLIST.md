@@ -44,6 +44,7 @@ Direct Admin Link: [Admin Content FAQ](/admin/content/faq)
 ### F. Demo Catalog Products (15 items)
 Direct Admin Link: [Admin Products Manager](/admin/products)
 - [ ] Review the 15 pre-seeded products (`N-Type TOPCon Bifacial 620W`, `48V 100Ah LiFePO4`, `10kW Hybrid Inverter`, etc.).
+- [ ] Replace demo studio photos and generated product images (`/demo/products/*`) with the supplier's real product photos and official catalog photography (front, angled, detail views).
 - [ ] Toggle to **Inactive** any models not currently in inventory or available for indent.
 - [ ] Update real BDT pricing, minimum order quantities (MOQ), and attach real manufacturer PDF datasheets.
 
@@ -51,6 +52,7 @@ Direct Admin Link: [Admin Products Manager](/admin/products)
 
 ## 2. Brand Assets & Visual Identity
 - [ ] **Official Company Logo:** Replace placeholder Sun icon with official high-resolution vector SVG or transparent PNG logo.
+- [ ] **Replace Demo Photos & Stock Imagery:** Replace all stock showcase imagery (`/photos/*`) and demo product renders (`/demo/products/*`) with the owner's authentic facility photos, incoming container unboxings, palletized warehouse stock, and real verified solar installation photos from Bangladesh project sites.
 - [ ] **Facility & Warehouse Photography:** Upload real photos of your Dhaka central warehouse, incoming container unboxings, and palletized stock.
 
 ---

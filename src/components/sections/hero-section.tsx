@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Box } from "lucide-react";
 import { HeroVisual } from "@/components/sections/hero-visual";
@@ -28,7 +29,20 @@ export function HeroSection({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Dashboard Container Card per DESIGN.md Section 4 */}
         <div className="relative p-6 sm:p-10 lg:p-14 rounded-[36px] sm:rounded-[44px] bg-[#EDEDED] border border-[#DDE1DC] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.06)] overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Subtle Authentic Solar Field Photo Layer */}
+          <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+            <Image
+              src="/photos/hero-solar-field.webp"
+              alt="Industrial solar field installations in Bangladesh"
+              fill
+              priority
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              className="object-cover object-center opacity-10 mix-blend-multiply"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#EDEDED] via-[#EDEDED]/90 to-[#EDEDED]/50" />
+          </div>
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column: Content & Call to Actions */}
             <div className="lg:col-span-7 flex flex-col justify-center">
               {/* Kicker */}

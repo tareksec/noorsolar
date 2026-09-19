@@ -1,6 +1,7 @@
-﻿"use client";
+"use client";
 
 import React, { useActionState, useState } from "react";
+import Image from "next/image";
 import { submitQuoteRequest, QuoteActionResult } from "@/app/actions/quote";
 import { MessageCircle, CheckCircle, Send, AlertCircle, Phone } from "lucide-react";
 
@@ -83,6 +84,21 @@ export function ClosingCTA({
                     Chat with an Engineer
                   </a>
                 </div>
+              </div>
+            </div>
+
+            <div className="relative aspect-16/9 w-full rounded-3xl overflow-hidden border border-[#DDE1DC] mt-6 shadow-sm bg-[#111311]">
+              <Image
+                src="/photos/cta-sunset-panels.webp"
+                alt="Solar panel array against sunset sky"
+                fill
+                sizes="(max-width: 1024px) 100vw, 450px"
+                className="object-cover opacity-90"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/85 via-transparent to-transparent" />
+              <div className="absolute bottom-3.5 left-4 right-4 text-white">
+                <span className="text-[11px] font-mono text-[#CEF23E] font-semibold block">Commercial Indents & Supply</span>
+                <span className="text-xs text-white/90 leading-tight block mt-0.5">Reliable dispatch across all 64 districts in Bangladesh</span>
               </div>
             </div>
           </div>
