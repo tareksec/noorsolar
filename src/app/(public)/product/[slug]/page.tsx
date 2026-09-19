@@ -1,11 +1,11 @@
-import React from "react";
+﻿import React from "react";
 import type { Metadata } from "next";
-import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/lib/data/products";
 import { ProductCard } from "@/components/product/product-card";
-import { ArrowLeft, ArrowUpRight, Box, Clock, Download, ShieldCheck } from "lucide-react";
+import { ProductGallery } from "@/components/product/product-gallery";
+import { ArrowUpRight, Box, Clock, Download, ShieldCheck } from "lucide-react";
 
 interface ProductPageProps {
   params: Promise<{
@@ -44,7 +44,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   }
 
   const { product, related } = data;
-  const primaryImage = product.images[0]?.url || "/demo/category-panels.svg";
 
   // Product JSON-LD structured data
   const jsonLd = {
@@ -56,38 +55,50 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     sku: product.model || product.slug,
     category: product.category.name,
     offers: {
-      "@type": "AggregateOffer",
-      priceCurrency: "BDT",
-      price: product.showPrice && product.priceBdt ? product.priceBdt : undefined,
+      "@type": "Offer",
       availability:
         product.stockStatus === "IN_STOCK"
           ? "https://schema.org/InStock"
-          : "https://schema.org/PreOrder",
+          : product.stockStatus === "INCOMING"
+          ? "https://schema.org/PreOrder"
+          : "https://schema.org/LimitedAvailability",
+      priceCurrency: "BDT",
+      price: "0",
+      priceValidUntil: "2026-12-31",
+      seller: {
+        "@type": "Organization",
+        name: "Noor Solar Energy BD",
+      },
     },
   };
 
   return (
-    <div className="pt-28 sm:pt-36 pb-24 bg-[#E4E7E4] min-h-screen">
-      {/* Inject JSON-LD */}
+    <div className="pt-24 pb-20 sm:pb-32 bg-[#E4E7E4] min-h-screen">
+      {/* Schema.org Product Metadata */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Breadcrumb & Navigation */}
-        <div className="mb-6 flex flex-wrap items-center gap-2 text-xs font-mono text-[#5C605C] min-w-0">
-          <Link href="/products" className="hover:text-[#111311] flex items-center gap-1">
-            <ArrowLeft className="w-3 h-3" />
-            <span>Catalog</span>
+        {/* Breadcrumb Navigation */}
+        <div className="flex items-center gap-2 text-xs font-mono text-[#5C605C] mb-8 overflow-x-auto whitespace-nowrap pb-2">
+          <Link href="/" className="hover:text-[#111311] transition-colors">
+            Home
           </Link>
           <span>/</span>
-          <Link href={`/category/${product.category.slug}`} className="hover:text-[#111311]">
+          <Link href="/products" className="hover:text-[#111311] transition-colors">
+            Products
+          </Link>
+          <span>/</span>
+          <Link
+            href={`/category/${product.category.slug}`}
+            className="hover:text-[#111311] transition-colors"
+          >
             {product.category.name}
           </Link>
           <span>/</span>
-          <span className="text-[#111311] font-bold truncate max-w-[200px] sm:max-w-none">
+          <span className="text-[#111311] font-semibold truncate max-w-[200px] sm:max-w-none">
             {product.name}
           </span>
         </div>
@@ -97,36 +108,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
             
             {/* Left: Product Media Gallery */}
-            <div className="lg:col-span-6 flex flex-col gap-4">
-              <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-[#EDEDED] border border-[#DDE1DC] flex items-center justify-center p-4">
-                <Image
-                  src={primaryImage}
-                  alt={product.name}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover"
-                />
-              </div>
-
-              {/* Thumbnail Gallery (if multiple) */}
-              {product.images.length > 1 && (
-                <div className="flex items-center gap-3 overflow-x-auto pb-2">
-                  {product.images.map((img) => (
-                    <div
-                      key={img.id}
-                      className="relative w-20 h-20 rounded-2xl overflow-hidden bg-[#EDEDED] border border-[#DDE1DC] shrink-0"
-                    >
-                      <Image
-                        src={img.url}
-                        alt={img.alt}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div className="lg:col-span-6 min-w-0">
+              <ProductGallery
+                images={product.images}
+                productName={product.name}
+              />
             </div>
 
             {/* Right: Commercial Information & Quote CTA */}
@@ -192,11 +178,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-center gap-3 pt-4">
+              {/* Commercial Quote Action CTAs */}
+              <div className="flex flex-col sm:flex-row items-center gap-4 pt-6 border-t border-[#EDEDED]">
                 <Link
-                  href={`/#quote-section?product=${product.slug}`}
-                  className="w-full sm:w-auto flex-grow flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-semibold text-sm tracking-tight transition-all active:scale-95 shadow-md"
+                  href={`/contact?product=${encodeURIComponent(product.slug)}`}
+                  className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 py-4 px-6 rounded-full bg-[#CEF23E] hover:bg-[#bce02b] text-[#111311] font-bold text-sm tracking-tight transition-all duration-200 shadow-sm active:scale-95"
                 >
                   <span>Request Wholesale Quotation</span>
                   <ArrowUpRight className="w-4 h-4" />
@@ -307,3 +293,4 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     </div>
   );
 }
+

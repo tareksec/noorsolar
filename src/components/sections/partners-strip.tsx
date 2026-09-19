@@ -1,4 +1,6 @@
-﻿import React from "react";
+﻿"use client";
+
+import React from "react";
 import type { Partner } from "@prisma/client";
 import { AppImage } from "@/components/ui/app-image";
 
@@ -11,27 +13,32 @@ export function PartnersStrip({ partners }: PartnersStripProps) {
     return null;
   }
 
-  return (
-    <section className="py-16 bg-[#EDEDED] border-y border-[#DDE1DC]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <p className="text-[11px] font-mono uppercase tracking-widest text-[#5C605C] font-semibold">
-            Supplying Commercial Contractors, Solar EPCs & Industrial Facilities
-          </p>
-        </div>
+  // Duplicate for seamless 50% loop
+  const duplicated = [...partners, ...partners];
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {partners.map((p) => {
-            const Content = (
-              <div className="rounded-xl bg-white/90 backdrop-blur-xs border border-[#DDE1DC] p-4 flex flex-col items-center justify-center min-h-[96px] hover:border-[#CEF23E] hover:shadow-xs transition-all group w-full h-full">
+  return (
+    <section className="py-16 bg-[#EDEDED] border-y border-[#DDE1DC] overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center">
+        <p className="text-[11px] font-mono uppercase tracking-widest text-[#5C605C] font-semibold">
+          Supplying Commercial Contractors, Solar EPCs & Industrial Facilities
+        </p>
+      </div>
+
+      {/* Marquee viewport with gradient mask edges */}
+      <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+        <div className="marquee-track flex items-center gap-4 py-2">
+          {duplicated.map((p, idx) => {
+            const isDuplicate = idx >= partners.length;
+            const cardContent = (
+              <div className="rounded-2xl bg-white/90 backdrop-blur-xs border border-[#DDE1DC] px-6 py-4 flex flex-col items-center justify-center min-w-[190px] h-[96px] hover:border-[#CEF23E] hover:shadow-xs transition-all group shrink-0">
                 {p.logo ? (
-                  <div className="w-full h-10 relative flex items-center justify-center mb-2">
+                  <div className="w-full h-9 relative flex items-center justify-center mb-1.5">
                     <AppImage
                       src={p.logo}
-                      alt={p.name}
+                      alt={isDuplicate ? "" : p.name}
                       width={120}
-                      height={40}
-                      className="max-h-10 max-w-[120px] object-contain group-hover:scale-105 transition-transform"
+                      height={36}
+                      className="max-h-9 max-w-[120px] object-contain group-hover:scale-105 transition-transform"
                     />
                   </div>
                 ) : (
@@ -48,21 +55,27 @@ export function PartnersStrip({ partners }: PartnersStripProps) {
             if (p.url) {
               return (
                 <a
-                  key={p.id}
+                  key={`${p.id}-${idx}`}
                   href={p.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-xl"
+                  tabIndex={isDuplicate ? -1 : 0}
+                  aria-hidden={isDuplicate}
+                  className="block shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-2xl"
                   title={p.name}
                 >
-                  {Content}
+                  {cardContent}
                 </a>
               );
             }
 
             return (
-              <div key={p.id} className="block">
-                {Content}
+              <div
+                key={`${p.id}-${idx}`}
+                aria-hidden={isDuplicate}
+                className="shrink-0"
+              >
+                {cardContent}
               </div>
             );
           })}

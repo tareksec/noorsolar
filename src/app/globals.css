@@ -60,6 +60,36 @@ body {
   box-shadow: 0 0 35px -5px rgba(206, 242, 62, 0.35);
 }
 
+/* Infinite Marquee */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 24s linear infinite;
+}
+
+.marquee-track:hover,
+.marquee-track:focus-within {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
 /* Custom scrollbar for subtle aesthetic */
 ::-webkit-scrollbar {
   width: 8px;

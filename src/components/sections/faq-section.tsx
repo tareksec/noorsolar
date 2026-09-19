@@ -1,7 +1,8 @@
 ﻿"use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { ChevronDown } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 
 interface FAQItemLike {
   id?: string;
@@ -14,7 +15,9 @@ interface FAQSectionProps {
 }
 
 export function FAQSection({ items }: FAQSectionProps) {
+  const shouldReduceMotion = useReducedMotion();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   if (!items || items.length === 0) {
     return null;
@@ -22,6 +25,24 @@ export function FAQSection({ items }: FAQSectionProps) {
 
   const toggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const nextIndex = (index + 1) % items.length;
+      buttonRefs.current[nextIndex]?.focus();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      const prevIndex = (index - 1 + items.length) % items.length;
+      buttonRefs.current[prevIndex]?.focus();
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      buttonRefs.current[0]?.focus();
+    } else if (e.key === "End") {
+      e.preventDefault();
+      buttonRefs.current[items.length - 1]?.focus();
+    }
   };
 
   return (
@@ -40,31 +61,58 @@ export function FAQSection({ items }: FAQSectionProps) {
         <div className="space-y-3">
           {items.map((item, index) => {
             const isOpen = openIndex === index;
+            const buttonId = `faq-btn-${index}`;
+            const panelId = `faq-panel-${index}`;
+
             return (
               <div
                 key={item.id || index}
-                className="rounded-2xl bg-white border border-[#DDE1DC] overflow-hidden transition-all duration-200"
+                className="rounded-2xl bg-white border border-[#DDE1DC] overflow-hidden transition-all duration-200 shadow-xs"
               >
                 <button
+                  ref={(el) => {
+                    buttonRefs.current[index] = el;
+                  }}
+                  id={buttonId}
                   onClick={() => toggle(index)}
-                  className="w-full flex items-center justify-between p-5 text-left text-sm sm:text-base font-bold text-[#111311] hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  className="faq-item-button w-full flex items-center justify-between p-5 text-left text-sm sm:text-base font-bold text-[#111311] hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] cursor-pointer"
                   aria-expanded={isOpen}
+                  aria-controls={panelId}
                 >
                   <span className="pr-4">{item.question}</span>
-                  <div
-                    className={`w-7 h-7 rounded-full bg-[#EDEDED] flex items-center justify-center shrink-0 transition-transform duration-200 ${
-                      isOpen ? "rotate-180 bg-[#111311] text-white" : "text-[#111311]"
+                  <motion.div
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
+                    className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+                      isOpen ? "bg-[#111311] text-white" : "bg-[#EDEDED] text-[#111311]"
                     }`}
                   >
                     <ChevronDown className="w-4 h-4" />
-                  </div>
+                  </motion.div>
                 </button>
 
-                {isOpen && (
-                  <div className="px-5 pb-5 text-xs sm:text-sm text-[#5C605C] leading-relaxed border-t border-[#EDEDED] pt-3 animate-in fade-in duration-200">
-                    {item.answer}
-                  </div>
-                )}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={buttonId}
+                      initial={shouldReduceMotion ? { opacity: 1 } : { height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={shouldReduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                      transition={{
+                        duration: shouldReduceMotion ? 0 : 0.28,
+                        ease: [0.04, 0.62, 0.23, 0.98],
+                      }}
+                      className="faq-item-panel overflow-hidden"
+                    >
+                      <div className="px-5 pb-5 text-xs sm:text-sm text-[#5C605C] leading-relaxed border-t border-[#EDEDED] pt-3">
+                        {item.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             );
           })}

@@ -1,9 +1,10 @@
-"use client";
+﻿"use client";
 
-import React from "react";
+import React, { useState, useRef } from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
-import { ArrowUpRight, CheckCircle2, Clock } from "lucide-react";
+import { ArrowUpRight, ArrowRight, MessageSquare, Clock, CheckCircle2 } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
 
 interface ProductCardProps {
   product: {
@@ -22,11 +23,38 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const shouldReduceMotion = useReducedMotion();
+  const [isPointerDevice, setIsPointerDevice] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+
+  const handlePointerEnter = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === "mouse") {
+      setIsPointerDevice(true);
+      setIsHovered(true);
+    }
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse" || shouldReduceMotion || !imageContainerRef.current) return;
+    const rect = imageContainerRef.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({
+      x: -y * 12, // rotateX
+      y: x * 12,  // rotateY
+    });
+  };
+
+  const handlePointerLeave = () => {
+    setIsHovered(false);
+    setTilt({ x: 0, y: 0 });
+  };
 
   const primaryImage = product.images[0]?.url || "/demo/category-panels.svg";
   const primaryAlt = product.images[0]?.alt || product.name;
-
-  // Key specs preview (first 2-3 specs)
   const previewSpecs = product.specs.slice(0, 2);
 
   const getStockBadge = (status: string) => {
@@ -42,41 +70,80 @@ export function ProductCard({ product }: ProductCardProps) {
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-amber-100 text-amber-900 border border-amber-300">
             <Clock className="w-3 h-3 text-amber-700" />
-            Incoming Shipment
+            Incoming
           </span>
         );
       default:
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-[#EDEDED] text-[#5C605C] border border-[#DDE1DC]">
             <CheckCircle2 className="w-3 h-3 text-[#5C605C]" />
-            On Request / Indent
+            On Request
           </span>
         );
     }
   };
 
+  const imageTransform = isPointerDevice && !shouldReduceMotion
+    ? {
+        transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${isHovered ? 1.05 : 1})`,
+        transition: isHovered ? "transform 0.1s ease-out" : "transform 0.35s ease-out",
+      }
+    : {};
+
   return (
     <div
-      className="group relative flex flex-col justify-between p-5 rounded-[28px] bg-white border border-[#DDE1DC] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] transition-all duration-300 hover:shadow-[0_16px_36px_-10px_rgba(0,0,0,0.08)] hover:border-[#111311]/20 hover:-translate-y-1"
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
+      className="group relative flex flex-col justify-between p-5 rounded-[28px] bg-white border border-[#DDE1DC] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] transition-all duration-300 hover:shadow-[0_16px_36px_-10px_rgba(0,0,0,0.08)] hover:border-[#111311]/25 hover:-translate-y-1 h-full"
     >
-      {/* Top Image Container */}
-      <div className="relative w-full aspect-[16/11] rounded-2xl overflow-hidden bg-[#EDEDED] flex items-center justify-center p-3 border border-[#E4E7E4]">
-        <Image
-          src={primaryImage}
-          alt={primaryAlt}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+      {/* Top Image Container with 3D Tilt on Pointer Devices */}
+      <div
+        ref={imageContainerRef}
+        onPointerMove={handlePointerMove}
+        className="relative w-full aspect-[16/11] rounded-2xl overflow-hidden bg-[#EDEDED] flex items-center justify-center p-3 border border-[#E4E7E4]"
+      >
+        <div style={imageTransform} className="relative w-full h-full will-change-transform">
+          <Image
+            src={primaryImage}
+            alt={primaryAlt}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover"
+          />
+        </div>
 
         {/* Stock Status Badge */}
-        <div className="absolute top-3 left-3 z-10">{getStockBadge(product.stockStatus)}</div>
+        <div className="absolute top-3 left-3 z-10 pointer-events-none">
+          {getStockBadge(product.stockStatus)}
+        </div>
 
         {/* Category Tag */}
         {product.category && (
-          <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-white/85 backdrop-blur-md text-[10px] font-mono uppercase tracking-wider text-[#111311] border border-white">
+          <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-mono uppercase tracking-wider text-[#111311] border border-white pointer-events-none">
             {product.category.name}
           </div>
+        )}
+
+        {/* Sliding "Request Quote" Affordance on Pointer Devices */}
+        {isPointerDevice && !shouldReduceMotion && (
+          <motion.div
+            initial={false}
+            animate={{
+              opacity: isHovered ? 1 : 0,
+              y: isHovered ? 0 : 14,
+            }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className="absolute bottom-3 inset-x-3 z-20 pointer-events-auto"
+          >
+            <Link
+              href={`/#quote-section?product=${product.slug}`}
+              className="w-full py-2.5 px-4 rounded-full bg-[#111311] hover:bg-black text-[#CEF23E] font-semibold text-xs tracking-tight flex items-center justify-center gap-2 shadow-lg transition-colors"
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>Request Quote</span>
+              <ArrowRight className="w-3.5 h-3.5 text-white" />
+            </Link>
+          </motion.div>
         )}
       </div>
 
@@ -89,7 +156,7 @@ export function ProductCard({ product }: ProductCardProps) {
         )}
         <Link
           href={`/product/${product.slug}`}
-          className="font-bold text-base text-[#111311] leading-snug group-hover:text-black line-clamp-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-sm"
+          className="font-bold text-base text-[#111311] leading-snug group-hover:text-black line-clamp-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-xs"
         >
           {product.name}
         </Link>
@@ -116,7 +183,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <div className="flex flex-col">
               <span className="text-[10px] font-mono uppercase text-[#5C605C]">Wholesale</span>
               <span className="text-sm font-mono font-bold text-[#111311]">
-                ৳ {product.priceBdt.toLocaleString()}
+                BDT {product.priceBdt.toLocaleString()}
               </span>
             </div>
           ) : (

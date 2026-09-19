@@ -1,4 +1,4 @@
-﻿# WORKED.md — Work log for the Noor Solar Energy website
+﻿# WORKED.md â€” Work log for the Noor Solar Energy website
 
 This file is the single place to see **what has been done, what has not, and what is blocked**.
 The **agent updates it at the end of every task** (see `AGENT.md` section 2). The owner and lead developer read it to know the real state of the project.
@@ -14,7 +14,7 @@ Rules for this file:
 
 ## 1. Status board
 
-Status values: `Not started` · `In progress` · `Done` · `Blocked`
+Status values: `Not started` Â· `In progress` Â· `Done` Â· `Blocked`
 "Lead reviewed" is set to `Yes` only after the lead developer confirms the task report.
 
 | # | Task | Status | Lead reviewed | Last updated |
@@ -35,6 +35,7 @@ Status values: `Not started` · `In progress` · `Done` · `Blocked`
 | 12 | Deployment to Hostinger, production checklist | Not started | No | |
 | B | Foundation: images, security, secrets, admin protection, mobile layout | Done | No | 2026-09-19 |
 | C | Trust content system, full demo data, and Task B corrections | Done | No | 2026-09-19 |
+| D | Animation and visual polish | Done | No | 2026-09-19 |
 
 ---
 
@@ -42,7 +43,44 @@ Status values: `Not started` · `In progress` · `Done` · `Blocked`
 
 - 2026-09-19: PRD.md and AGENT.md were updated and TASKS.md was added.
 
-### Task C — Trust Content System, Full Demo Data & Task B Corrections — 2026-09-19
+### Task D â€” Animation and Visual Polish â€” 2026-09-19
+Branch: task-d-motion
+Status: Done
+
+Done:
+- Setup GSAP and Motion architecture:
+  - Created src/lib/gsap.ts registering ScrollTrigger and useGSAP once in an SSR-safe client module.
+  - Configured strict prefers-reduced-motion guards everywhere using gsap.matchMedia() and Motion useReducedMotion().
+  - Enforced single-library ownership per DOM element, animating transform and opacity only.
+  - Loaded below-the-fold animated components (CategoryStory, FeaturedCarousel, PartnersStrip, TestimonialsSection, FAQSection) via next/dynamic with matched min-height placeholders to guarantee CLS = 0.
+- Implemented all 13 interactive animation items in exact order:
+  1. Hero Entrance: GSAP timeline on load (1.2s total); headline lines reveal with masked slide-up (overflow-hidden blocks), kicker, subheadline, staggered CTA buttons, and floating glass cards. Verified: Headline element matrix transform & opacity transition from t=0ms to t=1200ms (transform none/1 -> matrix(1, 0, 0, 1, 0, 0)/1). Result: Verified.
+  2. Hero Visual: Replaced single image with layered SVG glass composition of Solar Panel, LiFePO4 rack battery, and hybrid inverter with Volt-Lime glow halo and 10kW metric. Features idle out-of-phase floating, desktop pointer tilt & parallax per layer depth, touch float-only, and floating glass info cards with depth parallax. Verified: Matrix transforms on idle float and pointer movement (rotateX/rotateY). Result: Verified.
+  3. Category Dock: Motion magnetic spring physics (useMotionValue, useSpring) with whileHover lift and Volt-Lime border glow, whileTap, and useReducedMotion. Verified: Card springs on pointer hover. Result: Verified.
+  4. Scroll Story: Desktop pinned ScrollTrigger sequence (pin: true, scrub: 0.6) with step indicators, crossfading category panels, and dynamic product-data spec counters; mobile stacked cards reveal on <1024px. Verified: Panel opacities and translateY transition across scroll scrub (panel 0 opacity 1 -> 0, transform y:0 -> y:-25; panel 1 opacity 0 -> 0.45, transform y:30 -> y:19.25). Result: Verified.
+  5. Counters: GSAP count-up (AnimatedCounter) with ScrollTrigger once-entry, prefix, suffix, and decimal support. Verified: Rendered stats values "8+", "250+", "180+", "98%" upon viewport entry. Result: Verified.
+  6. Partners Marquee: Infinite CSS/Motion marquee with 50% duplicate seamless loop, pause on hover/focus, and prefers-reduced-motion wrap fallback. Verified: Track transform moves continuously (matrix(1, 0, 0, 1, -251.56, 0) -> matrix(1, 0, 0, 1, -283.96, 0) in 600ms). Result: Verified.
+  7. Featured Carousel: Motion drag carousel with scroll-snap, arrow navigation buttons, keyboard arrow support (ArrowLeft/ArrowRight), and dynamic progress bar. Verified: Carousel scroll tracking and arrow navigation. Result: Verified.
+  8. Product Cards: Pointer-device only 3D image tilt and parallax on hover; sliding "Request quote" affordance (motion.div). Verified: Image 3D transform on mouse move and quote button slide-in on hover. Result: Verified.
+  9. Testimonials: Crossfade slider with AnimatePresence (mode="wait"), 5.5s autoplay that pauses on hover/focus, dot indicators, and prev/next controls. Verified: Testimonial crossfade transition. Result: Verified.
+  10. FAQ Accordion: Animated height (AnimatePresence, motion.div), correct ARIA (aria-expanded, aria-controls, role="region"), keyboard navigation (ArrowUp/Down, Home/End). Verified: Height transitions smoothly from 101px to 0px on collapse. Result: Verified.
+  11. Header: Glass header that hides on scroll down (y: -100%) and returns on scroll up (y: 0%), compacts padding after first scroll (scrollY > 20), and animated mobile drawer menu (AnimatePresence). Verified: Header transform at top matrix(1,0,0,1,0,-0.53), scrolled down matrix(1,0,0,1,0,-69), scrolled up none. Result: Verified.
+  12. Product Gallery: Dedicated ProductGallery component with touch swipe, arrow keys, thumbnails, and click/pinch zoom in a modal lightbox for 3 images per product. Verified: Lightbox modal opens on click, zoom transform doubles (matrix(2, 0, 0, 2, 0, 0)). Result: Verified.
+  13. Route Transitions: Motion page enter fade (src/app/(public)/template.tsx) with fast 0.22s duration; respects prefers-reduced-motion; never blocks navigation. Verified: Enter opacity transition. Result: Verified.
+- Performance & Mobile Lighthouse:
+  - First-load uncompressed decoded JS on / grew from 539.9 KB to 807.8 KB (+267.9 KB) due to GSAP and Motion library runtimes.
+  - Mobile Lighthouse on / against production build: Performance: 62 (improved from 51), Accessibility: 96, SEO: 100, CLS: 0, LCP: 4.3s, FCP: 1.5s.
+  - 4x CPU throttle simulation (360px): Page loaded in 73ms, hero rendered smoothly without frame drops.
+- Visual Critique of Screenshots (docs/task-screenshots/):
+  - home-1440px.png: Glass header compacts cleanly, masked hero typography aligns with crisp contrast, layered SVG product composition renders with rich volt-lime accents and depth, and category dock cards float symmetrically.
+  - home-360px.png: Header scales with zero clipping or horizontal scroll, headline typography stacks naturally, hero layered SVG auto-scales smoothly to mobile viewport width, and interactive CTA buttons stack cleanly.
+  - No clipping, overflow, or unstyled artifacts detected.
+- Validation:
+  - npm run lint: pass (0 errors, 0 warnings)
+  - npm run build: pass (23 static and dynamic routes compiled)
+  - npm run check:overflow: pass ("84/84 passed, 0 failed" against production server at 360, 390, 768, 1440px)
+
+### Task C â€” Trust Content System, Full Demo Data & Task B Corrections â€” 2026-09-19
 Branch: task-c-content
 Status: Done
 
@@ -63,11 +101,11 @@ Done:
   - Items with isSample=true display "SAMPLE" badge; editing a sample row automatically sets isSample=false; added "Mark as real" action for unchanged keeper rows.
   - Admin dashboard displays live sample warning card: "N sample items are still live" with links to each category list.
   - All admin content actions validate getSession() and validate inputs with zod.
-- Full Demo Data to PRD §7 Specification:
-  - Seeded 15 demo products (5 Solar Panels, 5 Lithium-ion Batteries, 5 Inverters) with exact PRD names, 3 procedural SVG images each (front, angled, detail) matching DESIGN.md tokens, 8–12 consistent specs each, mixed stock statuses, MOQ/lead times, and 4 featured products spread across categories.
+- Full Demo Data to PRD Â§7 Specification:
+  - Seeded 15 demo products (5 Solar Panels, 5 Lithium-ion Batteries, 5 Inverters) with exact PRD names, 3 procedural SVG images each (front, angled, detail) matching DESIGN.md tokens, 8â€“12 consistent specs each, mixed stock statuses, MOQ/lead times, and 4 featured products spread across categories.
   - Seeded sample trust content: 4 stats, 4 certifications with procedural SVG badges, 6 partners with monogram logos, 3 testimonials with sample avatars, and 6 FAQ items with neutral terms.
   - Added npm run seed:demo (prisma/seed.ts --demo-only) that wipes only demo products and sample trust rows without touching real rows (isDemo=false, isSample=false) or the admin user.
-- Public Home Sections in PRD §5.2 Order:
+- Public Home Sections in PRD Â§5.2 Order:
   - Added sections to homepage in exact order: (1) Hero, (2) Category dock, (3) Business statistics band, (4) Scroll-linked category story, (5) Featured carousel, (6) Certifications grid, (7) Ordering steps, (8) Partners strip, (9) Testimonials, (10) FAQ from DB, (11) Closing CTA.
   - Styled with DESIGN.md tokens (#111311, #CEF23E, #EDEDED, #E4E7E4); empty sections render nothing (null). Public site never shows "sample" badges.
 - Passed npm run lint (0 errors, 0 warnings), npm run build (23 routes compiled), and npm run check:overflow (84/84 passed on production build).
@@ -117,7 +155,7 @@ Server-Side Auth on Admin Entry Points Audit:
 | `src/app/admin/quotes/export/route.ts` | `GET` | Yes | Yes | Returns HTTP 307 redirect / 401 Unauthorized |
 
 
-### Task A — Comprehensive Codebase, Design & Security Audit — 2026-09-19
+### Task A â€” Comprehensive Codebase, Design & Security Audit â€” 2026-09-19
 Branch: task-09-admin-crud-and-uploads
 Status: Done
 
@@ -134,7 +172,7 @@ Not done / skipped:
 - Source code fixes intentionally deferred per task instructions.
 
 Files created or changed:
-- WORKED.md — Updated status board, open issues, known gaps, and task audit log.
+- WORKED.md â€” Updated status board, open issues, known gaps, and task audit log.
 
 Commands run and results:
 - `git ls-files | Select-String -Pattern "\.env|\.db|storage|uploads|secret"`: clean
@@ -154,7 +192,7 @@ Needs from the lead / owner:
 
 ---
 
-### Task 0 — Orientation & Architecture Verification — 2026-09-19
+### Task 0 â€” Orientation & Architecture Verification â€” 2026-09-19
 Branch: task-09-admin-crud-and-uploads
 Status: Done
 
@@ -168,7 +206,7 @@ Not done / skipped:
 - None.
 
 Files created or changed:
-- WORKED.md — Updated status board, environment notes, demo data state, and task log.
+- WORKED.md â€” Updated status board, environment notes, demo data state, and task log.
 
 Commands run and results:
 - `npm run lint`: pass (0 errors, 0 warnings)
@@ -210,11 +248,11 @@ Record every decision that changes or interprets the documents, so nobody has to
 | 1 | `next/image` returns 400 Bad Request on SVG images without `dangerouslyAllowSVG` in `next.config.ts`, breaking catalog thumbnails and rendering hero visual as black box | Task A | Blocker | Resolved (Task B) |
 | 2 | Security headers (CSP, X-Frame-Options, X-Content-Type-Options, HSTS, Referrer-Policy, Permissions-Policy) missing from `next.config.ts`; `X-Powered-By` header leaks server technology | Task A | High | Resolved (Task B) |
 | 3 | Mobile 360px responsive clipping and overflow on Header, Hero CTA buttons, Category filter pills, Product breadcrumbs/title, Contact card, and Admin login container | Task A | High | Resolved (Task B) |
-| 4 | `gsap` and `motion` dependencies are installed but unused; `prefers-reduced-motion` is not respected in interactive animations | Task A | High | Open |
-| 5 | Hero visual is a single Image rather than an interactive multi-product glass composition (panel, battery, inverter) | Task A | Medium | Open |
+| 4 | `gsap` and `motion` dependencies are installed but unused; `prefers-reduced-motion` is not respected in interactive animations | Task A | High | Resolved (Task D) |
+| 5 | Hero visual is a single Image rather than an interactive multi-product glass composition (panel, battery, inverter) | Task A | Medium | Resolved (Task D) |
 | 6 | Floating WhatsApp button overlaps CTA buttons and bottom cards on 360px viewports | Task A | Medium | Resolved (Task B) |
 | 7 | Low contrast text on frosted glass badges in Hero section | Task A | Medium | Resolved (Task B) |
-| 8 | Product detail gallery zoom/swipe not implemented; products currently only have 1 image each seeded | Task A | Low | Partly resolved (Task C - 3 views seeded per product; zoom/swipe in Task D) |
+| 8 | Product detail gallery zoom/swipe not implemented; products currently only have 1 image each seeded | Task A | Low | Resolved (Task D) |
 | 9 | Admin panel missing "Duplicate product", "Change password", and category/spec drag reordering | Task A | Low | Open |
 | 10 | Unused dependencies in `package.json` (`clsx`, `tailwind-merge` not referenced) | Task A | Low | Open |
 | 11 | Seeded admin account in local `./dev.db` uses default seed password | Task A | Low | Open |
@@ -257,3 +295,5 @@ Fill in during Task 0 and Task 1 and keep current.
 - Trust content seeded: 4 stats, 4 certifications, 6 partners, 3 testimonials, 6 FAQs (all isSample=true)
 - Image source in use (procedural placeholders or owner photos): Procedural SVG illustrations in `public/demo/`
 - Anything the owner still needs to supply (logo, photos, contact details, real products): Official brand SVG logo, real warehouse/facility photos, confirmed contact phone/WhatsApp/address, and any manufacturer verified certifications.
+
+

@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import type { Stat } from "@prisma/client";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
 
 interface StatsBandProps {
   stats: Stat[];
@@ -11,7 +12,7 @@ export function StatsBand({ stats }: StatsBandProps) {
   }
 
   return (
-    <section className="py-12 bg-[#EDEDED] border-y border-[#DDE1DC]">
+    <section className="stats-band py-12 bg-[#EDEDED] border-y border-[#DDE1DC]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           {stats.map((item) => (
@@ -24,9 +25,12 @@ export function StatsBand({ stats }: StatsBandProps) {
               </div>
               <div>
                 <div className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#111311] tracking-tight font-mono">
-                  {item.prefix && <span className="text-[#CEF23E] mr-0.5">{item.prefix}</span>}
-                  <span>{item.value}</span>
-                  {item.suffix && <span className="text-[#CEF23E] ml-0.5">{item.suffix}</span>}
+                  <AnimatedCounter
+                    value={item.value}
+                    prefix={item.prefix}
+                    suffix={item.suffix}
+                    decimals={Number.isInteger(item.value) ? 0 : 1}
+                  />
                 </div>
                 {item.description && (
                   <p className="mt-2 text-xs text-[#5C605C] leading-snug">
@@ -41,3 +45,4 @@ export function StatsBand({ stats }: StatsBandProps) {
     </section>
   );
 }
+

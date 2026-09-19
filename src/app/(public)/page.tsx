@@ -1,4 +1,5 @@
 ﻿import React from "react";
+import dynamic from "next/dynamic";
 import { getCategories } from "@/lib/data/categories";
 import { getFeaturedProducts } from "@/lib/data/products";
 import { getSiteSettings } from "@/lib/data/settings";
@@ -13,14 +14,58 @@ import {
 import { HeroSection } from "@/components/sections/hero-section";
 import { CategoryDock } from "@/components/sections/category-dock";
 import { StatsBand } from "@/components/sections/stats-band";
-import { CategoryStory } from "@/components/sections/category-story";
-import { FeaturedCarousel } from "@/components/sections/featured-carousel";
 import { CertificationsSection } from "@/components/sections/certifications-section";
 import { OrderingSteps } from "@/components/sections/ordering-steps";
-import { PartnersStrip } from "@/components/sections/partners-strip";
-import { TestimonialsSection } from "@/components/sections/testimonials-section";
-import { FAQSection } from "@/components/sections/faq-section";
 import { ClosingCTA } from "@/components/sections/closing-cta";
+
+// Below-the-fold animated components loaded dynamically to reduce initial JS bundle size
+const CategoryStory = dynamic(
+  () =>
+    import("@/components/sections/category-story").then(
+      (mod) => mod.CategoryStory
+    ),
+  {
+    loading: () => <div className="min-h-[450px] bg-[#E4E7E4]" />,
+  }
+);
+
+const FeaturedCarousel = dynamic(
+  () =>
+    import("@/components/sections/featured-carousel").then(
+      (mod) => mod.FeaturedCarousel
+    ),
+  {
+    loading: () => <div className="min-h-[450px] bg-[#E4E7E4]" />,
+  }
+);
+
+const PartnersStrip = dynamic(
+  () =>
+    import("@/components/sections/partners-strip").then(
+      (mod) => mod.PartnersStrip
+    ),
+  {
+    loading: () => <div className="min-h-[120px] bg-[#E4E7E4]" />,
+  }
+);
+
+const TestimonialsSection = dynamic(
+  () =>
+    import("@/components/sections/testimonials-section").then(
+      (mod) => mod.TestimonialsSection
+    ),
+  {
+    loading: () => <div className="min-h-[360px] bg-[#E4E7E4]" />,
+  }
+);
+
+const FAQSection = dynamic(
+  () =>
+    import("@/components/sections/faq-section").then((mod) => mod.FAQSection),
+  {
+    loading: () => <div className="min-h-[380px] bg-[#E4E7E4]" />,
+  }
+);
 
 export const revalidate = 60; // On-demand or 60s cache revalidation
 

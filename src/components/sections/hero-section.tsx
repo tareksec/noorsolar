@@ -1,9 +1,11 @@
 ﻿"use client";
 
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
-import { AppImage as Image } from "@/components/ui/app-image";
-import { ArrowRight, ShieldCheck, Box, Zap, Truck } from "lucide-react";
+import { ArrowRight, ShieldCheck, Box } from "lucide-react";
+import { gsap } from "@/lib/gsap";
+import { useGSAP } from "@/lib/gsap";
+import { HeroVisual } from "@/components/sections/hero-visual";
 
 interface HeroSectionProps {
   headline?: string;
@@ -18,17 +20,87 @@ export function HeroSection({
   primaryCta = "Request Quote",
   secondaryCta = "Browse Products",
 }: HeroSectionProps) {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLElement>(null);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setMousePos({ x, y });
-  };
+  // Split headline into words or natural lines for masked slide-up reveal
+  const headlineWords = headline.split(" ");
+  // Group into ~3 lines for punchy typography
+  const line1 = headlineWords.slice(0, Math.ceil(headlineWords.length / 3)).join(" ");
+  const line2 = headlineWords
+    .slice(Math.ceil(headlineWords.length / 3), Math.ceil((headlineWords.length * 2) / 3))
+    .join(" ");
+  const line3 = headlineWords.slice(Math.ceil((headlineWords.length * 2) / 3)).join(" ");
+  const lines = [line1, line2, line3].filter(Boolean);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const tl = gsap.timeline({
+          defaults: { ease: "power3.out" },
+        });
+
+        // 1.2s total orchestrated entrance timeline
+        tl.from(".hero-kicker", {
+          opacity: 0,
+          y: 16,
+          duration: 0.5,
+        })
+          .from(
+            ".hero-headline-line",
+            {
+              yPercent: 120,
+              duration: 0.75,
+              stagger: 0.08,
+            },
+            "-=0.25"
+          )
+          .from(
+            ".hero-subtext",
+            {
+              opacity: 0,
+              y: 20,
+              duration: 0.55,
+            },
+            "-=0.35"
+          )
+          .from(
+            ".hero-cta-btn",
+            {
+              opacity: 0,
+              y: 18,
+              duration: 0.5,
+              stagger: 0.1,
+            },
+            "-=0.35"
+          )
+          .from(
+            ".hero-spec-footer",
+            {
+              opacity: 0,
+              y: 12,
+              duration: 0.45,
+            },
+            "-=0.25"
+          )
+          .from(
+            ".hero-visual-container",
+            {
+              opacity: 0,
+              scale: 0.94,
+              duration: 0.85,
+              ease: "power2.out",
+            },
+            0.2
+          );
+      });
+    },
+    { scope: containerRef }
+  );
 
   return (
-    <section className="relative pt-28 sm:pt-36 pb-12 overflow-hidden">
+    <section ref={containerRef} className="relative pt-28 sm:pt-36 pb-12 overflow-hidden">
       {/* Background Ambient Glows */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#CEF23E]/15 blur-[120px] rounded-full pointer-events-none -z-10" />
 
@@ -36,22 +108,27 @@ export function HeroSection({
         {/* Main Dashboard Container Card per DESIGN.md Section 4 */}
         <div className="relative p-6 sm:p-10 lg:p-14 rounded-[36px] sm:rounded-[44px] bg-[#EDEDED] border border-[#DDE1DC] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.06)] overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
             {/* Left Column: Content & Call to Actions */}
             <div className="lg:col-span-7 flex flex-col justify-center">
               {/* Kicker */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white/90 border border-white text-[11px] sm:text-xs font-mono text-[#111311] max-w-full mb-6 shadow-xs">
+              <div className="hero-kicker inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white/90 border border-white text-[11px] sm:text-xs font-mono text-[#111311] max-w-full mb-6 shadow-xs">
                 <span className="w-2 h-2 rounded-full bg-[#CEF23E] animate-pulse"></span>
                 <span>Direct B2B Solar Equipment Importer</span>
               </div>
 
-              {/* Title H1 */}
+              {/* Title H1 with Masked Line Reveal */}
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#111311] leading-[1.08] mb-6">
-                {headline}
+                {lines.map((line, idx) => (
+                  <span key={idx} className="block overflow-hidden pb-1">
+                    <span className="hero-headline-line block will-change-transform">
+                      {line}
+                    </span>
+                  </span>
+                ))}
               </h1>
 
               {/* Description */}
-              <p className="text-base sm:text-lg text-[#5C605C] leading-relaxed max-w-xl mb-8">
+              <p className="hero-subtext text-base sm:text-lg text-[#5C605C] leading-relaxed max-w-xl mb-8">
                 {subheadline}
               </p>
 
@@ -59,14 +136,14 @@ export function HeroSection({
               <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-10 w-full sm:w-auto">
                 <Link
                   href="/#quote-section"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#CEF23E] hover:bg-[#B8DC2F] text-[#111311] font-semibold text-sm tracking-tight shadow-[0_10px_25px_-5px_rgba(206,242,62,0.4)] transition-all duration-300 hover:scale-[1.02] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111311] w-full sm:w-auto text-center"
+                  className="hero-cta-btn inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#CEF23E] hover:bg-[#B8DC2F] text-[#111311] font-semibold text-sm tracking-tight shadow-[0_10px_25px_-5px_rgba(206,242,62,0.4)] transition-all duration-300 hover:scale-[1.02] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111311] w-full sm:w-auto text-center"
                 >
                   <span>{primaryCta}</span>
                 </Link>
 
                 <Link
                   href="/products"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/80 hover:bg-white text-[#111311] font-medium text-sm border border-[#DDE1DC] transition-all hover:border-[#111311] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] w-full sm:w-auto text-center"
+                  className="hero-cta-btn inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/80 hover:bg-white text-[#111311] font-medium text-sm border border-[#DDE1DC] transition-all hover:border-[#111311] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] w-full sm:w-auto text-center"
                 >
                   <span>{secondaryCta}</span>
                   <ArrowRight className="w-4 h-4" />
@@ -74,7 +151,7 @@ export function HeroSection({
               </div>
 
               {/* Specs & Compliance Footer (Neutral Specs only) */}
-              <div className="pt-6 border-t border-[#DDE1DC] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="hero-spec-footer pt-6 border-t border-[#DDE1DC] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3 sm:gap-4 text-[11px] sm:text-xs font-mono text-[#262826] font-medium">
                   <span>BULK ORDERS</span>
                   <span className="text-[#DDE1DC]">&bull;</span>
@@ -96,82 +173,10 @@ export function HeroSection({
               </div>
             </div>
 
-            {/* Right Column: Interactive Procedural Glass Visual & Floating Cards */}
-            <div
-              onMouseMove={handleMouseMove}
-              onMouseLeave={() => setMousePos({ x: 0, y: 0 })}
-              className="lg:col-span-5 relative w-full aspect-square sm:aspect-[4/3] lg:aspect-4/4 flex items-center justify-center"
-            >
-              {/* Central Visual Presentation */}
-              <div
-                style={{
-                  transform: `perspective(1000px) rotateY(${mousePos.x * 12}deg) rotateX(${-mousePos.y * 12}deg)`,
-                  transition: "transform 0.15s ease-out",
-                }}
-                className="relative w-full h-full rounded-3xl overflow-hidden glass-card bg-white/40 border border-white/80 p-4 shadow-xl flex items-center justify-center"
-              >
-                <div className="relative w-full h-full rounded-2xl overflow-hidden bg-[#111311] flex items-center justify-center border border-white/20">
-                  <Image
-                    src="/demo/panel-620w-topcon-front.svg"
-                    alt="Solar Panels and Equipment"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 40vw"
-                    className="object-cover opacity-90 scale-105"
-                  />
-                  {/* Subtle Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/70 via-transparent to-transparent pointer-events-none" />
-                </div>
-              </div>
-
-              {/* Floating Glass Card A: Logistics */}
-              <div
-                style={{
-                  transform: `translate(${mousePos.x * -18}px, ${mousePos.y * -18}px)`,
-                  transition: "transform 0.2s ease-out",
-                }}
-                className="absolute -top-4 -left-3 sm:-left-6 p-4 rounded-2xl glass-card bg-white/80 border border-white shadow-xl max-w-[210px] hidden sm:block pointer-events-none"
-              >
-                <div className="flex items-center gap-2 mb-1.5">
-                  <Truck className="w-4 h-4 text-[#111311]" />
-                  <span className="text-[11px] font-mono uppercase font-bold text-[#111311]">
-                    Wholesale Supply
-                  </span>
-                </div>
-                <p className="text-xs text-[#262826] font-medium leading-snug">
-                  Prompt wholesale delivery across Bangladesh
-                </p>
-              </div>
-
-              {/* Floating Glass Card B: Battery Capsule Status */}
-              <div
-                style={{
-                  transform: `translate(${mousePos.x * 20}px, ${mousePos.y * 20}px)`,
-                  transition: "transform 0.2s ease-out",
-                }}
-                className="absolute -bottom-4 -right-2 sm:-right-6 p-4 rounded-2xl glass-card bg-white/85 border border-white shadow-xl min-w-[220px] pointer-events-none"
-              >
-                <div className="flex items-center justify-between gap-3 mb-2">
-                  <div className="flex items-center gap-1.5">
-                    <Zap className="w-3.5 h-3.5 text-[#111311]" />
-                    <span className="text-[11px] font-mono font-bold text-[#111311]">
-                      ESS GRADE
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-mono text-[#CEF23E] bg-[#111311] px-2 py-0.5 rounded-full font-bold">
-                    6000+ CYCLES
-                  </span>
-                </div>
-                {/* Visual Capsule Progress Bar */}
-                <div className="w-full h-2.5 rounded-full bg-[#EDEDED] overflow-hidden p-0.5 border border-[#DDE1DC]">
-                  <div className="h-full rounded-full bg-gradient-to-r from-[#CEF23E] to-[#B8DC2F] w-[88%]" />
-                </div>
-                <span className="text-[11px] font-mono text-[#262826] font-medium mt-1.5 block">
-                  LiFePO4 Safe Prismatic Cells
-                </span>
-              </div>
+            {/* Right Column: Layered SVG Glass Visual & Interactive Parallax */}
+            <div className="lg:col-span-5 flex items-center justify-center">
+              <HeroVisual />
             </div>
-
           </div>
         </div>
       </div>
