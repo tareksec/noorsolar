@@ -1,4 +1,4 @@
-# WORKED.md — Work log for the Noor Solar Energy website
+﻿# WORKED.md — Work log for the Noor Solar Energy website
 
 This file is the single place to see **what has been done, what has not, and what is blocked**.
 The **agent updates it at the end of every task** (see `AGENT.md` section 2). The owner and lead developer read it to know the real state of the project.
@@ -34,12 +34,49 @@ Status values: `Not started` · `In progress` · `Done` · `Blocked`
 | 11 | Performance, accessibility and responsive polish pass | In progress | No | 2026-09-19 |
 | 12 | Deployment to Hostinger, production checklist | Not started | No | |
 | B | Foundation: images, security, secrets, admin protection, mobile layout | Done | No | 2026-09-19 |
+| C | Trust content system, full demo data, and Task B corrections | Done | No | 2026-09-19 |
 
 ---
 
 ## 2. Task log (newest first)
 
 - 2026-09-19: PRD.md and AGENT.md were updated and TASKS.md was added.
+
+### Task C — Trust Content System, Full Demo Data & Task B Corrections — 2026-09-19
+Branch: task-c-content
+Status: Done
+
+Done:
+- Task B corrections:
+  - Rewrote scripts/check-mobile-overflow.js with puppeteer-core, strict exit code 1 on failure, default CHROME_PATH, authenticated admin login with session cookies, and added npm run check:overflow to package.json.
+  - Executed npm run check:overflow against production build (npm run build && npm start) across all 21 public and admin routes at 360, 390, 768, and 1440 px: exact summary: "84/84 passed, 0 failed".
+  - Grepped src/ and prisma/seed.ts for forbidden claims ("tier", "Tier", "24-48", "warranty", "guarantee", "official", "verified", "factory sealed", "dispatch"); purged all unbacked marketing claims to 0 hits.
+  - Replaced <0.4% Annual spec value in Category Story with product data (16BB Half-Cut).
+  - Moved editable company copy, hero headline, hero sub-text, CTA labels, and closing CTA text into Site Settings with sensible neutral defaults.
+- Database & Data Layer (Prisma migration; MySQL-portable: no enums, no JSON columns):
+  - Added models: Stat, Certification, Partner, Testimonial, FaqItem, each with sortOrder, isActive, isSample, createdAt, updatedAt.
+  - Appended models to TRD.md Section 3.
+  - Implemented src/lib/data/content.ts with getters filtering active rows by sortOrder, excluding sample rows when process.env.HIDE_SAMPLE_CONTENT === "true", and returning sample content summary.
+- Admin Content Management:
+  - Created /admin/content hub and 5 dedicated subpages: /admin/content/stats, /admin/content/certifications, /admin/content/partners, /admin/content/testimonials, /admin/content/faq.
+  - Features: list, create, edit, delete, reorder (up/down), show/hide toggle, and image upload pipeline via saveUploadFile.
+  - Items with isSample=true display "SAMPLE" badge; editing a sample row automatically sets isSample=false; added "Mark as real" action for unchanged keeper rows.
+  - Admin dashboard displays live sample warning card: "N sample items are still live" with links to each category list.
+  - All admin content actions validate getSession() and validate inputs with zod.
+- Full Demo Data to PRD §7 Specification:
+  - Seeded 15 demo products (5 Solar Panels, 5 Lithium-ion Batteries, 5 Inverters) with exact PRD names, 3 procedural SVG images each (front, angled, detail) matching DESIGN.md tokens, 8–12 consistent specs each, mixed stock statuses, MOQ/lead times, and 4 featured products spread across categories.
+  - Seeded sample trust content: 4 stats, 4 certifications with procedural SVG badges, 6 partners with monogram logos, 3 testimonials with sample avatars, and 6 FAQ items with neutral terms.
+  - Added npm run seed:demo (prisma/seed.ts --demo-only) that wipes only demo products and sample trust rows without touching real rows (isDemo=false, isSample=false) or the admin user.
+- Public Home Sections in PRD §5.2 Order:
+  - Added sections to homepage in exact order: (1) Hero, (2) Category dock, (3) Business statistics band, (4) Scroll-linked category story, (5) Featured carousel, (6) Certifications grid, (7) Ordering steps, (8) Partners strip, (9) Testimonials, (10) FAQ from DB, (11) Closing CTA.
+  - Styled with DESIGN.md tokens (#111311, #CEF23E, #EDEDED, #E4E7E4); empty sections render nothing (null). Public site never shows "sample" badges.
+- Passed npm run lint (0 errors, 0 warnings), npm run build (23 routes compiled), and npm run check:overflow (84/84 passed on production build).
+
+Commands run and results:
+- npm run lint: pass (0 errors, 0 warnings)
+- npm run build: pass (23 static and dynamic routes compiled)
+- npm run check:overflow: pass ("84/84 passed, 0 failed" against production server at 360, 390, 768, 1440px)
+- npm run seed:demo: pass (15 demo products, 45 images, 163 specs, 4 stats, 4 certs, 6 partners, 3 testimonials, 6 FAQs)
 
 ### Task B ? Foundation Fixes & Security Hardening ? 2026-09-19
 Branch: task-b-foundation
@@ -177,7 +214,7 @@ Record every decision that changes or interprets the documents, so nobody has to
 | 5 | Hero visual is a single Image rather than an interactive multi-product glass composition (panel, battery, inverter) | Task A | Medium | Open |
 | 6 | Floating WhatsApp button overlaps CTA buttons and bottom cards on 360px viewports | Task A | Medium | Resolved (Task B) |
 | 7 | Low contrast text on frosted glass badges in Hero section | Task A | Medium | Resolved (Task B) |
-| 8 | Product detail gallery zoom/swipe not implemented; products currently only have 1 image each seeded | Task A | Low | Open |
+| 8 | Product detail gallery zoom/swipe not implemented; products currently only have 1 image each seeded | Task A | Low | Partly resolved (Task C - 3 views seeded per product; zoom/swipe in Task D) |
 | 9 | Admin panel missing "Duplicate product", "Change password", and category/spec drag reordering | Task A | Low | Open |
 | 10 | Unused dependencies in `package.json` (`clsx`, `tailwind-merge` not referenced) | Task A | Low | Open |
 | 11 | Seeded admin account in local `./dev.db` uses default seed password | Task A | Low | Open |
@@ -216,6 +253,7 @@ Fill in during Task 0 and Task 1 and keep current.
 ## 7. Content and demo data state
 
 - Categories seeded: 3 (Solar Panels, Lithium-ion Batteries, Solar Inverters)
-- Products seeded: 12 models (4 per category with complete technical specs, models, and MOQ)
+- Products seeded: 15 models (5 per category with 3 views each, 8-12 specs)
+- Trust content seeded: 4 stats, 4 certifications, 6 partners, 3 testimonials, 6 FAQs (all isSample=true)
 - Image source in use (procedural placeholders or owner photos): Procedural SVG illustrations in `public/demo/`
 - Anything the owner still needs to supply (logo, photos, contact details, real products): Official brand SVG logo, real warehouse/facility photos, confirmed contact phone/WhatsApp/address, and any manufacturer verified certifications.
