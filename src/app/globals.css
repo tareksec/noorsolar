@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* DESIGN.md Tokens */
+  --color-volt-lime: #CEF23E;
+  --color-volt-lime-hover: #B8DC2F;
+  --color-deep-charcoal: #111311;
+  --color-muted-gray: #5C605C;
+  --color-subtle-gray: #DDE1DC;
+  --color-canvas: #E4E7E4;
+  --color-card-frame: #EDEDED;
+  --color-surface-white: #FFFFFF;
+
+  --radius-dashboard: 40px;
+  --radius-glass: 24px;
+  --radius-pill: 9999px;
+}
+
+:root {
+  --background: #E4E7E4;
+  --foreground: #111311;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Glassmorphic Utilities from DESIGN.md */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.05);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.06);
+}
+
+.glass-dock {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.04);
+}
+
+.glow-lime {
+  box-shadow: 0 0 35px -5px rgba(206, 242, 62, 0.35);
+}
+
+/* Custom scrollbar for subtle aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #E4E7E4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #DDE1DC;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5C605C;
+}
