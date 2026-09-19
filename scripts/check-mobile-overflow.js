@@ -1,4 +1,4 @@
-/**
+﻿/**
  * scripts/check-mobile-overflow.js
  * Verifies document.documentElement.scrollWidth <= window.innerWidth
  * across 360px, 390px, 768px, and 1440px viewports on all public and admin routes.
@@ -38,7 +38,7 @@ const PUBLIC_ROUTES = [
   "/category/solar-panels",
   "/category/lithium-batteries",
   "/category/solar-inverters",
-  "/product/n-type-topcon-620w-bifacial-module",
+  "/product/n-type-topcon-bifacial-module-620w",
   "/about",
   "/contact",
   "/admin/login",
@@ -47,9 +47,16 @@ const PUBLIC_ROUTES = [
 const ADMIN_ROUTES = [
   "/admin",
   "/admin/products",
+  "/admin/products/new",
   "/admin/categories",
   "/admin/quotes",
   "/admin/settings",
+  "/admin/content",
+  "/admin/content/stats",
+  "/admin/content/certifications",
+  "/admin/content/partners",
+  "/admin/content/testimonials",
+  "/admin/content/faq",
 ];
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "owner@example.com";
@@ -113,16 +120,16 @@ async function run() {
 
           if (result.passed) {
             passedTests++;
-            console.log(`  ? PASS [${vp.width}px]: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
+            console.log(`  [PASS] [${vp.width}px]: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
           } else {
             failedTests++;
             failures.push({ vp: vp.name, route, result });
-            console.error(`  ? FAIL [${vp.width}px]: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
+            console.error(`  [FAIL] [${vp.width}px]: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
           }
         } catch (err) {
           failedTests++;
           failures.push({ vp: vp.name, route, error: err.message });
-          console.error(`  ? ERROR [${vp.width}px]: ${route} - ${err.message}`);
+          console.error(`  [ERROR] [${vp.width}px]: ${route} - ${err.message}`);
         }
       }
 
@@ -144,16 +151,16 @@ async function run() {
 
           if (result.passed) {
             passedTests++;
-            console.log(`  ? PASS [${vp.width}px]: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
+            console.log(`  [PASS] [${vp.width}px]: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
           } else {
             failedTests++;
             failures.push({ vp: vp.name, route, result });
-            console.error(`  ? FAIL [${vp.width}px]: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
+            console.error(`  [FAIL] [${vp.width}px]: ${route} (scrollWidth: ${result.scrollWidth}, innerWidth: ${result.innerWidth})`);
           }
         } catch (err) {
           failedTests++;
           failures.push({ vp: vp.name, route, error: err.message });
-          console.error(`  ? ERROR [${vp.width}px]: ${route} - ${err.message}`);
+          console.error(`  [ERROR] [${vp.width}px]: ${route} - ${err.message}`);
         }
       }
 
@@ -164,20 +171,22 @@ async function run() {
     await browser.close();
   }
 
-  console.log("==========================================");
-  console.log(`SUMMARY: ${passedTests}/${totalTests} passed (${failedTests} failed)`);
-  console.log("==========================================");
+  console.log("=========================================");
+  console.log(`SUMMARY: ${passedTests}/${totalTests} passed, ${failedTests} failed.`);
+  console.log("=========================================");
 
   if (failedTests > 0) {
-    console.error(`\nTest failed with ${failedTests} failure(s).`);
+    console.error("FAILURES DETAIL:");
+    failures.forEach((f) => {
+      console.error(`- ${f.vp} | ${f.route}:`, f.result || f.error);
+    });
     process.exit(1);
-  } else {
-    console.log(`\nExact Summary: ${passedTests}/${totalTests} passed.`);
-    process.exit(0);
   }
+
+  process.exit(0);
 }
 
 run().catch((err) => {
-  console.error("FATAL unexpected error:", err);
+  console.error("Fatal check-mobile-overflow error:", err);
   process.exit(1);
 });

@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
@@ -14,7 +14,7 @@ export type ContentActionResult = {
 // 1. Stats
 const StatSchema = z.object({
   label: z.string().min(1, "Label is required"),
-  value: z.coerce.number({ invalid_type_error: "Value must be a number" }),
+  value: z.coerce.number(),
   prefix: z.string().trim().optional().nullable(),
   suffix: z.string().trim().optional().nullable(),
   description: z.string().trim().optional().nullable(),

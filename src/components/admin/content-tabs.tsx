@@ -1,19 +1,24 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BarChart3, Award, Handshake, Quote, HelpCircle } from "lucide-react";
+import type { SampleContentSummary } from "@/lib/data/content";
 
-export function ContentTabs({ sampleCounts }: { sampleCounts?: Record<string, number> }) {
+export function ContentTabs({
+  sampleCounts,
+}: {
+  sampleCounts?: SampleContentSummary | Record<string, number>;
+}) {
   const pathname = usePathname();
 
   const tabs = [
-    { label: "Statistics", href: "/admin/content/stats", icon: BarChart3, key: "stats" },
-    { label: "Certifications", href: "/admin/content/certifications", icon: Award, key: "certifications" },
-    { label: "Partners", href: "/admin/content/partners", icon: Handshake, key: "partners" },
-    { label: "Testimonials", href: "/admin/content/testimonials", icon: Quote, key: "testimonials" },
-    { label: "FAQ Items", href: "/admin/content/faq", icon: HelpCircle, key: "faq" },
+    { label: "Statistics", href: "/admin/content/stats", icon: BarChart3, key: "stats", countKey: "statsCount" },
+    { label: "Certifications", href: "/admin/content/certifications", icon: Award, key: "certifications", countKey: "certificationsCount" },
+    { label: "Partners", href: "/admin/content/partners", icon: Handshake, key: "partners", countKey: "partnersCount" },
+    { label: "Testimonials", href: "/admin/content/testimonials", icon: Quote, key: "testimonials", countKey: "testimonialsCount" },
+    { label: "FAQ Items", href: "/admin/content/faq", icon: HelpCircle, key: "faq", countKey: "faqCount" },
   ];
 
   return (
@@ -21,7 +26,12 @@ export function ContentTabs({ sampleCounts }: { sampleCounts?: Record<string, nu
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = pathname === tab.href;
-        const samples = sampleCounts ? sampleCounts[tab.key] || 0 : 0;
+        let samples = 0;
+        if (sampleCounts) {
+          const rec = sampleCounts as Record<string, number>;
+          samples = rec[tab.key] ?? rec[tab.countKey] ?? 0;
+        }
+
         const activeClass = isActive
           ? "bg-[#111311] text-white font-bold"
           : "bg-white text-[#5C605C] hover:bg-[#EDEDED] hover:text-[#111311] border border-[#DDE1DC]";

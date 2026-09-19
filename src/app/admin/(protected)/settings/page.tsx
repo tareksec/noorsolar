@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { getSiteSettings, updateSiteSettings } from "@/lib/data/settings";
 import { revalidatePath } from "next/cache";
 import { getSession } from "@/lib/auth";
@@ -181,7 +181,7 @@ export default async function AdminSettingsPage() {
                 <input
                   type="text"
                   name="heroHeadline"
-                  defaultValue={settings().heroHeadline || settings.heroHeadline}
+                  defaultValue={settings.heroHeadline}
                   className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none font-bold"
                 />
               </div>

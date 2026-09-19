@@ -1,11 +1,11 @@
-import React from "react";
+﻿import React from "react";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { Package, Layers, MessageSquare, ArrowUpRight, AlertTriangle, ArrowRight } from "lucide-react";
 import { getLiveSampleContentSummary } from "@/lib/data/content";
 
 export default async function AdminDashboardPage() {
-  const [productCount, categoryCount, newQuoteCount, latestQuotes, sampleSummary] = await Promise.all([
+  const [sampleSummary, productCount, categoryCount, newQuoteCount, latestQuotes] = await Promise.all([
     getLiveSampleContentSummary(),
     db.product.count(),
     db.category.count(),
@@ -30,7 +30,7 @@ export default async function AdminDashboardPage() {
         </p>
       </div>
 
-      {{/* Warning Card: Live Sample Items */}}
+      {/* Warning Card: Live Sample Items */}
       {sampleSummary.totalLiveSamples > 0 && (
         <div className="p-6 rounded-3xl bg-amber-500/10 border border-amber-500/30 text-amber-950 space-y-3">
           <div className="flex items-center gap-3">
@@ -43,33 +43,33 @@ export default async function AdminDashboardPage() {
             Placeholder content is currently visible on the public site. Review each list to replace with verified company data or click &apos;Mark as real&apos;:
           </p>
           <div className="flex flex-wrap gap-2 pt-1">
-            {sampleSummary.stats > 0 && (
+            {sampleSummary.statsCount > 0 && (
               <Link href="/admin/content/stats" className="px-3 py-1.5 rounded-xl bg-white border border-amber-500/30 text-xs font-mono font-bold text-[#111311] hover:bg-amber-50 flex items-center gap-1">
-                <span>Stats ({sampleSummary.stats})</span>
+                <span>Stats ({sampleSummary.statsCount})</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
             )}
-            {sampleSummary.certifications > 0 && (
+            {sampleSummary.certificationsCount > 0 && (
               <Link href="/admin/content/certifications" className="px-3 py-1.5 rounded-xl bg-white border border-amber-500/30 text-xs font-mono font-bold text-[#111311] hover:bg-amber-50 flex items-center gap-1">
-                <span>Certifications ({sampleSummary.certifications})</span>
+                <span>Certifications ({sampleSummary.certificationsCount})</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
             )}
-            {sampleSummary.partners > 0 && (
+            {sampleSummary.partnersCount > 0 && (
               <Link href="/admin/content/partners" className="px-3 py-1.5 rounded-xl bg-white border border-amber-500/30 text-xs font-mono font-bold text-[#111311] hover:bg-amber-50 flex items-center gap-1">
-                <span>Partners ({sampleSummary.partners})</span>
+                <span>Partners ({sampleSummary.partnersCount})</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
             )}
-            {sampleSummary.testimonials > 0 && (
+            {sampleSummary.testimonialsCount > 0 && (
               <Link href="/admin/content/testimonials" className="px-3 py-1.5 rounded-xl bg-white border border-amber-500/30 text-xs font-mono font-bold text-[#111311] hover:bg-amber-50 flex items-center gap-1">
-                <span>Testimonials ({sampleSummary.testimonials})</span>
+                <span>Testimonials ({sampleSummary.testimonialsCount})</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
             )}
-            {sampleSummary.faq > 0 && (
+            {sampleSummary.faqCount > 0 && (
               <Link href="/admin/content/faq" className="px-3 py-1.5 rounded-xl bg-white border border-amber-500/30 text-xs font-mono font-bold text-[#111311] hover:bg-amber-50 flex items-center gap-1">
-                <span>FAQ ({sampleSummary.faq})</span>
+                <span>FAQ ({sampleSummary.faqCount})</span>
                 <ArrowRight className="w-3 h-3" />
               </Link>
             )}
@@ -180,14 +180,14 @@ export default async function AdminDashboardPage() {
                   <a
                     href={`https://wa.me/${q.phone.replace(/[^0-9]/g, "")}`}
                     target="_blank"
-                    rel="noreferrer"
-                    className="px-3 py-1.5 rounded-full bg-[#EDEDED] text-[11px] font-mono text-[#111311] hover:bg-[#DDE1DC]"
+                    rel="noopener noreferrer"
+                    className="px-3 py-1.5 rounded-full bg-[#111311] text-[#CEF23E] text-xs font-mono hover:bg-black transition-colors"
                   >
                     WhatsApp
                   </a>
                   <a
                     href={`tel:${q.phone}`}
-                    className="px-3 py-1.5 rounded-full bg-[#111311] text-[11px] font-mono text-white hover:bg-black"
+                    className="px-3 py-1.5 rounded-full bg-[#EDEDED] text-[#111311] text-xs font-mono hover:bg-[#DDE1DC] transition-colors"
                   >
                     Call
                   </a>
@@ -196,9 +196,9 @@ export default async function AdminDashboardPage() {
             ))}
           </div>
         ) : (
-          <p className="text-xs text-[#5C605C] py-4 text-center">
-            No quote requests received yet.
-          </p>
+          <div className="py-12 text-center text-xs text-[#5C605C] font-mono">
+            No incoming quote inquiries recorded yet.
+          </div>
         )}
       </div>
 

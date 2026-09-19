@@ -1,9 +1,9 @@
-import React from 'react';
-import Link from 'next/link';
-import { db } from '@/lib/db';
-import { getLiveSampleContentSummary } from '@/lib/data/content';
-import { ContentTabs } from '@/components/admin/content-tabs';
-import { BarChart3, Award, Handshake, Quote, HelpCircle, AlertTriangle, ArrowRight, CheckCircle2 } from 'lucide-react';
+﻿import React from "react";
+import Link from "next/link";
+import { db } from "@/lib/db";
+import { getLiveSampleContentSummary } from "@/lib/data/content";
+import { ContentTabs } from "@/components/admin/content-tabs";
+import { BarChart3, Award, Handshake, Quote, HelpCircle, AlertTriangle, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default async function ContentOverviewPage() {
   const summary = await getLiveSampleContentSummary();
@@ -18,54 +18,54 @@ export default async function ContentOverviewPage() {
 
   const cards = [
     {
-      title: 'Key Business Statistics',
-      href: '/admin/content/stats',
+      title: "Key Business Statistics",
+      href: "/admin/content/stats",
       icon: BarChart3,
       total: statTotal,
-      samples: summary.stats,
-      desc: 'Metric counters displayed in the statistics band on the homepage',
+      samples: summary.statsCount,
+      desc: "Metric counters displayed in the statistics band on the homepage",
     },
     {
-      title: 'Certifications & Badges',
-      href: '/admin/content/certifications',
+      title: "Certifications & Badges",
+      href: "/admin/content/certifications",
       icon: Award,
       total: certTotal,
-      samples: summary.certifications,
-      desc: 'Accreditations, standards, and safety certifications grid',
+      samples: summary.certificationsCount,
+      desc: "Accreditations, standards, and safety certifications grid",
     },
     {
-      title: 'Partners & Clients',
-      href: '/admin/content/partners',
+      title: "Partners & Clients",
+      href: "/admin/content/partners",
       icon: Handshake,
       total: partnerTotal,
-      samples: summary.partners,
-      desc: 'Logos and links shown in the partner strip on the homepage',
+      samples: summary.partnersCount,
+      desc: "Logos and links shown in the partner strip on the homepage",
     },
     {
-      title: 'Client Testimonials',
-      href: '/admin/content/testimonials',
+      title: "Client Testimonials",
+      href: "/admin/content/testimonials",
       icon: Quote,
       total: testimonialTotal,
-      samples: summary.testimonials,
-      desc: 'Commercial customer quotes, buyer roles, and photos',
+      samples: summary.testimonialsCount,
+      desc: "Commercial customer quotes, buyer roles, and photos",
     },
     {
-      title: 'FAQ Knowledge Base',
-      href: '/admin/content/faq',
+      title: "FAQ Knowledge Base",
+      href: "/admin/content/faq",
       icon: HelpCircle,
       total: faqTotal,
-      samples: summary.faq,
-      desc: 'Frequently asked questions regarding quotes, MOQ, and terms',
+      samples: summary.faqCount,
+      desc: "Frequently asked questions regarding quotes, MOQ, and terms",
     },
   ];
 
   return (
-    <div className='space-y-6'>
+    <div className="space-y-6">
       <div>
-        <h1 className='text-2xl font-bold text-[#111311] tracking-tight'>
+        <h1 className="text-2xl font-bold text-[#111311] tracking-tight">
           Trust & Marketing Content
         </h1>
-        <p className='text-xs text-[#5C605C] mt-1'>
+        <p className="text-xs text-[#5C605C] mt-1">
           Manage company statistics, certifications, partners, client reviews, and FAQ items.
         </p>
       </div>
@@ -73,56 +73,56 @@ export default async function ContentOverviewPage() {
       <ContentTabs sampleCounts={summary} />
 
       {summary.totalLiveSamples > 0 ? (
-        <div className='p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3'>
-          <AlertTriangle className='w-5 h-5 text-amber-600 shrink-0 mt-0.5' />
-          <div className='space-y-1 text-xs text-amber-950'>
-            <p className='font-bold font-mono text-sm'>
-              {summary.totalLiveSamples} sample {summary.totalLiveSamples === 1 ? 'item is' : 'items are'} currently live
+        <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+          <div className="space-y-1 text-xs text-amber-950">
+            <p className="font-bold font-mono text-sm">
+              {summary.totalLiveSamples} sample {summary.totalLiveSamples === 1 ? "item is" : "items are"} currently live
             </p>
-            <p className='text-amber-800'>
+            <p className="text-amber-800">
               Sample items show generic placeholder data to visitors. Replace them with real company data, or click Mark-as-real once verified.
             </p>
           </div>
         </div>
       ) : (
-        <div className='p-4 rounded-2xl bg-[#CEF23E]/10 border border-[#CEF23E]/30 flex items-center gap-3 text-xs text-[#111311]'>
-          <CheckCircle2 className='w-4 h-4 text-emerald-600' />
+        <div className="p-4 rounded-2xl bg-[#CEF23E]/10 border border-[#CEF23E]/30 flex items-center gap-3 text-xs text-[#111311]">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           <span>All live trust content is verified real data. Zero placeholder sample items are live.</span>
         </div>
       )}
 
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {cards.map((c) => {
           const Icon = c.icon;
           return (
             <Link
               key={c.href}
               href={c.href}
-              className='p-5 rounded-2xl bg-white border border-[#DDE1DC] hover:border-[#111311] transition-all flex flex-col justify-between group shadow-sm'
+              className="p-5 rounded-2xl bg-white border border-[#DDE1DC] hover:border-[#111311] transition-all flex flex-col justify-between group shadow-xs"
             >
               <div>
-                <div className='flex items-center justify-between mb-3'>
-                  <div className='w-9 h-9 rounded-xl bg-[#EDEDED] group-hover:bg-[#CEF23E] flex items-center justify-center text-[#111311] transition-colors'>
-                    <Icon className='w-4 h-4' />
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-9 h-9 rounded-xl bg-[#EDEDED] group-hover:bg-[#CEF23E] flex items-center justify-center text-[#111311] transition-colors">
+                    <Icon className="w-4 h-4" />
                   </div>
                   {c.samples > 0 ? (
-                    <span className='px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-700'>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-700">
                       {c.samples} sample live
                     </span>
                   ) : (
-                    <span className='px-2 py-0.5 rounded-full text-[10px] font-mono text-[#5C605C] bg-[#EDEDED]'>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono text-[#5C605C] bg-[#EDEDED]">
                       All real
                     </span>
                   )}
                 </div>
-                <h2 className='font-bold text-sm text-[#111311]'>{c.title}</h2>
-                <p className='text-xs text-[#5C605C] mt-1 line-clamp-2'>{c.desc}</p>
+                <h2 className="font-bold text-sm text-[#111311]">{c.title}</h2>
+                <p className="text-xs text-[#5C605C] mt-1 line-clamp-2">{c.desc}</p>
               </div>
 
-              <div className='pt-4 mt-4 border-t border-[#EDEDED] flex items-center justify-between text-xs font-mono'>
-                <span className='text-[#5C605C]'>{c.total} total rows</span>
-                <span className='text-[#111311] font-bold group-hover:translate-x-1 transition-transform flex items-center gap-1'>
-                  Manage <ArrowRight className='w-3.5 h-3.5' />
+              <div className="pt-4 mt-4 border-t border-[#EDEDED] flex items-center justify-between text-xs font-mono">
+                <span className="text-[#5C605C]">{c.total} total rows</span>
+                <span className="text-[#111311] font-bold group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                  Manage <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
             </Link>
