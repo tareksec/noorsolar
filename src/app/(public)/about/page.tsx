@@ -8,6 +8,13 @@ export const metadata: Metadata = {
   title: "About Us — Noor Solar Energy",
   description:
     "Learn about Noor Solar Energy, premier direct importer and bulk B2B supplier of solar panels, lithium-ion batteries, and inverters in Bangladesh.",
+  openGraph: {
+    title: "About Us — Noor Solar Energy",
+    description:
+      "Direct importer and container-scale wholesale distributor of renewable energy systems in Bangladesh.",
+    url: "/about",
+    type: "website",
+  },
 };
 
 export default async function AboutPage() {

@@ -5,9 +5,16 @@ import { ClosingCTA } from "@/components/sections/closing-cta";
 import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Contact Us & Warehouse — Noor Solar Energy",
+  title: "Contact & Warehouse Logistics — Noor Solar Energy",
   description:
-    "Get in touch with Noor Solar Energy sales and logistics team. Office in Motijheel Dhaka, warehouse delivery nationwide.",
+    "Get in touch with Noor Solar Energy sales and logistics team for container pricing, tender specifications, and warehouse pickup.",
+  openGraph: {
+    title: "Contact & Warehouse Logistics — Noor Solar Energy",
+    description:
+      "Direct contact details, warehouse pickup locations, and commercial quotation request form.",
+    url: "/contact",
+    type: "website",
+  },
 };
 
 export default async function ContactPage() {
@@ -96,12 +103,12 @@ export default async function ContactPage() {
             </div>
           </div>
 
-          {/* Interactive Styled Map Container Placeholder */}
+          {/* Interactive Styled Map Container */}
           <div className="w-full h-64 sm:h-80 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC] relative flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(#DDE1DC_1px,transparent_1px)] [background-size:16px_16px] opacity-70" />
             <div className="relative z-10 flex flex-col items-center text-center p-6 glass-card rounded-2xl border border-white max-w-sm">
               <div className="w-10 h-10 rounded-full bg-[#CEF23E] flex items-center justify-center text-[#111311] mb-2 font-bold">
-                ▲
+                ☀
               </div>
               <span className="font-bold text-sm text-[#111311]">Noor Solar Energy Central Office</span>
               <span className="text-xs text-[#5C605C] mt-1">{settings.address}</span>

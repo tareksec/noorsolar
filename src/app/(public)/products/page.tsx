@@ -10,6 +10,13 @@ export const metadata: Metadata = {
   title: "Equipment Catalog — Solar Panels, Batteries & Inverters",
   description:
     "Explore our complete inventory of Solar Panels, Lithium-ion Storage Batteries, and Industrial Inverters available for bulk wholesale in Bangladesh.",
+  openGraph: {
+    title: "Solar Equipment Catalog — Noor Solar Energy",
+    description:
+      "Explore bulk wholesale inventory of Tier-1 solar panels, LiFePO4 batteries, and industrial inverters in Bangladesh.",
+    url: "/products",
+    type: "website",
+  },
 };
 
 interface ProductsPageProps {
@@ -43,7 +50,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             <span>Wholesale Inventory Catalog</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111311]">
-            Solar Equipment Catalog .
+            Solar Equipment Catalog
           </h1>
           <p className="text-sm sm:text-base text-[#5C605C] max-w-2xl mt-3">
             Directly imported solar modules, high-capacity LiFePO4 batteries, and industrial solar inverters with complete specifications.

@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -22,14 +22,18 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   }
 
   const { product } = data;
+  const desc =
+    product.shortDescription ||
+    `Direct importer wholesale specs for ${product.name}. Request quotation and technical datasheets.`;
+
   return {
     title: `${product.name} — Noor Solar Energy`,
-    description:
-      product.shortDescription ||
-      `Direct importer wholesale specs for ${product.name}. Request quotation and technical datasheets.`,
+    description: desc,
     openGraph: {
-      title: product.name,
-      description: product.shortDescription || undefined,
+      title: `${product.name} — Noor Solar Energy`,
+      description: desc,
+      url: `/product/${product.slug}`,
+      type: "website",
       images: product.images[0]?.url ? [{ url: product.images[0].url }] : [],
     },
   };
@@ -45,8 +49,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
   const { product, related } = data;
 
-  // Product JSON-LD structured data
-  const jsonLd = {
+  // Product JSON-LD structured data (price only if showPrice is true)
+  const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
@@ -62,12 +66,16 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           : product.stockStatus === "INCOMING"
           ? "https://schema.org/PreOrder"
           : "https://schema.org/LimitedAvailability",
-      priceCurrency: "BDT",
-      price: "0",
-      priceValidUntil: "2026-12-31",
+      ...(product.showPrice && product.priceBdt
+        ? {
+            priceCurrency: "BDT",
+            price: product.priceBdt.toString(),
+            priceValidUntil: "2026-12-31",
+          }
+        : {}),
       seller: {
         "@type": "Organization",
-        name: "Noor Solar Energy BD",
+        name: "Noor Solar Energy",
       },
     },
   };
@@ -98,16 +106,16 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             {product.category.name}
           </Link>
           <span>/</span>
-          <span className="text-[#111311] font-semibold truncate max-w-[200px] sm:max-w-none">
+          <span className="text-[#111311] font-medium truncate max-w-[200px]">
             {product.name}
           </span>
         </div>
 
-        {/* Product Hero Grid */}
-        <div className="p-6 sm:p-10 lg:p-12 rounded-[36px] bg-white border border-[#DDE1DC] shadow-sm mb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+        {/* Product Details Hero Card */}
+        <div className="p-6 sm:p-10 lg:p-14 rounded-[36px] bg-white border border-[#DDE1DC] shadow-sm mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
             
-            {/* Left: Product Media Gallery */}
+            {/* Left: Product Images / Gallery */}
             <div className="lg:col-span-6 min-w-0">
               <ProductGallery
                 images={product.images}
@@ -277,7 +285,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 href={`/category/${product.category.slug}`}
                 className="text-xs font-mono text-[#111311] hover:underline"
               >
-                View Category →
+                View Category
               </Link>
             </div>
 
@@ -293,4 +301,3 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     </div>
   );
 }
-

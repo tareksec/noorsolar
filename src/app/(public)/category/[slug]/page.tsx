@@ -20,9 +20,18 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     return { title: "Category Not Found" };
   }
 
+  const desc = category.description || `Explore bulk ${category.name} available for wholesale import in Bangladesh.`;
+
   return {
     title: `${category.name} Wholesale — Noor Solar Energy`,
-    description: category.description || `Explore bulk ${category.name} available for wholesale import in Bangladesh.`,
+    description: desc,
+    openGraph: {
+      title: `${category.name} Wholesale — Noor Solar Energy`,
+      description: desc,
+      url: `/category/${category.slug}`,
+      type: "website",
+      images: category.image ? [{ url: category.image }] : [],
+    },
   };
 }
 
