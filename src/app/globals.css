@@ -108,3 +108,24 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #5C605C;
 }
+/* Page Enter Transition */
+@keyframes page-enter {
+  from {
+    opacity: 0.9;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-transition {
+  animation: page-enter 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition {
+    animation: none;
+  }
+}

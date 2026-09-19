@@ -1,8 +1,6 @@
-﻿"use client";
+"use client";
 
 import React, { useRef, useState } from "react";
-import { gsap } from "@/lib/gsap";
-import { useGSAP } from "@/lib/gsap";
 import { Zap, Cpu } from "lucide-react";
 
 export function HeroVisual() {
@@ -15,64 +13,59 @@ export function HeroVisual() {
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
+  React.useEffect(() => {
+    if (typeof window === "undefined" || window.innerWidth < 1024) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      // Respect reduced motion
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // Idle floating motion with different phases and durations
-        gsap.to(panelRef.current, {
-          y: "+=6",
-          rotation: "+=0.4",
-          duration: 4.2,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-        });
-
-        gsap.to(batteryRef.current, {
-          y: "-=7",
-          rotation: "-=0.5",
-          duration: 3.6,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: 0.5,
-        });
-
-        gsap.to(inverterRef.current, {
-          y: "+=5",
-          rotation: "+=0.3",
-          duration: 4.8,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: 1.1,
-        });
-
-        // Small floating cards gentle idle float
-        gsap.to(card1Ref.current, {
-          y: "-=5",
-          duration: 3.2,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: 0.2,
-        });
-
-        gsap.to(card2Ref.current, {
-          y: "+=6",
-          duration: 3.8,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: 0.7,
-        });
+    import("@/lib/gsap").then(({ gsap }) => {
+      gsap.to(panelRef.current, {
+        y: "+=6",
+        rotation: "+=0.4",
+        duration: 4.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
       });
-    },
-    { scope: containerRef }
-  );
+
+      gsap.to(batteryRef.current, {
+        y: "-=7",
+        rotation: "-=0.5",
+        duration: 3.6,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 0.5,
+      });
+
+      gsap.to(inverterRef.current, {
+        y: "+=5",
+        rotation: "+=0.3",
+        duration: 4.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 1.1,
+      });
+
+      gsap.to(card1Ref.current, {
+        y: "-=5",
+        duration: 3.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 0.2,
+      });
+
+      gsap.to(card2Ref.current, {
+        y: "+=6",
+        duration: 3.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 0.7,
+      });
+    });
+  }, []);
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType === "touch") return; // Touch devices do not tilt
@@ -286,28 +279,8 @@ export function HeroVisual() {
             <circle cx="360" cy="255" r="26" stroke="#CEF23E" strokeWidth="3.5" strokeDasharray="120 40" />
             <circle cx="360" cy="255" r="18" fill="#CEF23E" fillOpacity="0.15" />
             {/* Central Power Metric Display Text */}
-            <text
-              x="360"
-              y="260"
-              textAnchor="middle"
-              fill="#CEF23E"
-              fontFamily="monospace"
-              fontSize="12"
-              fontWeight="bold"
-            >
-              10 kW
-            </text>
-            <text
-              x="360"
-              y="298"
-              textAnchor="middle"
-              fill="#8A8F8A"
-              fontFamily="monospace"
-              fontSize="9"
-              letterSpacing="1"
-            >
-              HYBRID 3-PHASE
-            </text>
+            {/* Central Power Metric Display LED */}
+            <rect x="352" y="251" width="16" height="8" rx="2" fill="#CEF23E" />
             {/* Bottom Status LED Indicators */}
             <circle cx="310" cy="460" r="4" fill="#CEF23E" />
             <circle cx="330" cy="460" r="4" fill="#111311" opacity="0.3" />

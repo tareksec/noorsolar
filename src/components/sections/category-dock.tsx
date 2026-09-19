@@ -1,10 +1,7 @@
-﻿"use client";
-
-import React, { useRef } from "react";
+import React from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { motion, useMotionValue, useSpring, useReducedMotion } from "motion/react";
 
 interface CategoryDockProps {
   categories: Array<{
@@ -31,140 +28,85 @@ interface DockCardProps {
   };
 }
 
-function MagneticDockCard({ cat, meta }: DockCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const shouldReduceMotion = useReducedMotion();
-
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  // Smooth magnetic spring physics
-  const springConfig = { stiffness: 180, damping: 18 };
-  const springX = useSpring(mouseX, springConfig);
-  const springY = useSpring(mouseY, springConfig);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (shouldReduceMotion || !cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    // Magnetic pull factor (subtle and controlled)
-    const pullX = (e.clientX - centerX) * 0.18;
-    const pullY = (e.clientY - centerY) * 0.18;
-    mouseX.set(pullX);
-    mouseY.set(pullY);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-  };
-
+function DockCard({ cat, meta }: DockCardProps) {
   return (
-    <motion.div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={shouldReduceMotion ? {} : { x: springX, y: springY }}
-      whileHover={
-        shouldReduceMotion
-          ? {}
-          : {
-              scale: 1.025,
-              boxShadow: "0 16px 36px -8px rgba(206, 242, 62, 0.3)",
-              borderColor: "rgba(206, 242, 62, 0.8)",
-            }
-      }
-      whileTap={shouldReduceMotion ? {} : { scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 350, damping: 25 }}
-      className="category-dock-pill rounded-full will-change-transform"
+    <div
+      className="group relative bg-[#EDEDED] border border-[#DDE1DC] rounded-[28px] p-5 sm:p-6 transition-all duration-300 ease-out hover:scale-[1.025] hover:border-[#CEF23E]/80 hover:shadow-[0_16px_36px_-8px_rgba(206,242,62,0.3)] flex flex-col justify-between overflow-hidden cursor-pointer"
     >
-      <Link
-        href={`/category/${cat.slug}`}
-        className="group flex items-center justify-between p-3.5 sm:p-4 rounded-full glass-dock bg-white/85 hover:bg-white border border-[#DDE1DC] shadow-[0_8px_24px_-6px_rgba(0,0,0,0.04)] transition-colors duration-200"
-      >
-        <div className="flex items-center gap-3.5 min-w-0">
-          {/* Circular Photo Thumbnail with subtle hover pop */}
-          <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0 bg-[#EDEDED] border border-[#DDE1DC] group-hover:border-[#111311] transition-colors">
-            <Image
-              src={cat.image || "/demo/category-panels.svg"}
-              alt={cat.name}
-              fill
-              sizes="48px"
-              className="object-cover group-hover:scale-110 transition-transform duration-300"
-            />
-          </div>
-
-          <div className="flex flex-col truncate">
-            <span className="font-bold text-sm text-[#111311] tracking-tight truncate group-hover:text-black">
-              {cat.name}
-            </span>
-            <span className="text-[11px] font-mono text-[#5C605C] truncate">
-              {meta.subtitle} &bull;{" "}
-              <span className="text-[#111311] font-medium">{meta.spec}</span>
-            </span>
-          </div>
-        </div>
-
-        {/* Pill Button with Volt-Lime glow on hover */}
-        <div className="shrink-0 ml-3">
-          <span className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-[#111311] group-hover:bg-[#CEF23E] text-white group-hover:text-[#111311] text-xs font-semibold tracking-tight transition-all duration-200 shadow-xs">
-            Explore
-          </span>
-        </div>
+      <Link href={`/category/${cat.slug}`} className="absolute inset-0 z-10">
+        <span className="sr-only">View {cat.name} products</span>
       </Link>
-    </motion.div>
+
+      <div className="flex items-start justify-between gap-4 mb-6">
+        <div className="flex flex-col">
+          <span className="text-[11px] font-mono tracking-wider text-[#5C605C] uppercase font-semibold">
+            {meta.subtitle}
+          </span>
+          <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111311] group-hover:text-black transition-colors mt-0.5">
+            {cat.name}
+          </h3>
+        </div>
+
+        <div className="w-9 h-9 rounded-full bg-white border border-[#DDE1DC] flex items-center justify-center text-[#111311] group-hover:bg-[#CEF23E] group-hover:border-[#CEF23E] transition-all duration-300 shrink-0 shadow-xs">
+          <ArrowRight className="w-4 h-4 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+        </div>
+      </div>
+
+      <div className="relative w-full h-32 sm:h-36 rounded-2xl bg-white/70 border border-[#E4E7E4] overflow-hidden flex items-center justify-center mb-4 group-hover:bg-white transition-colors">
+        {cat.image ? (
+          <Image
+            src={cat.image}
+            alt={cat.name}
+            fill
+            className="object-contain p-3 group-hover:scale-105 transition-transform duration-500"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 380px"
+          />
+        ) : (
+          <div className="w-full h-full bg-[#DDE1DC]/30 flex items-center justify-center text-xs font-mono text-[#5C605C]">
+            NO PREVIEW
+          </div>
+        )}
+      </div>
+
+      <div className="flex items-center justify-between pt-3 border-t border-[#DDE1DC]/60 text-xs font-mono text-[#5C605C]">
+        <span>{meta.spec}</span>
+        <span className="font-semibold text-[#111311] group-hover:text-black">
+          {cat._count?.products ?? 0} Models Available
+        </span>
+      </div>
+    </div>
   );
 }
 
-export function CategoryDock({ categories }: CategoryDockProps) {
-  if (!categories || categories.length === 0) {
-    return null;
-  }
+const CATEGORY_META: Record<string, { subtitle: string; spec: string }> = {
+  "solar-panels": {
+    subtitle: "Tier-1 Photovoltaic Modules",
+    spec: "N-Type TOPCon · Bifacial",
+  },
+  "lithium-batteries": {
+    subtitle: "Energy Storage Systems",
+    spec: "LiFePO4 · 6000+ Cycles",
+  },
+  "solar-inverters": {
+    subtitle: "Power Conversion Units",
+    spec: "Hybrid · IP65 Grid-Tie",
+  },
+};
 
-  const dockMeta: Record<string, { subtitle: string; spec: string }> = {
-    "solar-panels": {
-      subtitle: "N-Type TOPCon & Bifacial",
-      spec: "Up to 620W Modules",
-    },
-    "lithium-batteries": {
-      subtitle: "LiFePO4 Storage & ESS",
-      spec: "6000+ Deep Cycles",
-    },
-    "solar-inverters": {
-      subtitle: "Hybrid & Grid-Tie",
-      spec: "Dual/Multi MPPT Tech",
-    },
-  };
+export function CategoryDock({ categories }: CategoryDockProps) {
+  if (!categories || categories.length === 0) return null;
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E]"></span>
-          <h2 className="text-xs font-mono uppercase tracking-wider text-[#5C605C]">
-            Direct Import Categories
-          </h2>
-        </div>
-        <Link
-          href="/products"
-          className="text-xs font-mono text-[#111311] hover:underline flex items-center gap-1 group"
-        >
-          <span>View All Equipment</span>
-          <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <section className="relative z-20 -mt-6 sm:-mt-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         {categories.slice(0, 3).map((cat) => {
-          const meta = dockMeta[cat.slug] || {
-            subtitle: "Commercial Wholesale",
-            spec: `${cat._count?.products || 5} Available Models`,
+          const meta = CATEGORY_META[cat.slug] || {
+            subtitle: "Equipment Category",
+            spec: "B2B Grade Specs",
           };
-
-          return <MagneticDockCard key={cat.id} cat={cat} meta={meta} />;
+          return <DockCard key={cat.id} cat={cat} meta={meta} />;
         })}
       </div>
-    </div>
+    </section>
   );
 }

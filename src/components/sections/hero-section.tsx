@@ -1,11 +1,13 @@
-﻿"use client";
-
-import React, { useRef } from "react";
+import React from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ArrowRight, ShieldCheck, Box } from "lucide-react";
-import { gsap } from "@/lib/gsap";
-import { useGSAP } from "@/lib/gsap";
-import { HeroVisual } from "@/components/sections/hero-visual";
+import { HeroEntrance } from "@/components/sections/hero-entrance";
+
+const HeroVisual = dynamic(
+  () => import("@/components/sections/hero-visual").then((mod) => mod.HeroVisual),
+  { ssr: true }
+);
 
 interface HeroSectionProps {
   headline?: string;
@@ -20,89 +22,13 @@ export function HeroSection({
   primaryCta = "Request Quote",
   secondaryCta = "Browse Products",
 }: HeroSectionProps) {
-  const containerRef = useRef<HTMLElement>(null);
-
-  // Split headline into words or natural lines for masked slide-up reveal
-  const headlineWords = headline.split(" ");
-  // Group into ~3 lines for punchy typography
-  const line1 = headlineWords.slice(0, Math.ceil(headlineWords.length / 3)).join(" ");
-  const line2 = headlineWords
-    .slice(Math.ceil(headlineWords.length / 3), Math.ceil((headlineWords.length * 2) / 3))
-    .join(" ");
-  const line3 = headlineWords.slice(Math.ceil((headlineWords.length * 2) / 3)).join(" ");
-  const lines = [line1, line2, line3].filter(Boolean);
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const tl = gsap.timeline({
-          defaults: { ease: "power3.out" },
-        });
-
-        // 1.2s total orchestrated entrance timeline
-        tl.from(".hero-kicker", {
-          opacity: 0,
-          y: 16,
-          duration: 0.5,
-        })
-          .from(
-            ".hero-headline-line",
-            {
-              yPercent: 120,
-              duration: 0.75,
-              stagger: 0.08,
-            },
-            "-=0.25"
-          )
-          .from(
-            ".hero-subtext",
-            {
-              opacity: 0,
-              y: 20,
-              duration: 0.55,
-            },
-            "-=0.35"
-          )
-          .from(
-            ".hero-cta-btn",
-            {
-              opacity: 0,
-              y: 18,
-              duration: 0.5,
-              stagger: 0.1,
-            },
-            "-=0.35"
-          )
-          .from(
-            ".hero-spec-footer",
-            {
-              opacity: 0,
-              y: 12,
-              duration: 0.45,
-            },
-            "-=0.25"
-          )
-          .from(
-            ".hero-visual-container",
-            {
-              opacity: 0,
-              scale: 0.94,
-              duration: 0.85,
-              ease: "power2.out",
-            },
-            0.2
-          );
-      });
-    },
-    { scope: containerRef }
-  );
-
   return (
-    <section ref={containerRef} className="relative pt-28 sm:pt-36 pb-12 overflow-hidden">
+    <section className="relative pt-28 sm:pt-36 pb-12 overflow-hidden">
+      {/* Desktop entrance animation loaded dynamically without blocking mobile SSR */}
+      <HeroEntrance />
+
       {/* Background Ambient Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#CEF23E]/15 blur-[120px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#CEF23E]/15 sm:blur-[120px] blur-[40px] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Dashboard Container Card per DESIGN.md Section 4 */}
@@ -116,15 +42,9 @@ export function HeroSection({
                 <span>Direct B2B Solar Equipment Importer</span>
               </div>
 
-              {/* Title H1 with Masked Line Reveal */}
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#111311] leading-[1.08] mb-6">
-                {lines.map((line, idx) => (
-                  <span key={idx} className="block overflow-hidden pb-1">
-                    <span className="hero-headline-line block will-change-transform">
-                      {line}
-                    </span>
-                  </span>
-                ))}
+              {/* Title H1: Visible immediately on SSR for instant LCP */}
+              <h1 className="hero-headline text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#111311] leading-[1.12] mb-6">
+                {headline}
               </h1>
 
               {/* Description */}
@@ -150,7 +70,7 @@ export function HeroSection({
                 </Link>
               </div>
 
-              {/* Specs & Compliance Footer (Neutral Specs only) */}
+              {/* Specs & Compliance Footer */}
               <div className="hero-spec-footer pt-6 border-t border-[#DDE1DC] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3 sm:gap-4 text-[11px] sm:text-xs font-mono text-[#262826] font-medium">
                   <span>BULK ORDERS</span>
@@ -173,8 +93,8 @@ export function HeroSection({
               </div>
             </div>
 
-            {/* Right Column: Layered SVG Glass Visual & Interactive Parallax */}
-            <div className="lg:col-span-5 flex items-center justify-center">
+            {/* Right Column: Layered SVG Glass Visual */}
+            <div className="hero-visual-container lg:col-span-5 flex items-center justify-center">
               <HeroVisual />
             </div>
           </div>

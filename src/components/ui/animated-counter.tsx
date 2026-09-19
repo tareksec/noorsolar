@@ -1,8 +1,6 @@
-﻿"use client";
+"use client";
 
-import React, { useRef } from "react";
-import { gsap } from "@/lib/gsap";
-import { useGSAP } from "@/lib/gsap";
+import React, { useRef, useEffect } from "react";
 
 interface AnimatedCounterProps {
   value: number;
@@ -21,40 +19,41 @@ export function AnimatedCounter({
 }: AnimatedCounterProps) {
   const spanRef = useRef<HTMLSpanElement>(null);
 
-  useGSAP(
-    () => {
-      const el = spanRef.current;
-      if (!el) return;
+  useEffect(() => {
+    const el = spanRef.current;
+    if (!el) return;
 
-      const mm = gsap.matchMedia();
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.innerText = `${prefix || ""}${value.toFixed(decimals)}${suffix || ""}`;
+      return;
+    }
 
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-        el.innerText = `${prefix || ""}${value.toFixed(decimals)}${suffix || ""}`;
-      });
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const counter = { val: 0 };
-
-        gsap.to(counter, {
-          val: value,
-          duration: 1.6,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 88%",
-            once: true,
-          },
-          onUpdate: () => {
+    // Load GSAP dynamically only when component mounts in browser
+    import("@/lib/gsap").then(({ gsap }) => {
+      const counter = { val: 0 };
+      gsap.to(counter, {
+        val: value,
+        duration: 1.6,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 88%",
+          once: true,
+        },
+        onUpdate: () => {
+          if (el) {
             el.innerText = `${prefix || ""}${counter.val.toFixed(decimals)}${suffix || ""}`;
-          },
-          onComplete: () => {
+          }
+        },
+        onComplete: () => {
+          if (el) {
             el.innerText = `${prefix || ""}${value.toFixed(decimals)}${suffix || ""}`;
-          },
-        });
+          }
+        },
       });
-    },
-    { scope: spanRef, dependencies: [value, prefix, suffix, decimals] }
-  );
+    });
+  }, [value, prefix, suffix, decimals]);
 
   return (
     <span ref={spanRef} className={className}>
