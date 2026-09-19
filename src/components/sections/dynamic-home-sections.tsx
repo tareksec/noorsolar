@@ -75,6 +75,46 @@ interface DynamicHomeSectionsProps {
   }>;
 }
 
+function LazySection({
+  children,
+  placeholderHeight = 450,
+}: {
+  children: React.ReactNode;
+  placeholderHeight?: number;
+}) {
+  const [visible, setVisible] = React.useState(false);
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref}>
+      {visible ? (
+        children
+      ) : (
+        <div style={{ minHeight: `${placeholderHeight}px` }} className="bg-[#E4E7E4]" aria-hidden="true" />
+      )}
+    </div>
+  );
+}
+
 export function DynamicHomeSections({
   categories,
   featuredProducts,
@@ -84,16 +124,24 @@ export function DynamicHomeSections({
   return (
     <>
       {/* 4. Scroll-Linked Category Story */}
-      <CategoryStory categories={categories} />
+      <LazySection placeholderHeight={500}>
+        <CategoryStory categories={categories} />
+      </LazySection>
 
       {/* 5. Featured Products Carousel */}
-      <FeaturedCarousel products={featuredProducts} />
+      <LazySection placeholderHeight={450}>
+        <FeaturedCarousel products={featuredProducts} />
+      </LazySection>
 
       {/* 9. Testimonials */}
-      <TestimonialsSection testimonials={testimonials} />
+      <LazySection placeholderHeight={380}>
+        <TestimonialsSection testimonials={testimonials} />
+      </LazySection>
 
       {/* 10. Frequently Asked Questions */}
-      <FAQSection items={faqItems} />
+      <LazySection placeholderHeight={360}>
+        <FAQSection items={faqItems} />
+      </LazySection>
     </>
   );
 }

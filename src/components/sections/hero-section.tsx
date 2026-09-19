@@ -28,7 +28,7 @@ export function HeroSection({
       <HeroEntrance />
 
       {/* Background Ambient Glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#CEF23E]/15 sm:blur-[120px] blur-[40px] rounded-full pointer-events-none -z-10" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(206,242,62,0.15)_0%,transparent_70%)] rounded-full pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Dashboard Container Card per DESIGN.md Section 4 */}

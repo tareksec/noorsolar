@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 
 export default function PublicTemplate({
   children,
@@ -6,7 +6,7 @@ export default function PublicTemplate({
   children: React.ReactNode;
 }) {
   return (
-    <div className="page-transition min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col">
       {children}
     </div>
   );

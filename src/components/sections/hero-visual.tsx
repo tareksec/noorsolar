@@ -121,7 +121,7 @@ export function HeroVisual() {
       aria-label="Layered glass composition of high-efficiency solar panel, lithium battery rack, and hybrid inverter"
     >
       {/* Background Soft Glow Aura */}
-      <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-[#CEF23E]/20 via-[#CEF23E]/10 to-transparent blur-3xl -z-10 pointer-events-none" />
+      <div className="absolute inset-4 rounded-full bg-[radial-gradient(circle,rgba(206,242,62,0.18)_0%,transparent_70%)] -z-10 pointer-events-none" />
 
       {/* Main Layered SVG Canvas */}
       <div className="w-full h-full relative flex items-center justify-center">
@@ -129,7 +129,7 @@ export function HeroVisual() {
           viewBox="0 0 680 540"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full overflow-visible drop-shadow-2xl"
+          className="w-full h-full overflow-visible drop-shadow-md"
         >
           <defs>
             {/* Panel Glass Gradients */}
@@ -149,15 +149,10 @@ export function HeroVisual() {
               <stop offset="70%" stopColor="#F5F7F5" />
               <stop offset="100%" stopColor="#E2E6E2" />
             </linearGradient>
-
-            {/* Soft Shadow Filters */}
-            <filter id="hv-shadow-deep" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="16" stdDeviation="16" floodColor="#000000" floodOpacity="0.18" />
-            </filter>
           </defs>
 
           {/* LAYER 1: N-Type Solar Panel (Background Layer, angled back right) */}
-          <g ref={panelRef} id="hero-layer-panel" style={panelParallax} filter="url(#hv-shadow-deep)">
+          <g ref={panelRef} id="hero-layer-panel" style={panelParallax}>
             {/* Panel Aluminum Alloy Frame */}
             <rect
               x="160"
@@ -205,7 +200,7 @@ export function HeroVisual() {
           </g>
 
           {/* LAYER 2: Lithium Battery Server Rack Unit (Middle Layer, angled left-center) */}
-          <g ref={batteryRef} id="hero-layer-battery" style={batteryParallax} filter="url(#hv-shadow-deep)">
+          <g ref={batteryRef} id="hero-layer-battery" style={batteryParallax}>
             {/* Rack Chassis Enclosure */}
             <rect
               x="70"
@@ -249,7 +244,7 @@ export function HeroVisual() {
           </g>
 
           {/* LAYER 3: Hybrid Solar Inverter (Foreground Layer, front center-right) */}
-          <g ref={inverterRef} id="hero-layer-inverter" style={inverterParallax} filter="url(#hv-shadow-deep)">
+          <g ref={inverterRef} id="hero-layer-inverter" style={inverterParallax}>
             {/* Clean White Architectural Casing */}
             <rect
               x="250"

@@ -42,9 +42,9 @@ function DockCard({ cat, meta }: DockCardProps) {
           <span className="text-[11px] font-mono tracking-wider text-[#5C605C] uppercase font-semibold">
             {meta.subtitle}
           </span>
-          <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111311] group-hover:text-black transition-colors mt-0.5">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111311] group-hover:text-black transition-colors mt-0.5">
             {cat.name}
-          </h3>
+          </h2>
         </div>
 
         <div className="w-9 h-9 rounded-full bg-white border border-[#DDE1DC] flex items-center justify-center text-[#111311] group-hover:bg-[#CEF23E] group-hover:border-[#CEF23E] transition-all duration-300 shrink-0 shadow-xs">

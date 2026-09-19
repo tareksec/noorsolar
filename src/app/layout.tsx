@@ -8,6 +8,7 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   preload: true,
+  weight: ["400", "500", "600", "700"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -15,6 +16,7 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   display: "swap",
   preload: false,
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
