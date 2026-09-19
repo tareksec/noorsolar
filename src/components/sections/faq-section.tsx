@@ -1,19 +1,24 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-interface FAQItem {
+interface FAQItemLike {
+  id?: string;
   question: string;
   answer: string;
 }
 
 interface FAQSectionProps {
-  items: FAQItem[];
+  items: FAQItemLike[];
 }
 
 export function FAQSection({ items }: FAQSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  if (!items || items.length === 0) {
+    return null;
+  }
 
   const toggle = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -22,14 +27,13 @@ export function FAQSection({ items }: FAQSectionProps) {
   return (
     <section id="faq" className="py-20 bg-[#E4E7E4]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3 border border-[#DDE1DC]">
             <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
             <span>Commercial Inquiries</span>
           </div>
           <h2 className="text-3xl font-bold tracking-tight text-[#111311]">
-            Frequently Asked Questions .
+            Frequently Asked Questions
           </h2>
         </div>
 
@@ -38,7 +42,7 @@ export function FAQSection({ items }: FAQSectionProps) {
             const isOpen = openIndex === index;
             return (
               <div
-                key={index}
+                key={item.id || index}
                 className="rounded-2xl bg-white border border-[#DDE1DC] overflow-hidden transition-all duration-200"
               >
                 <button
@@ -65,7 +69,6 @@ export function FAQSection({ items }: FAQSectionProps) {
             );
           })}
         </div>
-
       </div>
     </section>
   );

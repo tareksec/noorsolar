@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useActionState, useState } from "react";
 import { submitQuoteRequest, QuoteActionResult } from "@/app/actions/quote";
@@ -8,6 +8,8 @@ interface ClosingCTAProps {
   phoneDisplay?: string;
   whatsappNumber?: string;
   selectedProduct?: string;
+  headline?: string;
+  subheadline?: string;
 }
 
 const initialState: QuoteActionResult = {
@@ -18,6 +20,8 @@ export function ClosingCTA({
   phoneDisplay = "+880 1700-000000",
   whatsappNumber = "8801700000000",
   selectedProduct,
+  headline = "Ready to Order or Inquire About Container Pricing?",
+  subheadline = "Submit your project specifications or required equipment quantity below. Our commercial sales engineers respond with formal quotations within working hours.",
 }: ClosingCTAProps) {
   const [state, formAction, isPending] = useActionState(submitQuoteRequest, initialState);
   const [phoneVal, setPhoneVal] = useState("");
@@ -40,11 +44,11 @@ export function ClosingCTA({
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#111311] leading-tight mb-4">
-              Ready to Order or Inquire About Container Pricing?
+              {headline}
             </h2>
 
             <p className="text-sm sm:text-base text-[#5C605C] leading-relaxed mb-8">
-              Submit your project specifications or required equipment quantity below. Our commercial sales engineers respond with formal quotations within working hours.
+              {subheadline}
             </p>
 
             <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC] space-y-4 shadow-sm">

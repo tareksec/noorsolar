@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -8,11 +8,15 @@ import { ArrowRight, ShieldCheck, Box, Zap, Truck } from "lucide-react";
 interface HeroSectionProps {
   headline?: string;
   subheadline?: string;
+  primaryCta?: string;
+  secondaryCta?: string;
 }
 
 export function HeroSection({
-  headline = "Solar panels, lithium batteries and inverters, supplied in bulk .",
-  subheadline = "Direct B2B importer providing engineering-grade solar equipment, bulk orders, and wholesale delivery across Bangladesh.",
+  headline = "Solar panels, lithium batteries and inverters, supplied in bulk.",
+  subheadline = "Direct B2B importer providing engineering-grade solar equipment and wholesale delivery across Bangladesh.",
+  primaryCta = "Request Quote",
+  secondaryCta = "Browse Products",
 }: HeroSectionProps) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
@@ -36,14 +40,13 @@ export function HeroSection({
             {/* Left Column: Content & Call to Actions */}
             <div className="lg:col-span-7 flex flex-col justify-center">
               {/* Kicker */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white/90 border border-white text-[11px] sm:text-xs font-mono text-[#111311] max-w-full mb-6 shadow-sm">
+              <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white/90 border border-white text-[11px] sm:text-xs font-mono text-[#111311] max-w-full mb-6 shadow-xs">
                 <span className="w-2 h-2 rounded-full bg-[#CEF23E] animate-pulse"></span>
-                <span>Power Equipment for a Resilient Bangladesh 🌱</span>
+                <span>Direct B2B Solar Equipment Importer</span>
               </div>
 
               {/* Title H1 */}
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#111311] leading-[1.08] mb-6">
-                <span className="inline-block text-[#CEF23E] mr-2">↗</span>
                 {headline}
               </h1>
 
@@ -58,14 +61,14 @@ export function HeroSection({
                   href="/#quote-section"
                   className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#CEF23E] hover:bg-[#B8DC2F] text-[#111311] font-semibold text-sm tracking-tight shadow-[0_10px_25px_-5px_rgba(206,242,62,0.4)] transition-all duration-300 hover:scale-[1.02] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111311] w-full sm:w-auto text-center"
                 >
-                  <span>↗ Request Bulk Quote</span>
+                  <span>{primaryCta}</span>
                 </Link>
 
                 <Link
                   href="/products"
                   className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/80 hover:bg-white text-[#111311] font-medium text-sm border border-[#DDE1DC] transition-all hover:border-[#111311] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] w-full sm:w-auto text-center"
                 >
-                  <span>Browse Catalog</span>
+                  <span>{secondaryCta}</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -97,7 +100,7 @@ export function HeroSection({
             <div
               onMouseMove={handleMouseMove}
               onMouseLeave={() => setMousePos({ x: 0, y: 0 })}
-              className="lg:col-span-5 relative w-full aspect-square sm:aspect-[4/3] lg:aspect-[4/4] flex items-center justify-center"
+              className="lg:col-span-5 relative w-full aspect-square sm:aspect-[4/3] lg:aspect-4/4 flex items-center justify-center"
             >
               {/* Central Visual Presentation */}
               <div
@@ -109,7 +112,7 @@ export function HeroSection({
               >
                 <div className="relative w-full h-full rounded-2xl overflow-hidden bg-[#111311] flex items-center justify-center border border-white/20">
                   <Image
-                    src="/demo/panel-620w-topcon.svg"
+                    src="/demo/panel-620w-topcon-front.svg"
                     alt="Solar Panels and Equipment"
                     fill
                     priority
