@@ -85,10 +85,10 @@ async function run() {
     let adminCookies = [];
     const authPage = await browser.newPage();
     console.log(`Authenticating admin on ${BASE_URL}/admin/login with ${ADMIN_EMAIL} ...`);
-    await authPage.goto(`${BASE_URL}/admin/login`, { waitUntil: "domcontentloaded" });
+    await authPage.goto(`${BASE_URL}/admin/login`, { waitUntil: "networkidle0" });
     
-    // Fill password (email defaults to owner@example.com)
-    await authPage.click('input[name="password"]');
+    // Wait for password input to be ready
+    await authPage.waitForSelector('input[name="password"]', { timeout: 10000 });
     await authPage.type('input[name="password"]', ADMIN_PASSWORD);
     await authPage.click('button[type="submit"]');
 
