@@ -1,4 +1,4 @@
-﻿import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
@@ -21,12 +21,14 @@ function getProductImagePath(slug: string, view: "front" | "angled" | "detail", 
 }
 
 async function main() {
+  const isProduction = process.env.NODE_ENV === "production";
+  const seedDemo = process.env.SEED_DEMO === "true";
   const isDemoOnly = process.argv.includes("--demo-only");
-  console.log(isDemoOnly ? "Seeding demo rows only (--demo-only)..." : "Full database seed starting...");
 
-  // 1. Admin User & Site Settings (skipped when --demo-only)
+  console.log(`Starting database seed (NODE_ENV=${process.env.NODE_ENV || "development"}, SEED_DEMO=${process.env.SEED_DEMO || "false"})...`);
+
+  // 1. Admin User & Site Settings
   if (!isDemoOnly) {
-    const isProduction = process.env.NODE_ENV === "production";
     const adminEmail = process.env.ADMIN_EMAIL || "owner@example.com";
     const rawPassword = process.env.ADMIN_PASSWORD || "change-me-on-first-login";
 
@@ -53,7 +55,7 @@ async function main() {
         passwordHash,
       },
     });
-    console.log(`Admin user ensured: ${adminEmail}`);
+    console.log(`✓ Admin user ensured: ${adminEmail}`);
 
     // Ensure default site config
     await prisma.siteSetting.upsert({
@@ -64,7 +66,7 @@ async function main() {
         value: JSON.stringify(defaultSiteConfig),
       },
     });
-    console.log("Site settings ensured.");
+    console.log("✓ Core site settings ensured.");
   }
 
   // 2. Categories
@@ -105,7 +107,13 @@ async function main() {
     });
     categories[cat.slug] = created.id;
   }
-  console.log("Categories ensured.");
+  console.log("✓ Core categories ensured.");
+
+  // Check if production mode without SEED_DEMO=true
+  if (isProduction && !seedDemo) {
+    console.log("ℹ️ Production environment: creating admin user and core settings only. Demo products and sample content skipped (set SEED_DEMO=true to seed demo items).");
+    return;
+  }
 
   // 3. Wipe Demo & Sample Rows (preserving real rows where isDemo=false or isSample=false)
   console.log("Wiping existing demo products and sample trust content...");
@@ -136,7 +144,7 @@ async function main() {
   await prisma.testimonial.deleteMany({ where: { isSample: true } });
   await prisma.faqItem.deleteMany({ where: { isSample: true } });
 
-  // 4. Seed 15 Full Demo Products (PRD §7)
+  // 4. Seed 15 Full Demo Products
   console.log("Creating 15 demo products with 3 views and specs...");
   for (const p of demoProducts) {
     const categoryId = categories[p.categorySlug];
@@ -194,7 +202,7 @@ async function main() {
       });
     }
   }
-  console.log(`Seeded ${demoProducts.length} demo products.`);
+  console.log(`✓ Seeded ${demoProducts.length} demo products.`);
 
   // 5. Seed Sample Trust Content (all isSample=true)
   console.log("Seeding sample trust content (stats, certifications, partners, testimonials, FAQs)...");
@@ -219,7 +227,7 @@ async function main() {
     await prisma.faqItem.create({ data: faq });
   }
 
-  console.log("Sample trust content successfully seeded!");
+  console.log("✓ Sample trust content successfully seeded!");
 }
 
 main()
