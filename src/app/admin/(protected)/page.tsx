@@ -1,10 +1,12 @@
 import React from "react";
 import { db } from "@/lib/db";
 import Link from "next/link";
-import { Package, Layers, MessageSquare, ArrowUpRight } from "lucide-react";
+import { Package, Layers, MessageSquare, ArrowUpRight, AlertTriangle, ArrowRight } from "lucide-react";
+import { getLiveSampleContentSummary } from "@/lib/data/content";
 
 export default async function AdminDashboardPage() {
-  const [productCount, categoryCount, newQuoteCount, latestQuotes] = await Promise.all([
+  const [productCount, categoryCount, newQuoteCount, latestQuotes, sampleSummary] = await Promise.all([
+    getLiveSampleContentSummary(),
     db.product.count(),
     db.category.count(),
     db.quoteRequest.count({ where: { status: "NEW" } }),
@@ -28,6 +30,53 @@ export default async function AdminDashboardPage() {
         </p>
       </div>
 
+      {{/* Warning Card: Live Sample Items */}}
+      {sampleSummary.totalLiveSamples > 0 && (
+        <div className="p-6 rounded-3xl bg-amber-500/10 border border-amber-500/30 text-amber-950 space-y-3">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
+            <span className="font-bold text-base font-mono">
+              {sampleSummary.totalLiveSamples} sample items are still live
+            </span>
+          </div>
+          <p className="text-xs text-amber-800">
+            Placeholder content is currently visible on the public site. Review each list to replace with verified company data or click &apos;Mark as real&apos;:
+          </p>
+          <div className="flex flex-wrap gap-2 pt-1">
+            {sampleSummary.stats > 0 && (
+              <Link href="/admin/content/stats" className="px-3 py-1.5 rounded-xl bg-white border border-amber-500/30 text-xs font-mono font-bold text-[#111311] hover:bg-amber-50 flex items-center gap-1">
+                <span>Stats ({sampleSummary.stats})</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            )}
+            {sampleSummary.certifications > 0 && (
+              <Link href="/admin/content/certifications" className="px-3 py-1.5 rounded-xl bg-white border border-amber-500/30 text-xs font-mono font-bold text-[#111311] hover:bg-amber-50 flex items-center gap-1">
+                <span>Certifications ({sampleSummary.certifications})</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            )}
+            {sampleSummary.partners > 0 && (
+              <Link href="/admin/content/partners" className="px-3 py-1.5 rounded-xl bg-white border border-amber-500/30 text-xs font-mono font-bold text-[#111311] hover:bg-amber-50 flex items-center gap-1">
+                <span>Partners ({sampleSummary.partners})</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            )}
+            {sampleSummary.testimonials > 0 && (
+              <Link href="/admin/content/testimonials" className="px-3 py-1.5 rounded-xl bg-white border border-amber-500/30 text-xs font-mono font-bold text-[#111311] hover:bg-amber-50 flex items-center gap-1">
+                <span>Testimonials ({sampleSummary.testimonials})</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            )}
+            {sampleSummary.faq > 0 && (
+              <Link href="/admin/content/faq" className="px-3 py-1.5 rounded-xl bg-white border border-amber-500/30 text-xs font-mono font-bold text-[#111311] hover:bg-amber-50 flex items-center gap-1">
+                <span>FAQ ({sampleSummary.faq})</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
+      
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC] shadow-sm">

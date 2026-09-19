@@ -12,6 +12,7 @@ import {
   Settings,
   LogOut,
   ExternalLink,
+  FileText,
 } from "lucide-react";
 
 export default async function AdminProtectedLayout({
@@ -30,6 +31,7 @@ export default async function AdminProtectedLayout({
     { label: "Quote Inbox", href: "/admin/quotes", icon: MessageSquare },
     { label: "Products", href: "/admin/products", icon: Package },
     { label: "Categories", href: "/admin/categories", icon: Layers },
+    { label: 'Content', href: '/admin/content', icon: FileText },
     { label: "Settings", href: "/admin/settings", icon: Settings },
   ];
 
