@@ -7,16 +7,23 @@ import { usePathname } from "next/navigation";
 import { ArrowUpRight, ArrowRight, MessageSquare, Clock, CheckCircle2 } from "lucide-react";
 import { isPointerFine, prefersReducedMotion as checkReducedMotion } from "@/lib/motion";
 
-export interface ProductCardProps {
+interface ProductCardProps {
   product: {
-    id: string; slug: string; name: string; brand?: string | null; model?: string | null;
-    stockStatus: string; priceBdt?: number | null; showPrice: boolean;
+    id: string;
+    slug: string;
+    name: string;
+    brand?: string | null;
+    model?: string | null;
+    stockStatus: string;
+    priceBdt?: number | null;
+    showPrice: boolean;
     images: Array<{ url: string; alt: string }>;
     specs: Array<{ label: string; value: string }>;
     category?: { name: string; slug: string } | null;
   };
   priority?: boolean;
 }
+
 export function ProductCard({ product, priority = false }: ProductCardProps) {
   const router = useRouter();
   const pathname = usePathname() || "";
@@ -248,7 +255,6 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           </Link>
         </div>
       </div>
-    </article>
+    </div>
   );
 }
-

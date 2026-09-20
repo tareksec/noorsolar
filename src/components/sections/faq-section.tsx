@@ -123,4 +123,3 @@ export function FAQSection({ items, locale }: FAQSectionProps) {
     </section>
   );
 }
-

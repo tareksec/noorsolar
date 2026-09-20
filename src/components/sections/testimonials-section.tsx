@@ -256,5 +256,3 @@ export function TestimonialsSection({
     </section>
   );
 }
-
-

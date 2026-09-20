@@ -1,3 +1,4 @@
+import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
@@ -56,6 +57,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     },
   };
 }
+
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
@@ -366,13 +368,5 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
       </div>
     </div>
-    <div className="grid grid-cols-1 lg:grid-cols-[.8fr_1.2fr] gap-8 mb-16">
-      <section className="p-6 sm:p-8 rounded-3xl bg-[#EDEDED] self-start"><p className="eyebrow">Product overview</p><h2 className="text-2xl font-semibold tracking-tight mt-3 mb-5">The details that matter.</h2><p className="whitespace-pre-line text-sm text-[#5C605C] leading-relaxed">{product.description || "Contact our sales team to discuss specifications, quantities and documents for this product."}</p><p className="text-xs text-[#5C605C] leading-relaxed border-t border-[#CDD3C8] mt-6 pt-5">Confirm the required specifications and current order terms when requesting your quotation.</p></section>
-      <section id="specifications" className="p-5 sm:p-8 rounded-3xl bg-white border border-[#DDE1DC] min-w-0"><h2 className="text-2xl font-semibold tracking-tight mb-6">Technical specifications</h2>
-        {product.specs.length ? <table className="w-full text-sm border-collapse"><caption className="sr-only">Specifications for {product.name}</caption><tbody>{product.specs.map(spec => <tr key={spec.id} className="border-t border-[#E4E7E4]"><th scope="row" className="py-4 pr-5 text-left font-normal text-[#5C605C] w-1/2 align-top">{spec.label}</th><td className="py-4 text-right font-mono text-xs font-medium break-words">{spec.value}</td></tr>)}</tbody></table> : <p className="text-sm text-[#5C605C]">Ask for specifications in your quote request.</p>}
-      </section>
-    </div>
-    {related.length > 0 && <section><div className="section-heading"><div><p className="eyebrow">Compare your options</p><h2>Also in {product.category.name.toLowerCase()}.</h2></div><Link href={"/category/" + product.category.slug} className="text-link shrink-0">View category ↗</Link></div><div className="catalog-grid">{related.map(item => <ProductCard key={item.id} product={item} />)}</div></section>}
-  </div></div>;
+  );
 }
-

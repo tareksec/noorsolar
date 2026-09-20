@@ -222,4 +222,3 @@ export function CategoryDock({ locale }: CategoryDockProps) {
     </section>
   );
 }
-
