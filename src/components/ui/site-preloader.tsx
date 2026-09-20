@@ -6,11 +6,9 @@ import Image from "next/image";
 const SESSION_KEY = "noor-preloader-seen";
 
 export function SitePreloader() {
-  console.log("RENDER SitePreloader");
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log("MOUNT SitePreloader useEffect");
     const root = rootRef.current;
     if (!root) return;
 
@@ -35,7 +33,7 @@ export function SitePreloader() {
     let timeline: { kill: () => void } | undefined;
     let hardStop: number | null = null;
     let exitStarted = false;
-    let pageReady = document.readyState === "complete";
+    let pageReady = document.readyState !== "loading";
     let animationFinished = false;
 
     const remove = () => {
@@ -60,7 +58,7 @@ export function SitePreloader() {
       import("@/lib/gsap").then(({ gsap }) => {
         if (cancelled) return;
         const exit = gsap.timeline({
-          defaults: { duration: 0.8, ease: "expo.inOut" },
+          defaults: { duration: 0.6, ease: "expo.inOut" },
           onComplete: remove,
         });
         exit.to(root.querySelector(".preloader-panel-top"), { yPercent: -100 }, 0);
@@ -104,7 +102,7 @@ export function SitePreloader() {
       }
       root.classList.add("preloader-hard-stop");
       window.setTimeout(remove, 120);
-    }, 3800);
+    }, 2500);
 
     if (reducedMotion) {
       const reducedTimer = window.setTimeout(() => {
@@ -124,18 +122,18 @@ export function SitePreloader() {
 
     import("@/lib/gsap").then(({ gsap }) => {
       if (cancelled) return;
-      const icon = root.querySelector(".preloader-icon");
+      const icons = root.querySelectorAll(".preloader-icon");
 
-      gsap.set(icon, { scale: 0.72, opacity: 0, transformOrigin: "center" });
+      gsap.set(icons, { scale: 0.72, opacity: 0, transformOrigin: "center" });
 
       const animation = gsap.timeline({ onComplete: finish });
       animation
-        .to(icon, { scale: 1, opacity: 1, duration: 0.65, ease: "back.out(1.4)" }, 0.15)
-        .to(icon, { filter: "drop-shadow(0 0 18px rgba(205,243,0,0.7))", duration: 0.22, yoyo: true, repeat: 1 }, 1.35)
-        .to({}, { duration: 1.2 });
+        .to(icons, { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(1.4)" }, 0.1)
+        .to(icons, { filter: "drop-shadow(0 0 18px rgba(205,243,0,0.7))", duration: 0.22, yoyo: true, repeat: 1 }, 0.85)
+        .to({}, { duration: 0.3 });
       timeline = animation;
 
-      window.setTimeout(finish, 3000);
+      window.setTimeout(finish, 1800);
     });
 
     return () => {

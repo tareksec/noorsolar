@@ -38,13 +38,15 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
         <div className="text-center mb-12 sm:mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3.5 border border-[#D5DDD2] shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-[#CEF23E]" />
-            <span>Compliance & Testing</span>
+            <span>{isBn ? "অনুমোদন ও টেস্টিং" : "Compliance & Testing"}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#111311]">
-            Official Industry Accreditation
+            {isBn ? "অফিসিয়াল ইন্ডাস্ট্রি অ্যাক্রেডিটেশন" : "Official Industry Accreditation"}
           </h2>
           <p className="mt-3 text-sm sm:text-base text-[#525C4F] max-w-2xl mx-auto leading-relaxed">
-            Operating under verified national renewable energy association governance, adhering to standardized inspection criteria and high-voltage safety benchmarks.
+            {isBn
+              ? "জাতীয় নবায়নযোগ্য জ্বালানি সংস্থার নির্ধারিত মানদণ্ড এবং হাই-ভোল্টেজ নিরাপত্তা বিধিমালা মেনে পরিচালিত।"
+              : "Operating under verified national renewable energy association governance, adhering to standardized inspection criteria and high-voltage safety benchmarks."}
           </p>
         </div>
 

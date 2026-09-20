@@ -1,50 +1,12 @@
 "use client";
 
 import React from "react";
-import dynamic from "next/dynamic";
 import type { Testimonial } from "@prisma/client";
 
-const CategoryStory = dynamic(
-  () =>
-    import("@/components/sections/category-story").then(
-      (mod) => mod.CategoryStory
-    ),
-  {
-    ssr: false,
-    loading: () => <div className="min-h-[450px] bg-[#E4E7E4]" />,
-  }
-);
-
-const FeaturedCarousel = dynamic(
-  () =>
-    import("@/components/sections/featured-carousel").then(
-      (mod) => mod.FeaturedCarousel
-    ),
-  {
-    ssr: false,
-    loading: () => <div className="min-h-[450px] bg-[#E4E7E4]" />,
-  }
-);
-
-const TestimonialsSection = dynamic(
-  () =>
-    import("@/components/sections/testimonials-section").then(
-      (mod) => mod.TestimonialsSection
-    ),
-  {
-    ssr: false,
-    loading: () => <div className="min-h-[360px] bg-[#E4E7E4]" />,
-  }
-);
-
-const FAQSection = dynamic(
-  () =>
-    import("@/components/sections/faq-section").then((mod) => mod.FAQSection),
-  {
-    ssr: false,
-    loading: () => <div className="min-h-[380px] bg-[#E4E7E4]" />,
-  }
-);
+import { CategoryStory } from "@/components/sections/category-story";
+import { FeaturedCarousel } from "@/components/sections/featured-carousel";
+import { TestimonialsSection } from "@/components/sections/testimonials-section";
+import { FAQSection } from "@/components/sections/faq-section";
 
 interface DynamicHomeSectionsProps {
   categories: Array<{

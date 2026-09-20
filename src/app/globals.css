@@ -396,4 +396,26 @@ noscript + #preloader {
 [lang="bn"] kbd,
 [lang="bn"] samp {
   font-family: var(--font-jetbrains-mono), monospace !important;
+}
+
+/* Continuous Marquee Track */
+.marquee-anim-track {
+  animation: marqueeScroll 28s linear infinite;
+}
+.marquee-anim-track:hover {
+  animation-play-state: paused;
+}
+@keyframes marqueeScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-anim-track {
+    animation: none !important;
+    transform: none !important;
+  }
 }
