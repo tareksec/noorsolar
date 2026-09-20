@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent, useTransform, useSpring } from "framer-motion";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
@@ -89,64 +89,103 @@ export function AnimatedNavFramer({
   const { scrollY } = useScroll();
   const lastScrollY = React.useRef(0);
   const scrollPositionOnCollapse = React.useRef(0);
+  const userExpandedManually = React.useRef(false);
+  const [isManuallyOpen, setIsManuallyOpen] = React.useState(false);
+  const navRef = React.useRef<HTMLElement>(null);
+
+  // High-sensitivity dynamic rotation responsive to mouse scroll
+  const rawRotate = useTransform(scrollY, (v) => v * 2.2);
+  const smoothRotate = useSpring(rawRotate, {
+    stiffness: 400,
+    damping: 26,
+    mass: 0.35,
+  });
+
+  // Handle outside clicks when manually opened while scrolled
+  React.useEffect(() => {
+    if (!isExpanded || !isManuallyOpen) return;
+    const handlePointerDown = (e: PointerEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setExpanded(false);
+        setIsManuallyOpen(false);
+        userExpandedManually.current = false;
+      }
+    };
+    window.addEventListener("pointerdown", handlePointerDown);
+    return () => window.removeEventListener("pointerdown", handlePointerDown);
+  }, [isExpanded, isManuallyOpen]);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = lastScrollY.current;
+    // If user clicked to expand while scrolled down, keep open until scrolled > 120px away
+    if (userExpandedManually.current) {
+      if (Math.abs(latest - scrollPositionOnCollapse.current) > 120) {
+        userExpandedManually.current = false;
+        setIsManuallyOpen(false);
+        setExpanded(false);
+      }
+      lastScrollY.current = latest;
+      return;
+    }
 
-    // Collapse when scrolling down past 150px
-    if (isExpanded && latest > previous && latest > 150) {
-      setExpanded(false);
-      scrollPositionOnCollapse.current = latest;
+    // When near top of page, keep expanded
+    if (latest <= 60) {
+      if (!isExpanded) {
+        setExpanded(true);
+        setIsManuallyOpen(false);
+      }
     } 
-    // Expand when scrolling up by threshold
-    else if (
-      !isExpanded &&
-      previous > latest &&
-      scrollPositionOnCollapse.current - latest > EXPAND_SCROLL_THRESHOLD
-    ) {
-      setExpanded(true);
-    } 
-    // Expand immediately if scrolled all the way to top
-    else if (!isExpanded && latest <= 50) {
-      setExpanded(true);
+    // When scrolled down, collapse into the rotating logo icon
+    else if (latest > 100) {
+      if (isExpanded) {
+        setExpanded(false);
+        setIsManuallyOpen(false);
+      }
     }
 
     lastScrollY.current = latest;
   });
 
-
   return (
     <>
       <div className="fixed top-3 sm:top-5 inset-x-0 z-50 flex justify-center pointer-events-none px-2 sm:px-4">
         <motion.nav
+          ref={navRef}
           initial={false}
           animate={{
-            width: isExpanded ? "auto" : "48px",
-            height: isExpanded ? "auto" : "48px",
+            width: isExpanded ? "auto" : "52px",
+            height: isExpanded ? "auto" : "52px",
           }}
           transition={{
             type: "spring",
-            stiffness: 450,
-            damping: 35,
+            stiffness: 600,
+            damping: 34,
+            mass: 0.5,
           }}
           onClick={() => {
-            if (!isExpanded) setExpanded(true);
+            if (!isExpanded) {
+              setExpanded(true);
+              setIsManuallyOpen(true);
+              userExpandedManually.current = true;
+              scrollPositionOnCollapse.current = scrollY.get();
+            }
           }}
+          whileHover={!isExpanded ? { scale: 1.08 } : {}}
+          whileTap={!isExpanded ? { scale: 0.94 } : {}}
           className={cn(
-            "pointer-events-auto relative flex items-center overflow-hidden rounded-full border border-white/20 bg-slate-950/85 backdrop-blur-xl shadow-[0_12px_36px_rgba(0,0,0,0.35)] py-1 sm:py-1.5 transition-colors duration-300 shrink-0 max-w-full",
+            "pointer-events-auto relative flex items-center overflow-hidden rounded-full border border-white/20 bg-slate-950/85 backdrop-blur-xl shadow-[0_12px_36px_rgba(0,0,0,0.35)] transition-colors duration-150 shrink-0 max-w-full",
             !isExpanded
-              ? "cursor-pointer justify-center p-0 border-[#CEF23E]/40 bg-slate-950/95 shadow-[0_0_24px_rgba(206,242,62,0.35)]"
-              : "px-2 sm:px-2.5"
+              ? "cursor-pointer justify-center p-0 border-[#CEF23E]/60 bg-slate-950/95 shadow-[0_0_24px_rgba(206,242,62,0.45)]"
+              : "px-2 sm:px-2.5 py-1 sm:py-1.5"
           )}
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence initial={false}>
             {isExpanded ? (
               <motion.div
                 key="expanded-content"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.12, ease: "easeOut" }}
                 className="flex items-center shrink-0 min-w-0"
               >
                 {/* Brand Logo in Header Navbar */}
@@ -204,7 +243,7 @@ export function AnimatedNavFramer({
                   </div>
 
                   {/* Right CTA Button in Brand Volt Lime */}
-                  <div className="pl-1 shrink-0">
+                  <div className="pl-1 shrink-0 flex items-center gap-1">
                     <Link
                       href={finalCtaHref}
                       onClick={(e) => e.stopPropagation()}
@@ -215,6 +254,24 @@ export function AnimatedNavFramer({
                         <ArrowRight className="w-3 h-3 stroke-[2.5]" />
                       </span>
                     </Link>
+
+                    {/* Close button when manually opened while scrolled */}
+                    {isManuallyOpen && (
+                      <button
+                        type="button"
+                        aria-label="Close menu"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setExpanded(false);
+                          setIsManuallyOpen(false);
+                          userExpandedManually.current = false;
+                        }}
+                        className="p-1 sm:p-1.5 rounded-full text-slate-300 hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-none"
+                        title={isBn ? "মেনু বন্ধ করুন" : "Close menu"}
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
 
                   {/* Mobile Hamburger Toggle Button */}
@@ -234,20 +291,30 @@ export function AnimatedNavFramer({
             ) : (
               <motion.div
                 key="collapsed-icon"
-                initial={{ opacity: 0, scale: 0.6 }}
+                initial={{ opacity: 0, scale: 0.7 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.6 }}
-                transition={{ duration: 0.15 }}
-                className="w-full h-full flex items-center justify-center p-2"
+                exit={{ opacity: 0, scale: 0.7 }}
+                transition={{ duration: 0.12, ease: "easeOut" }}
+                className="w-[52px] h-[52px] flex items-center justify-center relative cursor-pointer select-none"
+                title={isBn ? "মেনু খুলতে ক্লিক করুন" : "Click to open menu"}
               >
-                <Image
-                  src="/brand/logo-icon.png"
-                  alt="Noor Solar Energy"
-                  width={28}
-                  height={28}
-                  className="w-6 h-6 object-contain"
-                  priority
-                />
+                {/* Subtle spinning glow aura ring */}
+                <div className="absolute inset-1 rounded-full bg-gradient-to-tr from-[#CEF23E]/25 via-transparent to-[#CEF23E]/45 animate-[spin_8s_linear_infinite] pointer-events-none" />
+
+                {/* Real-time scroll rotating logo */}
+                <motion.div
+                  style={{ rotate: smoothRotate }}
+                  className="w-8 h-8 flex items-center justify-center will-change-transform pointer-events-none relative z-10"
+                >
+                  <Image
+                    src="/brand/logo-icon.png"
+                    alt="Noor Solar Energy"
+                    width={32}
+                    height={32}
+                    className="w-7 h-7 sm:w-8 sm:h-8 object-contain drop-shadow-[0_0_12px_rgba(206,242,62,0.7)]"
+                    priority
+                  />
+                </motion.div>
               </motion.div>
             )}
           </AnimatePresence>
