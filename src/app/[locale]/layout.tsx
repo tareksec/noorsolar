@@ -7,6 +7,7 @@ import { inter, jetbrainsMono, hindSiliguri } from "@/lib/fonts";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppButton } from "@/components/layout/whatsapp-button";
+import { BackToTop } from "@/components/layout/back-to-top";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { RouteTransition } from "@/components/providers/route-transition";
 import { getSiteSettings } from "@/lib/data/settings";
@@ -129,6 +130,7 @@ export default async function LocaleLayout({
               </main>
               <Footer settings={settings} showBlog={showBlog} locale={locale} />
               <WhatsAppButton phone={settings.whatsapp} locale={locale} />
+              <BackToTop locale={locale} />
             </div>
           </SmoothScrollProvider>
         </NextIntlClientProvider>
