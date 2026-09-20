@@ -151,9 +151,9 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
 
           {/* Col 2: Products & Catalog (2.5 cols) */}
           <div className="lg:col-span-3">
-            <h3 className="font-bold text-sm text-[#111311] tracking-tight mb-4">
+            <h2 className="font-bold text-sm text-[#111311] tracking-tight mb-4">
               Equipment Catalog
-            </h3>
+            </h2>
             <ul className="space-y-2.5 text-xs sm:text-sm text-[#4F574A]">
               <li>
                 <Link
@@ -200,9 +200,9 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
 
           {/* Col 3: Company & Information (2.5 cols) */}
           <div className="lg:col-span-2">
-            <h3 className="font-bold text-sm text-[#111311] tracking-tight mb-4">
+            <h2 className="font-bold text-sm text-[#111311] tracking-tight mb-4">
               Company
-            </h3>
+            </h2>
             <ul className="space-y-2.5 text-xs sm:text-sm text-[#4F574A]">
               <li>
                 <Link href="/about" className="hover:text-[#111311] transition-colors">
@@ -237,7 +237,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                 </li>
               )}
               <li>
-                <Link href="/admin/login" className="hover:text-[#111311] transition-colors text-[11px] font-mono text-[#828B7D]">
+                <Link href="/admin/login" className="hover:text-[#111311] transition-colors text-[11px] font-mono text-[#4A5445]">
                   B2B Staff Portal
                 </Link>
               </li>
@@ -247,9 +247,9 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
           {/* Col 4: Affiliations & Social Icons (3 cols) */}
           <div className="lg:col-span-3 flex flex-col justify-between">
             <div>
-              <h3 className="font-bold text-sm text-[#111311] tracking-tight mb-4">
+              <h2 className="font-bold text-sm text-[#111311] tracking-tight mb-4">
                 Affiliation & Compliance
-              </h3>
+              </h2>
 
               {/* BSREA Membership Verified Badge Card */}
               <div className="p-3.5 rounded-2xl bg-white border border-[#D5DAD0] shadow-2xs mb-5">
@@ -284,9 +284,9 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
               </div>
 
               {/* Social Channels with Modern Icon Buttons */}
-              <h4 className="text-xs font-mono font-semibold text-[#111311] mb-2.5">
+              <h3 className="text-xs font-mono font-semibold text-[#111311] mb-2.5">
                 Connect With Us
-              </h4>
+              </h3>
               <div className="flex items-center gap-2">
                 <a
                   href={settings.socials?.facebook || "https://facebook.com"}

@@ -123,19 +123,13 @@ export function SitePreloader() {
     import("@/lib/gsap").then(({ gsap }) => {
       if (cancelled) return;
       const icon = root.querySelector(".preloader-icon");
-      const wordmark = root.querySelectorAll(".preloader-wordmark");
-      const sweep = root.querySelector(".preloader-sweep");
 
       gsap.set(icon, { scale: 0.72, opacity: 0, transformOrigin: "center" });
-      gsap.set(wordmark, { yPercent: 110, opacity: 0 });
-      gsap.set(sweep, { xPercent: -140, opacity: 0 });
 
       const animation = gsap.timeline({ onComplete: finish });
       animation
         .to(icon, { scale: 1, opacity: 1, duration: 0.65, ease: "back.out(1.4)" }, 0.15)
-        .to(wordmark, { yPercent: 0, opacity: 1, duration: 0.48, ease: "expo.out" }, 1)
-        .to(icon, { filter: "drop-shadow(0 0 18px rgba(205,243,0,0.7))", duration: 0.22, yoyo: true, repeat: 1 }, 1.35)
-        .to(sweep, { xPercent: 140, opacity: 0.22, duration: 0.5, ease: "power2.inOut" }, 1.35);
+        .to(icon, { filter: "drop-shadow(0 0 18px rgba(205,243,0,0.7))", duration: 0.22, yoyo: true, repeat: 1 }, 1.35);
       timeline = animation;
 
       window.setTimeout(finish, 2800);
@@ -155,16 +149,10 @@ export function SitePreloader() {
   return (
     <div ref={rootRef} id="preloader" data-motion="preloader" aria-hidden="true" className="preloader-root">
       <div className="preloader-panel preloader-panel-top">
-        <div className="preloader-lockup" aria-hidden="true">
-          <PreloaderIcon />
-          <PreloaderWordmark />
-        </div>
+        <PreloaderIcon />
       </div>
       <div className="preloader-panel preloader-panel-bottom">
-        <div className="preloader-lockup" aria-hidden="true">
-          <PreloaderIcon />
-          <PreloaderWordmark />
-        </div>
+        <PreloaderIcon />
       </div>
     </div>
   );
@@ -180,21 +168,5 @@ function PreloaderIcon() {
       height={431}
       unoptimized
     />
-  );
-}
-
-function PreloaderWordmark() {
-  return (
-    <div className="preloader-wordmark-wrap">
-      <Image
-        className="preloader-wordmark"
-        src="/brand/logo-wordmark-white.webp"
-        alt=""
-        width={500}
-        height={178}
-        unoptimized
-      />
-      <span className="preloader-sweep" />
-    </div>
   );
 }

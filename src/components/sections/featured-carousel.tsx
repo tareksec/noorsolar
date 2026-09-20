@@ -94,15 +94,15 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.Rea
       {/* 1. Header: Shop Solar / Featured Products */}
       <div className="pt-16 sm:pt-24 pb-6 text-center max-w-3xl mx-auto px-4">
         {/* Amber Kicker Lines */}
-        <div className="inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-semibold tracking-wider text-[#C49335] uppercase mb-3">
-          <span className="w-8 sm:w-12 h-[1.5px] bg-[#C49335]/70 rounded-full" />
+        <div className="inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-semibold tracking-wider text-[#85580F] uppercase mb-3">
+          <span className="w-8 sm:w-12 h-[1.5px] bg-[#85580F]/70 rounded-full" />
           <span>Shop Solar</span>
-          <span className="w-8 sm:w-12 h-[1.5px] bg-[#C49335]/70 rounded-full" />
+          <span className="w-8 sm:w-12 h-[1.5px] bg-[#85580F]/70 rounded-full" />
         </div>
 
         {/* Heading */}
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#111311] leading-tight">
-          Featured <span className="text-[#889182] font-extrabold">Products</span>
+          Featured <span className="text-[#485244] font-extrabold">Products</span>
         </h2>
 
         {/* Subtitle */}
@@ -180,7 +180,7 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.Rea
 
                         {/* Model / Subtitle */}
                         {product.model && (
-                          <p className="text-xs font-mono text-[#7A8476] mb-3">
+                          <p className="text-xs font-mono text-[#4F594A] mb-3">
                             Model: {product.model}
                           </p>
                         )}

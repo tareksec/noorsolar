@@ -152,12 +152,14 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             {product.model}
           </span>
         )}
-        <Link
-          href={`/product/${product.slug}`}
-          className="font-bold text-base text-[#111311] leading-snug group-hover:text-black line-clamp-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-xs"
-        >
-          {product.name}
-        </Link>
+        <h2 className="text-base font-bold leading-snug">
+          <Link
+            href={`/product/${product.slug}`}
+            className="text-[#111311] group-hover:text-black line-clamp-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-xs"
+          >
+            {product.name}
+          </Link>
+        </h2>
 
         {/* Technical Specs Rows */}
         {previewSpecs.length > 0 && (

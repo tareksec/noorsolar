@@ -37,6 +37,9 @@ export const metadata: Metadata = {
   title: "Noor Solar Energy — Solar Panels, Batteries & Inverters Wholesale",
   description:
     "Direct importer and bulk supplier of high-efficiency solar panels, Lithium-ion batteries, and hybrid solar inverters in Bangladesh.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Noor Solar Energy — Industrial Solar Panels, Storage & Inverters",
     description:

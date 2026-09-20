@@ -125,18 +125,22 @@ export function TestimonialsSection({ testimonials }: { testimonials?: Testimoni
               </div>
 
               {/* Dots */}
-              <div className="flex items-center gap-2 ml-4">
+              <div className="flex items-center gap-1 ml-3">
                 {displayItems.map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setCurrentIndex(idx)}
                     aria-label={`Go to testimonial ${idx + 1}`}
-                    className={`h-2.5 rounded-full transition-all duration-300 ${
-                      currentIndex === idx
-                        ? "w-8 bg-[#111311]"
-                        : "w-2.5 bg-[#DDE1DC] hover:bg-[#5C605C]"
-                    }`}
-                  />
+                    className="p-2 flex items-center justify-center min-w-[28px] min-h-[32px] cursor-pointer rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
+                  >
+                    <span
+                      className={`h-2.5 rounded-full transition-all duration-300 block ${
+                        currentIndex === idx
+                          ? "w-8 bg-[#111311]"
+                          : "w-2.5 bg-[#DDE1DC] hover:bg-[#5C605C]"
+                      }`}
+                    />
+                  </button>
                 ))}
               </div>
             </div>

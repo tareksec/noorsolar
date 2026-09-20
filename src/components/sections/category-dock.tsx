@@ -73,16 +73,16 @@ export function CategoryDock({}: CategoryDockProps) {
         <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-18">
           
           {/* Top Kicker with Accent Lines */}
-          <div className="inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-semibold tracking-wider text-[#C49335] uppercase mb-4">
-            <span className="w-8 sm:w-12 h-[1.5px] bg-[#C49335]/70 rounded-full" />
+          <div className="inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-semibold tracking-wider text-[#85580F] uppercase mb-4">
+            <span className="w-8 sm:w-12 h-[1.5px] bg-[#85580F]/70 rounded-full" />
             <span>What We Offer</span>
-            <span className="w-8 sm:w-12 h-[1.5px] bg-[#C49335]/70 rounded-full" />
+            <span className="w-8 sm:w-12 h-[1.5px] bg-[#85580F]/70 rounded-full" />
           </div>
 
           {/* Main Heading with Contrasting Solar Equipment */}
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#111311] leading-tight">
             A Complete Range of{" "}
-            <span className="text-[#889182] font-extrabold">Solar Equipment</span>
+            <span className="text-[#485244] font-extrabold">Solar Equipment</span>
           </h2>
 
           {/* Subheading */}

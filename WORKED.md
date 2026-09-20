@@ -42,11 +42,86 @@ Status values: `Not started` Â· `In progress` Â· `Done` Â· `Blocked`
 | P | Redesign "How ordering works" as Process section | Done | No | 2026-09-20 |
 | Final | Finalize the admin panel and backend, add a blog and product reviews | Done | No | 2026-09-20 |
 | Logo | Use official Noor Solar Energy logo across site | In progress | No | 2026-09-20 |
+| Lighthouse | Fix mobile Lighthouse (A11y & SEO >= 95), Motion audit | Done | No | 2026-09-20 |
 | Preloader | Professional home-only logo loading animation | In progress | No | 2026-09-20 |
 
 ---
 
 ## 2. Task log (newest first)
+
+### Task Lighthouse Fix — Mobile Accessibility, SEO & Read-Only Motion Audit — 2026-09-20
+Branch: `task-lighthouse-fix`
+Status: Done
+
+#### Implementation
+- Fixed Mobile Accessibility color contrast on Home (`/`) and Catalog (`/products`):
+  - Updated kicker accents `#C49335` to `#85580F` (contrast > 5.5:1 on `#E4E7E4`) in `category-dock.tsx` and `featured-carousel.tsx`.
+  - Updated secondary heading span `#889182` to `#485244` (contrast > 5.2:1 on `#E4E7E4`) in `category-dock.tsx` and `featured-carousel.tsx`.
+  - Updated card model subtitle `#7A8476` to `#4F594A` (contrast > 5.5:1 on white) in `featured-carousel.tsx`.
+  - Updated footer staff portal link `#828B7D` to `#4A5445` (contrast > 5.2:1 on `#E4E7E4`) in `footer.tsx`.
+- Fixed Mobile Accessibility tap targets on Home (`/`):
+  - Increased testimonial pagination dot click wrappers to 28px x 32px touch-friendly targets (`min-w-[28px] min-h-[32px] p-2`) in `testimonials-section.tsx` while preserving pixel-perfect 10px visual indicators.
+- Fixed Mobile Accessibility heading order on Catalog (`/products`):
+  - Added semantic `<h2>` container around product title link in `product-card.tsx` to establish sequential `<h1>` -> `<h2>` hierarchy.
+  - Converted footer column headings from `<h3>` to `<h2>` with identical styles and social subhead to `<h3>` in `footer.tsx` to prevent skipping levels.
+- Fixed Product SEO & Site Canonicalization:
+  - Added `alternates: { canonical: ... }` to `generateMetadata` in `product/[slug]/page.tsx`, `products/page.tsx`, and `page.tsx`.
+
+#### Read-Only Motion Audit
+- Catalog of all elements with `data-motion` attribute (18 total):
+  1. `preloader`: `src/components/ui/site-preloader.tsx` on `/` — Really animates: YES (GSAP timeline animating icon opacity/scale/draw and exiting with split wipe).
+  2. `photo-reveal`: `src/components/ui/photo-reveal.tsx` on `/` — Really animates: YES (GSAP ScrollTrigger scale 1.15->1 and parallax scrub).
+  3. `magnetic-button`: `src/components/ui/magnetic-button.tsx` on `/` — Really animates: YES (Pointer cursor magnetic pull via spring physics).
+  4. `magnetic-cta`: `src/components/sections/closing-cta.tsx` on `/` — Really animates: YES (Pointer cursor magnetic attraction).
+  5. `stat-counter`: `src/components/ui/animated-counter.tsx` on `/` — Really animates: YES (GSAP numeric count-up on scroll entry).
+  6. `smooth-scroll`: `src/components/providers/smooth-scroll-provider.tsx` (Global) — Really animates: YES (Lenis smooth inertia scrolling on desktop).
+  7. `closing-headline`: `src/components/sections/closing-cta.tsx` on `/` — Really animates: YES (GSAP ScrollTrigger scroll slide-up).
+  8. `button-slide`: `src/components/sections/closing-cta.tsx` on `/` — Really animates: YES (CSS hover slide fill and arrow transform).
+  9. `faq-accordion`: `src/components/sections/faq-section.tsx` on `/` — Really animates: YES (Framer Motion height open/close transitions).
+  10. `hero-parallax`: `src/components/sections/hero-visual.tsx` on `/` — Really animates: YES (GSAP ScrollTrigger parallax scrub on scroll).
+  11. `hero-glass`: `src/components/sections/hero-visual.tsx` on `/` — Really animates: YES (GSAP stagger settle on load + CSS continuous float).
+  12. `text-marquee`: `src/components/sections/text-marquee.tsx` on `/` — Really animates: YES (CSS keyframe infinite continuous translation).
+  13. `testimonials-slider`: `src/components/sections/testimonials-section.tsx` on `/` — Really animates: YES (Framer Motion AnimatePresence crossfade + timer autoplay).
+  14. `process-section`: `src/components/sections/ordering-steps.tsx` on `/` — Really animates: YES (GSAP ScrollTrigger timeline, with child attributes `process-header`, `process-step`, `process-arrow`).
+  15. `route-transition`: `src/components/providers/route-transition.tsx` (Global) — Really animates: YES (Framer Motion AnimatePresence route crossfade).
+  16. `product-gallery`: `src/components/product/product-gallery.tsx` on `/product/[slug]` — Really animates: YES (Framer Motion AnimatePresence thumbnail switch).
+  17. `lightbox`: `src/components/product/product-gallery.tsx` on `/product/[slug]` — Really animates: YES (Framer Motion modal zoom & scale).
+  18. `product-card`: `src/components/product/product-card.tsx` on `/products`, `/product/[slug]`, `/` — Really animates: YES (React pointer state 3D perspective tilt & hover button slide).
+- Animations from MOTION.md / TASKS.md (TASK D) that are MISSING or STATIC:
+  1. `hero-headline`: Attribute missing from DOM; `hero-entrance.tsx` animates `.hero-headline` class with simple opacity/y without split-word masking.
+  2. `hero-photo`: Attribute missing from DOM; `hero-entrance.tsx` animates `.hero-photo-img` class.
+  3. `category-panel`: Missing from DOM; expanding/compressing accordion flex panels were superseded by the 3-card equipment dock grid in `category-dock.tsx`.
+  4. `featured-carousel`: Attribute missing from DOM; `featured-carousel.tsx` implements sticky scroll tracking rather than a draggable snap container with custom DRAG cursor.
+  5. `header-scroll`: Missing from DOM; header does not have scroll direction hide/reveal threshold animation.
+  6. `mobile-menu`: Attribute missing from DOM; mobile overlay toggles without staggered Framer Motion slide-in items.
+
+#### Verification
+- `npm run lint`: PASSED (0 errors, 0 warnings).
+- `npm run build`: PASSED (Turbopack, 32 routes compiled).
+- `npm run check:overflow`: PASSED (100/100 tests passed, 0 failed across 360, 390, 768, 1440px).
+- `npm run check:images`: PASSED (All images verified, 471 KB / 600 KB mobile budget).
+- `npm run check:admin`: PASSED (All 17 admin verification steps passed).
+- Mobile Lighthouse (Before -> After):
+  - Home (`/`):
+    - Performance: 96 -> 96
+    - Accessibility: 93 -> 100 (Target was >= 95)
+    - Best Practices: 100 -> 100
+    - SEO: 100 -> 100
+  - Products (`/products`):
+    - Performance: 94 -> 94
+    - Accessibility: 94 -> 100 (Target was >= 95)
+    - Best Practices: 100 -> 100
+    - SEO: 100 -> 100
+  - Product Detail (`/product/n-type-topcon-bifacial-module-620w`):
+    - Performance: 100 -> 100
+    - Accessibility: 100 -> 100
+    - Best Practices: 100 -> 100
+    - SEO: 92 -> 100 (Target was >= 95)
+  - Blog (`/blog`):
+    - Performance: 96 -> 96
+    - Accessibility: 100 -> 100
+    - Best Practices: 96 -> 96
+    - SEO: 100 -> 100
 
 ### Task Preloader Pro — Professional home-only logo loading animation — 2026-09-20
 Branch: `task-preloader-pro`

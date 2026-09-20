@@ -244,8 +244,8 @@ noscript + #preloader {
   inset: 0;
   z-index: 99999;
   overflow: hidden;
-  background: #111311;
-  color: #fff;
+  background: #f3f5f2;
+  color: #111311;
   isolation: isolate;
   animation: preloader-failsafe 3s forwards;
 }
@@ -254,7 +254,7 @@ noscript + #preloader {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(205, 243, 0, 0.06), transparent 34%);
+  background: radial-gradient(circle at 50% 50%, rgba(205, 243, 0, 0.14), transparent 32%);
   pointer-events: none;
 }
 
@@ -263,7 +263,7 @@ noscript + #preloader {
   inset: 0;
   display: grid;
   place-items: center;
-  background: #111311;
+  background: #f3f5f2;
   overflow: hidden;
 }
 
@@ -277,16 +277,15 @@ noscript + #preloader {
 
 .preloader-lockup {
   position: relative;
-  display: flex;
-  align-items: center;
-  width: min(320px, 72vw);
+  display: grid;
+  place-items: center;
+  width: min(300px, 72vw);
   transform: translateY(-1px);
 }
 
 .preloader-icon {
-  width: clamp(66px, 16vw, 112px);
+  width: min(300px, 72vw);
   height: auto;
-  flex: 0 0 auto;
   overflow: visible;
 }
 

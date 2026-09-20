@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "Equipment Catalog — Solar Panels, Batteries & Inverters",
   description:
     "Explore our complete inventory of Solar Panels, Lithium-ion Storage Batteries, and Industrial Inverters available for bulk wholesale in Bangladesh.",
+  alternates: {
+    canonical: "/products",
+  },
   openGraph: {
     title: "Solar Equipment Catalog — Noor Solar Energy",
     description:
