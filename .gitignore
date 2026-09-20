@@ -53,3 +53,5 @@ next-env.d.ts
 
 docs/
 source-images/
+.cache/
+.audit/

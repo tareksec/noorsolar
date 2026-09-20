@@ -32,13 +32,15 @@ function LoginForm() {
       )}
 
       <div>
-        <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+        <label htmlFor="admin-email" className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
           Admin Email
         </label>
         <div className="relative">
           <input
             type="email"
             name="email"
+            id="admin-email"
+            autoComplete="username"
             required
             defaultValue="owner@example.com"
             placeholder="admin@noorsolaren.com"
@@ -49,13 +51,15 @@ function LoginForm() {
       </div>
 
       <div>
-        <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+        <label htmlFor="admin-password" className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
           Password
         </label>
         <div className="relative">
           <input
             type="password"
             name="password"
+            id="admin-password"
+            autoComplete="current-password"
             required
             placeholder="••••••••"
             className="w-full pl-10 pr-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] outline-none transition-colors"

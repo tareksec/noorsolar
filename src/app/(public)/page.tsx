@@ -13,17 +13,15 @@ import {
 
 import { HeroSection } from "@/components/sections/hero-section";
 import { CategoryDock } from "@/components/sections/category-dock";
+import { BusinessImpact } from "@/components/sections/business-impact";
+import { FeaturedCarousel } from "@/components/sections/featured-carousel";
+import { OrderingSteps } from "@/components/sections/ordering-steps";
 import { StatsBand } from "@/components/sections/stats-band";
 import { CertificationsSection } from "@/components/sections/certifications-section";
-import { OrderingSteps } from "@/components/sections/ordering-steps";
 import { PartnersStrip } from "@/components/sections/partners-strip";
-import dynamic from "next/dynamic";
-import { DynamicHomeSections } from "@/components/sections/dynamic-home-sections";
-
-const ClosingCTA = dynamic(
-  () => import("@/components/sections/closing-cta").then((mod) => mod.ClosingCTA),
-  { ssr: true }
-);
+import { TestimonialsSection } from "@/components/sections/testimonials-section";
+import { FAQSection } from "@/components/sections/faq-section";
+import { ClosingCTA } from "@/components/sections/closing-cta";
 
 export const revalidate = 60; // On-demand or 60s cache revalidation
 
@@ -66,7 +64,7 @@ export default async function HomePage() {
   const orgJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Noor Solar Energy",
+    name: settings.companyName,
     url: siteUrl,
     logo: `${siteUrl}/icon`,
     description:
@@ -91,7 +89,7 @@ export default async function HomePage() {
       {/* Schema.org Organization Structured Data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd).replace(/</g, "\\u003c") }}
       />
 
       {/* 1. Signature Hero Section (Server Component) */}
@@ -105,27 +103,31 @@ export default async function HomePage() {
       {/* 2. Category Dock (Server Component - 3 Horizontal Cards) */}
       <CategoryDock categories={categories} />
 
-      {/* 3. Business Statistics Band (Server Component - 4 Counters) */}
-      <StatsBand stats={stats} />
+      {/* 3. Business Impact & Sustainability (Future Ready & Cost Efficiency Split Story) */}
+      <BusinessImpact />
 
-      {/* 6. Certifications Grid (Server Component) */}
-      <CertificationsSection certifications={certifications} />
+      {/* 4. Featured Products Carousel */}
+      <FeaturedCarousel products={featuredProducts} />
 
-      {/* 7. How Ordering Works Sequence (Server Component) */}
+      {/* 5. Ordering Steps */}
       <OrderingSteps />
 
-      {/* 8. Partners and Clients Strip (Server Component) */}
+      {/* 6. Business Statistics Band (Animated 4 Counters) */}
+      <StatsBand stats={stats} />
+
+      {/* 7. Certifications Grid */}
+      <CertificationsSection certifications={certifications} />
+
+      {/* 8. Partners and Clients Strip */}
       <PartnersStrip partners={partners} />
 
-      {/* Below-the-fold Animated Sections (Dynamic Client-Side Only to keep initial JS bundle small) */}
-      <DynamicHomeSections
-        categories={categories}
-        featuredProducts={featuredProducts}
-        testimonials={testimonials}
-        faqItems={faqItems}
-      />
+      {/* 9. Testimonials */}
+      <TestimonialsSection testimonials={testimonials} />
 
-      {/* 11. Closing Call-To-Action & Quote Form (Server Component) */}
+      {/* 10. FAQ Section */}
+      <FAQSection items={faqItems} />
+
+      {/* 11. Closing Call-To-Action & Quote Form */}
       <ClosingCTA
         phoneDisplay={settings.phoneDisplay}
         whatsappNumber={settings.whatsapp}

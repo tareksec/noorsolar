@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/product/product-card";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { EmptyCatalogIllustration } from "@/components/illustrations/empty-catalog-illustration";
+import { AppImage } from "@/components/ui/app-image";
 
 interface CategoryPageProps {
   params: Promise<{
@@ -60,13 +61,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </div>
 
         {/* Category Header Banner */}
-        <div className="p-8 sm:p-12 rounded-[36px] bg-[#EDEDED] border border-[#DDE1DC] mb-12 relative overflow-hidden">
+        <div className="p-6 sm:p-10 rounded-[36px] bg-[#EDEDED] border border-white mb-8 grid sm:grid-cols-[1fr_180px] gap-6 items-center">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3">
               <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
               <span>Direct Import Line</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111311]">
+            <h1 className="text-4xl sm:text-5xl font-semibold tracking-[-.04em] text-[#111311]">
               {category.name}
             </h1>
             {category.description && (
@@ -74,12 +75,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 {category.description}
               </p>
             )}
+            <p className="text-xs font-mono text-[#5C605C] mt-5">{category.products.length} models · Specifications & bulk enquiries</p>
           </div>
+          {category.image && <AppImage src={category.image} alt={category.name} width={240} height={180} sizes="180px" className="hidden sm:block w-full rounded-3xl mix-blend-multiply" />}
         </div>
 
         {/* Category Products Grid */}
         {category.products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="catalog-grid">
             {category.products.map((product, idx) => (
               <ProductCard
                 key={product.id}
@@ -87,18 +90,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   ...product,
                   category: { name: category.name, slug: category.slug },
                 }}
-                priority={idx < 2}
+                priority={idx === 0}
               />
             ))}
           </div>
         ) : (
           <div className="p-12 text-center rounded-3xl bg-white border border-[#DDE1DC] max-w-lg mx-auto">
             <EmptyCatalogIllustration className="w-40 h-36 mx-auto mb-2" />
-            <h3 className="text-lg font-bold text-[#111311] mb-2">
+            <h2 className="text-lg font-bold text-[#111311] mb-2">
               No active products listed yet
-            </h3>
+            </h2>
             <p className="text-xs text-[#5C605C] mb-6">
-              New container inventory for this category is currently being staged in our warehouse.
+              Contact us with your requirements, or explore the other equipment categories.
             </p>
             <Link
               href="/products"

@@ -89,7 +89,7 @@ export function Footer({ settings }: FooterProps) {
               </li>
               <li>
                 <Link href="/contact" className="hover:text-[#111311] transition-colors">
-                  Contact & Warehouse
+                  Contact & quotes
                 </Link>
               </li>
               <li>

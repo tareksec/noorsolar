@@ -1,140 +1,45 @@
-import React from "react";
 import type { Metadata } from "next";
 import { getCategories } from "@/lib/data/categories";
 import { getAllProducts } from "@/lib/data/products";
 import { ProductCard } from "@/components/product/product-card";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { Search, ArrowUpRight } from "lucide-react";
 import { EmptyCatalogIllustration } from "@/components/illustrations/empty-catalog-illustration";
 
 export const metadata: Metadata = {
-  title: "Equipment Catalog — Solar Panels, Batteries & Inverters",
-  description:
-    "Explore our complete inventory of Solar Panels, Lithium-ion Storage Batteries, and Industrial Inverters available for bulk wholesale in Bangladesh.",
-  openGraph: {
-    title: "Solar Equipment Catalog — Noor Solar Energy",
-    description:
-      "Explore bulk wholesale inventory of Tier-1 solar panels, LiFePO4 batteries, and industrial inverters in Bangladesh.",
-    url: "/products",
-    type: "website",
-  },
+  title: "Solar equipment catalog",
+  description: "Compare solar panels, lithium batteries and inverters by specification. Request a quote for your bulk order from Noor Solar Energy.",
+  openGraph: { title: "Equipment catalog — Noor Solar Energy", description: "Explore solar panels, lithium batteries and inverters for bulk enquiries.", url: "/products" },
 };
-
-interface ProductsPageProps {
-  searchParams: Promise<{
-    category?: string;
-    q?: string;
-  }>;
-}
-
-export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+export default async function ProductsPage({ searchParams }: { searchParams: Promise<{ category?: string; q?: string }> }) {
   const params = await searchParams;
-  const activeCategorySlug = params.category || "all";
-  const searchQuery = params.q || "";
-
-  const [categories, products] = await Promise.all([
-    getCategories(),
-    getAllProducts({
-      categorySlug: activeCategorySlug !== "all" ? activeCategorySlug : undefined,
-      query: searchQuery || undefined,
-    }),
-  ]);
-
-  return (
-    <div className="pt-28 sm:pt-36 pb-24 bg-[#E4E7E4] min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Page Header */}
-        <div className="mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#DDE1DC] text-xs font-mono text-[#111311] mb-3">
-            <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-            <span>Wholesale Inventory Catalog</span>
-          </div>
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111311]">
-            Solar Equipment Catalog
-          </h1>
-          <p className="text-sm sm:text-base text-[#5C605C] max-w-2xl mt-3">
-            Directly imported solar modules, high-capacity LiFePO4 batteries, and industrial solar inverters with complete specifications.
-          </p>
-        </div>
-
-        {/* Filter & Search Bar */}
-        <div className="p-4 sm:p-5 rounded-3xl bg-white border border-[#DDE1DC] shadow-sm mb-10 flex flex-col md:flex-row items-center justify-between gap-4">
-          
-          {/* Category Filter Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scroll-smooth snap-x snap-mandatory scrollbar-none max-w-full">
-            <Link
-              href="/products"
-              className={`snap-start shrink-0 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs font-semibold tracking-tight transition-colors whitespace-nowrap ${
-                activeCategorySlug === "all"
-                  ? "bg-[#111311] text-[#CEF23E]"
-                  : "bg-[#EDEDED] text-[#5C605C] hover:text-[#111311]"
-              }`}
-            >
-              All Products ({products.length})
-            </Link>
-
-            {categories.map((cat) => {
-              const isSelected = activeCategorySlug === cat.slug;
-              return (
-                <Link
-                  key={cat.id}
-                  href={`/products?category=${cat.slug}`}
-                  className={`snap-start shrink-0 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs font-semibold tracking-tight transition-colors whitespace-nowrap ${
-                    isSelected
-                      ? "bg-[#111311] text-[#CEF23E]"
-                      : "bg-[#EDEDED] text-[#5C605C] hover:text-[#111311]"
-                  }`}
-                >
-                  {cat.name}
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Search Input Box */}
-          <form method="GET" action="/products" className="relative w-full md:w-72">
-            {activeCategorySlug !== "all" && (
-              <input type="hidden" name="category" value={activeCategorySlug} />
-            )}
-            <input
-              type="text"
-              name="q"
-              defaultValue={searchQuery}
-              placeholder="Search model or spec..."
-              className="w-full pl-9 pr-4 py-2 rounded-full bg-[#EDEDED] text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none focus:bg-white focus:ring-1 focus:ring-[#111311] transition-all"
-            />
-            <Search className="w-4 h-4 text-[#5C605C] absolute left-3 top-1/2 -translate-y-1/2" />
-          </form>
-
-        </div>
-
-        {/* Products Grid */}
-        {products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {products.map((product, idx) => (
-              <ProductCard key={product.id} product={product} priority={idx < 2} />
-            ))}
-          </div>
-        ) : (
-          <div className="p-12 text-center rounded-3xl bg-white border border-[#DDE1DC] max-w-lg mx-auto">
-            <EmptyCatalogIllustration className="w-40 h-36 mx-auto mb-2" />
-            <h3 className="text-lg font-bold text-[#111311] mb-2">
-              No products found matching your search
-            </h3>
-            <p className="text-xs text-[#5C605C] mb-6">
-              Try adjusting your search terms or view our complete category catalog.
-            </p>
-            <Link
-              href="/products"
-              className="inline-flex items-center px-5 py-2.5 rounded-full bg-[#111311] text-white text-xs font-medium hover:bg-black transition-colors"
-            >
-              Reset Filters
-            </Link>
-          </div>
-        )}
-
-      </div>
+  const active = params.category || "all";
+  const query = params.q?.trim() || "";
+  const [categories, products] = await Promise.all([getCategories(), getAllProducts({ categorySlug: active !== "all" ? active : undefined, query })]);
+  const total = categories.reduce((sum, c) => sum + c._count.products, 0);
+  function filterUrl(category: string) {
+    const search = new URLSearchParams();
+    if (category !== "all") search.set("category", category);
+    if (query) search.set("q", query);
+    return "/products" + (search.size ? "?" + search.toString() : "");
+  }
+  return <div className="pt-28 sm:pt-36 pb-20"><div className="page-shell">
+    <div className="catalog-header"><div><p className="eyebrow">The equipment catalog / Bulk enquiries</p><h1>Find your next<br className="hidden sm:block" /> energy essential.</h1><p>Solar panels, lithium batteries and inverters. Compare specifications and request pricing for the quantity you need.</p></div><Link href="/contact#quote-section" className="button button-dark">Discuss a bulk order <ArrowUpRight size={16} /></Link></div>
+    <div className="catalog-controls">
+      <nav className="catalog-tabs" aria-label="Filter by product category">
+        <Link href={filterUrl("all")} aria-current={active === "all" ? "page" : undefined}>All equipment <span className="ml-1 opacity-70">{total}</span></Link>
+        {categories.map(cat => <Link key={cat.id} href={filterUrl(cat.slug)} aria-current={active === cat.slug ? "page" : undefined}>{cat.name}</Link>)}
+      </nav>
+      <form className="catalog-search" method="GET" action="/products" role="search">
+        {active !== "all" && <input type="hidden" name="category" value={active} />}
+        <label htmlFor="catalog-query" className="sr-only">Search equipment by model or specification</label>
+        <input id="catalog-query" name="q" type="search" defaultValue={query} placeholder="Search model or specification" />
+        <button aria-label="Search equipment" type="submit"><Search size={17} /></button>
+      </form>
     </div>
-  );
+    <div className="catalog-results"><p>{products.length} {products.length === 1 ? "product" : "products"}{query ? " matching “" + query + "”" : " in this selection"}</p>{(query || active !== "all") && <Link className="underline underline-offset-4 shrink-0" href="/products">Clear filters</Link>}</div>
+    {products.length ? <div className="catalog-grid">{products.map((product, index) => <ProductCard key={product.id} product={product} priority={index === 0} />)}</div> :
+      <div className="rounded-3xl border border-[#DDE1DC] bg-white p-8 sm:p-12 text-center max-w-xl mx-auto"><EmptyCatalogIllustration className="w-36 h-32 mx-auto" /><h2 className="text-xl font-semibold mt-3">No matching equipment.</h2><p className="text-sm text-[#5C605C] leading-relaxed mt-3 mb-6">Try a model, power rating or product type. You can also send us your requirements.</p><Link href="/products" className="button button-dark">Reset filters</Link><Link href="/contact#quote-section" className="text-link ml-4 mt-4">Ask about equipment ↗</Link></div>}
+  </div></div>;
 }
+

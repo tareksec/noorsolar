@@ -103,7 +103,7 @@ export default async function OpenGraphImage() {
           }}
         >
           <span style={{ fontSize: "16px", color: "#CEF23E", fontWeight: 600 }}>
-            Tier-1 Monocrystalline N-Type
+            Solar panels · Batteries · Inverters
           </span>
           <span style={{ color: "#5C605C" }}>•</span>
           <span style={{ fontSize: "16px", color: "#CEF23E", fontWeight: 600 }}>

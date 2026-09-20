@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 
 export async function getFeaturedProducts() {
   return db.product.findMany({
-    where: { isActive: true, isFeatured: true },
+    where: { isActive: true, isFeatured: true, category: { isActive: true } },
     orderBy: { sortOrder: "asc" },
     include: {
       category: true,
@@ -17,10 +17,10 @@ export async function getAllProducts(options?: {
   categorySlug?: string;
   query?: string;
 }) {
-  const where: Prisma.ProductWhereInput = { isActive: true };
+  const where: Prisma.ProductWhereInput = { isActive: true, category: { isActive: true } };
 
   if (options?.categorySlug && options.categorySlug !== "all") {
-    where.category = { slug: options.categorySlug };
+    where.category = { slug: options.categorySlug, isActive: true };
   }
 
   if (options?.query && options.query.trim()) {
@@ -30,6 +30,7 @@ export async function getAllProducts(options?: {
       { shortDescription: { contains: q } },
       { description: { contains: q } },
       { model: { contains: q } },
+      { specs: { some: { OR: [{ label: { contains: q } }, { value: { contains: q } }] } } },
     ];
   }
 
@@ -46,7 +47,7 @@ export async function getAllProducts(options?: {
 
 export async function getProductBySlug(slug: string) {
   const product = await db.product.findUnique({
-    where: { slug, isActive: true },
+    where: { slug, isActive: true, category: { isActive: true } },
     include: {
       category: true,
       images: { orderBy: { sortOrder: "asc" } },
@@ -77,7 +78,7 @@ export async function getProductBySlug(slug: string) {
 export async function getProductsByCategory(categorySlug: string) {
   return db.product.findMany({
     where: {
-      category: { slug: categorySlug },
+      category: { slug: categorySlug, isActive: true },
       isActive: true,
     },
     orderBy: { sortOrder: "asc" },

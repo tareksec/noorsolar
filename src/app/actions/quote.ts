@@ -42,7 +42,7 @@ export async function submitQuoteRequest(
       // Fake success for spam bots
       return {
         success: true,
-        message: "Your inquiry has been received. Our sales engineer will reach out shortly.",
+        message: "Your enquiry has been received.",
       };
     }
 
@@ -58,6 +58,14 @@ export async function submitQuoteRequest(
     }
 
     const data = validation.data;
+
+    if (data.productId) {
+      const product = await db.product.findFirst({
+        where: { id: data.productId, isActive: true, category: { isActive: true } },
+        select: { id: true },
+      });
+      if (!product) return { success: false, error: "This product is no longer available. Please choose another product or send a general enquiry." };
+    }
 
     // Save to database
     await db.quoteRequest.create({
@@ -76,7 +84,7 @@ export async function submitQuoteRequest(
 
     return {
       success: true,
-      message: "Quote request received! Our engineering team will contact you promptly with pricing and availability.",
+      message: "Your enquiry has been saved. Our sales team will use the details you provided to discuss pricing and availability.",
     };
   } catch (err: unknown) {
     console.error("Quote submission error:", err);

@@ -1,186 +1,42 @@
-﻿"use client";
-
-import React, { useState, useEffect, useRef } from "react";
+"use client";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ArrowUpRight, Phone, Sun } from "lucide-react";
-
-interface HeaderProps {
-  phoneDisplay?: string;
-  phoneRaw?: string;
-}
-
-export function Header({
-  phoneDisplay = "+880 1700-000000",
-  phoneRaw = "+8801700000000",
-}: HeaderProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const lastScrollY = useRef(0);
+import { Menu, X, ArrowUpRight, Sun, Phone } from "lucide-react";
+interface HeaderProps { phoneDisplay?: string; phoneRaw?: string }
+const links = [
+  { label: "All equipment", href: "/products" },
+  { label: "Solar panels", href: "/category/solar-panels" },
+  { label: "Batteries", href: "/category/lithium-batteries" },
+  { label: "Inverters", href: "/category/solar-inverters" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
+export function Header({ phoneDisplay, phoneRaw }: HeaderProps) {
+  const [open, setOpen] = useState(false);
+  const root = useRef<HTMLElement>(null);
+  const toggle = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
-
   useEffect(() => {
-    const handleScroll = () => {
-      const currentY = window.scrollY;
-      setScrolled(currentY > 20);
-
-      // Hide header when scrolling down more than 100px, return when scrolling up
-      if (currentY > 100 && currentY > lastScrollY.current && !mobileMenuOpen) {
-        setHidden(true);
-      } else if (currentY < lastScrollY.current || currentY <= 50) {
-        setHidden(false);
-      }
-      lastScrollY.current = currentY;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [mobileMenuOpen]);
-
-  const closeMobileMenu = () => setMobileMenuOpen(false);
-
-  const navLinks = [
-    { label: "Solar Panels", href: "/category/solar-panels" },
-    { label: "Batteries", href: "/category/lithium-batteries" },
-    { label: "Inverters", href: "/category/solar-inverters" },
-    { label: "All Products", href: "/products" },
-    { label: "About", href: "/about" },
-    { label: "Contact", href: "/contact" },
-  ];
-
-  return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-[transform,padding,background-color] duration-300 ease-out will-change-transform ${
-        hidden ? "-translate-y-full" : "translate-y-0"
-      } ${
-        scrolled
-          ? "py-2 bg-[rgba(228,231,228,0.85)] backdrop-blur-md border-b border-[rgba(255,255,255,0.7)] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]"
-          : "py-4 sm:py-5 bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div
-          className={`flex items-center justify-between px-3 sm:px-6 rounded-full glass-panel transition-[height,padding] duration-300 min-w-0 ${
-            scrolled ? "h-12 sm:h-13" : "h-14"
-          }`}
-        >
-          {/* Brand Logo & Avatar */}
-          <Link
-            href="/"
-            className="flex items-center gap-2 sm:gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-full pr-1 sm:pr-2 min-w-0 shrink-0"
-          >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#CEF23E] flex items-center justify-center font-bold text-[#111311] shadow-[0_2px_10px_rgba(206,242,62,0.4)] transition-transform group-hover:scale-105">
-              <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-[#111311]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-xs sm:text-base tracking-tight text-[#111311] leading-none truncate">
-                NOOR SOLAR
-              </span>
-              <span className="text-[9px] sm:text-[10px] uppercase font-mono tracking-wider text-[#5C605C] mt-0.5">
-                ENERGY BD
-              </span>
-            </div>
-          </Link>
-
-          {/* Center Navigation Links (Desktop) */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`px-3.5 py-1.5 rounded-full text-[13px] font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] ${
-                    isActive
-                      ? "bg-[#111311] text-white shadow-sm"
-                      : "text-[#111311] hover:text-black hover:bg-[rgba(255,255,255,0.6)]"
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Right Section: Phone & Quote CTA */}
-          <div className="hidden sm:flex items-center gap-3">
-            <a
-              href={`tel:${phoneRaw}`}
-              className="flex items-center gap-1.5 text-xs font-mono text-[#5C605C] hover:text-[#111311] transition-colors px-2 py-1"
-            >
-              <Phone className="w-3.5 h-3.5 text-[#111311]" />
-              <span>{phoneDisplay}</span>
-            </a>
-
-            <Link
-              href="/#quote-section"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#111311] text-white text-[13px] font-medium tracking-tight transition-all duration-200 hover:bg-[#222622] hover:shadow-[0_4px_16px_-2px_rgba(0,0,0,0.2)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
-            >
-              <span>Request Quote</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-[#CEF23E]" />
-            </Link>
-          </div>
-
-          {/* Mobile Hamburger Toggle */}
-          <div className="flex lg:hidden items-center gap-1.5 shrink-0">
-            <Link
-              href="/#quote-section"
-              className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-[#CEF23E] text-[#111311] text-[11px] sm:text-xs font-semibold tracking-tight shrink-0 whitespace-nowrap sm:hidden"
-            >
-              Quote
-            </Link>
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-1.5 sm:p-2 rounded-full text-[#111311] hover:bg-[rgba(255,255,255,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] shrink-0"
-              aria-label="Toggle mobile menu"
-              aria-expanded={mobileMenuOpen}
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Animated Drawer */}
-      {mobileMenuOpen && (
-        <div
-          key="mobile-drawer"
-          className="lg:hidden fixed inset-x-4 top-20 z-50 p-6 rounded-3xl glass-card bg-white/95 backdrop-blur-xl border border-white/80 shadow-2xl transition-all duration-200 animate-in fade-in slide-in-from-top-4"
-        >
-          <nav className="flex flex-col gap-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={closeMobileMenu}
-                className="px-4 py-3 rounded-2xl text-sm font-semibold text-[#111311] hover:bg-[#EDEDED] transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
-            <div className="pt-4 border-t border-[#DDE1DC] mt-2 flex flex-col gap-3">
-              <a
-                href={`tel:${phoneRaw}`}
-                onClick={closeMobileMenu}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#EDEDED] text-xs font-mono text-[#111311]"
-              >
-                <Phone className="w-4 h-4 text-[#111311]" />
-                <span>{phoneDisplay}</span>
-              </a>
-              <Link
-                href="/#quote-section"
-                onClick={closeMobileMenu}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-full bg-[#111311] text-white text-sm font-medium"
-              >
-                <span>Request Commercial Quote</span>
-                <ArrowUpRight className="w-4 h-4 text-[#CEF23E]" />
-              </Link>
-            </div>
-          </nav>
-        </div>
-      )}
-    </header>
-  );
+    if (!open) return;
+    const escape = (event: KeyboardEvent) => { if (event.key === "Escape") { setOpen(false); toggle.current?.focus(); } };
+    const outside = (event: PointerEvent) => { if (!root.current?.contains(event.target as Node)) setOpen(false); };
+    document.addEventListener("keydown", escape); document.addEventListener("pointerdown", outside);
+    return () => { document.removeEventListener("keydown", escape); document.removeEventListener("pointerdown", outside); };
+  }, [open]);
+  return <header ref={root} className="fixed top-0 inset-x-0 z-40 py-3 sm:py-4 pointer-events-none">
+    <div className="page-shell"><div className="pointer-events-auto flex items-center justify-between gap-3 rounded-full border border-white bg-[#F5F6F1]/95 backdrop-blur-xl px-4 sm:px-5 py-3 shadow-[0_8px_32px_-16px_#11131130]">
+      <Link href="/" aria-label="Noor Solar Energy home" onClick={() => setOpen(false)} className="flex items-center gap-2.5 shrink-0 rounded-full">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#CEF23E]"><Sun size={20} /></span>
+        <span><span className="block text-[13px] sm:text-sm font-bold tracking-tight leading-none">NOOR SOLAR</span><span className="block font-mono text-[8px] sm:text-[9px] tracking-[.18em] text-[#5C605C] mt-1">ENERGY · BANGLADESH</span></span>
+      </Link>
+      <nav aria-label="Main navigation" className="hidden lg:flex gap-1">{links.map(link => <Link key={link.href} href={link.href} aria-current={pathname === link.href ? "page" : undefined}
+        className={"rounded-full py-2 px-2.5 xl:px-3 text-xs transition-colors " + (pathname === link.href ? "bg-[#E4E7E4]" : "hover:bg-white")}>{link.label}</Link>)}</nav>
+      <div className="flex items-center gap-2 shrink-0"><Link href="/contact#quote-section" onClick={() => setOpen(false)} className="button button-dark !min-h-10 !px-3 sm:!px-5 !py-2 !text-xs"><span className="hidden sm:inline">Request a quote</span><span className="sm:hidden">Quote</span><ArrowUpRight size={14} className="text-[#CEF23E] hidden sm:block" /></Link>
+      <button ref={toggle} type="button" aria-label={open ? "Close menu" : "Open menu"} aria-controls="mobile-navigation" aria-expanded={open} onClick={() => setOpen(!open)} className="lg:hidden p-2 rounded-full hover:bg-[#E4E7E4]">{open ? <X size={21} /> : <Menu size={21} />}</button></div>
+    </div>
+    {open && <nav id="mobile-navigation" aria-label="Mobile navigation" className="pointer-events-auto lg:hidden rounded-3xl mt-2 p-4 bg-[#F5F6F1] border border-white shadow-xl max-h-[calc(100dvh-100px)] overflow-y-auto">{links.map(link => <Link key={link.href} href={link.href} onClick={() => setOpen(false)} aria-current={pathname === link.href ? "page" : undefined} className="block rounded-2xl px-4 py-3 text-sm font-medium hover:bg-[#E4E7E4]">{link.label}</Link>)}<a href={"tel:" + phoneRaw} className="flex items-center gap-3 px-4 py-4 border-t border-[#DDE1DC] mt-3 text-sm"><Phone size={16} />{phoneDisplay}</a></nav>}
+    </div>
+  </header>;
 }
+

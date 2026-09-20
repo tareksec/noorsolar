@@ -24,7 +24,7 @@ export function CertificationsSection({ certifications }: CertificationsSectionP
             Technical Certifications & Standards
           </h2>
           <p className="mt-3 text-sm text-[#5C605C] max-w-2xl mx-auto">
-            All equipment batches adhere to standardized manufacturing protocols, electrical inspection criteria, and safety authorizations.
+            Review the listed documents and ask which documentation applies to your selected equipment.
           </p>
         </div>
 

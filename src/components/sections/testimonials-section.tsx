@@ -1,155 +1,112 @@
-"use client";
-
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import Image from "next/image";
 import type { Testimonial } from "@prisma/client";
-import { Quote, ArrowLeft, ArrowRight } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 
-interface TestimonialsSectionProps {
-  testimonials: Testimonial[];
-}
+const DEMO_TESTIMONIALS: Array<{
+  id: string;
+  authorName: string;
+  authorRole: string | null;
+  company: string | null;
+  photo: string | null;
+  quote: string;
+}> = [
+  {
+    id: "demo-1",
+    authorName: "Arif Hossain",
+    authorRole: "Business Owner",
+    company: "EcoPower",
+    photo: "/photos/testimonial-arif.jpg",
+    quote:
+      "“EcoPower helped us seamlessly transition to both solar and wind energy. Our costs have dropped significantly, and we’re now operating more sustainably than ever.”",
+  },
+  {
+    id: "demo-2",
+    authorName: "Mahmud Karim",
+    authorRole: "Property Developer",
+    company: "Apex Developments",
+    photo: "/photos/testimonial-mahmud.jpg",
+    quote:
+      "“The hybrid wind and solar systems installed on our commercial properties cut grid reliance by 65%. Highly recommended team.”",
+  },
+  {
+    id: "demo-3",
+    authorName: "Farhana Ahmed",
+    authorRole: "Industrial Plant Director",
+    company: "Delta Manufacturing",
+    photo: "/photos/testimonial-farhana.jpg",
+    quote:
+      "“From initial engineering assessment through commissioning, the experience was flawless. Our production plant achieved ROI faster than projected.”",
+  },
+];
 
-export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) {
-  const shouldReduceMotion = useReducedMotion();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  }, [testimonials.length]);
-
-  const prevSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
-  }, [testimonials.length]);
-
-  // Autoplay with pause on hover/focus
-  useEffect(() => {
-    if (testimonials.length <= 1 || isPaused) return;
-
-    timerRef.current = setInterval(() => {
-      nextSlide();
-    }, 5500);
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [testimonials.length, isPaused, nextSlide]);
-
-  if (!testimonials || testimonials.length === 0) {
-    return null;
-  }
-
-  const current = testimonials[currentIndex];
+export function TestimonialsSection({ testimonials }: { testimonials: Testimonial[] }) {
+  const displayItems = testimonials && testimonials.length > 0 ? testimonials : DEMO_TESTIMONIALS;
 
   return (
-    <section
-      className="py-20 bg-[#E4E7E4]"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocusCapture={() => setIsPaused(true)}
-      onBlurCapture={() => setIsPaused(false)}
-      aria-roledescription="carousel"
-      aria-label="Customer testimonials"
-    >
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3 border border-[#DDE1DC]">
-            <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-            <span>Commercial Feedback</span>
+    <section className="py-20 lg:py-28 bg-[#f5f6f5] border-t border-b border-black/[0.05]">
+      <div className="page-shell">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+          {/* Left Column: Eyebrow & Bold Heading */}
+          <div className="lg:col-span-5 lg:sticky lg:top-32 self-start">
+            <span className="text-xs sm:text-sm font-semibold tracking-wider text-[#00897B] uppercase block">
+              TESTIMONIALS
+            </span>
+            <h2 className="mt-3 text-3xl sm:text-4xl lg:text-[46px] font-bold tracking-tight text-[#111311] leading-[1.12]">
+              Here’s the value we’ve brought to our clients.
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#111311]">
-            Procurement & Project Verification
-          </h2>
-        </div>
 
-        {/* Testimonial Card with Crossfade Animation */}
-        <div className="relative min-h-[280px] sm:min-h-[240px] flex items-center justify-center">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current.id || currentIndex}
-              initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
-              transition={{ duration: shouldReduceMotion ? 0 : 0.35, ease: "easeOut" }}
-              className="w-full rounded-[36px] bg-white border border-[#DDE1DC] p-8 sm:p-12 shadow-sm flex flex-col justify-between"
-            >
-              <div>
-                <div className="w-10 h-10 rounded-full bg-[#EDEDED] flex items-center justify-center text-[#111311] mb-6 shadow-xs">
-                  <Quote className="w-4 h-4 fill-current" />
-                </div>
-                <blockquote className="text-base sm:text-xl text-[#111311] font-medium leading-relaxed mb-8">
-                  &ldquo;{current.quote}&rdquo;
-                </blockquote>
-              </div>
+          {/* Right Column: Stacked Testimonial Cards */}
+          <div className="lg:col-span-7 flex flex-col gap-6">
+            {displayItems.map((item, index) => {
+              const photoSrc =
+                item.photo ||
+                (index === 0
+                  ? "/photos/testimonial-arif.jpg"
+                  : index === 1
+                  ? "/photos/testimonial-mahmud.jpg"
+                  : "/photos/testimonial-farhana.jpg");
 
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-6 border-t border-[#EDEDED]">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-[#111311] text-[#CEF23E] border border-[#CEF23E]/30 flex items-center justify-center text-sm font-bold font-mono shrink-0 shadow-xs">
-                    {current.authorName
-                      ? current.authorName
-                          .split(" ")
-                          .filter(Boolean)
-                          .map((n) => n[0])
-                          .slice(0, 2)
-                          .join("")
-                          .toUpperCase()
-                      : "NS"}
+              const roleText = [item.authorRole, item.company].filter(Boolean).join(", ");
+
+              return (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-black/[0.06] transition-all duration-300 hover:shadow-[0_8px_32px_rgba(0,0,0,0.07)]"
+                >
+                  {/* User Avatar */}
+                  <div className="relative w-14 h-14 rounded-2xl overflow-hidden mb-4 bg-neutral-100 flex-shrink-0 shadow-sm">
+                    <Image
+                      src={photoSrc}
+                      alt={item.authorName}
+                      fill
+                      sizes="56px"
+                      className="object-cover"
+                    />
                   </div>
-                  <div>
-                    <div className="font-bold text-base text-[#111311]">
-                      {current.authorName}
-                    </div>
-                    {(current.authorRole || current.company) && (
-                      <div className="text-xs font-mono text-[#5C605C]">
-                        {[current.authorRole, current.company].filter(Boolean).join(" · ")}
-                      </div>
+
+                  {/* User Name & Role */}
+                  <div className="text-sm text-neutral-600 mb-3">
+                    <span className="font-semibold text-neutral-900">{item.authorName}</span>
+                    {roleText && (
+                      <>
+                        <span className="text-neutral-400">, </span>
+                        <span>{roleText}</span>
+                      </>
                     )}
                   </div>
-                </div>
 
-                {/* Arrow Controls */}
-                <div className="flex items-center gap-2 self-end sm:self-center">
-                  <button
-                    onClick={prevSlide}
-                    className="p-2.5 rounded-full bg-[#EDEDED] hover:bg-[#111311] text-[#111311] hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
-                    aria-label="Previous testimonial"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={nextSlide}
-                    className="p-2.5 rounded-full bg-[#EDEDED] hover:bg-[#111311] text-[#111311] hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
-                    aria-label="Next testimonial"
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
+                  {/* Testimonial Quote */}
+                  <p className="text-base sm:text-lg font-semibold text-neutral-900 leading-snug tracking-tight">
+                    {item.quote}
+                  </p>
                 </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Dot Indicators */}
-        {testimonials.length > 1 && (
-          <div className="flex items-center justify-center gap-2 mt-6">
-            {testimonials.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentIndex(idx)}
-                className={`h-2 rounded-full transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] ${
-                  idx === currentIndex
-                    ? "w-8 bg-[#111311]"
-                    : "w-2 bg-[#DDE1DC] hover:bg-[#5C605C]"
-                }`}
-                aria-label={`Go to slide ${idx + 1}`}
-                aria-current={idx === currentIndex ? "true" : undefined}
-              />
-            ))}
+              );
+            })}
           </div>
-        )}
+        </div>
       </div>
     </section>
   );
 }
+
+

@@ -13,11 +13,12 @@ export default async function PublicLayout({
 
   return (
     <div className="flex flex-col min-h-screen bg-[#E4E7E4]">
+      <a href="#main-content" className="skip-link">Skip to content</a>
       <Header
         phoneDisplay={settings.phoneDisplay}
         phoneRaw={settings.phone}
       />
-      <main className="flex-grow pb-10 sm:pb-0">{children}</main>
+      <main id="main-content" className="flex-grow">{children}</main>
       <Footer settings={settings} />
       <WhatsAppButton phone={settings.whatsapp} />
     </div>
