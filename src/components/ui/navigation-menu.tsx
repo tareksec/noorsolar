@@ -106,12 +106,12 @@ export function AnimatedNavFramer({
   const [isManuallyOpen, setIsManuallyOpen] = React.useState(false);
   const navRef = React.useRef<HTMLElement>(null);
 
-  // High-sensitivity dynamic rotation responsive to mouse scroll
-  const rawRotate = useTransform(scrollY, (v) => v * 2.2);
+  // Gentle, calm dynamic rotation responsive to mouse scroll
+  const rawRotate = useTransform(scrollY, (v) => v * 0.45);
   const smoothRotate = useSpring(rawRotate, {
-    stiffness: 400,
-    damping: 26,
-    mass: 0.35,
+    stiffness: 180,
+    damping: 25,
+    mass: 0.4,
   });
 
   // Handle outside clicks when manually opened while scrolled
