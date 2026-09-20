@@ -20,8 +20,8 @@ export function HeroSection({
   primaryCta = "Book Service",
 }: HeroSectionProps) {
   return (
-    <section className="relative w-full p-2.5 sm:p-4 lg:p-6 bg-white">
-      <div className="relative w-full min-h-[calc(100vh-1.25rem)] sm:min-h-[calc(100vh-2rem)] lg:min-h-[calc(100vh-3rem)] flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl lg:rounded-[36px] border-2 sm:border-[3px] border-white shadow-[0_20px_50px_rgba(0,0,0,0.18)] ring-1 ring-black/5 bg-[#0A0D0A] text-white">
+    <section className="relative w-full px-2.5 sm:px-4 lg:px-6 pb-2.5 sm:pb-4 lg:pb-6 pt-0 bg-white">
+      <div className="relative w-full min-h-[calc(100vh-1rem)] sm:min-h-[calc(100vh-1.5rem)] lg:min-h-[calc(100vh-2rem)] flex flex-col justify-between overflow-hidden rounded-t-[56px] sm:rounded-t-[100px] lg:rounded-t-[180px] xl:rounded-t-[220px] rounded-b-2xl sm:rounded-b-3xl lg:rounded-b-[36px] border-2 sm:border-[3px] border-white shadow-[0_20px_50px_rgba(0,0,0,0.18)] ring-1 ring-black/5 bg-[#0A0D0A] text-white">
         <video
           autoPlay
           loop
@@ -37,18 +37,18 @@ export function HeroSection({
         </video>
 
       {/* ================= MAIN HERO BODY ================= */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-grow flex flex-col justify-between pt-26 sm:pt-32 pb-8 sm:pb-10">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-grow flex flex-col justify-between pt-28 sm:pt-36 lg:pt-40 pb-8 sm:pb-10">
         
-        {/* Left Column: Kicker, Title, Subtitle, CTA Button */}
-        <div className="max-w-2xl flex flex-col justify-center my-auto py-4">
+        {/* Centered Column: Kicker, Title, Subtitle, CTA Button */}
+        <div className="max-w-4xl mx-auto flex flex-col items-center text-center justify-center my-auto py-4 sm:py-6">
           {/* Kicker Pill Badge in Brand Volt Lime */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#CEF23E]/30 bg-[#CEF23E]/10 backdrop-blur-md text-[#CEF23E] text-xs sm:text-sm font-medium mb-5 w-fit shadow-[0_0_20px_rgba(206,242,62,0.15)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#CEF23E]/30 bg-[#CEF23E]/10 backdrop-blur-md text-[#CEF23E] text-xs sm:text-sm font-medium mb-5 shadow-[0_0_20px_rgba(206,242,62,0.15)]">
             <Sparkles className="w-4 h-4 text-[#CEF23E] shrink-0" />
             <span>Professional Ac & Solar Services</span>
           </div>
 
           {/* Headline with Brand Volt Lime to Sky Cyan Gradient */}
-          <h1 className="text-3xl sm:text-5xl lg:text-[3.8rem] xl:text-[4.2rem] font-bold tracking-tight text-white leading-[1.08] mb-5 drop-shadow-sm">
+          <h1 className="text-3xl sm:text-5xl lg:text-[3.8rem] xl:text-[4.3rem] font-bold tracking-tight text-white leading-[1.08] mb-5 drop-shadow-sm text-center">
             Keep Your Home Cool &{" "}
             <span className="block mt-1">
               Comfortable{" "}
@@ -59,15 +59,15 @@ export function HeroSection({
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-base lg:text-[1.05rem] text-slate-300/90 leading-relaxed max-w-xl mb-7 font-normal drop-shadow-xs">
+          <p className="text-sm sm:text-base lg:text-[1.08rem] text-slate-300/90 leading-relaxed max-w-2xl mb-8 font-normal drop-shadow-xs text-center">
             Expert AC repair, installation, and maintenance services delivered by certified technicians to keep your home cool, efficient, and comfortable all year long.
           </p>
 
           {/* Brand Volt Lime Pill CTA Button */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-center gap-4">
             <Link
               href="/contact"
-              className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] font-bold text-sm sm:text-base shadow-[0_8px_25px_rgba(206,242,62,0.35)] transition-all hover:scale-[1.02] active:scale-[0.98] w-fit"
+              className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] font-bold text-sm sm:text-base shadow-[0_8px_25px_rgba(206,242,62,0.35)] transition-all hover:scale-[1.03] active:scale-[0.98] w-fit"
             >
               <span>{primaryCta}</span>
               <span className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#111311] flex items-center justify-center text-[#CEF23E] group-hover:translate-x-0.5 transition-transform shadow-xs">
