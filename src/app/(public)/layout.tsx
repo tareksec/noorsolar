@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/footer";
 import { WhatsAppButton } from "@/components/layout/whatsapp-button";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { RouteTransition } from "@/components/providers/route-transition";
+import { SitePreloader } from "@/components/ui/site-preloader";
 import { getSiteSettings } from "@/lib/data/settings";
 
 export default async function PublicLayout({
@@ -15,6 +16,7 @@ export default async function PublicLayout({
 
   return (
     <SmoothScrollProvider>
+      <SitePreloader />
       <div className="flex flex-col min-h-screen bg-[#E4E7E4]">
         <Header
           phoneDisplay={settings.phoneDisplay}

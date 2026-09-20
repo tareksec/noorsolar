@@ -63,7 +63,7 @@ export function TextMarquee() {
   return (
     <div
       ref={marqueeRef}
-      className="py-4 border-y border-[#DDE1DC] bg-[#111311] overflow-hidden select-none"
+      className="relative z-10 my-6 sm:my-8 py-4 sm:py-5 border-y border-[#282E28] bg-[#111311] overflow-hidden select-none shadow-md"
       data-motion="text-marquee"
     >
       <div
@@ -75,10 +75,10 @@ export function TextMarquee() {
           <div key={loopIdx} className="flex items-center shrink-0">
             {MARQUEE_ITEMS.map((item, idx) => (
               <div key={idx} className="flex items-center">
-                <span className="text-xs sm:text-sm font-mono font-bold tracking-widest text-white/90 px-6 sm:px-8">
+                <span className="text-xs sm:text-sm font-mono font-bold tracking-widest text-white/95 px-6 sm:px-8 uppercase">
                   {item}
                 </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#CEF23E] shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-[#CEF23E] shrink-0 shadow-[0_0_8px_#CEF23E]" />
               </div>
             ))}
           </div>

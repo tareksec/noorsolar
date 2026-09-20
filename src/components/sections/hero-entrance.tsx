@@ -32,12 +32,12 @@ export function HeroEntrance() {
           duration: 0.45,
         }, 0.05);
 
-        // 3. Headline masked slide-up reveal
-        tl.from(".hero-word-inner", {
-          yPercent: 110,
+        // 3. Headline slide-up reveal
+        tl.from(".hero-headline", {
+          opacity: 0,
+          y: 20,
           duration: 0.85,
           ease: "expo.out",
-          stagger: 0.025,
         }, 0.1);
 
         // 4. Subheadline

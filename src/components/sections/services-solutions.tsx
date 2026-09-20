@@ -20,7 +20,7 @@ const SERVICES: ServiceCard[] = [
     title: "Commercial Solar Supply",
     description:
       "Direct container-scale imports and bulk procurement of Tier-1 N-Type TOPCon bifacial modules sized for industrial factories and commercial EPC projects.",
-    image: "/photos/story-panels.webp",
+    image: "/solar-images/solar-panels-arranged-in-a-grid-pattern-on-a-clean-surface-under-bright-lighting-photo.jpeg",
     alt: "High-efficiency monocrystalline solar panels installation in Bangladesh",
     link: "/category/solar-panels",
   },
@@ -29,7 +29,7 @@ const SERVICES: ServiceCard[] = [
     title: "Lithium Storage Systems",
     description:
       "High-voltage LiFePO4 commercial energy storage banks engineered for factory backup power, peak shaving, and zero-downtime industrial reliability.",
-    image: "/photos/story-batteries.webp",
+    image: "/bettry/500_F_2090872523_bLZOG1F2Gbz4TsCdhboiXNUezn7dTZZI.jpg",
     alt: "Industrial LiFePO4 battery rack installations with smart BMS",
     link: "/category/lithium-batteries",
   },
@@ -38,7 +38,7 @@ const SERVICES: ServiceCard[] = [
     title: "Hybrid & Utility Inverters",
     description:
       "Three-phase commercial string and hybrid solar inverters with intelligent grid synchronization, high surge capacity, and remote telemetry monitoring.",
-    image: "/photos/story-inverters.webp",
+    image: "/Inverter/white-inverter-of-solar-cell-power-generation-system.jpg",
     alt: "Commercial solar hybrid inverter installation and testing",
     link: "/category/solar-inverters",
   },
@@ -58,8 +58,8 @@ export function ServicesSolutions() {
   };
 
   return (
-    <section className="py-20 lg:py-28 bg-[#EDEDED] border-b border-[#DDE1DC]">
-      <div className="page-shell">
+    <section id="services" className="pt-16 lg:pt-24 pb-8 lg:pb-10 bg-[#EDEDED]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Row: Eyebrow + Split Headline & Value Proposition */}
         <div className="mb-12 lg:mb-16">
           {/* Eyebrow */}

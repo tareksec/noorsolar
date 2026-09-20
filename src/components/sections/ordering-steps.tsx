@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { FileText, SlidersHorizontal, CheckSquare, Truck } from "lucide-react";
-import { prefersReducedMotion, motionTokens } from "@/lib/motion";
+import { prefersReducedMotion } from "@/lib/motion";
 import { gsap, useGSAP } from "@/lib/gsap";
 
 interface StepItem {
@@ -30,7 +30,7 @@ const DEFAULT_STEPS: StepItem[] = [
     title: "Request a quote",
     desc: "Tell us the products and quantity you need. Send the form, call us or message us on WhatsApp.",
     image: "/photos/process-1-request.webp",
-    alt: "Engineer reviewing technical solar procurement specifications",
+    alt: "Client requesting solar quotation and product consulting via phone and WhatsApp",
     icon: FileText,
   },
   {
@@ -38,7 +38,7 @@ const DEFAULT_STEPS: StepItem[] = [
     title: "Confirm specifications",
     desc: "Our team checks the datasheets and matches the right models and quantities to your project.",
     image: "/photos/process-2-specs.webp",
-    alt: "Commercial engineers reviewing technical solar specifications",
+    alt: "Solar engineer verifying technical blueprints, sizing, and module datasheets",
     icon: SlidersHorizontal,
   },
   {
@@ -46,7 +46,7 @@ const DEFAULT_STEPS: StepItem[] = [
     title: "Receive your quotation",
     desc: "Get a formal quotation with pricing and terms for your order.",
     image: "/photos/process-3-quotation.webp",
-    alt: "Commercial documentation and equipment pallet staging",
+    alt: "Reviewing commercial solar quotation, wholesale pricing, and terms on laptop",
     icon: CheckSquare,
   },
   {
@@ -54,7 +54,7 @@ const DEFAULT_STEPS: StepItem[] = [
     title: "Confirm and arrange delivery",
     desc: "Confirm the order and we coordinate delivery. Contact sales for current schedules.",
     image: "/photos/process-4-delivery.webp",
-    alt: "Depot delivery and solar equipment dispatch in Bangladesh",
+    alt: "Solar panel equipment delivery, container dispatch, and on-site handover in Bangladesh",
     icon: Truck,
   },
 ];
@@ -65,6 +65,7 @@ export function OrderingSteps({
   steps,
 }: OrderingStepsProps) {
   const containerRef = useRef<HTMLElement>(null);
+  const [activeStepIdx, setActiveStepIdx] = useState<number>(0);
 
   // Merge custom titles/descriptions from site settings if provided
   const displaySteps: StepItem[] = DEFAULT_STEPS.map((step, idx) => {
@@ -81,135 +82,260 @@ export function OrderingSteps({
       const section = containerRef.current;
       if (!section) return;
 
-      if (prefersReducedMotion() || (typeof window !== "undefined" && window.innerWidth < 768)) {
-        // Immediate clean display for reduced-motion and mobile screens
+      if (prefersReducedMotion()) {
         gsap.set(
           [
             ".process-title-reveal",
             ".process-step-item",
             ".process-circle",
             ".process-badge",
+            ".process-step-content",
             ".process-arrow-svg",
+            ".process-arrow-path",
+            ".process-arrow-head",
+            ".process-progress-fill",
           ],
-          { opacity: 1, y: 0, scale: 1, clearProps: "all" }
+          { opacity: 1, y: 0, scale: 1, strokeDashoffset: 0, scaleX: 1, clearProps: "all" }
         );
         return;
       }
 
-      // 1. Header reveal (masked slide-up)
+      // 1. Header reveal on scroll entry
       gsap.fromTo(
         ".process-title-reveal",
-        { y: 28, opacity: 0 },
+        { y: 35, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: motionTokens.duration.slow,
-          ease: motionTokens.ease.gsapExpoOut,
-          stagger: 0.12,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power3.out",
           scrollTrigger: {
             trigger: section,
-            start: "top 82%",
-            toggleActions: "play none none none",
+            start: "top 85%",
+            toggleActions: "play none none reverse",
           },
         }
       );
 
-      // 2. Circles scale in with stagger
-      gsap.fromTo(
-        ".process-circle",
-        { scale: 0.85, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 0.55,
-          stagger: motionTokens.stagger.cards,
-          ease: "back.out(1.3)",
-          scrollTrigger: {
-            trigger: ".process-steps-container",
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      // 3. Numbered badges pop in after circles
-      gsap.fromTo(
-        ".process-badge",
-        { scale: 0, opacity: 0 },
-        {
-          scale: 1,
-          opacity: 1,
-          duration: 0.4,
-          delay: 0.18,
-          stagger: motionTokens.stagger.cards,
-          ease: "back.out(1.8)",
-          scrollTrigger: {
-            trigger: ".process-steps-container",
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      // 4. Step titles and text fade up
-      gsap.fromTo(
-        ".process-step-content",
-        { y: 16, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.5,
-          delay: 0.25,
-          stagger: motionTokens.stagger.cards,
-          ease: motionTokens.ease.gsapPower2Out,
-          scrollTrigger: {
-            trigger: ".process-steps-container",
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      // 5. Curved arrows draw themselves left to right
+      // 2. Setup curved SVG arrows
       const arrowPaths = section.querySelectorAll<SVGPathElement>(".process-arrow-path");
-      arrowPaths.forEach((path, idx) => {
-        const length = path.getTotalLength ? path.getTotalLength() : 120;
+      arrowPaths.forEach((path) => {
+        const length = path.getTotalLength ? path.getTotalLength() : 140;
         gsap.set(path, {
           strokeDasharray: length,
           strokeDashoffset: length,
         });
-
-        gsap.to(path, {
-          strokeDashoffset: 0,
-          duration: 0.6,
-          delay: 0.35 + idx * 0.15,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: ".process-steps-container",
-            start: "top 78%",
-            toggleActions: "play none none none",
-          },
-        });
       });
 
-      // Arrow heads fade in right when the path finishes drawing
-      gsap.fromTo(
-        ".process-arrow-head",
-        { opacity: 0, scale: 0.6 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.25,
-          delay: 0.7,
-          stagger: 0.15,
-          ease: "power2.out",
+      // 3. Desktop Sequenced 4-Step Scroll Scrub Animation
+      const isDesktop = window.innerWidth >= 1024;
+
+      if (isDesktop) {
+        // Master scroll scrub timeline that activates the 4 steps sequentially
+        const masterTl = gsap.timeline({
           scrollTrigger: {
             trigger: ".process-steps-container",
-            start: "top 78%",
-            toggleActions: "play none none none",
+            start: "top 72%",
+            end: "bottom 35%",
+            scrub: 0.8,
+            onUpdate: (self) => {
+              const progress = self.progress;
+              if (progress < 0.25) setActiveStepIdx(0);
+              else if (progress < 0.5) setActiveStepIdx(1);
+              else if (progress < 0.75) setActiveStepIdx(2);
+              else setActiveStepIdx(3);
+            },
           },
+        });
+
+        // Background progress bar fill scrub
+        masterTl.fromTo(
+          ".process-progress-fill",
+          { scaleX: 0 },
+          { scaleX: 1, ease: "none", duration: 1 },
+          0
+        );
+
+        // Step 1 Activate (0% -> 25%)
+        masterTl
+          .fromTo(
+            ".step-item-0 .process-circle",
+            { scale: 0.88, opacity: 0.4 },
+            { scale: 1.05, opacity: 1, duration: 0.2, ease: "power2.out" },
+            0
+          )
+          .fromTo(
+            ".step-item-0 .process-badge",
+            { scale: 0.8, rotation: -45, backgroundColor: "#111311", color: "#CEF23E" },
+            { scale: 1.15, rotation: 0, backgroundColor: "#CEF23E", color: "#111311", duration: 0.2 },
+            0
+          )
+          .fromTo(
+            ".step-item-0 .process-radar",
+            { opacity: 0, scale: 0.8 },
+            { opacity: 0.8, scale: 1.25, duration: 0.2 },
+            0.05
+          );
+
+        // Arrow 1 (Step 1 -> Step 2)
+        if (arrowPaths[0]) {
+          masterTl.to(
+            arrowPaths[0],
+            { strokeDashoffset: 0, ease: "none", duration: 0.2 },
+            0.1
+          );
+          masterTl.fromTo(
+            ".arrow-head-0",
+            { opacity: 0, scale: 0.3 },
+            { opacity: 1, scale: 1, duration: 0.08 },
+            0.26
+          );
         }
-      );
+
+        // Step 2 Activate (25% -> 50%)
+        masterTl
+          .fromTo(
+            ".step-item-1 .process-circle",
+            { scale: 0.88, opacity: 0.4 },
+            { scale: 1.05, opacity: 1, duration: 0.2, ease: "power2.out" },
+            0.25
+          )
+          .fromTo(
+            ".step-item-1 .process-badge",
+            { scale: 0.8, rotation: -45, backgroundColor: "#111311", color: "#CEF23E" },
+            { scale: 1.15, rotation: 0, backgroundColor: "#CEF23E", color: "#111311", duration: 0.2 },
+            0.25
+          )
+          .fromTo(
+            ".step-item-1 .process-radar",
+            { opacity: 0, scale: 0.8 },
+            { opacity: 0.8, scale: 1.25, duration: 0.2 },
+            0.3
+          );
+
+        // Arrow 2 (Step 2 -> Step 3)
+        if (arrowPaths[1]) {
+          masterTl.to(
+            arrowPaths[1],
+            { strokeDashoffset: 0, ease: "none", duration: 0.2 },
+            0.35
+          );
+          masterTl.fromTo(
+            ".arrow-head-1",
+            { opacity: 0, scale: 0.3 },
+            { opacity: 1, scale: 1, duration: 0.08 },
+            0.51
+          );
+        }
+
+        // Step 3 Activate (50% -> 75%)
+        masterTl
+          .fromTo(
+            ".step-item-2 .process-circle",
+            { scale: 0.88, opacity: 0.4 },
+            { scale: 1.05, opacity: 1, duration: 0.2, ease: "power2.out" },
+            0.5
+          )
+          .fromTo(
+            ".step-item-2 .process-badge",
+            { scale: 0.8, rotation: -45, backgroundColor: "#111311", color: "#CEF23E" },
+            { scale: 1.15, rotation: 0, backgroundColor: "#CEF23E", color: "#111311", duration: 0.2 },
+            0.5
+          )
+          .fromTo(
+            ".step-item-2 .process-radar",
+            { opacity: 0, scale: 0.8 },
+            { opacity: 0.8, scale: 1.25, duration: 0.2 },
+            0.55
+          );
+
+        // Arrow 3 (Step 3 -> Step 4)
+        if (arrowPaths[2]) {
+          masterTl.to(
+            arrowPaths[2],
+            { strokeDashoffset: 0, ease: "none", duration: 0.2 },
+            0.6
+          );
+          masterTl.fromTo(
+            ".arrow-head-2",
+            { opacity: 0, scale: 0.3 },
+            { opacity: 1, scale: 1, duration: 0.08 },
+            0.76
+          );
+        }
+
+        // Step 4 Activate (75% -> 100%)
+        masterTl
+          .fromTo(
+            ".step-item-3 .process-circle",
+            { scale: 0.88, opacity: 0.4 },
+            { scale: 1.08, opacity: 1, duration: 0.2, ease: "power2.out" },
+            0.75
+          )
+          .fromTo(
+            ".step-item-3 .process-badge",
+            { scale: 0.8, rotation: -45, backgroundColor: "#111311", color: "#CEF23E" },
+            { scale: 1.2, rotation: 0, backgroundColor: "#CEF23E", color: "#111311", duration: 0.2 },
+            0.75
+          )
+          .fromTo(
+            ".step-item-3 .process-radar",
+            { opacity: 0, scale: 0.8 },
+            { opacity: 1, scale: 1.3, duration: 0.2 },
+            0.8
+          );
+
+        // Gentle Parallax scrub on desktop
+        const circles = section.querySelectorAll(".process-circle");
+        circles.forEach((c, idx) => {
+          gsap.to(c, {
+            yPercent: idx % 2 === 0 ? -12 : 12,
+            ease: "none",
+            scrollTrigger: {
+              trigger: section,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1,
+            },
+          });
+        });
+      } else {
+        // Mobile Vertical Stagger Animation (< 1024px)
+        const stepItems = section.querySelectorAll(".process-step-item");
+        stepItems.forEach((item, idx) => {
+          const circle = item.querySelector(".process-circle");
+          const badge = item.querySelector(".process-badge");
+          const content = item.querySelector(".process-step-content");
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: item,
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+              onEnter: () => setActiveStepIdx(idx),
+            },
+          });
+
+          tl.fromTo(
+            circle,
+            { scale: 0.8, opacity: 0.3, y: 25 },
+            { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "back.out(1.5)" }
+          )
+            .fromTo(
+              badge,
+              { scale: 0, rotation: -45, opacity: 0 },
+              { scale: 1, rotation: 0, opacity: 1, duration: 0.4, ease: "back.out(2)" },
+              "-=0.3"
+            )
+            .fromTo(
+              content,
+              { opacity: 0, y: 15 },
+              { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" },
+              "-=0.2"
+            );
+        });
+      }
     },
     { scope: containerRef }
   );
@@ -221,14 +347,14 @@ export function OrderingSteps({
       className="py-20 lg:py-28 bg-[#EDEDED] border-y border-[#DDE1DC] relative overflow-hidden"
       data-motion="process-section"
     >
-      <div className="page-shell">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Centered Header */}
         <div className="max-w-3xl mx-auto text-center mb-16 lg:mb-20" data-motion="process-header">
           {/* Centered small label pill */}
           <div className="process-title-reveal inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#DDE1DC] shadow-xs mb-4">
             <span className="w-2 h-2 rounded-full bg-[#CEF23E] ring-2 ring-[#CEF23E]/40" />
             <span className="text-xs font-mono uppercase tracking-wider text-[#111311] font-semibold">
-              Process
+              Step-by-Step Process
             </span>
           </div>
 
@@ -238,45 +364,77 @@ export function OrderingSteps({
           </h2>
 
           {/* One or two line sub-text */}
-          <p className="process-title-reveal text-sm sm:text-base text-[#5C605C] leading-relaxed max-w-xl mx-auto">
+          <p className="process-title-reveal text-sm sm:text-base text-[#5C605C] leading-relaxed max-w-xl mx-auto mb-6">
             {subheadline}
           </p>
+
+          {/* Real-time active step status pill on scroll */}
+          <div className="process-title-reveal inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#111311] text-white text-xs font-mono shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-[#CEF23E] animate-pulse" />
+            <span className="font-bold text-[#CEF23E]">
+              STEP {displaySteps[activeStepIdx]?.num}:
+            </span>
+            <span>{displaySteps[activeStepIdx]?.title}</span>
+          </div>
         </div>
 
         {/* Desktop 4-Column Layout (>= 1024px) & Mobile Stack (< 1024px) */}
         <div className="process-steps-container relative">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-6 items-start">
+          
+          {/* Subtle Ambient Connecting Beam on Desktop */}
+          <div className="hidden lg:block absolute top-[88px] left-[10%] right-[10%] h-[3px] bg-[#D7DDD2] -z-0 pointer-events-none overflow-hidden rounded-full">
+            <div className="process-progress-fill w-full h-full bg-gradient-to-r from-[#B5E025] to-[#CEF23E] shadow-[0_0_10px_#CEF23E] origin-left scale-x-0" />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-6 items-start relative z-10">
             {displaySteps.map((step, idx) => {
               const Icon = step.icon;
+              const isActive = activeStepIdx === idx;
 
               return (
                 <div
                   key={step.num}
-                  className="process-step-item group flex flex-col items-center text-center relative"
+                  onClick={() => setActiveStepIdx(idx)}
+                  className={`process-step-item step-item-${idx} group flex flex-col items-center text-center relative cursor-pointer transition-all duration-300`}
                   data-motion="process-step"
                 >
                   {/* Circle Photo Container with Volt-Lime Border */}
                   <div className="relative mb-6">
+                    {/* Glowing Radar Halo Ring on Active Step */}
+                    <div
+                      className={`process-radar absolute -inset-2.5 rounded-full bg-[#CEF23E]/25 blur-sm pointer-events-none transition-opacity duration-500 ${
+                        isActive ? "opacity-100 animate-pulse" : "opacity-0"
+                      }`}
+                    />
+
                     {/* Number Badge Overlapping Top-Left */}
                     <div
-                      className="process-badge absolute -top-1 -left-1 sm:-top-2 sm:-left-2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#111311] text-[#CEF23E] border-2 border-white flex items-center justify-center font-mono font-bold text-xs sm:text-[13px] shadow-sm select-none"
+                      className={`process-badge absolute -top-1 -left-1 sm:-top-2 sm:-left-2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full border-2 border-white flex items-center justify-center font-mono font-bold text-xs sm:text-[13px] shadow-sm select-none transition-all duration-300 ${
+                        isActive
+                          ? "bg-[#CEF23E] text-[#111311] scale-110 shadow-[0_0_12px_rgba(206,242,62,0.8)]"
+                          : "bg-[#111311] text-[#CEF23E]"
+                      }`}
                     >
                       {step.num}
                     </div>
 
                     {/* Circular Photo */}
                     <div
-                      className="process-circle relative w-36 h-36 sm:w-40 sm:h-40 lg:w-44 lg:h-44 rounded-full overflow-hidden border-[3px] border-[#CEF23E] bg-[#E4E7E4] shadow-xs transition-all duration-300 md:group-hover:-translate-y-2 md:group-hover:shadow-[0_12px_28px_rgba(206,242,62,0.35)]"
+                      className={`process-circle relative w-36 h-36 sm:w-40 sm:h-40 lg:w-44 lg:h-44 rounded-full overflow-hidden border-[3px] bg-[#E4E7E4] shadow-xs transition-all duration-500 md:group-hover:-translate-y-2 will-change-transform ${
+                        isActive
+                          ? "border-[#CEF23E] shadow-[0_12px_32px_rgba(206,242,62,0.45)] ring-4 ring-[#CEF23E]/40"
+                          : "border-[#D7DDD2] opacity-85 hover:opacity-100 hover:border-[#CEF23E]"
+                      }`}
                     >
                       <Image
                         src={step.image}
                         alt={step.alt}
                         fill
                         sizes="(max-width: 640px) 144px, (max-width: 1024px) 160px, 176px"
-                        className="object-cover transition-transform duration-500 md:group-hover:scale-108"
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
                         priority={idx === 0}
                       />
-                      {/* Soft Glass Fallback Icon container inside image in case image fails */}
+                      {/* Soft Glass Fallback Icon container inside image */}
                       <div className="absolute inset-0 flex items-center justify-center bg-[#111311]/5 opacity-0 group-hover:opacity-10 pointer-events-none transition-opacity">
                         <Icon className="w-8 h-8 text-[#111311]" />
                       </div>
@@ -285,7 +443,11 @@ export function OrderingSteps({
 
                   {/* Step Title & Gray Description */}
                   <div className="process-step-content max-w-[260px] mx-auto">
-                    <h3 className="text-lg sm:text-[19px] font-bold text-[#111311] tracking-tight mb-2.5">
+                    <h3
+                      className={`text-lg sm:text-[19px] font-bold tracking-tight mb-2.5 transition-colors ${
+                        isActive ? "text-black scale-102" : "text-[#111311] group-hover:text-black"
+                      }`}
+                    >
                       {step.title}
                     </h3>
                     <p className="text-xs sm:text-[13px] text-[#5C605C] leading-relaxed">
@@ -309,7 +471,7 @@ export function OrderingSteps({
                           <path
                             d="M 6,24 C 36,4 78,6 108,18"
                             stroke="#111311"
-                            strokeWidth="2"
+                            strokeWidth="2.4"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             className="process-arrow-path"
@@ -317,10 +479,10 @@ export function OrderingSteps({
                           <path
                             d="M 98,12 L 109,18 L 100,24"
                             stroke="#111311"
-                            strokeWidth="2"
+                            strokeWidth="2.4"
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            className="process-arrow-head"
+                            className={`process-arrow-head arrow-head-${idx}`}
                           />
                         </svg>
                       ) : (
@@ -333,7 +495,7 @@ export function OrderingSteps({
                           <path
                             d="M 6,12 C 38,32 78,30 108,18"
                             stroke="#111311"
-                            strokeWidth="2"
+                            strokeWidth="2.4"
                             strokeLinecap="round"
                             strokeLinejoin="round"
                             className="process-arrow-path"
@@ -341,10 +503,10 @@ export function OrderingSteps({
                           <path
                             d="M 99,13 L 109,18 L 98,25"
                             stroke="#111311"
-                            strokeWidth="2"
+                            strokeWidth="2.4"
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            className="process-arrow-head"
+                            className={`process-arrow-head arrow-head-${idx}`}
                           />
                         </svg>
                       )}

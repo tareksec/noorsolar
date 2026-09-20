@@ -43,11 +43,20 @@ export const sampleStats = [
 
 export const sampleCertifications = [
   {
+    name: "BSREA Certificate of Membership",
+    issuer: "Bangladesh Sustainable & Renewable Energy Association (BSREA)",
+    description: "Official General Membership (20260915GEN113) issued to Tasneem Knitting Industry. Valid through Dec 31, 2026. Document: https://drive.google.com/file/d/1GR4hILXnDjJblqNmrxRNnWH_M7It4Md2/view?usp=sharing",
+    image: "/photos/bsrea-logo.png",
+    sortOrder: 1,
+    isActive: true,
+    isSample: true,
+  },
+  {
     name: "Quality management certificate",
     issuer: "Standard Inspection Board",
     description: "Verified quality management processes for commercial solar equipment distribution",
     image: "/demo/cert-quality.svg",
-    sortOrder: 1,
+    sortOrder: 2,
     isActive: true,
     isSample: true,
   },
@@ -56,7 +65,7 @@ export const sampleCertifications = [
     issuer: "Accredited Laboratory",
     description: "Factory electrical performance and laboratory testing verification",
     image: "/demo/cert-testing.svg",
-    sortOrder: 2,
+    sortOrder: 3,
     isActive: true,
     isSample: true,
   },
@@ -65,7 +74,7 @@ export const sampleCertifications = [
     issuer: "Safety Standards Authority",
     description: "Electrical safety, insulation, and dielectric compliance standards",
     image: "/demo/cert-safety.svg",
-    sortOrder: 3,
+    sortOrder: 4,
     isActive: true,
     isSample: true,
   },
@@ -74,14 +83,15 @@ export const sampleCertifications = [
     issuer: "Municipal Corporation",
     description: "Registered commercial solar equipment import, trade, and supply operations",
     image: "/demo/cert-license.svg",
-    sortOrder: 4,
+    sortOrder: 5,
     isActive: true,
     isSample: true,
   },
 ];
 
 export const samplePartners = [
-  { name: "Huawei FusionSolar", logo: "/demo/partners/huawei.svg", url: "https://solar.huawei.com", sortOrder: 1, isActive: true, isSample: true },
+  { name: "BSREA", logo: "/photos/bsrea-logo.png", url: "https://bsreabd.org/", sortOrder: 1, isActive: true, isSample: true },
+  { name: "Huawei FusionSolar", logo: "/demo/partners/huawei.svg", url: "https://solar.huawei.com", sortOrder: 2, isActive: true, isSample: true },
   { name: "LONGi Solar", logo: "/demo/partners/longi.svg", url: "https://www.longi.com", sortOrder: 2, isActive: true, isSample: true },
   { name: "Sungrow Power", logo: "/demo/partners/sungrow.svg", url: "https://www.sungrowpower.com", sortOrder: 3, isActive: true, isSample: true },
   { name: "JinkoSolar", logo: "/demo/partners/jinko.svg", url: "https://www.jinkosolar.com", sortOrder: 4, isActive: true, isSample: true },

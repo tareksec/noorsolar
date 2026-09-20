@@ -35,6 +35,14 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Noor Solar Energy" }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  icons: {
+    icon: [
+      { url: "/logo/icon.png", type: "image/png" },
+      { url: "/favicon.ico" },
+    ],
+    shortcut: "/logo/icon.png",
+    apple: "/logo/icon.png",
+  },
   openGraph: {
     title: "Noor Solar Energy — Solar Panels, Batteries & Inverters",
     description:

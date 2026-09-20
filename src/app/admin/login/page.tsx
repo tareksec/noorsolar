@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useActionState, useEffect, Suspense } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { loginAdminAction, AuthActionResult } from "@/app/admin/actions/auth";
-import { Sun, Lock, Mail, AlertCircle, ArrowRight } from "lucide-react";
+import { Lock, Mail, AlertCircle, ArrowRight } from "lucide-react";
 
 const initialState: AuthActionResult = {
   success: false,
@@ -89,9 +91,16 @@ export default function AdminLoginPage() {
         
         {/* Brand Header */}
         <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-full bg-[#CEF23E] flex items-center justify-center mx-auto mb-4 text-[#111311] shadow-sm">
-            <Sun className="w-6 h-6" />
-          </div>
+          <Link href="/" className="inline-block mb-4 group">
+            <Image
+              src="/logo/logo.png"
+              alt="Noor Solar Energy"
+              width={180}
+              height={45}
+              className="h-10 w-auto mx-auto object-contain group-hover:opacity-90 transition-opacity"
+              priority
+            />
+          </Link>
           <h1 className="text-2xl font-bold text-[#111311] tracking-tight">
             Admin Management
           </h1>

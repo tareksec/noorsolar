@@ -1,221 +1,113 @@
 import React from "react";
-import { Zap, Cpu } from "lucide-react";
+import Image from "next/image";
+import { Navigation } from "lucide-react";
 
 export function HeroVisual() {
   return (
     <div
-      className="relative w-full max-w-[560px] aspect-[4/3] mx-auto select-none perspective-[1000px] flex items-center justify-center hero-visual-parallax"
-      aria-label="Layered glass composition of high-efficiency solar panel, lithium battery rack, and hybrid inverter"
+      className="relative w-full max-w-[620px] mx-auto select-none flex flex-col items-center justify-center"
       data-motion="hero-parallax"
+      aria-label="Next-generation solar architecture model with real-time grid telemetry"
     >
-      {/* Background Soft Glow Aura */}
-      <div className="absolute inset-4 rounded-full bg-[radial-gradient(circle,rgba(206,242,62,0.18)_0%,transparent_70%)] -z-10 pointer-events-none" />
+      {/* 3D Isometric Solar Architecture Visual Container */}
+      <div className="relative w-full aspect-[4/3] flex items-center justify-center">
+        {/* Soft Ambient Green-Yellow Halo Glow behind model */}
+        <div className="absolute w-[80%] h-[80%] rounded-full bg-[radial-gradient(circle,rgba(206,242,62,0.25)_0%,rgba(163,230,53,0.12)_40%,transparent_70%)] blur-2xl -z-10 pointer-events-none" />
 
-      {/* Main Layered SVG Canvas */}
-      <div className="w-full h-full relative flex items-center justify-center">
-        <svg
-          viewBox="0 0 680 540"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-full h-full overflow-visible drop-shadow-md"
+        {/* 3D Isometric Station Model */}
+        <div className="relative w-full h-full max-h-[380px] rounded-3xl overflow-hidden flex items-center justify-center">
+          <Image
+            src="/photos/solar-3d-station.jpg"
+            alt="Futuristic solar power station and green roof architecture"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 620px"
+            className="object-contain object-center transition-transform duration-700 hover:scale-[1.03] will-change-transform"
+          />
+        </div>
+
+        {/* Floating Glass Card 1: Circuit / Grid Map (Station n. 3456) */}
+        <div
+          data-motion="hero-glass"
+          className="absolute top-10 right-28 sm:right-36 z-20 backdrop-blur-xl bg-[#D4E8B0]/75 border border-white/60 shadow-[0_16px_36px_-10px_rgba(0,0,0,0.15)] rounded-2xl p-3 sm:p-4 w-[130px] sm:w-[150px] transition-transform duration-500 hover:-translate-y-1.5"
         >
-          <defs>
-            {/* Panel Glass Gradients */}
-            <linearGradient id="hv-panel-glass" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#1C2621" stopOpacity="0.95" />
-              <stop offset="60%" stopColor="#0E1410" stopOpacity="0.98" />
-              <stop offset="100%" stopColor="#070A08" stopOpacity="1" />
-            </linearGradient>
-            <linearGradient id="hv-lime-edge" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#CEF23E" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#CEF23E" stopOpacity="0.1" />
-            </linearGradient>
-
-            {/* Inverter Gloss Gradient */}
-            <linearGradient id="hv-inverter-body" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#FFFFFF" />
-              <stop offset="70%" stopColor="#F5F7F5" />
-              <stop offset="100%" stopColor="#E2E6E2" />
-            </linearGradient>
-          </defs>
-
-          {/* LAYER 1: N-Type Solar Panel (Background Layer, angled back right) */}
-          <g id="hero-layer-panel" className="hv-anim-panel">
-            {/* Panel Aluminum Alloy Frame */}
-            <rect
-              x="160"
-              y="60"
-              width="360"
-              height="440"
-              rx="18"
-              fill="#222723"
-              stroke="#3A403A"
-              strokeWidth="3"
-              transform="rotate(6 340 280) skewY(-2)"
-            />
-            {/* Dark Photovoltaic Monocrystalline Wafer Substrate */}
-            <rect
-              x="172"
-              y="72"
-              width="336"
-              height="416"
-              rx="12"
-              fill="url(#hv-panel-glass)"
-              transform="rotate(6 340 280) skewY(-2)"
-            />
-            {/* Subtle Volt-Lime Highlight Trim */}
-            <rect
-              x="172"
-              y="72"
-              width="336"
-              height="416"
-              rx="12"
+          {/* Schematic Circuit Graph SVG */}
+          <div className="w-full h-12 mb-2 flex items-center justify-center opacity-85">
+            <svg
+              viewBox="0 0 100 45"
               fill="none"
-              transform="rotate(6 340 280) skewY(-2)"
-              stroke="url(#hv-lime-edge)"
-              strokeWidth="2.5"
-            />
-            {/* Grid Busbars (16BB Half-Cut Silicon Cells Pattern) */}
-            <g opacity="0.35" stroke="#FFFFFF" strokeWidth="0.75">
-              <line x1="256" y1="75" x2="256" y2="485" transform="rotate(6 340 280) skewY(-2)" />
-              <line x1="340" y1="75" x2="340" y2="485" transform="rotate(6 340 280) skewY(-2)" />
-              <line x1="424" y1="75" x2="424" y2="485" transform="rotate(6 340 280) skewY(-2)" />
-              <line x1="172" y1="150" x2="508" y2="150" transform="rotate(6 340 280) skewY(-2)" />
-              <line x1="172" y1="230" x2="508" y2="230" transform="rotate(6 340 280) skewY(-2)" />
-              <line x1="172" y1="310" x2="508" y2="310" transform="rotate(6 340 280) skewY(-2)" />
-              <line x1="172" y1="390" x2="508" y2="390" transform="rotate(6 340 280) skewY(-2)" />
-            </g>
-          </g>
-
-          {/* LAYER 2: Lithium Battery Server Rack Unit (Middle Layer, angled left-center) */}
-          <g id="hero-layer-battery" className="hv-anim-battery">
-            {/* Rack Chassis Enclosure */}
-            <rect
-              x="70"
-              y="270"
-              width="300"
-              height="160"
-              rx="14"
-              fill="#181B18"
-              stroke="#2E332E"
-              strokeWidth="2"
-              transform="rotate(-5 220 350)"
-            />
-            {/* Front Panel Inset */}
-            <rect
-              x="82"
-              y="282"
-              width="276"
-              height="136"
-              rx="8"
-              fill="#111311"
-              transform="rotate(-5 220 350)"
-            />
-            {/* 3U Rack Mount Ears & Handles */}
-            <rect x="62" y="310" width="8" height="80" rx="3" fill="#5C605C" transform="rotate(-5 220 350)" />
-            <rect x="370" y="310" width="8" height="80" rx="3" fill="#5C605C" transform="rotate(-5 220 350)" />
-            {/* Battery Status LED Bar (Volt Lime) */}
-            <rect x="100" y="310" width="90" height="6" rx="3" fill="#2E332E" transform="rotate(-5 220 350)" />
-            <rect x="100" y="310" width="75" height="6" rx="3" fill="#CEF23E" transform="rotate(-5 220 350)" />
-            {/* DC Breaker Switch */}
-            <rect x="220" y="302" width="28" height="22" rx="4" fill="#000000" stroke="#3A403A" transform="rotate(-5 220 350)" />
-            <rect x="226" y="307" width="16" height="12" rx="2" fill="#CEF23E" transform="rotate(-5 220 350)" />
-            {/* Power Terminals (Positive Red & Negative Black) */}
-            <circle cx="285" cy="314" r="10" fill="#B91C1C" stroke="#450A0A" strokeWidth="2" transform="rotate(-5 220 350)" />
-            <circle cx="325" cy="314" r="10" fill="#1F2937" stroke="#111827" strokeWidth="2" transform="rotate(-5 220 350)" />
-            {/* Ventilation Hex Grille Slots */}
-            <g opacity="0.4" stroke="#5C605C" strokeWidth="1.5" strokeDasharray="3 3">
-              <line x1="100" y1="360" x2="340" y2="360" transform="rotate(-5 220 350)" />
-              <line x1="100" y1="380" x2="340" y2="380" transform="rotate(-5 220 350)" />
-              <line x1="100" y1="400" x2="340" y2="400" transform="rotate(-5 220 350)" />
-            </g>
-          </g>
-
-          {/* LAYER 3: Hybrid Solar Inverter (Foreground Layer, front center-right) */}
-          <g id="hero-layer-inverter" className="hv-anim-inverter">
-            {/* Clean White Architectural Casing */}
-            <rect
-              x="250"
-              y="170"
-              width="220"
-              height="330"
-              rx="24"
-              fill="url(#hv-inverter-body)"
-              stroke="#DDE1DC"
-              strokeWidth="2"
-            />
-            {/* Side Cooling Heat Sink Fins */}
-            <rect x="238" y="240" width="12" height="180" rx="3" fill="#9FA59F" opacity="0.7" />
-            <rect x="470" y="240" width="12" height="180" rx="3" fill="#9FA59F" opacity="0.7" />
-            {/* Glossy Black Display Portal */}
-            <rect
-              x="278"
-              y="210"
-              width="164"
-              height="110"
-              rx="16"
-              fill="#111311"
-              stroke="#2E332E"
-              strokeWidth="1.5"
-            />
-            {/* Glowing Circular State Halo (Volt Lime) */}
-            <circle cx="360" cy="255" r="26" stroke="#CEF23E" strokeWidth="3.5" strokeDasharray="120 40" />
-            <circle cx="360" cy="255" r="18" fill="#CEF23E" fillOpacity="0.15" />
-            {/* Central Power Metric Display LED */}
-            <rect x="352" y="251" width="16" height="8" rx="2" fill="#CEF23E" />
-            {/* Bottom Status LED Indicators */}
-            <circle cx="310" cy="460" r="4" fill="#CEF23E" />
-            <circle cx="330" cy="460" r="4" fill="#111311" opacity="0.3" />
-            <circle cx="350" cy="460" r="4" fill="#111311" opacity="0.3" />
-            {/* DC Switch Disconnector */}
-            <rect x="410" y="448" width="32" height="24" rx="6" fill="#111311" />
-            <line x1="426" y1="454" x2="426" y2="466" stroke="#CEF23E" strokeWidth="2.5" strokeLinecap="round" />
-          </g>
-        </svg>
-      </div>
-
-      {/* Floating Glass Info Card 1: Panel Metric (Top Left) */}
-      <div
-        className="absolute -top-2 left-2 sm:-left-3 p-3 sm:p-3.5 rounded-2xl glass-card bg-white/90 border border-white shadow-[0_12px_28px_-6px_rgba(0,0,0,0.12)] backdrop-blur-md max-w-[190px] pointer-events-none hv-anim-card1"
-        data-motion="hero-glass"
-      >
-        <div className="flex items-center gap-2 mb-1">
-          <div className="w-5 h-5 rounded-full bg-[#111311] text-[#CEF23E] flex items-center justify-center shrink-0">
-            <Cpu className="w-3 h-3" />
+              stroke="#222C1D"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-full h-full"
+            >
+              {/* Circuit nodes and interconnected route lines */}
+              <circle cx="18" cy="32" r="3" fill="#CEF23E" stroke="#111311" strokeWidth="1.5" />
+              <line x1="18" y1="29" x2="35" y2="15" />
+              <line x1="35" y1="15" x2="60" y2="15" />
+              <circle cx="60" cy="15" r="2.5" fill="#111311" />
+              <line x1="60" y1="15" x2="78" y2="30" />
+              <circle cx="78" cy="30" r="2.5" fill="#111311" />
+              <line x1="35" y1="15" x2="52" y2="34" />
+              <circle cx="52" cy="34" r="3.5" fill="#CEF23E" stroke="#111311" strokeWidth="1.5" />
+              <line x1="52" y1="34" x2="88" y2="34" />
+              <circle cx="88" cy="34" r="2.5" fill="#111311" />
+            </svg>
           </div>
-          <span className="text-[10px] sm:text-[11px] font-mono font-bold text-[#111311] tracking-tight">
-            TOPCon 620W
-          </span>
+          <div className="text-[11px] font-semibold text-[#161D13] leading-tight">
+            Station n. 3456
+          </div>
+          <div className="text-[9.5px] font-mono text-[#4A5543] mt-0.5">
+            (4 km - 12000 v)
+          </div>
         </div>
-        <p className="text-[11px] text-[#5C605C] font-mono leading-tight">
-          22.6% N-Type Bifacial
-        </p>
+
+        {/* Floating Glass Card 2: Glowing Energy Pill Capsule */}
+        <div
+          data-motion="hero-glass"
+          className="absolute top-14 right-2 sm:right-6 z-20 backdrop-blur-xl bg-white/70 border border-white/80 shadow-[0_16px_36px_-10px_rgba(0,0,0,0.12)] rounded-2xl p-3 w-[84px] sm:w-[96px] aspect-square flex flex-col items-center justify-center transition-transform duration-500 hover:-translate-y-1.5"
+        >
+          {/* Vertical Energy Tube Capsule */}
+          <div className="relative w-5 h-16 rounded-full bg-[#E5E9E0] p-[2px] shadow-inner flex flex-col justify-end overflow-hidden">
+            {/* Liquid Glow Level */}
+            <div
+              className="w-full rounded-full transition-all duration-1000"
+              style={{
+                height: "82%",
+                background: "linear-gradient(180deg, #FFFFFF 0%, #D8FA42 35%, #22C55E 75%, #06B6D4 100%)",
+                boxShadow: "0 0 10px rgba(216,250,66,0.8)",
+              }}
+            />
+            {/* Glass shine line */}
+            <div className="absolute top-1 left-1.5 w-[2px] h-8 bg-white/70 rounded-full pointer-events-none" />
+          </div>
+        </div>
       </div>
 
-      {/* Floating Glass Info Card 2: Battery Metric (Bottom Right) */}
-      <div
-        className="absolute -bottom-3 right-2 sm:-right-4 p-3 sm:p-3.5 rounded-2xl glass-card bg-white/90 border border-white shadow-[0_12px_28px_-6px_rgba(0,0,0,0.12)] backdrop-blur-md min-w-[180px] pointer-events-none hv-anim-card2"
-        data-motion="hero-glass"
-      >
-        <div className="flex items-center justify-between gap-2 mb-1.5">
-          <div className="flex items-center gap-1.5">
-            <div className="w-5 h-5 rounded-full bg-[#CEF23E] text-[#111311] flex items-center justify-center shrink-0">
-              <Zap className="w-3 h-3 fill-current" />
-            </div>
-            <span className="text-[10px] sm:text-[11px] font-mono font-bold text-[#111311]">
-              LiFePO4 ESS
+      {/* Location / Hub Pin Indicator below model */}
+      <div className="w-full flex items-start justify-end pr-4 sm:pr-8 -mt-2 z-20">
+        <div className="flex items-start gap-3 text-left">
+          {/* Round navigation compass button */}
+          <div className="w-8 h-8 rounded-full bg-white/90 border border-[#D5DAD0] shadow-sm flex items-center justify-center shrink-0 text-[#111311] transition-transform hover:scale-110">
+            <Navigation className="w-3.5 h-3.5 fill-[#111311] rotate-45" />
+          </div>
+
+          <div className="flex flex-col">
+            <span className="text-[12px] font-semibold text-[#111311] leading-tight">
+              Tejgaon Industrial Area
             </span>
+            <span className="text-[11px] text-[#5C6358] leading-tight">
+              Dhaka, Bangladesh
+            </span>
+            <a
+              href="#quote-section"
+              className="text-[11px] font-medium text-[#111311] underline underline-offset-2 decoration-[#111311] hover:text-[#426B1F] transition-colors mt-0.5"
+            >
+              Closest station to you
+            </a>
           </div>
-          <span className="text-[9px] font-mono text-[#111311] bg-[#CEF23E] px-1.5 py-0.5 rounded-full font-bold">
-            6000+ CYC
-          </span>
         </div>
-        <div className="w-full h-1.5 rounded-full bg-[#EDEDED] overflow-hidden">
-          <div className="h-full rounded-full bg-gradient-to-r from-[#CEF23E] to-[#B8DC2F] w-[92%]" />
-        </div>
-        <span className="text-[10px] font-mono text-[#5C605C] mt-1 block">
-          48V – 51.2V Prismatic Banks
-        </span>
       </div>
     </div>
   );

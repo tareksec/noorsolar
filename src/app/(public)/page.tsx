@@ -20,6 +20,8 @@ import { PartnersStrip } from "@/components/sections/partners-strip";
 import { TextMarquee } from "@/components/sections/text-marquee";
 import { ServicesSolutions } from "@/components/sections/services-solutions";
 import { WhyChooseUs } from "@/components/sections/why-choose-us";
+import { SustainabilityImpact } from "@/components/sections/sustainability-impact";
+import { VideoCtaBanner } from "@/components/sections/video-cta-banner";
 import dynamic from "next/dynamic";
 import { DynamicHomeSections } from "@/components/sections/dynamic-home-sections";
 
@@ -120,7 +122,13 @@ export default async function HomePage() {
       {/* 5. Trusted Expertise & Key Metrics (Design Match) */}
       <WhyChooseUs />
 
-      {/* 6. Certifications Grid (Server Component) */}
+      {/* 6. Built for Lower Impact & Cost Efficiency (Design Match) */}
+      <SustainabilityImpact />
+
+      {/* 7. Video CTA: Container-Scale Solar Supply (Robotic Assembly Video) */}
+      <VideoCtaBanner />
+
+      {/* 8. Certifications Grid (Server Component) */}
       <CertificationsSection certifications={certifications} />
 
       {/* 7. How Ordering Works Sequence (Process Section) */}

@@ -1,10 +1,15 @@
 "use client";
 
-import React, { useRef, useState, useEffect, useCallback } from "react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { ProductCard } from "@/components/product/product-card";
-import { motion, useReducedMotion } from "motion/react";
-import { isPointerFine } from "@/lib/motion";
+import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+} from "motion/react";
+import { ArrowUpRight, CheckCircle2, ShieldCheck } from "lucide-react";
 
 interface CarouselProduct {
   id: string;
@@ -24,205 +29,214 @@ interface FeaturedCarouselProps {
   products: CarouselProduct[];
 }
 
-export function FeaturedCarousel({ products }: FeaturedCarouselProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const shouldReduceMotion = useReducedMotion();
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
+export function throttle(fn: (...args: any[]) => any, wait: number) {
+  let shouldWait = false;
 
-  // Custom "Drag" cursor state
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStartRef = useRef({ startX: 0, scrollLeft: 0 });
-
-  const updateProgress = useCallback(() => {
-    if (!scrollRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-    const maxScroll = scrollWidth - clientWidth;
-    if (maxScroll > 0) {
-      const p = Math.min(1, Math.max(0, scrollLeft / maxScroll));
-      setScrollProgress(p);
-      const idx = Math.round(p * (products.length - 1));
-      setActiveIndex(idx);
+  return function throttledFunction(this: any, ...args: any[]) {
+    if (!shouldWait) {
+      fn.apply(this, args);
+      shouldWait = true;
+      setTimeout(() => (shouldWait = false), wait);
     }
-  }, [products.length]);
+  };
+}
+
+export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.ReactNode {
+  const mainRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [carouselEndPosition, setCarouselEndPosition] = useState(0);
+
+  const displayProducts = products && products.length > 0 ? products.slice(0, 8) : [];
+
+  const { scrollYProgress } = useScroll({
+    target: mainRef,
+    offset: ["start start", "end end"],
+  });
+
+  // 1. Map vertical scroll progress to full horizontal travel distance
+  const rawX = useTransform(scrollYProgress, [0, 1], [0, carouselEndPosition]);
+
+  // 2. Slow, graceful, and smooth spring physics so the slide moves calmly and gently
+  const x = useSpring(rawX, {
+    stiffness: 55,
+    damping: 28,
+    mass: 1.2,
+    restDelta: 0.001,
+  });
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.addEventListener("scroll", updateProgress, { passive: true });
-    updateProgress();
-    return () => el.removeEventListener("scroll", updateProgress);
-  }, [updateProgress]);
+    if (!carouselRef.current) return;
 
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollAmount = clientWidth * 0.75;
-      scrollRef.current.scrollTo({
-        left: direction === "left" ? scrollLeft - scrollAmount : scrollLeft + scrollAmount,
-        behavior: shouldReduceMotion ? "auto" : "smooth",
-      });
-    }
-  };
+    const resetCarouselEndPosition = () => {
+      if (carouselRef.current) {
+        const totalWidth = carouselRef.current.scrollWidth;
+        const viewportWidth = window.innerWidth;
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        const paddingOffset = window.innerWidth < 640 ? 24 : 48;
+        const newPosition = totalWidth - viewportWidth + scrollbarWidth + paddingOffset;
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      scroll("left");
-    } else if (e.key === "ArrowRight") {
-      e.preventDefault();
-      scroll("right");
-    }
-  };
-
-  // Mouse Drag to Scroll handlers
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!isPointerFine()) return;
-    const el = scrollRef.current;
-    if (!el) return;
-    setIsDragging(true);
-    dragStartRef.current = {
-      startX: e.pageX - el.offsetLeft,
-      scrollLeft: el.scrollLeft,
+        setCarouselEndPosition(-Math.max(0, newPosition));
+      }
     };
-  };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isPointerFine()) return;
-    const container = containerRef.current;
-    if (container) {
-      const rect = container.getBoundingClientRect();
-      setCursorPos({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
-    }
+    resetCarouselEndPosition();
+    const handleResize = throttle(resetCarouselEndPosition, 30);
 
-    if (!isDragging) return;
-    const el = scrollRef.current;
-    if (!el) return;
-    e.preventDefault();
-    const x = e.pageX - el.offsetLeft;
-    const walk = (x - dragStartRef.current.startX) * 1.5;
-    el.scrollLeft = dragStartRef.current.scrollLeft - walk;
-  };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [displayProducts.length]);
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  if (!products || products.length === 0) return null;
+  if (displayProducts.length === 0) return null;
 
   return (
-    <section
-      className="py-20 bg-[#EDEDED] border-y border-[#DDE1DC] overflow-hidden relative"
-      aria-roledescription="carousel"
-      aria-label="Featured equipment carousel"
-      data-motion="featured-carousel"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E]" />
-              <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C]">
-                Featured Equipment
-              </span>
-            </div>
-            <h2 className="text-3xl font-bold tracking-tight text-[#111311]">
-              Engineered for Highest Yield
-            </h2>
-          </div>
+    <section ref={mainRef} className="relative bg-[#E4E7E4]">
+      
+      {/* 1. Header: Shop Solar / Featured Products */}
+      <div className="pt-16 sm:pt-24 pb-6 text-center max-w-3xl mx-auto px-4">
+        {/* Amber Kicker Lines */}
+        <div className="inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-semibold tracking-wider text-[#C49335] uppercase mb-3">
+          <span className="w-8 sm:w-12 h-[1.5px] bg-[#C49335]/70 rounded-full" />
+          <span>Shop Solar</span>
+          <span className="w-8 sm:w-12 h-[1.5px] bg-[#C49335]/70 rounded-full" />
+        </div>
 
-          {/* Navigation Arrows */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => scroll("left")}
-              className="p-3 rounded-full bg-white border border-[#DDE1DC] hover:border-[#111311] text-[#111311] hover:bg-[#111311] hover:text-white transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] cursor-pointer"
-              aria-label="Previous equipment slide"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => scroll("right")}
-              className="p-3 rounded-full bg-white border border-[#DDE1DC] hover:border-[#111311] text-[#111311] hover:bg-[#111311] hover:text-white transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] cursor-pointer"
-              aria-label="Next equipment slide"
-            >
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
+        {/* Heading */}
+        <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#111311] leading-tight">
+          Featured <span className="text-[#889182] font-extrabold">Products</span>
+        </h2>
+
+        {/* Subtitle */}
+        <p className="mt-3 text-sm sm:text-base text-[#5C605C] max-w-2xl mx-auto leading-relaxed">
+          Genuine panels, inverters, batteries and UPS systems — each with digital warranty and authenticity on every serial.
+        </p>
+
+        {/* Scroll Progress Bar indicator */}
+        <div className="max-w-xs mx-auto mt-4 h-1 bg-[#D8E1D5] rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-[#111311] rounded-full"
+            style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
+          />
         </div>
       </div>
 
-      {/* Horizontal Carousel Track */}
-      <div
-        ref={containerRef}
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => {
-          setIsHovered(false);
-          setIsDragging(false);
-        }}
-        onMouseMove={handleMouseMove}
-      >
-        {/* Custom "Drag" Cursor for Desktop Pointer */}
-        {isHovered && !shouldReduceMotion && (
-          <div
-            className="pointer-events-none hidden md:flex items-center justify-center absolute z-40 px-3 py-1.5 rounded-full bg-[#111311] text-[#CEF23E] text-[11px] font-mono font-bold tracking-wider shadow-lg transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-75"
-            style={{
-              left: `${cursorPos.x}px`,
-              top: `${cursorPos.y}px`,
-              scale: isDragging ? 0.9 : 1,
-            }}
+      {/* 2. Slow & Smooth Sticky Scroll Container (450vh allows calm, gradual sliding) */}
+      <div className="w-full relative" style={{ height: "450vh" }}>
+        <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
+          
+          {/* Moving Horizontal Track */}
+          <motion.div
+            ref={carouselRef}
+            className="flex gap-6 sm:gap-8 px-6 sm:px-12 items-center will-change-transform"
+            style={{ x }}
           >
-            {isDragging ? "DRAGGING" : "DRAG ↔"}
-          </div>
-        )}
+            {displayProducts.map((product, index) => {
+              const imageSrc =
+                product.images?.[0]?.url || "/photos/cat-solar-panels.webp";
+              const categoryTitle =
+                product.category?.name?.toUpperCase() || "SOLAR EQUIPMENT";
 
-        <div
-          ref={scrollRef}
-          onKeyDown={handleKeyDown}
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          tabIndex={0}
-          role="region"
-          aria-label="Equipment slides. Use arrow keys to navigate."
-          className={`featured-carousel-scroll flex gap-6 overflow-x-auto pb-6 pt-2 scrollbar-none snap-x snap-mandatory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-3xl ${
-            isDragging ? "cursor-grabbing select-none snap-none" : "cursor-grab"
-          }`}
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {products.map((prod, idx) => (
-            <motion.div
-              key={prod.id}
-              whileHover={shouldReduceMotion ? {} : { y: -4 }}
-              transition={{ duration: 0.2 }}
-              className="w-[280px] sm:w-[320px] md:w-[360px] shrink-0 snap-start"
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${idx + 1} of ${products.length}: ${prod.name}`}
-            >
-              <ProductCard product={prod} />
-            </motion.div>
-          ))}
-        </div>
+              return (
+                <div
+                  key={product.id || index}
+                  className="w-[280px] sm:w-[330px] md:w-[360px] h-[450px] sm:h-[470px] shrink-0 rounded-[28px] bg-white border border-[#DDE1DC] shadow-[0_6px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-500 overflow-hidden flex flex-col justify-between group"
+                >
+                  <Link href={`/product/${product.slug}`} className="flex flex-col h-full">
+                    
+                    {/* Top Studio Image Area with Light Neutral Display Canvas */}
+                    <div className="relative w-full h-56 sm:h-60 bg-[#F5F7F3] border-b border-[#E8ECE5] overflow-hidden flex items-center justify-center p-6">
+                      <Image
+                        src={imageSrc}
+                        alt={product.name}
+                        fill
+                        sizes="(max-width: 640px) 280px, 360px"
+                        className="object-contain p-4 group-hover:scale-108 transition-transform duration-500 ease-out pointer-events-none"
+                      />
 
-        {/* Carousel Progress Indicator Bar */}
-        <div className="max-w-xs mx-auto mt-6 flex items-center gap-3">
-          <div className="flex-1 h-1 bg-[#DDE1DC] rounded-full overflow-hidden">
-            <div
-              className="h-full bg-[#111311] rounded-full transition-all duration-150"
-              style={{ width: `${Math.max(15, scrollProgress * 100)}%` }}
-            />
-          </div>
-          <span className="text-[11px] font-mono text-[#5C605C] shrink-0 font-medium">
-            {activeIndex + 1} / {products.length}
-          </span>
+                      {/* Brand Pill */}
+                      {product.brand && (
+                        <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-white/95 border border-[#DDE1DC] text-[10px] font-mono font-bold text-[#111311] shadow-2xs">
+                          {product.brand}
+                        </div>
+                      )}
+
+                      {/* Item Index Pill */}
+                      <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-[#111311] text-white text-[10px] font-mono font-bold">
+                        0{index + 1}
+                      </div>
+                    </div>
+
+                    {/* Content Box */}
+                    <div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
+                      <div>
+                        {/* Category Kicker */}
+                        <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B7567] font-semibold block mb-1.5">
+                          {categoryTitle}
+                        </span>
+
+                        {/* Product Name */}
+                        <h3 className="text-base sm:text-lg font-bold text-[#111311] group-hover:text-black line-clamp-2 leading-snug mb-2.5">
+                          {product.name}
+                        </h3>
+
+                        {/* Model / Subtitle */}
+                        {product.model && (
+                          <p className="text-xs font-mono text-[#7A8476] mb-3">
+                            Model: {product.model}
+                          </p>
+                        )}
+
+                        {/* Top Spec Chip if available */}
+                        {product.specs && product.specs[0] && (
+                          <div className="inline-block px-2.5 py-1 rounded-md bg-[#F4F6F2] border border-[#E2E6DF] text-[11px] font-mono text-[#4C5447]">
+                            <span className="font-semibold text-[#111311]">
+                              {product.specs[0].label}:
+                            </span>{" "}
+                            {product.specs[0].value}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Bottom Footer Info */}
+                      <div className="pt-3.5 border-t border-[#F0F2EF] flex items-center justify-between mt-auto">
+                        <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full font-semibold">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                          <span>In Stock</span>
+                        </span>
+
+                        <span className="inline-flex items-center gap-1 text-xs font-bold text-[#111311] group-hover:text-black group-hover:translate-x-1 transition-all">
+                          <span>View Details</span>
+                          <ArrowUpRight className="w-3.5 h-3.5 text-[#111311]" />
+                        </span>
+                      </div>
+
+                    </div>
+
+                  </Link>
+                </div>
+              );
+            })}
+          </motion.div>
+
         </div>
       </div>
+
+      {/* 3. Bottom Transition Strip to Next Section */}
+      <div className="bg-[#111311] py-12 px-4 text-center text-white border-t border-[#252A25]">
+        <div className="max-w-xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-left">
+            <span className="text-xs font-mono text-[#CEF23E] block">B2B Wholesale Catalog</span>
+            <p className="text-sm font-semibold text-white">Explore all equipment models & specs</p>
+          </div>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#CEF23E] hover:bg-[#b8da35] text-[#111311] text-xs font-bold transition-all hover:scale-105 shrink-0"
+          >
+            <span>View All {products.length} Products</span>
+            <ArrowUpRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+
     </section>
   );
 }

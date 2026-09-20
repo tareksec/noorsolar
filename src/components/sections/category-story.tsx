@@ -68,7 +68,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
       highlight: "6,000+ Cycles @ 80% Depth of Discharge",
       body: "Safe, durable Lithium Iron Phosphate (LiFePO4) storage batteries. Available in standard 3U/4U 51.2V rack-mountable units as well as high-voltage modular systems for three-phase commercial hybrid solar backups.",
       icon: BatteryCharging,
-      previewImage: "/photos/story-batteries.webp",
+      previewImage: "/bettry/500_F_2090872600_mpL6CKZulRNh7R8OMe31iD00cXQpEpR7.jpg",
       counters: [
         { label: "Nominal Pack Energy", value: 14.33, prefix: "", suffix: " kWh", decimals: 2, subtext: "51.2V 280Ah Grade-A" },
         { label: "Cycle Life Rating", value: 6000, prefix: "", suffix: "+", decimals: 0, subtext: "@ 80% Depth of Discharge" },
@@ -87,7 +87,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
       highlight: "Up to 30kW Industrial Units & 98.7% Peak Efficiency",
       body: "High-efficiency pure sine wave solar inverters engineered for maximum uptime and grid stability. Featuring dual and 3-channel MPPT tracking, IP65/IP66 outdoor enclosures, and sub-10ms automatic UPS transfer for mission-critical industrial loads.",
       icon: Cpu,
-      previewImage: "/photos/story-inverters.webp",
+      previewImage: "/Inverter/solar-inverter-with-battery-storage.jpg",
       counters: [
         { label: "Rated AC Output", value: 10, prefix: "", suffix: " kW", decimals: 0, subtext: "3-Phase 380V/400V" },
         { label: "Max Peak Efficiency", value: 98.7, prefix: "", suffix: "%", decimals: 1, subtext: "Multi-MPPT High Yield" },

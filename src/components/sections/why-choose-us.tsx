@@ -6,20 +6,20 @@ import { AnimatedCounter } from "@/components/ui/animated-counter";
 
 export function WhyChooseUs() {
   return (
-    <section className="py-20 lg:py-28 bg-[#EDEDED] border-b border-[#DDE1DC]">
-      <div className="page-shell">
+    <section id="why-choose-us" className="pt-6 sm:pt-8 pb-20 lg:pb-28 bg-[#EDEDED] border-b border-[#DDE1DC]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-12 lg:mb-16">
+        <div className="mb-10 lg:mb-14">
           {/* Eyebrow */}
-          <div className="flex items-center gap-2 mb-3">
-            <span className="w-2 h-2 rounded-full border-2 border-[#111311] inline-block" />
-            <span className="text-xs font-mono uppercase tracking-wider text-[#111311] font-semibold">
+          <div className="flex items-center gap-2.5 mb-3">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E] ring-2 ring-[#111311]/20 inline-block" />
+            <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C] font-semibold">
               Why Choose Noor Solar Energy
             </span>
           </div>
 
-          {/* Bold Condensed Title */}
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#111311] uppercase max-w-2xl leading-[1.08]">
+          {/* Clean Balanced Title */}
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#111311] max-w-3xl leading-[1.12]">
             Trusted Expertise. Reliable Results. Every Time.
           </h2>
         </div>
@@ -57,8 +57,8 @@ export function WhyChooseUs() {
             <div className="grid grid-cols-2 gap-4 sm:gap-6 mb-8">
               <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-[#DDE1DC] bg-[#E4E7E4] shadow-xs group">
                 <Image
-                  src="/photos/about-inspection.webp"
-                  alt="Engineer inspecting commercial solar inverter and electrical connections"
+                  src="/Inverter/technician-engineering-setting-inverter-solar-panel-in-electrical-room-service-engineer.jpg"
+                  alt="Engineer setting commercial solar inverter in electrical room"
                   fill
                   sizes="(max-width: 1024px) 50vw, 25vw"
                   className="object-cover object-center group-hover:scale-106 transition-transform duration-500"
@@ -67,8 +67,8 @@ export function WhyChooseUs() {
 
               <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border border-[#DDE1DC] bg-[#E4E7E4] shadow-xs group">
                 <Image
-                  src="/photos/process-2-specs.webp"
-                  alt="Engineers reviewing technical datasheets and project schematics"
+                  src="/Inverter/electrician-installing-solar-panel-system-wiring-inverter-and-electric-box.jpg"
+                  alt="Electrician installing solar inverter and wiring electric box"
                   fill
                   sizes="(max-width: 1024px) 50vw, 25vw"
                   className="object-cover object-center group-hover:scale-106 transition-transform duration-500"
