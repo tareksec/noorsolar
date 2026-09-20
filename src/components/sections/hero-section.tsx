@@ -22,30 +22,19 @@ export function HeroSection({
   return (
     <section className="relative w-full p-2.5 sm:p-4 lg:p-6 bg-white">
       <div className="relative w-full min-h-[calc(100vh-1.25rem)] sm:min-h-[calc(100vh-2rem)] lg:min-h-[calc(100vh-3rem)] flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl lg:rounded-[36px] border-2 sm:border-[3px] border-white shadow-[0_20px_50px_rgba(0,0,0,0.18)] ring-1 ring-black/5 bg-[#0A0D0A] text-white">
-        {/* ================= BACKGROUND VIDEO ================= */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none scale-[1.01] opacity-85"
-      >
-        <source
-          src="/video/Solar_energy_commercial_video_20260920141958.mp4"
-          type="video/mp4"
-        />
-      </video>
-
-      {/* ================= CINEMATIC OVERLAYS & MIST GLOW ================= */}
-      {/* Horizontal contrast gradient for crystal clear text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0B0F19]/92 via-[#0B0F19]/65 to-[#0B0F19]/35 pointer-events-none" />
-      {/* Subtle top & bottom shadow gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0B0F19]/65 via-transparent to-[#0B0F19]/85 pointer-events-none" />
-
-      {/* Brand Volt Lime & Sky Cyan atmospheric glow */}
-      <div className="absolute top-1/3 left-1/3 w-[550px] h-[550px] bg-[#CEF23E]/12 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-sky-500/15 rounded-full blur-[140px] pointer-events-none" />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        >
+          <source
+            src="/video/Solar_energy_commercial_video_20260920141958.mp4"
+            type="video/mp4"
+          />
+        </video>
 
       {/* ================= MAIN HERO BODY ================= */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-grow flex flex-col justify-between pt-26 sm:pt-32 pb-8 sm:pb-10">
