@@ -18,9 +18,17 @@ function runCommand(command, description) {
 runCommand("npx prisma generate", "Generating Prisma Client");
 
 // 2. Database Sync & Seed if DATABASE_URL is configured
+if (process.env.DATABASE_URL) {
+  let url = process.env.DATABASE_URL.trim();
+  while ((url.startsWith('"') && url.endsWith('"')) || (url.startsWith("'") && url.endsWith("'"))) {
+    url = url.slice(1, -1).trim();
+  }
+  process.env.DATABASE_URL = url;
+}
+
 const dbUrl = process.env.DATABASE_URL;
-if (dbUrl && !dbUrl.includes("placeholder")) {
-  console.log("📦 DATABASE_URL detected. Synchronizing schema to database...");
+if (dbUrl && dbUrl.startsWith("mysql://")) {
+  console.log("📦 Valid MySQL DATABASE_URL detected. Synchronizing schema to database...");
   const pushed = runCommand("npx prisma db push --skip-generate", "Syncing database schema (prisma db push)");
   if (pushed) {
     runCommand("npx tsx prisma/seed.ts", "Seeding database with categories, products, and admin");

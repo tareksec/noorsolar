@@ -25,6 +25,13 @@ const envSchema = z.object({
 });
 
 function validateEnv() {
+  if (process.env.DATABASE_URL) {
+    let url = process.env.DATABASE_URL.trim();
+    while ((url.startsWith('"') && url.endsWith('"')) || (url.startsWith("'") && url.endsWith("'"))) {
+      url = url.slice(1, -1).trim();
+    }
+    process.env.DATABASE_URL = url;
+  }
   const result = envSchema.safeParse(process.env);
   if (!result.success) {
     console.warn("⚠️ Warning: Some environment variables are not set. Using safe fallback defaults for build.");
