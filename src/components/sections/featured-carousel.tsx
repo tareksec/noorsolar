@@ -58,11 +58,11 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
   // 1. Map vertical scroll progress to full horizontal travel distance
   const rawX = useTransform(scrollYProgress, [0, 1], [0, carouselEndPosition]);
 
-  // 2. Slow, graceful, and smooth spring physics so the slide moves calmly and gently
+  // 2. Faster, snappier, and butter-smooth spring physics
   const x = useSpring(rawX, {
-    stiffness: 45,
+    stiffness: 120,
     damping: 24,
-    mass: 0.8,
+    mass: 0.35,
   });
 
   useEffect(() => {
@@ -131,8 +131,8 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
         </div>
       </div>
 
-      {/* 2. Slow & Smooth Sticky Scroll Container (450vh allows calm, gradual sliding) */}
-      <div className="w-full relative" style={{ height: "450vh" }}>
+      {/* 2. Fast & Smooth Sticky Scroll Container (240vh allows brisk, effortless glide) */}
+      <div className="w-full relative" style={{ height: "240vh" }}>
         <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
           
           {/* Moving Horizontal Track */}
