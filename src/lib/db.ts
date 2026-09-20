@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
-// Ensure DATABASE_URL is defined even during CI/CD or Vercel build phase
+// Ensure DATABASE_URL is defined even during CI/CD or build phase
 if (!process.env.DATABASE_URL) {
-  process.env.DATABASE_URL = "file:./dev.db";
+  process.env.DATABASE_URL = "mysql://root:@localhost:3306/noorsolar";
 }
 
 const globalForPrisma = globalThis as unknown as {

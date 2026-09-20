@@ -4,7 +4,7 @@ const envSchema = z.object({
   DATABASE_URL: z
     .string()
     .min(1, "DATABASE_URL is required")
-    .default("file:./dev.db"),
+    .default("mysql://root:@localhost:3306/noorsolar"),
   AUTH_SECRET: z
     .string()
     .min(16, "AUTH_SECRET must be at least 16 characters (recommended 32+)")
