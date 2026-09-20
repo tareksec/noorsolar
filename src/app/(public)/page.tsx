@@ -18,6 +18,8 @@ import { CertificationsSection } from "@/components/sections/certifications-sect
 import { OrderingSteps } from "@/components/sections/ordering-steps";
 import { PartnersStrip } from "@/components/sections/partners-strip";
 import { TextMarquee } from "@/components/sections/text-marquee";
+import { ServicesSolutions } from "@/components/sections/services-solutions";
+import { WhyChooseUs } from "@/components/sections/why-choose-us";
 import dynamic from "next/dynamic";
 import { DynamicHomeSections } from "@/components/sections/dynamic-home-sections";
 
@@ -111,6 +113,12 @@ export default async function HomePage() {
 
       {/* 3. Business Statistics Band (Server Component - 4 Counters) */}
       <StatsBand stats={stats} />
+
+      {/* 4. Complete Solar Solutions For Every Project (Design Match) */}
+      <ServicesSolutions />
+
+      {/* 5. Trusted Expertise & Key Metrics (Design Match) */}
+      <WhyChooseUs />
 
       {/* 6. Certifications Grid (Server Component) */}
       <CertificationsSection certifications={certifications} />
