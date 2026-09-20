@@ -52,35 +52,40 @@ function localizeProduct<
 }
 
 export async function getFeaturedProducts(locale?: string) {
-  let products = await db.product.findMany({
-    where: { isActive: true, isFeatured: true },
-    orderBy: { sortOrder: "asc" },
-    include: {
-      category: true,
-      images: { orderBy: { sortOrder: "asc" } },
-      specs: { orderBy: { sortOrder: "asc" } },
-    },
-  });
-
-  // Ensure Shop Solar carousel always has a rich variety of at least 12 products
-  if (products.length < 12) {
-    const additional = await db.product.findMany({
-      where: {
-        isActive: true,
-        id: { notIn: products.map((p) => p.id) },
-      },
+  try {
+    let products = await db.product.findMany({
+      where: { isActive: true, isFeatured: true },
       orderBy: { sortOrder: "asc" },
-      take: 12 - products.length,
       include: {
         category: true,
         images: { orderBy: { sortOrder: "asc" } },
         specs: { orderBy: { sortOrder: "asc" } },
       },
     });
-    products = [...products, ...additional];
-  }
 
-  return products.map((p) => localizeProduct(p, locale));
+    // Ensure Shop Solar carousel always has a rich variety of at least 12 products
+    if (products.length < 12) {
+      const additional = await db.product.findMany({
+        where: {
+          isActive: true,
+          id: { notIn: products.map((p) => p.id) },
+        },
+        orderBy: { sortOrder: "asc" },
+        take: 12 - products.length,
+        include: {
+          category: true,
+          images: { orderBy: { sortOrder: "asc" } },
+          specs: { orderBy: { sortOrder: "asc" } },
+        },
+      });
+      products = [...products, ...additional];
+    }
+
+    return products.map((p) => localizeProduct(p, locale));
+  } catch (error) {
+    console.warn("getFeaturedProducts: database not available, returning empty list", error);
+    return [];
+  }
 }
 
 export async function getAllProducts(options?: {
@@ -88,126 +93,144 @@ export async function getAllProducts(options?: {
   query?: string;
   locale?: string;
 }) {
-  const where: Prisma.ProductWhereInput = { isActive: true };
+  try {
+    const where: Prisma.ProductWhereInput = { isActive: true };
 
-  if (options?.categorySlug && options.categorySlug !== "all") {
-    where.category = { slug: options.categorySlug };
+    if (options?.categorySlug && options.categorySlug !== "all") {
+      where.category = { slug: options.categorySlug };
+    }
+
+    if (options?.query && options.query.trim()) {
+      const q = options.query.trim();
+      where.OR = [
+        { name: { contains: q } },
+        { shortDescription: { contains: q } },
+        { description: { contains: q } },
+        { model: { contains: q } },
+        { nameBn: { contains: q } },
+        { shortDescriptionBn: { contains: q } },
+        { descriptionBn: { contains: q } },
+      ];
+    }
+
+    const products = await db.product.findMany({
+      where,
+      orderBy: { sortOrder: "asc" },
+      include: {
+        category: true,
+        images: { orderBy: { sortOrder: "asc" } },
+        specs: { orderBy: { sortOrder: "asc" } },
+      },
+    });
+
+    return products.map((p) => localizeProduct(p, options?.locale));
+  } catch (error) {
+    console.warn("getAllProducts: database not available, returning empty list", error);
+    return [];
   }
-
-  if (options?.query && options.query.trim()) {
-    const q = options.query.trim();
-    where.OR = [
-      { name: { contains: q } },
-      { shortDescription: { contains: q } },
-      { description: { contains: q } },
-      { model: { contains: q } },
-      { nameBn: { contains: q } },
-      { shortDescriptionBn: { contains: q } },
-      { descriptionBn: { contains: q } },
-    ];
-  }
-
-  const products = await db.product.findMany({
-    where,
-    orderBy: { sortOrder: "asc" },
-    include: {
-      category: true,
-      images: { orderBy: { sortOrder: "asc" } },
-      specs: { orderBy: { sortOrder: "asc" } },
-    },
-  });
-
-  return products.map((p) => localizeProduct(p, options?.locale));
 }
 
 export async function getProductBySlug(slug: string, locale?: string) {
-  const product = await db.product.findUnique({
-    where: { slug, isActive: true },
-    include: {
-      category: true,
-      images: { orderBy: { sortOrder: "asc" } },
-      specs: { orderBy: { sortOrder: "asc" } },
-    },
-  });
+  try {
+    const product = await db.product.findUnique({
+      where: { slug, isActive: true },
+      include: {
+        category: true,
+        images: { orderBy: { sortOrder: "asc" } },
+        specs: { orderBy: { sortOrder: "asc" } },
+      },
+    });
 
-  if (!product) return null;
+    if (!product) return null;
 
-  const related = await db.product.findMany({
-    where: {
-      categoryId: product.categoryId,
-      isActive: true,
-      id: { not: product.id },
-    },
-    take: 3,
-    orderBy: { sortOrder: "asc" },
-    include: {
-      category: true,
-      images: { orderBy: { sortOrder: "asc" } },
-      specs: { orderBy: { sortOrder: "asc" } },
-    },
-  });
+    const related = await db.product.findMany({
+      where: {
+        categoryId: product.categoryId,
+        isActive: true,
+        id: { not: product.id },
+      },
+      take: 3,
+      orderBy: { sortOrder: "asc" },
+      include: {
+        category: true,
+        images: { orderBy: { sortOrder: "asc" } },
+        specs: { orderBy: { sortOrder: "asc" } },
+      },
+    });
 
-  return {
-    product: localizeProduct(product, locale),
-    related: related.map((p) => localizeProduct(p, locale)),
-  };
+    return {
+      product: localizeProduct(product, locale),
+      related: related.map((p) => localizeProduct(p, locale)),
+    };
+  } catch (error) {
+    console.warn(`getProductBySlug: failed to fetch slug ${slug}`, error);
+    return null;
+  }
 }
 
 export async function getProductsByCategory(categorySlug: string, locale?: string) {
-  const products = await db.product.findMany({
-    where: {
-      category: { slug: categorySlug },
-      isActive: true,
-    },
-    orderBy: { sortOrder: "asc" },
-    include: {
-      category: true,
-      images: { orderBy: { sortOrder: "asc" } },
-      specs: { orderBy: { sortOrder: "asc" } },
-    },
-  });
+  try {
+    const products = await db.product.findMany({
+      where: {
+        category: { slug: categorySlug },
+        isActive: true,
+      },
+      orderBy: { sortOrder: "asc" },
+      include: {
+        category: true,
+        images: { orderBy: { sortOrder: "asc" } },
+        specs: { orderBy: { sortOrder: "asc" } },
+      },
+    });
 
-  return products.map((p) => localizeProduct(p, locale));
+    return products.map((p) => localizeProduct(p, locale));
+  } catch (error) {
+    console.warn(`getProductsByCategory: failed to fetch category ${categorySlug}`, error);
+    return [];
+  }
 }
 
 export async function getSpecHighlights() {
-  const specs = await db.productSpec.findMany({
-    where: {
-      product: { isActive: true },
-    },
-    include: {
-      product: {
-        include: { category: true },
-      },
-    },
-  });
-
-  // Calculate real metrics from specs (numbers stay Western digits)
   let maxPanelWatt = 700;
   let maxBatteryKwh = 15.36;
   let maxInverterKw = 100;
   let totalCatalogModels = 12;
 
-  const count = await db.product.count({ where: { isActive: true } });
-  if (count > 0) totalCatalogModels = count;
+  try {
+    const specs = await db.productSpec.findMany({
+      where: {
+        product: { isActive: true },
+      },
+      include: {
+        product: {
+          include: { category: true },
+        },
+      },
+    });
 
-  for (const s of specs) {
-    if (s.product.category.slug === "solar-panels") {
-      const match = s.value.match(/(\d+)\s*W/i);
-      if (match && parseInt(match[1]) > maxPanelWatt) {
-        maxPanelWatt = parseInt(match[1]);
-      }
-    } else if (s.product.category.slug === "lithium-batteries") {
-      const match = s.value.match(/([\d.]+)\s*kWh/i);
-      if (match && parseFloat(match[1]) > maxBatteryKwh) {
-        maxBatteryKwh = parseFloat(match[1]);
-      }
-    } else if (s.product.category.slug === "solar-inverters") {
-      const match = s.value.match(/(\d+)\s*kW/i);
-      if (match && parseInt(match[1]) > maxInverterKw) {
-        maxInverterKw = parseInt(match[1]);
+    const count = await db.product.count({ where: { isActive: true } });
+    if (count > 0) totalCatalogModels = count;
+
+    for (const s of specs) {
+      if (s.product.category.slug === "solar-panels") {
+        const match = s.value.match(/(\d+)\s*W/i);
+        if (match && parseInt(match[1]) > maxPanelWatt) {
+          maxPanelWatt = parseInt(match[1]);
+        }
+      } else if (s.product.category.slug === "lithium-batteries") {
+        const match = s.value.match(/([\d.]+)\s*kWh/i);
+        if (match && parseFloat(match[1]) > maxBatteryKwh) {
+          maxBatteryKwh = parseFloat(match[1]);
+        }
+      } else if (s.product.category.slug === "solar-inverters") {
+        const match = s.value.match(/(\d+)\s*kW/i);
+        if (match && parseInt(match[1]) > maxInverterKw) {
+          maxInverterKw = parseInt(match[1]);
+        }
       }
     }
+  } catch (error) {
+    console.warn("getSpecHighlights: database not available, using default highlights", error);
   }
 
   return {
@@ -217,3 +240,4 @@ export async function getSpecHighlights() {
     totalCatalogModels,
   };
 }
+
