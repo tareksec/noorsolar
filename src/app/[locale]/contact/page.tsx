@@ -1,11 +1,10 @@
-import React from "react";
-import Image from "next/image";
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { getSiteSettings } from "@/lib/data/settings";
+import { getProductBySlug } from "@/lib/data/products";
 import { ClosingCTA } from "@/components/sections/closing-cta";
-import { MapPin, Phone, Mail, Clock, MessageCircle, Sun, Headphones } from "lucide-react";
+import Link from "next/link";
 
 interface ContactPageProps {
   params: Promise<{
@@ -215,6 +214,16 @@ export default async function ContactPage({ params }: ContactPageProps) {
         />
 
       </div>
+      <ClosingCTA key={selected?.product.id || "general"} phoneDisplay={settings.phoneDisplay} whatsappNumber={settings.whatsapp}
+        headline={selected ? "Your equipment. Your requirements." : settings.closingCtaHeadline}
+        subheadline={settings.closingCtaSubheadline}
+        selectedProduct={selected ? { id: selected.product.id, slug: selected.product.slug, name: selected.product.name } : undefined} />
+      <div className="page-shell"><div className="contact-methods">
+        <div><p className="eyebrow">Email</p><a href={"mailto:" + settings.email}>{settings.email}</a></div>
+        <div><p className="eyebrow">Address</p><p className="text-sm mt-3 leading-relaxed">{settings.address}</p></div>
+        <div><p className="eyebrow">Opening hours</p><p className="text-sm mt-3 leading-relaxed">{settings.hours}</p></div>
+      </div></div>
     </div>
   );
 }
+

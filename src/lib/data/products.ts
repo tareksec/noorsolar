@@ -88,10 +88,10 @@ export async function getAllProducts(options?: {
   query?: string;
   locale?: string;
 }) {
-  const where: Prisma.ProductWhereInput = { isActive: true };
+  const where: Prisma.ProductWhereInput = { isActive: true, category: { isActive: true } };
 
   if (options?.categorySlug && options.categorySlug !== "all") {
-    where.category = { slug: options.categorySlug };
+    where.category = { slug: options.categorySlug, isActive: true };
   }
 
   if (options?.query && options.query.trim()) {
@@ -122,7 +122,7 @@ export async function getAllProducts(options?: {
 
 export async function getProductBySlug(slug: string, locale?: string) {
   const product = await db.product.findUnique({
-    where: { slug, isActive: true },
+    where: { slug, isActive: true, category: { isActive: true } },
     include: {
       category: true,
       images: { orderBy: { sortOrder: "asc" } },
@@ -156,7 +156,7 @@ export async function getProductBySlug(slug: string, locale?: string) {
 export async function getProductsByCategory(categorySlug: string, locale?: string) {
   const products = await db.product.findMany({
     where: {
-      category: { slug: categorySlug },
+      category: { slug: categorySlug, isActive: true },
       isActive: true,
     },
     orderBy: { sortOrder: "asc" },

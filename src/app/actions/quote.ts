@@ -72,6 +72,14 @@ export async function submitQuoteRequest(
 
     const data = validation.data;
 
+    if (data.productId) {
+      const product = await db.product.findFirst({
+        where: { id: data.productId, isActive: true, category: { isActive: true } },
+        select: { id: true },
+      });
+      if (!product) return { success: false, error: "This product is no longer available. Please choose another product or send a general enquiry." };
+    }
+
     // Save to database
     await db.quoteRequest.create({
       data: {
