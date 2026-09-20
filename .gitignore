@@ -52,6 +52,7 @@ yarn-error.log*
 next-env.d.ts
 
 docs/task-screenshots/
+docs/bangla-review.md
 source-images/
 .audit/
 .cache/

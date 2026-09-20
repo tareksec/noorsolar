@@ -12,15 +12,22 @@ if (!fs.existsSync(OUT_DIR)) {
   fs.mkdirSync(OUT_DIR, { recursive: true });
 }
 
+const BASE_URL = process.env.BASE_URL || "http://127.0.0.1:3000";
+
 const PAGES = [
-  { name: "home", path: "/" },
-  { name: "products", path: "/products" },
-  { name: "category", path: "/category/solar-panels" },
-  { name: "product-detail", path: "/product/n-type-topcon-bifacial-module-620w" },
+  { name: "home-bn", path: "/bn" },
+  { name: "products-bn", path: "/bn/products" },
+  { name: "product-detail-bn", path: "/bn/product/n-type-topcon-bifacial-module-620w" },
+  { name: "category-bn", path: "/bn/category/solar-panels" },
+  { name: "blog-bn", path: "/bn/blog" },
+  { name: "about-bn", path: "/bn/about" },
+  { name: "contact-bn", path: "/bn/contact" },
+  { name: "home-en", path: "/" },
+  { name: "products-en", path: "/products" },
 ];
 
 const VIEWPORTS = [
-  { name: "390", width: 390, height: 844 },
+  { name: "360", width: 360, height: 800 },
   { name: "1440", width: 1440, height: 900 },
 ];
 
@@ -40,7 +47,7 @@ async function run() {
         await page.evaluateOnNewDocument(() => {
           sessionStorage.setItem("noor-preloader-seen", "1");
         });
-        await page.goto(`http://127.0.0.1:3000${p.path}`, {
+        await page.goto(`${BASE_URL}${p.path}`, {
           waitUntil: "domcontentloaded",
           timeout: 25000,
         });

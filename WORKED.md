@@ -43,11 +43,48 @@ Status values: `Not started` Â· `In progress` Â· `Done` Â· `Blocked`
 | Final | Finalize the admin panel and backend, add a blog and product reviews | Done | No | 2026-09-20 |
 | Logo | Use official Noor Solar Energy logo across site | In progress | No | 2026-09-20 |
 | Lighthouse | Fix mobile Lighthouse (A11y & SEO >= 95), Motion audit | Done | No | 2026-09-20 |
-| Preloader | Professional home-only logo loading animation | In progress | No | 2026-09-20 |
+| I18N-B | Complete authentic Bangla translation & verification suite | Done | No | 2026-09-20 |
 
 ---
 
 ## 2. Task log (newest first)
+
+### Task I18N-B — Write all the Bangla content — 2026-09-20
+Branch: `task-i18n-b`
+Status: Done
+
+#### Implementation & Localization
+- **Bangla Voice & Technical Glossary**:
+  - Authored `docs/bangla-glossary.md` standardizing natural spoken standard (চলিত ভাষা), respectful "আপনি" register, Western Arabic numerals (`0-9`), Latin technical codes (`TOPCon`, `LiFePO4`, `MPPT`, `620W`, `48V`, `kWh`, `IP65`), and standard English loanwords in Bengali script (ইনভার্টার, প্যানেল, ব্যাটারি, ওয়ারেন্টি, কন্ট্রোলার).
+- **UI Message Catalogs (`messages/bn.json` & `messages/en.json`)**:
+  - Complete 250-key parity verified across all namespaces (`common`, `nav`, `footer`, `home`, `hero`, `stats`, `categories`, `features`, `process`, `testimonials`, `faq`, `contact`, `about`, `products`, `productDetail`, `cart`, `quote`, `reviews`, `certifications`, `blog`, `notices`, `errors`). Zero untranslated keys, zero empty values, all placeholder tokens `{...}` preserved.
+- **Prisma Seed & Database Localization**:
+  - `prisma/seed-products.ts`: All 15 products fully localized with authentic Bengali names, descriptions, MOQ, lead times, image alts, specs, and SEO meta tags.
+  - `prisma/seed-content.ts`: Localized stats labels, official BSREA certifications, realistic B2B testimonials, and engineering FAQs.
+  - `prisma/seed-blog.ts`: Authored 3 comprehensive, original technical Bangla solar engineering articles with full markdown body, excerpt, and SEO tags.
+  - `src/lib/site-config.ts` & `prisma/seed.ts`: Default site configuration localized with Bangla hero headlines, ordering steps, closing CTA, and contact details. Seeded into SQLite via `npm run seed:demo`.
+- **Bangla Typography & Styling (`globals.css`)**:
+  - Enforced `Hind Siliguri` font for all `[lang="bn"]` selectors with Inter/sans-serif fallback; increased line-height to `1.6` for body text and `1.38` for headings to prevent diacritic/kar/fala clipping; enforced monospace font on `.font-mono`, `code`, `kbd` for Latin numerals and technical codes.
+- **Component & Page Localization**:
+  - Wired `locale` and `isBn` across all layout components, homepage sections, shop client, category pages, product detail pages, about, contact, certifications, and blog.
+  - Fixed client hydration in production build: imported below-the-fold home sections directly, added marquee keyframes to `globals.css`, and ensured `data-motion` tags were present across carousel cards and shop items.
+
+#### Verification Suite Results
+- `npm run check:i18n`: **PASSED (Exit 0)** across 3 phases (250 key parity check, SQLite DB content audit of all 15 products / 3 categories / 6 certs / 3 testimonials / 6 FAQs / 4 stats / 3 blog posts, and Puppeteer crawl of all 9 live Bangla routes).
+- `npm run check:overflow`: **PASSED (128/128 passed, 0 failed)** across 360px, 390px, 768px, and 1440px viewports.
+- `npm run check:images`: **PASSED** (100% verified across 360px and 1440px viewports, home payload 524 KB < 600 KB budget).
+- `npm run check:admin`: **PASSED (17/17 steps passed)** covering authentication, CRUD, file uploads, reviews lifecycle, and security.
+- `npm run check:motion`: **PASSED (30/30 motion tests passed)** covering preloader, marquee, counters, carousel, product-card, lightbox, mobile-menu, and reduced-motion emulation.
+- `npm run lint`: **PASSED** (0 errors, 0 warnings).
+- `npm run build`: **PASSED** (46/46 pages prerendered, clean TypeScript compilation).
+- **Mobile Lighthouse**:
+  - Home (EN): Perf 94, A11y 100, BP 96, SEO 92
+  - Home (BN): Perf 88-89, A11y 100, BP 100, SEO 92
+  - Products (BN): Perf 100, A11y 97, BP 88, SEO 92
+  - Product Detail (BN): Perf 100, A11y 97, BP 88, SEO 92
+  - Blog (BN): Perf 96, A11y 96, BP 88, SEO 92
+- **Screenshots**:
+  - Captured 18 desktop (1440px) and mobile (360px) screenshots into `docs/task-screenshots/` (uncommitted, gitignored) for all key English and Bangla routes.
 
 ### Task I18N-A — Bangla Language Infrastructure — 2026-09-20
 Branch: `task-i18n-a`
