@@ -50,12 +50,13 @@ export async function generateMetadata({
     description: isBn
       ? "বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল, লিথিয়াম-আয়ন ব্যাটারি এবং হাইব্রিড সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
       : "Direct importer and bulk supplier of high-efficiency solar panels, Lithium-ion batteries, and hybrid solar inverters in Bangladesh.",
+    metadataBase: new URL(siteUrl),
     alternates: {
-      canonical: isBn ? `${siteUrl}/bn` : siteUrl,
+      canonical: isBn ? "/bn" : "/",
       languages: {
-        en: `${siteUrl}/`,
-        bn: `${siteUrl}/bn`,
-        "x-default": `${siteUrl}/`,
+        en: "/",
+        bn: "/bn",
+        "x-default": "/",
       },
     },
     openGraph: {

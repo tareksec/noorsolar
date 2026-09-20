@@ -1,16 +1,13 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { ArrowUpRight, Check, Zap, BatteryCharging, Cpu } from "lucide-react";
-import { gsap } from "@/lib/gsap";
-import { useGSAP } from "@/lib/gsap";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
-import { PhotoReveal } from "@/components/ui/photo-reveal";
 
 interface CategoryStoryProps {
-  categories: Array<{
+  categories?: Array<{
     id: string;
     slug: string;
     name: string;
@@ -160,298 +157,226 @@ const STORIES_BN: StoryItem[] = [
 ];
 
 export function CategoryStory({ locale }: CategoryStoryProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const isBn = locale === "bn";
   const stories = isBn ? STORIES_BN : STORIES_EN;
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-
-      // Desktop pinned sequence (1024px and wider without reduced motion)
-      mm.add(
-        "(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
-        () => {
-          const pinTrigger = containerRef.current?.querySelector(".story-pin-section");
-          if (!pinTrigger) return;
-
-          const panels = gsap.utils.toArray<HTMLElement>(".story-desktop-panel");
-          if (panels.length < 3) return;
-
-          // Initially show panel 0, hide panels 1 and 2
-          gsap.set(panels[0], { opacity: 1, y: 0, pointerEvents: "auto", display: "grid" });
-          gsap.set(panels[1], { opacity: 0, y: 30, pointerEvents: "none", display: "grid" });
-          gsap.set(panels[2], { opacity: 0, y: 30, pointerEvents: "none", display: "grid" });
-
-          const dots = gsap.utils.toArray<HTMLElement>(".story-step-dot");
-
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: pinTrigger,
-              pin: true,
-              start: "top top",
-              end: "+=2200",
-              scrub: 0.6,
-              anticipatePin: 1,
-            },
-          });
-
-          // Transition Step 0 -> Step 1
-          tl.to(panels[0], { opacity: 0, y: -25, pointerEvents: "none", duration: 1 })
-            .to(dots[0], { opacity: 0.4, scale: 1, duration: 0.5 }, "<")
-            .to(dots[1], { opacity: 1, scale: 1.1, duration: 0.5 }, "<")
-            .to(panels[1], { opacity: 1, y: 0, pointerEvents: "auto", duration: 1 }, "-=0.3")
-
-            // Pause slightly on step 1
-            .to({}, { duration: 0.8 })
-
-            // Transition Step 1 -> Step 2
-            .to(panels[1], { opacity: 0, y: -25, pointerEvents: "none", duration: 1 })
-            .to(dots[1], { opacity: 0.4, scale: 1, duration: 0.5 }, "<")
-            .to(dots[2], { opacity: 1, scale: 1.1, duration: 0.5 }, "<")
-            .to(panels[2], { opacity: 1, y: 0, pointerEvents: "auto", duration: 1 }, "-=0.3")
-
-            // Pause slightly on step 2
-            .to({}, { duration: 0.5 });
-        }
-      );
-    },
-    { scope: containerRef }
-  );
 
   if (!stories || stories.length === 0) {
     return null;
   }
 
+  // Visual Theme Config for the 3 Stacking Cards
+  const cardThemes = [
+    {
+      // Card 1: Solar Panels (Deep Slate Theme)
+      sectionBg: "bg-slate-950 text-white",
+      gridColor: "bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)]",
+      roundedClass: "",
+      shadowClass: "",
+      borderClass: "",
+      tagBg: "bg-[#CEF23E]/15 text-[#CEF23E] border border-[#CEF23E]/30",
+      imageBorder: "border-white/10 bg-white/5",
+      counterBg: "bg-white/[0.06] border border-white/10 text-white",
+      counterSubtext: "text-slate-400",
+      bulletCheck: "bg-[#CEF23E] text-[#111311]",
+      bulletText: "text-slate-200",
+      bodyText: "text-slate-300",
+      ctaBtn: "bg-[#CEF23E] hover:bg-white text-[#111311]",
+      indexPill: "bg-white/10 text-[#CEF23E] border border-white/15",
+    },
+    {
+      // Card 2: Lithium Batteries (Clean Industrial Light Gray Theme)
+      sectionBg: "bg-neutral-300 text-black",
+      gridColor: "bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)]",
+      roundedClass: "rounded-tr-2xl rounded-tl-2xl sm:rounded-tr-[40px] sm:rounded-tl-[40px]",
+      shadowClass: "shadow-[0_-25px_60px_rgba(0,0,0,0.35)]",
+      borderClass: "border-t border-white/70",
+      tagBg: "bg-white/90 text-[#111311] border border-slate-300",
+      imageBorder: "border-slate-300 bg-white/70",
+      counterBg: "bg-white/90 border border-slate-300 text-[#111311]",
+      counterSubtext: "text-[#5C605C]",
+      bulletCheck: "bg-[#111311] text-[#CEF23E]",
+      bulletText: "text-[#111311]",
+      bodyText: "text-[#3D423D]",
+      ctaBtn: "bg-[#111311] hover:bg-black text-[#CEF23E]",
+      indexPill: "bg-[#111311] text-white border border-[#111311]",
+    },
+    {
+      // Card 3: Solar Inverters (Deep Black / Neon Lime Theme)
+      sectionBg: "bg-slate-950 text-white",
+      gridColor: "bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)]",
+      roundedClass: "rounded-tr-2xl rounded-tl-2xl sm:rounded-tr-[40px] sm:rounded-tl-[40px]",
+      shadowClass: "shadow-[0_-30px_70px_rgba(0,0,0,0.55)]",
+      borderClass: "border-t border-[#CEF23E]/30",
+      tagBg: "bg-[#CEF23E]/15 text-[#CEF23E] border border-[#CEF23E]/30",
+      imageBorder: "border-white/10 bg-white/5",
+      counterBg: "bg-white/[0.06] border border-white/10 text-white",
+      counterSubtext: "text-slate-400",
+      bulletCheck: "bg-[#CEF23E] text-[#111311]",
+      bulletText: "text-slate-200",
+      bodyText: "text-slate-300",
+      ctaBtn: "bg-[#CEF23E] hover:bg-white text-[#111311]",
+      indexPill: "bg-white/10 text-[#CEF23E] border border-white/15",
+    },
+  ];
+
   return (
-    <div ref={containerRef} className="bg-[#E4E7E4]">
-      {/* ========================================================= */}
-      {/* DESKTOP PINNED SCROLL STORY (>= 1024px)                     */}
-      {/* ========================================================= */}
-      <div className="hidden lg:block">
-        <div className="story-pin-section min-h-screen w-full flex flex-col justify-center py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            {/* Header & Step Dots Indicator */}
-            <div className="flex items-end justify-between mb-8 border-b border-[#DDE1DC] pb-5">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E]"></span>
-                  <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C]">
-                    {isBn ? "স্ক্রোল স্টোরি • তিনটি মূল ক্যাটাগরি" : "Scroll Story • Three Core Categories"}
-                  </span>
+    <article className="relative w-full">
+      {stories.map((story, idx) => {
+        const IconComponent = story.icon;
+        const linkHref = isBn ? `/bn/category/${story.slug}` : `/category/${story.slug}`;
+        const theme = cardThemes[idx] || cardThemes[0];
+
+        return (
+          <section
+            key={story.slug}
+            data-motion="category-panel"
+            className={`${theme.sectionBg} ${theme.roundedClass} ${theme.shadowClass} ${theme.borderClass} min-h-screen w-full grid place-content-center sticky top-0 overflow-hidden py-14 sm:py-20 px-4 sm:px-8 lg:px-12`}
+          >
+            {/* Subtle High-Tech Blueprint Grid Mask matching user reference */}
+            <div
+              className={`absolute bottom-0 left-0 right-0 top-0 ${theme.gridColor} bg-[size:54px_54px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none`}
+            />
+
+            {/* Content Container */}
+            <div className="relative z-10 max-w-7xl mx-auto w-full">
+              
+              {/* Header Row */}
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-current/15 gap-4">
+                <div>
+                  <div className="inline-flex items-center gap-2 mb-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E] animate-pulse" />
+                    <span className="text-xs font-mono uppercase tracking-wider opacity-75">
+                      {isBn ? "স্ক্রোল স্টোরি • তিনটি মূল ক্যাটাগরি" : "Scroll Story • Three Core Categories"}
+                    </span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
+                    {isBn ? "উন্নত প্রযুক্তির পরিচ্ছন্ন শক্তি ব্যবস্থা" : "Engineered Clean Energy Systems"}
+                  </h2>
                 </div>
-                <h2 className="text-3xl font-bold tracking-tight text-[#111311]">
-                  {isBn ? "উন্নত প্রযুক্তির পরিচ্ছন্ন শক্তি ব্যবস্থা" : "Engineered Clean Energy Systems"}
-                </h2>
+
+                {/* Step / Category Pill */}
+                <div className="flex items-center gap-3 shrink-0">
+                  <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono font-bold ${theme.indexPill}`}>
+                    <span>0{idx + 1} / 0{stories.length}</span>
+                    <span className="opacity-40">|</span>
+                    <span>{story.kicker}</span>
+                  </div>
+                </div>
               </div>
 
-              {/* Category Step Indicators */}
-              <div className="flex items-center gap-3 bg-white/90 border border-[#DDE1DC] px-4 py-2 rounded-full">
-                {stories.map((s, idx) => (
-                  <div
-                    key={s.slug}
-                    className={`story-step-dot flex items-center gap-2 text-xs font-mono transition-all ${
-                      idx === 0 ? "opacity-100 font-bold text-[#111311]" : "opacity-40 text-[#5C605C]"
-                    }`}
+              {/* 2-Column Responsive Showcase Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                
+                {/* Left Column: Product Visual Image */}
+                <div className="lg:col-span-5 h-[280px] sm:h-[380px] lg:h-[460px] rounded-[28px] sm:rounded-[36px] overflow-hidden relative border p-3 group shadow-xl transition-all duration-500 hover:shadow-2xl">
+                  <Link
+                    href={linkHref}
+                    className="block relative w-full h-full rounded-[22px] sm:rounded-[30px] overflow-hidden cursor-pointer"
+                    title={story.title}
                   >
-                    <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-                    <span>{s.kicker}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Panel Area (Pinned overlay container) */}
-            <div className="relative min-h-[580px] w-full">
-              {stories.map((story) => {
-                const IconComponent = story.icon;
-                const linkHref = isBn ? `/bn/category/${story.slug}` : `/category/${story.slug}`;
-                return (
-                  <div
-                    key={story.slug}
-                    className={`story-desktop-panel absolute inset-0 grid grid-cols-12 gap-8 items-center bg-[#EDEDED] border border-[#DDE1DC] rounded-[40px] p-10 shadow-sm transition-all will-change-transform`}
-                  >
-                    {/* Left Column: Product Visual */}
-                    <div className="col-span-5 h-[480px] rounded-3xl bg-white/60 border border-white flex items-center justify-center p-3 relative overflow-hidden group">
-                      <PhotoReveal className="w-full h-full rounded-2xl">
-                        <Image
-                          src={story.previewImage}
-                          alt={story.title}
-                          fill
-                          sizes="40vw"
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      </PhotoReveal>
-                      <div className="absolute top-5 left-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-xs border border-[#DDE1DC] text-[11px] font-mono text-[#111311] z-10 shadow-xs">
-                        <IconComponent className="w-3.5 h-3.5 text-[#111311]" />
-                        <span>{story.kicker}</span>
-                      </div>
-                    </div>
-
-                    {/* Right Column: Copy, Specs, and Live Counters */}
-                    <div className="col-span-7 flex flex-col justify-between h-full py-2">
-                      <div>
-                        <div className="inline-flex items-center gap-2 text-xs font-mono text-[#5C605C] mb-2 uppercase">
-                          <span>{isBn ? "যাচাইকৃত স্পেসিফিকেশন" : "Verified Specification"}</span>
-                        </div>
-                        <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111311] mb-2">
-                          {story.title}
-                        </h3>
-                        <p className="text-xs sm:text-sm font-mono text-[#111311] font-semibold mb-4 text-[#5C605C]">
-                          {story.highlight}
-                        </p>
-                        <p className="text-sm text-[#5C605C] leading-relaxed mb-6">
-                          {story.body}
-                        </p>
-
-                        {/* Bullets */}
-                        <div className="space-y-2 mb-8">
-                          {story.bullets.map((bullet, bIdx) => (
-                            <div key={bIdx} className="flex items-center gap-2.5 text-xs text-[#111311]">
-                              <div className="w-4 h-4 rounded-full bg-[#CEF23E] flex items-center justify-center text-[#111311] shrink-0">
-                                <Check className="w-2.5 h-2.5" />
-                              </div>
-                              <span>{bullet}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Live Data Counters */}
-                      <div className="pt-6 border-t border-[#DDE1DC] grid grid-cols-3 gap-4">
-                        {story.counters.map((c, cIdx) => (
-                          <div key={cIdx} className="bg-white/80 rounded-2xl p-4 border border-[#DDE1DC]">
-                            <span className="text-[10px] font-mono uppercase text-[#5C605C] block mb-1">
-                              {c.label}
-                            </span>
-                            <div className="text-2xl font-bold font-mono text-[#111311] tracking-tight">
-                              <AnimatedCounter
-                                value={c.value}
-                                prefix={c.prefix}
-                                suffix={c.suffix}
-                                decimals={c.decimals || 0}
-                              />
-                            </div>
-                            <span className="text-[10px] font-mono text-[#5C605C] mt-0.5 block truncate">
-                              {c.subtext}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="pt-4 flex items-center justify-between">
-                        <Link
-                          href={linkHref}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] text-xs font-semibold tracking-tight transition-colors shadow-xs"
-                        >
-                          <span>{isBn ? "বিস্তারিত দেখুন" : `Explore ${story.kicker}`}</span>
-                          <ArrowUpRight className="w-3.5 h-3.5" />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ========================================================= */}
-      {/* MOBILE / TABLET STACKED CARDS (< 1024px)                  */}
-      {/* ========================================================= */}
-      <div className="block lg:hidden py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="mb-8 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3 border border-[#DDE1DC]">
-              <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-              <span>{isBn ? "ক্যাটাগরি শোকেস" : "Category Showcase"}</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111311]">
-              {isBn ? "পরিচ্ছন্ন জ্বালানির তিনটি স্তম্ভ" : "Three Pillars of Clean Energy"}
-            </h2>
-          </div>
-
-          <div className="space-y-8">
-            {stories.map((story) => {
-              const IconComponent = story.icon;
-              const linkHref = isBn ? `/bn/category/${story.slug}` : `/category/${story.slug}`;
-              return (
-                <div
-                  key={story.slug}
-                  className="rounded-3xl bg-[#EDEDED] border border-[#DDE1DC] p-6 shadow-sm flex flex-col space-y-6"
-                >
-                  <div className="relative w-full aspect-4/3 rounded-2xl bg-white/60 border border-white overflow-hidden">
-                    <PhotoReveal className="w-full h-full rounded-xl">
-                      <Image
-                        src={story.previewImage}
-                        alt={story.title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 500px"
-                        className="object-cover"
-                      />
-                    </PhotoReveal>
-                    <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-xs border border-[#DDE1DC] text-[10px] font-mono text-[#111311] z-10 shadow-xs">
-                      <IconComponent className="w-3 h-3 text-[#111311]" />
+                    <Image
+                      src={story.previewImage}
+                      alt={story.title}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 45vw"
+                      className="object-cover group-hover:scale-108 transition-transform duration-700 ease-out cursor-pointer"
+                    />
+                    
+                    {/* Floating Kicker Badge */}
+                    <div className={`absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full backdrop-blur-md text-[11px] font-mono font-semibold z-10 shadow-sm ${theme.tagBg}`}>
+                      <IconComponent className="w-3.5 h-3.5" />
                       <span>{story.kicker}</span>
                     </div>
-                  </div>
 
+                    {/* Hover Hint Overlay */}
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
+                      <span className="px-4 py-2 rounded-full bg-white/90 text-black text-xs font-bold shadow-md">
+                        {isBn ? "ক্যাটাগরি দেখুন →" : "View Category →"}
+                      </span>
+                    </div>
+                  </Link>
+                </div>
+
+                {/* Right Column: Copy, Specs, and Live Counters */}
+                <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
                   <div>
-                    <h3 className="text-xl font-bold tracking-tight text-[#111311] mb-1">
+                    {/* Verified Specs Eyebrow */}
+                    <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider opacity-70 mb-2">
+                      <span>{isBn ? "যাচাইকৃত স্পেসিফিকেশন" : "Verified Specification"}</span>
+                    </div>
+
+                    {/* Headline */}
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-2">
                       {story.title}
                     </h3>
-                    <p className="text-xs font-mono text-[#5C605C] mb-3">
+
+                    {/* Highlight Subtitle */}
+                    <p className="text-xs sm:text-sm font-mono font-bold opacity-80 mb-4">
                       {story.highlight}
                     </p>
-                    <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed mb-4">
+
+                    {/* Body */}
+                    <p className={`text-xs sm:text-sm leading-relaxed mb-6 ${theme.bodyText}`}>
                       {story.body}
                     </p>
 
-                    <div className="space-y-1.5 mb-6">
+                    {/* Bullets */}
+                    <div className="space-y-2.5 mb-6">
                       {story.bullets.map((bullet, bIdx) => (
-                        <div key={bIdx} className="flex items-center gap-2 text-xs text-[#111311]">
-                          <div className="w-3.5 h-3.5 rounded-full bg-[#CEF23E] flex items-center justify-center text-[#111311] shrink-0">
-                            <Check className="w-2 h-2" />
+                        <div key={bIdx} className="flex items-center gap-2.5 text-xs sm:text-sm">
+                          <div className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${theme.bulletCheck}`}>
+                            <Check className="w-2.5 h-2.5 stroke-[3]" />
                           </div>
-                          <span>{bullet}</span>
+                          <span className={theme.bulletText}>{bullet}</span>
                         </div>
                       ))}
                     </div>
+                  </div>
 
-                    <div className="grid grid-cols-3 gap-2 pt-4 border-t border-[#DDE1DC] mb-6">
-                      {story.counters.map((c, cIdx) => (
-                        <div key={cIdx} className="bg-white/80 rounded-xl p-2.5 border border-[#DDE1DC] text-center">
-                          <span className="text-[9px] font-mono uppercase text-[#5C605C] block truncate">
-                            {c.label}
-                          </span>
-                          <div className="text-base font-bold font-mono text-[#111311] tracking-tight">
-                            <AnimatedCounter
-                              value={c.value}
-                              prefix={c.prefix}
-                              suffix={c.suffix}
-                              decimals={c.decimals || 0}
-                            />
-                          </div>
+                  {/* 3 Live Data Counters */}
+                  <div className="pt-5 border-t border-current/15 grid grid-cols-3 gap-3 sm:gap-4">
+                    {story.counters.map((c, cIdx) => (
+                      <div
+                        key={cIdx}
+                        className={`rounded-2xl p-3 sm:p-4 backdrop-blur-xs transition-all ${theme.counterBg}`}
+                      >
+                        <span className={`text-[10px] font-mono uppercase block truncate mb-1 opacity-75`}>
+                          {c.label}
+                        </span>
+                        <div className="text-xl sm:text-2xl lg:text-3xl font-black font-mono tracking-tight">
+                          <AnimatedCounter
+                            value={c.value}
+                            prefix={c.prefix}
+                            suffix={c.suffix}
+                            decimals={c.decimals || 0}
+                          />
                         </div>
-                      ))}
-                    </div>
+                        <span className={`text-[10px] font-mono mt-1 block truncate ${theme.counterSubtext}`}>
+                          {c.subtext}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
 
+                  {/* Explore Button */}
+                  <div className="pt-4 flex items-center">
                     <Link
                       href={linkHref}
-                      className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-full bg-[#111311] text-[#CEF23E] text-xs font-semibold tracking-tight"
+                      className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-bold tracking-tight transition-all duration-300 shadow-md hover:scale-105 active:scale-95 ${theme.ctaBtn}`}
                     >
                       <span>{isBn ? "বিস্তারিত দেখুন" : `Explore ${story.kicker}`}</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
+                      <ArrowUpRight className="w-4 h-4" />
                     </Link>
                   </div>
+
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
+
+              </div>
+
+            </div>
+          </section>
+        );
+      })}
+    </article>
   );
 }
-

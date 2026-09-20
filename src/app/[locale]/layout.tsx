@@ -47,11 +47,11 @@ export async function generateMetadata({
       : "Direct importer and bulk supplier of solar panels, Lithium-ion Batteries, and Solar Inverters in Bangladesh.",
     metadataBase: new URL(siteUrl),
     alternates: {
-      canonical: isBn ? `${siteUrl}/bn` : siteUrl,
+      canonical: isBn ? "/bn" : "/",
       languages: {
-        en: `${siteUrl}/`,
-        bn: `${siteUrl}/bn`,
-        "x-default": `${siteUrl}/`,
+        en: "/",
+        bn: "/bn",
+        "x-default": "/",
       },
     },
     icons: {

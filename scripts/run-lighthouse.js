@@ -43,6 +43,7 @@ async function runAudit() {
       ...process.env,
       PORT: String(PORT),
       NODE_ENV: "production",
+      NEXT_PUBLIC_SITE_URL: BASE_URL,
     },
     stdio: ["ignore", "ignore", "inherit"],
   });
