@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowUpRight, Mail, MapPin, Phone, Sun } from "lucide-react";
 import { SiteConfig } from "@/lib/site-config";
 
 interface FooterProps {
@@ -8,138 +7,162 @@ interface FooterProps {
 }
 
 export function Footer({ settings }: FooterProps) {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="bg-[#EDEDED] border-t border-[#DDE1DC] text-[#111311] pt-16 pb-12 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-[#DDE1DC]">
-          {/* Col 1 & 2: Brand & Philosophy */}
-          <div className="lg:col-span-2 flex flex-col gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#CEF23E] flex items-center justify-center font-bold text-[#111311] shadow-sm">
-                <Sun className="w-5 h-5 text-[#111311]" />
-              </div>
-              <span className="font-bold text-lg tracking-tight text-[#111311]">
-                {settings.companyName}
-              </span>
-            </div>
-            <p className="text-sm text-[#5C605C] leading-relaxed max-w-sm">
-              {settings.description}
+    <footer className="w-full px-3 sm:px-6 lg:px-8 pb-6 sm:pb-8 pt-4">
+      <div className="max-w-7xl mx-auto rounded-[32px] sm:rounded-[40px] bg-[#f7f8f7] border border-white/80 shadow-[0_4px_30px_rgba(0,0,0,0.03)] overflow-hidden pt-12 sm:pt-16 px-6 sm:px-12 lg:px-16 flex flex-col justify-between">
+        {/* Top Navigation Columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 lg:gap-12 pb-12 sm:pb-16 text-left">
+          {/* Col 1: Info & Address */}
+          <div>
+            <h3 className="font-semibold text-sm sm:text-base text-[#111311] mb-5">
+              Info & Address
+            </h3>
+            <p className="text-sm text-[#4B5563] leading-relaxed mb-6 max-w-[240px]">
+              {settings.address || "1330 Disk Rd, Anchorage, Alaska, United States"}
             </p>
-            <div className="inline-flex items-center gap-2 mt-2 px-3 py-1.5 rounded-full bg-white border border-[#DDE1DC] text-[12px] font-mono text-[#111311] w-fit">
-              <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-              <span>Direct Importer & Wholesale Distributor BD</span>
+            <div className="space-y-1.5 text-sm">
+              <a
+                href={`tel:${settings.phone || "+66105856978"}`}
+                className="block text-[#4B5563] hover:text-[#111311] transition-colors"
+              >
+                {settings.phoneDisplay || "+661 058 56978"}
+              </a>
+              <a
+                href={`mailto:${settings.email || "Hello@energy.com"}`}
+                className="block text-[#4B5563] hover:text-[#111311] transition-colors"
+              >
+                {settings.email || "Hello@energy.com"}
+              </a>
             </div>
           </div>
 
-          {/* Col 3: Equipment Lines */}
+          {/* Col 2: Main Pages */}
           <div>
-            <h3 className="font-bold text-xs uppercase tracking-wider text-[#111311] mb-4">
-              Products
+            <h3 className="font-semibold text-sm sm:text-base text-[#111311] mb-5">
+              Main Pages
             </h3>
-            <ul className="space-y-2.5 text-sm text-[#5C605C]">
+            <ul className="space-y-3 text-sm text-[#4B5563]">
               <li>
-                <Link
-                  href="/category/solar-panels"
-                  className="hover:text-[#111311] transition-colors inline-flex items-center gap-1 group"
-                >
-                  <span>Solar Panels</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#111311]" />
+                <Link href="/" className="hover:text-[#111311] transition-colors">
+                  Home
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/category/lithium-batteries"
-                  className="hover:text-[#111311] transition-colors inline-flex items-center gap-1 group"
-                >
-                  <span>Lithium-ion Batteries</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#111311]" />
+                <Link href="/products" className="hover:text-[#111311] transition-colors">
+                  Services
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/category/solar-inverters"
-                  className="hover:text-[#111311] transition-colors inline-flex items-center gap-1 group"
-                >
-                  <span>Solar Inverters</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#111311]" />
+                <Link href="/products" className="hover:text-[#111311] transition-colors">
+                  Projects
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/products"
-                  className="hover:text-[#111311] transition-colors inline-flex items-center gap-1 group"
-                >
-                  <span>All Catalog Items</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-[#111311]" />
+                <Link href="/products" className="hover:text-[#111311] transition-colors">
+                  Packages
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 4: Quick Navigation */}
+          {/* Col 3: Inner Pages */}
           <div>
-            <h3 className="font-bold text-xs uppercase tracking-wider text-[#111311] mb-4">
-              Company
+            <h3 className="font-semibold text-sm sm:text-base text-[#111311] mb-5">
+              Inner Pages
             </h3>
-            <ul className="space-y-2.5 text-sm text-[#5C605C]">
+            <ul className="space-y-3 text-sm text-[#4B5563]">
               <li>
                 <Link href="/about" className="hover:text-[#111311] transition-colors">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-[#111311] transition-colors">
-                  Contact & Warehouse
+                  About us
                 </Link>
               </li>
               <li>
                 <Link href="/#faq" className="hover:text-[#111311] transition-colors">
-                  B2B Order FAQ
+                  Blogs
                 </Link>
               </li>
               <li>
-                <Link href="/admin/login" className="hover:text-[#111311] transition-colors text-xs font-mono">
-                  Admin Portal
+                <Link href="/contact" className="hover:text-[#111311] transition-colors">
+                  Contact
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 5: Contact Block */}
+          {/* Col 4: Social Link */}
           <div>
-            <h3 className="font-bold text-xs uppercase tracking-wider text-[#111311] mb-4">
-              Contact & Supply
+            <h3 className="font-semibold text-sm sm:text-base text-[#111311] mb-5">
+              Social Link
             </h3>
-            <ul className="space-y-3 text-xs text-[#5C605C]">
-              <li className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-[#111311] shrink-0 mt-0.5" />
-                <span>{settings.address}</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#111311] shrink-0" />
-                <a href={`tel:${settings.phone}`} className="hover:text-[#111311] font-mono">
-                  {settings.phoneDisplay}
+            <ul className="space-y-3 text-sm text-[#4B5563]">
+              <li>
+                <a
+                  href={settings.socials?.facebook || "https://facebook.com"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#111311] transition-colors"
+                >
+                  Facebook
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-[#111311] shrink-0" />
-                <a href={`mailto:${settings.email}`} className="hover:text-[#111311]">
-                  {settings.email}
+              <li>
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#111311] transition-colors"
+                >
+                  Twitter
                 </a>
               </li>
-              <li className="text-[11px] font-mono text-[#5C605C] pt-1">
-                {settings.hours}
+              <li>
+                <a
+                  href="https://youtube.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#111311] transition-colors"
+                >
+                  Youtube
+                </a>
+              </li>
+              <li>
+                <a
+                  href={settings.socials?.linkedin || "https://linkedin.com"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#111311] transition-colors"
+                >
+                  Linkedin
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 5: Legal */}
+          <div>
+            <h3 className="font-semibold text-sm sm:text-base text-[#111311] mb-5">
+              Legal
+            </h3>
+            <ul className="space-y-3 text-sm text-[#4B5563]">
+              <li>
+                <Link href="/privacy" className="hover:text-[#111311] transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li className="text-[#4B5563]">
+                ©{currentYear} Energy
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom copyright */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#5C605C]">
-          <p>© {new Date().getFullYear()} {settings.companyName}. All rights reserved.</p>
-          <p className="font-mono text-[11px]">
-            Engineering Grade Solar Distribution &bull; Dhaka, Bangladesh
-          </p>
+        {/* Bottom Giant ENERGY Brand Watermark */}
+        <div className="w-full select-none pointer-events-none pt-4 pb-0 overflow-hidden flex items-end justify-center">
+          <span className="font-extrabold tracking-[0.06em] text-center uppercase leading-[0.82] text-[clamp(4.8rem,18.5vw,17rem)] text-transparent bg-clip-text bg-gradient-to-b from-[#8FA8A0]/50 via-[#8FA8A0]/25 to-transparent">
+            ENERGY
+          </span>
         </div>
       </div>
     </footer>
