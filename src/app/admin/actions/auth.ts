@@ -61,19 +61,10 @@ export async function loginAdminAction(
     } catch (dbErr: unknown) {
       console.error("Database error during admin login:", dbErr);
       const msg = dbErr instanceof Error ? dbErr.message : String(dbErr);
-      if (msg.includes("Can't reach database") || msg.includes("ECONNREFUSED") || msg.includes("Access denied")) {
-        return {
-          success: false,
-          error: "Cannot connect to database. Please check DATABASE_URL credentials in Hostinger.",
-        };
-      }
-      if (msg.includes("Table") || msg.includes("does not exist") || msg.includes("P2021")) {
-        return {
-          success: false,
-          error: "Database tables are not ready yet. Please ensure deployment build finished.",
-        };
-      }
-      return { success: false, error: "Database error occurred. Please verify your connection." };
+      return {
+        success: false,
+        error: `Database connection error: ${msg.slice(0, 180)}`,
+      };
     }
 
     if (!admin) {
