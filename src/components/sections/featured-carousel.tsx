@@ -153,6 +153,7 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
                   key={product.id || index}
                   role="group"
                   aria-roledescription="slide"
+                  data-motion="product-card"
                   className="w-[280px] sm:w-[330px] md:w-[360px] h-[450px] sm:h-[470px] shrink-0 rounded-[28px] bg-white border border-[#DDE1DC] shadow-[0_6px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-500 overflow-hidden flex flex-col justify-between group"
                 >
                   <Link href={linkHref} className="flex flex-col h-full">

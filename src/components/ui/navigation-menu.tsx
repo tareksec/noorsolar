@@ -290,7 +290,7 @@ export function AnimatedNavFramer({
                   {/* Mobile Hamburger Toggle Button */}
                   <button
                     type="button"
-                    aria-label={isBn ? "মোবাইল মেনু পরিবর্তন করুন" : "Toggle mobile menu"}
+                    aria-label="Toggle mobile menu"
                     onClick={(e) => {
                       e.stopPropagation();
                       setMobileOpen((prev) => !prev);

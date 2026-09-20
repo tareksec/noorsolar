@@ -499,15 +499,29 @@ export function ShopPageClient({
                 </div>
 
                 {/* Right 3D Visual Popout */}
-                <div className="relative w-56 sm:w-64 lg:w-72 h-44 sm:h-52 shrink-0 flex items-center justify-center">
-                  <Image
-                    src="/solar-images/solar-panel-3d-isolated.webp"
-                    alt="Solar Panel 3D Model"
-                    fill
-                    className="object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.15)] hover:scale-105 transition-transform duration-500"
-                    priority
-                  />
-                </div>
+                {(() => {
+                  const panel = products.find((p) => p.category?.slug === "solar-panels" || p.slug.includes("panel")) || products[0];
+                  const panelSlug = panel ? panel.slug : "n-type-topcon-bifacial-module-620w";
+                  return (
+                    <Link
+                      href={`/product/${panelSlug}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        router.push(`/product/${panelSlug}`);
+                      }}
+                      className="relative w-56 sm:w-64 lg:w-72 h-44 sm:h-52 shrink-0 flex items-center justify-center cursor-pointer"
+                      title={isBn ? "পণ্য বিস্তারিত দেখুন" : "View Product Details"}
+                    >
+                      <Image
+                        src="/solar-images/solar-panel-3d-isolated.webp"
+                        alt="Solar Panel 3D Model"
+                        fill
+                        className="object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.15)] hover:scale-105 transition-transform duration-500 cursor-pointer"
+                        priority
+                      />
+                    </Link>
+                  );
+                })()}
               </div>
 
               {/* Stacked Right Cards (Right ~35-40%) */}
@@ -527,32 +541,49 @@ export function ShopPageClient({
                 </div>
 
                 {/* Bottom Card: Product Feature & Shop Now button */}
-                <div className="flex-1 rounded-[24px] sm:rounded-[28px] bg-gradient-to-r from-[#EFF6FD] to-[#E3EDFD] p-5 sm:p-6 flex items-center justify-between border border-blue-100/60 shadow-2xs">
-                  <div className="max-w-[160px]">
-                    <span className="text-[10px] font-mono font-semibold text-slate-500 uppercase tracking-widest block mb-1">
-                      Telecom Grade
-                    </span>
-                    <h5 className="text-base sm:text-lg font-bold text-[#111311] leading-tight mb-3">
-                      Hybrid Inverter 10kW
-                    </h5>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedCategory("solar-inverters")}
-                      className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#1E232A] hover:bg-black text-white text-xs font-bold transition-transform hover:scale-105"
-                    >
-                      <span>{isBn ? "এখন কিনুন" : "Shop now"}</span>
-                    </button>
-                  </div>
+                {(() => {
+                  const inverter = products.find((p) => p.category?.slug === "inverters" || p.category?.slug === "solar-inverters" || p.slug.includes("inverter")) || products[1] || products[0];
+                  const inverterSlug = inverter ? inverter.slug : "10kw-hybrid-inverter-three-phase";
+                  return (
+                    <div className="flex-1 rounded-[24px] sm:rounded-[28px] bg-gradient-to-r from-[#EFF6FD] to-[#E3EDFD] p-5 sm:p-6 flex items-center justify-between border border-blue-100/60 shadow-2xs">
+                      <div className="max-w-[160px]">
+                        <span className="text-[10px] font-mono font-semibold text-slate-500 uppercase tracking-widest block mb-1">
+                          Telecom Grade
+                        </span>
+                        <h5 className="text-base sm:text-lg font-bold text-[#111311] leading-tight mb-3">
+                          Hybrid Inverter 10kW
+                        </h5>
+                        <Link
+                          href={`/product/${inverterSlug}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            router.push(`/product/${inverterSlug}`);
+                          }}
+                          className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#1E232A] hover:bg-black text-white text-xs font-bold transition-transform hover:scale-105"
+                        >
+                          <span>{isBn ? "পণ্য দেখুন" : "View specs"}</span>
+                        </Link>
+                      </div>
 
-                  <div className="relative w-24 sm:w-28 h-24 sm:h-28 shrink-0">
-                    <Image
-                      src="/demo/inverter-10kw-hybrid-front.svg"
-                      alt="Hybrid Inverter"
-                      fill
-                      className="object-contain drop-shadow-sm"
-                    />
-                  </div>
-                </div>
+                      <Link
+                        href={`/product/${inverterSlug}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          router.push(`/product/${inverterSlug}`);
+                        }}
+                        className="relative w-24 sm:w-28 h-24 sm:h-28 shrink-0 cursor-pointer"
+                        title={isBn ? "পণ্য বিস্তারিত দেখুন" : "View Product Details"}
+                      >
+                        <Image
+                          src="/demo/inverter-10kw-hybrid-front.svg"
+                          alt="Hybrid Inverter"
+                          fill
+                          className="object-contain drop-shadow-sm hover:scale-105 transition-transform duration-300 cursor-pointer"
+                        />
+                      </Link>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
 
@@ -683,7 +714,7 @@ export function ShopPageClient({
                         key={product.id}
                         onClick={(e) => {
                           const target = e.target as HTMLElement;
-                          if (target.closest("button") || target.closest("a")) return;
+                          if (target.closest("button") || target.closest("[data-quote-link]")) return;
                           router.push(`/product/${product.slug}`);
                         }}
                         className="group rounded-[24px] bg-white border border-slate-200/80 p-5 flex flex-col justify-between hover:shadow-lg hover:border-slate-300 transition-all duration-300 cursor-pointer"
@@ -707,10 +738,23 @@ export function ShopPageClient({
                           </div>
 
                           {/* Image Canvas with Real Favorite Heart Toggle */}
-                          <div className="relative w-full h-44 rounded-2xl bg-[#F8FAFC] border border-slate-100 mb-4 flex items-center justify-center overflow-hidden">
+                          <div
+                            onClick={(e) => {
+                              const target = e.target as HTMLElement;
+                              if (target.closest("button")) return;
+                              e.stopPropagation();
+                              router.push(`/product/${product.slug}`);
+                            }}
+                            className="relative w-full h-44 rounded-2xl bg-[#F8FAFC] border border-slate-100 mb-4 flex items-center justify-center overflow-hidden cursor-pointer"
+                          >
                             <Link
                               href={`/product/${product.slug}`}
-                              className="absolute inset-0 flex items-center justify-center p-3"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                router.push(`/product/${product.slug}`);
+                              }}
+                              className="absolute inset-0 flex items-center justify-center p-3 z-0 cursor-pointer"
                               aria-label={product.name}
                             >
                               <Image
@@ -718,7 +762,7 @@ export function ShopPageClient({
                                 alt={product.name}
                                 fill
                                 sizes="(max-width: 640px) 100vw, 360px"
-                                className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
+                                className="object-contain p-3 group-hover:scale-105 transition-transform duration-300 cursor-pointer pointer-events-auto"
                               />
                             </Link>
 
@@ -752,7 +796,15 @@ export function ShopPageClient({
                           </div>
 
                           {/* Title */}
-                          <Link href={`/product/${product.slug}`} className="block">
+                          <Link
+                            href={`/product/${product.slug}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              router.push(`/product/${product.slug}`);
+                            }}
+                            className="block cursor-pointer"
+                          >
                             <h4 className="text-sm sm:text-base font-bold text-[#111311] group-hover:text-[#FF5500] transition-colors line-clamp-2 mb-2">
                               {product.name}
                             </h4>
@@ -819,6 +871,7 @@ export function ShopPageClient({
                             {/* Direct Quote link */}
                             <Link
                               href={`/contact?product=${encodeURIComponent(product.slug)}`}
+                              data-quote-link="true"
                               onClick={(e) => e.stopPropagation()}
                               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-bold text-xs shadow-xs transition-transform hover:scale-105"
                             >
