@@ -2,7 +2,8 @@ import { MetadataRoute } from "next";
 import { db } from "@/lib/db";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolarbd.com";
+  const hideSample = process.env.HIDE_SAMPLE_CONTENT === "true";
 
   const staticRoutes = [
     "",
@@ -41,7 +42,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     }));
 
-    return [...staticRoutes, ...categoryRoutes, ...productRoutes];
+    // Blog posts
+    const blogPosts = await db.blogPost.findMany({
+      where: {
+        status: "PUBLISHED",
+        ...(hideSample ? { isSample: false } : {}),
+      },
+      select: { slug: true, updatedAt: true },
+    });
+
+    const blogRoutes = blogPosts.length > 0 ? [
+      {
+        url: `${siteUrl}/blog`,
+        lastModified: new Date(),
+        changeFrequency: "daily" as const,
+        priority: 0.8,
+      },
+      ...blogPosts.map((post) => ({
+        url: `${siteUrl}/blog/${post.slug}`,
+        lastModified: post.updatedAt,
+        changeFrequency: "weekly" as const,
+        priority: 0.7,
+      })),
+    ] : [];
+
+    return [...staticRoutes, ...categoryRoutes, ...productRoutes, ...blogRoutes];
   } catch (error) {
     console.error("Failed to generate dynamic sitemap routes:", error);
     return staticRoutes;

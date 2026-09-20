@@ -9,7 +9,7 @@ import {
   useTransform,
   useSpring,
 } from "motion/react";
-import { ArrowUpRight, CheckCircle2, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, CheckCircle2 } from "lucide-react";
 
 interface CarouselProduct {
   id: string;
@@ -29,10 +29,10 @@ interface FeaturedCarouselProps {
   products: CarouselProduct[];
 }
 
-export function throttle(fn: (...args: any[]) => any, wait: number) {
+export function throttle<T extends (...args: unknown[]) => void>(fn: T, wait: number) {
   let shouldWait = false;
 
-  return function throttledFunction(this: any, ...args: any[]) {
+  return function throttledFunction(this: unknown, ...args: Parameters<T>) {
     if (!shouldWait) {
       fn.apply(this, args);
       shouldWait = true;

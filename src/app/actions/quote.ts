@@ -1,6 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { quoteRequestSchema } from "@/lib/validation";
@@ -73,6 +74,9 @@ export async function submitQuoteRequest(
         status: "NEW",
       },
     });
+
+    revalidatePath("/admin/quotes");
+    revalidatePath("/admin");
 
     return {
       success: true,

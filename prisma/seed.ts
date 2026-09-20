@@ -5,6 +5,7 @@ import path from "path";
 import { defaultSiteConfig } from "../src/lib/site-config";
 import { sampleStats, sampleCertifications, samplePartners, sampleTestimonials, sampleFaqs } from "./seed-content";
 import { demoProducts } from "./seed-products";
+import { sampleBlogPosts } from "./seed-blog";
 
 const prisma = new PrismaClient();
 
@@ -234,7 +235,17 @@ async function main() {
     await prisma.faqItem.create({ data: faq });
   }
 
-  console.log("✓ Sample trust content successfully seeded!");
+  // 6. Seed Sample Educational Blog Posts (isSample=true, PUBLISHED)
+  console.log("Seeding sample educational blog posts...");
+  for (const blog of sampleBlogPosts) {
+    await prisma.blogPost.upsert({
+      where: { slug: blog.slug },
+      update: blog,
+      create: blog,
+    });
+  }
+
+  console.log("✓ Sample trust content and blog posts successfully seeded!");
 }
 
 main()

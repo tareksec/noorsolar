@@ -105,6 +105,48 @@ export async function processAndSaveImage(
   };
 }
 
+// Validate PDF signature (%PDF = 0x25 0x50 0x44 0x46)
+function isValidPdfSignature(buffer: Buffer): boolean {
+  if (buffer.length < 4) return false;
+  return (
+    buffer[0] === 0x25 &&
+    buffer[1] === 0x50 &&
+    buffer[2] === 0x44 &&
+    buffer[3] === 0x46
+  );
+}
+
+export async function processAndSavePdf(
+  file: File | Blob,
+  prefix = "datasheet"
+): Promise<{ url: string; filename: string }> {
+  ensureDirs();
+
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+
+  // Max 10 MB limit
+  if (buffer.length > 10 * 1024 * 1024) {
+    throw new Error("PDF datasheet exceeds 10MB limit.");
+  }
+
+  // Validate magic bytes (%PDF)
+  if (!isValidPdfSignature(buffer)) {
+    throw new Error("Invalid PDF file format. Header must match %PDF.");
+  }
+
+  const hash = crypto.randomBytes(8).toString("hex");
+  const filename = `${prefix}_${Date.now()}_${hash}.pdf`;
+  const fullPath = path.join(UPLOAD_DIR, filename);
+
+  fs.writeFileSync(fullPath, buffer);
+
+  return {
+    url: `/uploads/${filename}`,
+    filename,
+  };
+}
+
 export function deleteUploadedFile(relativeUrl: string) {
   if (!relativeUrl.startsWith("/uploads/")) return;
 

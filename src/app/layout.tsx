@@ -36,12 +36,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Noor Solar Energy" }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   icons: {
-    icon: [
-      { url: "/logo/icon.png", type: "image/png" },
-      { url: "/favicon.ico" },
-    ],
-    shortcut: "/logo/icon.png",
-    apple: "/logo/icon.png",
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/apple-icon.png",
   },
   openGraph: {
     title: "Noor Solar Energy — Solar Panels, Batteries & Inverters",
@@ -49,6 +46,7 @@ export const metadata: Metadata = {
       "Direct importer and bulk supplier of solar panels, Lithium-ion Batteries, and Solar Inverters in Bangladesh.",
     type: "website",
     locale: "en_BD",
+    images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Noor Solar Energy" }],
   },
 };
 
@@ -59,6 +57,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <head>
+        <noscript>
+          <style dangerouslySetInnerHTML={{ __html: "#preloader{display:none!important}" }} />
+        </noscript>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try { if (sessionStorage.getItem("noor-preloader-seen") === "1" || new URLSearchParams(location.search).get("preloader") === "off") document.documentElement.dataset.preloader = "skip"; } catch (_) {}`,
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-[#E4E7E4] text-[#111311] antialiased selection:bg-[#CEF23E] selection:text-[#111311]">
         {children}
       </body>

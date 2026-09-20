@@ -59,10 +59,89 @@ async function run() {
 
   try {
     // ----------------------------------------------------
+    // TEST SUITE 0: LOGO PRELOADER CONTRACT
+    // ----------------------------------------------------
+    console.log("\n--- Suite 0: Logo Preloader Contract ---");
+    const preloaderPage = await browser.newPage();
+    await preloaderPage.setViewport({ width: 1440, height: 900 });
+    await preloaderPage.goto(`${BASE_URL}/`, { waitUntil: "load", timeout: 25000 });
+    const preloaderFrame1 = await preloaderPage.evaluate(() => {
+      const root = document.querySelector('[data-motion="preloader"]');
+      const icon = root?.querySelector(".preloader-icon");
+      return {
+        present: !!root,
+        transform: icon ? window.getComputedStyle(icon).transform : "missing",
+        opacity: icon ? window.getComputedStyle(icon).opacity : "missing",
+      };
+    });
+    await sleep(650);
+    const preloaderFrame2 = await preloaderPage.evaluate(() => {
+      const root = document.querySelector('[data-motion="preloader"]');
+      const icon = root?.querySelector(".preloader-icon");
+      return {
+        present: !!root,
+        transform: icon ? window.getComputedStyle(icon).transform : "missing",
+        opacity: icon ? window.getComputedStyle(icon).opacity : "missing",
+      };
+    });
+    record(
+      "preloader-draw",
+      preloaderFrame1.present && preloaderFrame2.present &&
+        (preloaderFrame1.transform !== preloaderFrame2.transform || preloaderFrame1.opacity !== preloaderFrame2.opacity),
+      "Fresh home session renders the official PNG icon and changes its animation state"
+    );
+    await sleep(2200);
+    const preloaderExited = await preloaderPage.evaluate(
+      () => !document.querySelector('[data-motion="preloader"]')
+    );
+    record("preloader-exit", preloaderExited, "Logo overlay exits within the three-second cap");
+
+    await preloaderPage.reload({ waitUntil: "load" });
+    const reloadSkipped = await preloaderPage.evaluate(
+      () => {
+        const root = document.querySelector('[data-motion="preloader"]');
+        return !root || window.getComputedStyle(root).display === "none";
+      }
+    );
+    record("preloader-session", reloadSkipped, "Same browser session skips the preloader after first load");
+
+    await preloaderPage.goto(`${BASE_URL}/products`, { waitUntil: "load", timeout: 25000 });
+    const routeSkipped = await preloaderPage.evaluate(
+      () => !document.querySelector('[data-motion="preloader"]')
+    );
+    record("preloader-route", routeSkipped, "Non-home routes never render the preloader");
+    await preloaderPage.close();
+
+    const reducedPreloaderPage = await browser.newPage();
+    await reducedPreloaderPage.setViewport({ width: 390, height: 844 });
+    await reducedPreloaderPage.emulateMediaFeatures([
+      { name: "prefers-reduced-motion", value: "reduce" },
+    ]);
+    await reducedPreloaderPage.goto(`${BASE_URL}/?preloader=on`, { waitUntil: "load", timeout: 25000 });
+    const reducedFrame1 = await reducedPreloaderPage.evaluate(() => {
+      const icon = document.querySelector('[data-motion="preloader"] .preloader-icon');
+      return icon ? { transform: window.getComputedStyle(icon).transform, opacity: window.getComputedStyle(icon).opacity } : null;
+    });
+    await sleep(180);
+    const reducedFrame2 = await reducedPreloaderPage.evaluate(() => {
+      const icon = document.querySelector('[data-motion="preloader"] .preloader-icon');
+      return icon ? { transform: window.getComputedStyle(icon).transform, opacity: window.getComputedStyle(icon).opacity } : null;
+    });
+    record(
+      "preloader-reduced-motion",
+      !!reducedFrame1 && !!reducedFrame2 && reducedFrame1.transform === reducedFrame2.transform && reducedFrame1.opacity === reducedFrame2.opacity,
+      "Reduced-motion session keeps the logo static without drawing movement"
+    );
+    await reducedPreloaderPage.close();
+
+    // ----------------------------------------------------
     // TEST SUITE 1: DESKTOP MOTION INTERACTION (1440x900)
     // ----------------------------------------------------
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900 });
+    await page.evaluateOnNewDocument(() => {
+      sessionStorage.setItem("noor-preloader-seen", "1");
+    });
 
     console.log("\n--- Suite 1: Desktop Motion & Interactions (1440px) ---");
     await page.goto(`${BASE_URL}/`, { waitUntil: "load", timeout: 25000 });
@@ -340,6 +419,9 @@ async function run() {
     console.log("\n--- Suite 4: Mobile Viewport (390px) & Mobile Menu ---");
     const mobilePage = await browser.newPage();
     await mobilePage.setViewport({ width: 390, height: 844 });
+    await mobilePage.evaluateOnNewDocument(() => {
+      sessionStorage.setItem("noor-preloader-seen", "1");
+    });
     await mobilePage.goto(`${BASE_URL}/`, { waitUntil: "networkidle0", timeout: 30000 });
     await sleep(400);
 
@@ -363,6 +445,9 @@ async function run() {
     console.log("\n--- Suite 5: prefers-reduced-motion Emulation ---");
     const reducedPage = await browser.newPage();
     await reducedPage.setViewport({ width: 1440, height: 900 });
+    await reducedPage.evaluateOnNewDocument(() => {
+      sessionStorage.setItem("noor-preloader-seen", "1");
+    });
     await reducedPage.emulateMediaFeatures([
       { name: "prefers-reduced-motion", value: "reduce" },
     ]);

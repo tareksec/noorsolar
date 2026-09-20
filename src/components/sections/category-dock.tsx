@@ -64,7 +64,7 @@ const EQUIPMENT_ITEMS: EquipmentCard[] = [
   },
 ];
 
-export function CategoryDock({ categories }: CategoryDockProps) {
+export function CategoryDock({}: CategoryDockProps) {
   return (
     <section className="relative z-10 py-16 sm:py-24 bg-[#E4E7E4]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

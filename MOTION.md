@@ -65,6 +65,7 @@ All animations reference the centralized tokens in `src/lib/motion.ts`:
 | 15 | **Route Transitions** | `[data-motion="route-transition"]` | Motion AnimatePresence | Pathname change (<250ms fade/slide) | Instant route display |
 | 16a | **Product Gallery** | `[data-motion="product-gallery"]` | Motion / React State | Thumbnail selection, touch swipe, arrow keys | Instant image swap |
 | 16b | **Gallery Lightbox** | `[data-motion="lightbox"]` | Motion AnimatePresence | Click main image for modal zoom (1x to 3x) & keyboard Escape | Standard modal |
+| 17 | **Logo Preloader** | `[data-motion="preloader"]` | GSAP | First home load per browser session; inline SVG icon draw, wordmark reveal, ready-gated split exit, click/Escape/Enter skip | Static logo fade, no drawing or movement |
 
 ---
 
@@ -74,3 +75,5 @@ The test suite `npm run check:motion` executes in Puppeteer Core to verify:
 1. Every `data-motion` element exists on the rendered page.
 2. Motion occurs during interaction or scrolling (measuring transforms, opacities, heights, or text value changes across two time/scroll states).
 3. Under `prefers-reduced-motion: reduce`, animations are disabled and final content is visible.
+
+The preloader contract additionally verifies a fresh home session, SVG stroke change at two time samples, exit within three seconds, session reload skip, non-home route skip, and reduced-motion stability. Existing browser checks seed `noor-preloader-seen` before navigation so the overlay never blocks their route assertions.

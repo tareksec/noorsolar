@@ -282,6 +282,7 @@ export function ClosingCTA({
                   <MagneticButton dataMotion="magnetic-cta" className="w-full">
                     <button
                       type="submit"
+                      id="btn-submit-quote"
                       disabled={isPending}
                       data-motion="button-slide"
                       className="btn-slide-fill w-full flex items-center justify-center gap-2 py-4 rounded-full bg-[#111311] text-[#CEF23E] font-semibold text-sm tracking-tight transition-all duration-200 active:scale-[0.99] disabled:opacity-60 shadow-lg cursor-pointer"

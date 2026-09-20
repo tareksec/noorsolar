@@ -2,6 +2,7 @@ import Link from "next/link";
 import { KeyRound } from "lucide-react";
 import React from "react";
 import { getSiteSettings, updateSiteSettings } from "@/lib/data/settings";
+import { isPublicReviewsEnabled, setPublicReviewsEnabled } from "@/lib/data/reviews";
 import { revalidatePath } from "next/cache";
 import { getSession } from "@/lib/auth";
 
@@ -11,6 +12,9 @@ async function saveSettingsAction(formData: FormData) {
   if (!session) {
     throw new Error("Unauthorized");
   }
+
+  const reviewsPublicEnabled = formData.get("reviewsPublicEnabled") === "true";
+  await setPublicReviewsEnabled(reviewsPublicEnabled);
   const companyName = formData.get("companyName") as string;
   const phone = formData.get("phone") as string;
   const phoneDisplay = formData.get("phoneDisplay") as string;
@@ -72,10 +76,14 @@ async function saveSettingsAction(formData: FormData) {
   revalidatePath("/admin/settings");
   revalidatePath("/about");
   revalidatePath("/contact");
+  revalidatePath("/products");
 }
 
 export default async function AdminSettingsPage() {
-  const settings = await getSiteSettings();
+  const [settings, publicReviewsEnabled] = await Promise.all([
+    getSiteSettings(),
+    isPublicReviewsEnabled(),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -384,6 +392,30 @@ export default async function AdminSettingsPage() {
                 />
               </div>
             </div>
+          </div>
+
+          <div className="pt-4 border-t border-[#EDEDED]">
+            <h2 className="text-base font-bold text-[#111311] mb-2">Customer Reviews Moderation</h2>
+            <p className="text-xs text-[#5C605C] mb-4">
+              Control whether public visitors can submit product reviews on the catalog pages.
+            </p>
+            <label className="flex items-center gap-3 p-4 rounded-2xl bg-[#EDEDED]/50 border border-[#DDE1DC] cursor-pointer">
+              <input
+                type="checkbox"
+                name="reviewsPublicEnabled"
+                value="true"
+                defaultChecked={publicReviewsEnabled}
+                className="rounded text-[#111311] w-4 h-4 cursor-pointer"
+              />
+              <div>
+                <span className="text-xs font-bold text-[#111311] block">
+                  Enable Public Product Reviews Submission
+                </span>
+                <span className="text-[11px] text-[#5C605C] block">
+                  When checked, visitors can submit ratings and reviews. Submissions are always held as PENDING until approved in the Admin Reviews panel.
+                </span>
+              </div>
+            </label>
           </div>
 
           <div className="pt-4 border-t border-[#EDEDED]">

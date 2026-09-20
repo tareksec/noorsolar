@@ -232,3 +232,113 @@ body {
     transition: none !important;
   }
 }
+
+/* Home-only logo preloader: server markup paints immediately and fails closed. */
+html[data-preloader="skip"] #preloader,
+noscript + #preloader {
+  display: none !important;
+}
+
+.preloader-root {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  overflow: hidden;
+  background: #111311;
+  color: #fff;
+  isolation: isolate;
+  animation: preloader-failsafe 3s forwards;
+}
+
+.preloader-root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(205, 243, 0, 0.06), transparent 34%);
+  pointer-events: none;
+}
+
+.preloader-panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #111311;
+  overflow: hidden;
+}
+
+.preloader-panel-top {
+  clip-path: inset(0 0 50% 0);
+}
+
+.preloader-panel-bottom {
+  clip-path: inset(50% 0 0 0);
+}
+
+.preloader-lockup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: min(320px, 72vw);
+  transform: translateY(-1px);
+}
+
+.preloader-icon {
+  width: clamp(66px, 16vw, 112px);
+  height: auto;
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+.preloader-wordmark-wrap {
+  position: relative;
+  width: clamp(150px, 43vw, 220px);
+  height: clamp(42px, 9vw, 72px);
+  overflow: hidden;
+  margin-left: clamp(8px, 2vw, 16px);
+}
+
+.preloader-wordmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  object-fit: contain;
+}
+
+.preloader-sweep {
+  position: absolute;
+  inset: -35% auto -35% -18%;
+  width: 18%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  transform: skewX(-18deg);
+  pointer-events: none;
+}
+
+@keyframes preloader-failsafe {
+  0%, 94% { opacity: 1; pointer-events: auto; }
+  100% { opacity: 0; pointer-events: none; visibility: hidden; }
+}
+
+.preloader-reduced-exit {
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader-root {
+    animation: preloader-reduced-fallback 0.4s ease forwards;
+  }
+}
+
+@keyframes preloader-reduced-fallback {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.preloader-hard-stop {
+  opacity: 0;
+  pointer-events: none;
+}

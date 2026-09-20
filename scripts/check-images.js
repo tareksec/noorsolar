@@ -75,6 +75,9 @@ async function run() {
       for (const route of PUBLIC_ROUTES) {
         const page = await browser.newPage();
         await page.setViewport({ width: vp.width, height: vp.height });
+        await page.evaluateOnNewDocument(() => {
+          sessionStorage.setItem("noor-preloader-seen", "1");
+        });
 
         const failedRequests = [];
         const imageTransfers = [];

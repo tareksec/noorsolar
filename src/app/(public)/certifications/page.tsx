@@ -7,7 +7,6 @@ import { AppImage } from "@/components/ui/app-image";
 import {
   ShieldCheck,
   ExternalLink,
-  Award,
   CheckCircle2,
   FileText,
   Globe,

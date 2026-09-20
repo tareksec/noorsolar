@@ -24,6 +24,7 @@ import { SustainabilityImpact } from "@/components/sections/sustainability-impac
 import { VideoCtaBanner } from "@/components/sections/video-cta-banner";
 import dynamic from "next/dynamic";
 import { DynamicHomeSections } from "@/components/sections/dynamic-home-sections";
+import { SitePreloader } from "@/components/ui/site-preloader";
 
 const ClosingCTA = dynamic(
   () => import("@/components/sections/closing-cta").then((mod) => mod.ClosingCTA),
@@ -73,7 +74,7 @@ export default async function HomePage() {
     "@type": "Organization",
     name: "Noor Solar Energy",
     url: siteUrl,
-    logo: `${siteUrl}/icon`,
+    logo: `${siteUrl}/brand/logo-default.png`,
     description:
       settings.description ||
       "Direct importer and bulk wholesale supplier of solar equipment in Bangladesh.",
@@ -93,6 +94,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <SitePreloader />
       {/* Schema.org Organization Structured Data */}
       <script
         type="application/ld+json"

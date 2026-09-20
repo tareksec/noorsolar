@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { NotFoundIllustration } from "@/components/illustrations/not-found-illustration";
 
@@ -7,6 +8,13 @@ export default function NotFound() {
   return (
     <div className="min-h-screen bg-[#E4E7E4] flex items-center justify-center p-4">
       <div className="max-w-md w-full p-8 sm:p-10 rounded-[36px] bg-white border border-[#DDE1DC] text-center shadow-xl">
+        <Image
+          src="/brand/logo-icon.png"
+          alt="Noor Solar Energy"
+          width={48}
+          height={48}
+          className="mx-auto mb-5 h-12 w-12 object-contain"
+        />
         <NotFoundIllustration className="w-48 h-40 mx-auto mb-4" />
 
         <span className="text-xs font-mono font-bold text-[#CEF23E] bg-[#111311] px-3 py-1 rounded-full">

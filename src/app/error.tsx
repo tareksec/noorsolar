@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 
 export default function GlobalError({
@@ -18,6 +19,13 @@ export default function GlobalError({
   return (
     <div className="min-h-screen bg-[#E4E7E4] flex items-center justify-center p-4">
       <div className="max-w-md w-full p-8 sm:p-10 rounded-[36px] bg-white border border-[#DDE1DC] text-center shadow-xl">
+        <Image
+          src="/brand/logo-icon.png"
+          alt="Noor Solar Energy"
+          width={48}
+          height={48}
+          className="mx-auto mb-5 h-12 w-12 object-contain"
+        />
         <div className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6 text-red-600">
           <AlertTriangle className="w-7 h-7" />
         </div>

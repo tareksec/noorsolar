@@ -62,6 +62,8 @@ export async function createCategoryAction(
     revalidatePath("/");
     revalidatePath("/products");
     revalidatePath("/admin/categories");
+    revalidatePath("/admin/products");
+    revalidatePath("/admin/products/new");
     return { success: true };
   } catch (err: unknown) {
     console.error("Create category error:", err);

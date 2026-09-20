@@ -1,4 +1,4 @@
-﻿/**
+/**
  * scripts/check-mobile-overflow.js
  * Verifies document.documentElement.scrollWidth <= window.innerWidth
  * across 360px, 390px, 768px, and 1440px viewports on all public and admin routes.
@@ -39,6 +39,7 @@ const PUBLIC_ROUTES = [
   "/category/lithium-batteries",
   "/category/solar-inverters",
   "/product/n-type-topcon-bifacial-module-620w",
+  "/blog",
   "/about",
   "/contact",
   "/admin/login",
@@ -48,6 +49,9 @@ const ADMIN_ROUTES = [
   "/admin",
   "/admin/products",
   "/admin/products/new",
+  "/admin/blog",
+  "/admin/blog/new",
+  "/admin/reviews",
   "/admin/categories",
   "/admin/quotes",
   "/admin/settings",
@@ -84,6 +88,9 @@ async function run() {
     // 1. Authenticate admin once and capture session cookies
     let adminCookies = [];
     const authPage = await browser.newPage();
+    await authPage.evaluateOnNewDocument(() => {
+      sessionStorage.setItem("noor-preloader-seen", "1");
+    });
     console.log(`Authenticating admin on ${BASE_URL}/admin/login with ${ADMIN_EMAIL} ...`);
     await authPage.goto(`${BASE_URL}/admin/login`, { waitUntil: "networkidle0" });
     
@@ -105,6 +112,9 @@ async function run() {
       console.log(`=== Viewport: ${vp.name} (${vp.width}x${vp.height}) ===`);
       const page = await browser.newPage();
       await page.setViewport({ width: vp.width, height: vp.height });
+      await page.evaluateOnNewDocument(() => {
+        sessionStorage.setItem("noor-preloader-seen", "1");
+      });
 
       // Check Public Routes
       for (const route of PUBLIC_ROUTES) {

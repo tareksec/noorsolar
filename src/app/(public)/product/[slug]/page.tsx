@@ -3,9 +3,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/lib/data/products";
+import { getApprovedReviewsForProduct, isPublicReviewsEnabled } from "@/lib/data/reviews";
 import { ProductCard } from "@/components/product/product-card";
 import { ProductGallery } from "@/components/product/product-gallery";
+import { ProductReviewsSection } from "@/components/product/product-reviews-section";
 import { ArrowUpRight, Box, Clock, Download, ShieldCheck } from "lucide-react";
+
+export const dynamic = "force-dynamic";
 
 interface ProductPageProps {
   params: Promise<{
@@ -22,15 +26,17 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   }
 
   const { product } = data;
+  const title = product.metaTitle || `${product.name} — Noor Solar Energy`;
   const desc =
+    product.metaDescription ||
     product.shortDescription ||
     `Direct importer wholesale specs for ${product.name}. Request quotation and technical datasheets.`;
 
   return {
-    title: `${product.name} — Noor Solar Energy`,
+    title,
     description: desc,
     openGraph: {
-      title: `${product.name} — Noor Solar Energy`,
+      title,
       description: desc,
       url: `/product/${product.slug}`,
       type: "website",
@@ -48,6 +54,12 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   }
 
   const { product, related } = data;
+
+  const [reviewsData, publicReviewsEnabled] = await Promise.all([
+    getApprovedReviewsForProduct(product.id),
+    isPublicReviewsEnabled(),
+  ]);
+  const { reviews, totalReviews, averageRating } = reviewsData;
 
   // Product JSON-LD structured data (price only if showPrice is true)
   const jsonLd: Record<string, unknown> = {
@@ -78,6 +90,32 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         name: "Noor Solar Energy",
       },
     },
+    ...(totalReviews > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: averageRating.toString(),
+            reviewCount: totalReviews.toString(),
+            bestRating: "5",
+            worstRating: "1",
+          },
+          review: reviews.map((r) => ({
+            "@type": "Review",
+            author: {
+              "@type": "Person",
+              name: r.authorName,
+            },
+            datePublished: r.createdAt.toISOString().split("T")[0],
+            reviewBody: r.body,
+            reviewRating: {
+              "@type": "Rating",
+              ratingValue: r.rating.toString(),
+              bestRating: "5",
+              worstRating: "1",
+            },
+          })),
+        }
+      : {}),
   };
 
   return (
@@ -268,6 +306,16 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           </div>
 
         </div>
+
+        {/* Customer Reviews Section */}
+        <ProductReviewsSection
+          productId={product.id}
+          productName={product.name}
+          reviews={reviews}
+          totalReviews={totalReviews}
+          averageRating={averageRating}
+          publicSubmissionEnabled={publicReviewsEnabled}
+        />
 
         {/* Related Products from Same Category */}
         {related.length > 0 && (

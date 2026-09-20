@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useActionState, useEffect } from "react";
+import React, { useState, useActionState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { AppImage as Image } from "@/components/ui/app-image";
 import {
@@ -8,9 +8,24 @@ import {
   updateProductAction,
   deleteProductAction,
   reorderProductImageAction,
+  deleteProductImageAction,
   ProductActionResult,
 } from "@/app/admin/actions/products";
-import { Plus, Trash2, Upload, AlertCircle, Save, ArrowUp, ArrowDown, ArrowLeft, ArrowRight } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Upload,
+  AlertCircle,
+  Save,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  ArrowDown,
+  CheckCircle2,
+  FileText,
+  Sparkles,
+  ExternalLink,
+} from "lucide-react";
 
 interface CategoryOption {
   id: string;
@@ -48,10 +63,46 @@ interface ProductFormClientProps {
     showPrice: boolean;
     isFeatured: boolean;
     datasheetUrl?: string | null;
+    metaTitle?: string | null;
+    metaDescription?: string | null;
     specs: ProductSpecItem[];
     images: ProductImageItem[];
   };
 }
+
+const SPEC_SUGGESTIONS: Record<string, string[]> = {
+  "solar-panels": [
+    "Nominal Power (Wp)",
+    "Module Efficiency (%)",
+    "Cell Technology",
+    "Dimensions (mm)",
+    "Product Warranty (Years)",
+    "Performance Warranty (Years)",
+  ],
+  "lithium-batteries": [
+    "Nominal Capacity (kWh)",
+    "Nominal Voltage (V)",
+    "Usable Energy (kWh)",
+    "Chemistry",
+    "Cycle Life (@80% DoD)",
+    "Max Discharge Rate (C)",
+  ],
+  "solar-inverters": [
+    "Rated AC Power (kW)",
+    "Max DC Input Voltage (V)",
+    "MPPT Voltage Range (V)",
+    "Number of MPPT Trackers",
+    "Max Efficiency (%)",
+    "Grid Phase",
+  ],
+  mounting: [
+    "Material & Grade",
+    "Wind Load Resistance (m/s)",
+    "Snow Load Resistance (kN/m²)",
+    "Tilt Angle Range",
+    "Applicable Roof Type",
+  ],
+};
 
 const initialState: ProductActionResult = {
   success: false,
@@ -63,9 +114,12 @@ export function ProductFormClient({
 }: ProductFormClientProps) {
   const router = useRouter();
   const isEditing = Boolean(initialProduct);
+  const [, startTransition] = useTransition();
 
   const actionFn = isEditing ? updateProductAction : createProductAction;
   const [state, formAction, isPending] = useActionState(actionFn, initialState);
+
+  const [isDirty, setIsDirty] = useState(false);
 
   const [specs, setSpecs] = useState<ProductSpecItem[]>(
     initialProduct?.specs || [
@@ -74,25 +128,81 @@ export function ProductFormClient({
     ]
   );
 
+  const [selectedCategory, setSelectedCategory] = useState(
+    initialProduct?.categoryId || categories[0]?.id || ""
+  );
+
   const [nameVal, setNameVal] = useState(initialProduct?.name || "");
   const [slugVal, setSlugVal] = useState(initialProduct?.slug || "");
+  const [metaTitleVal, setMetaTitleVal] = useState(initialProduct?.metaTitle || "");
+  const [metaDescVal, setMetaDescVal] = useState(initialProduct?.metaDescription || "");
+
+  const saveSuccess = state.success;
+
+  // Unsaved changes warning
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty && !saveSuccess) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty, saveSuccess]);
 
   useEffect(() => {
     if (state.success) {
-      router.push("/admin/products");
-      router.refresh();
+      const timer = setTimeout(() => {
+        router.push("/admin/products");
+        router.refresh();
+      }, 700);
+      return () => clearTimeout(timer);
     }
   }, [state.success, router]);
 
+  const markDirty = () => {
+    if (!isDirty) setIsDirty(true);
+  };
+
+  const handleNameChange = (val: string) => {
+    setNameVal(val);
+    markDirty();
+    if (!isEditing && (!slugVal || slugVal === nameVal.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, ""))) {
+      const generated = val
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]+/g, "")
+        .replace(/--+/g, "-");
+      setSlugVal(generated);
+    }
+  };
+
   const addSpecRow = () => {
     setSpecs([...specs, { label: "", value: "" }]);
+    markDirty();
+  };
+
+  const addSuggestedSpec = (label: string) => {
+    markDirty();
+    // If an existing row is empty, fill it
+    const emptyIdx = specs.findIndex((s) => !s.label && !s.value);
+    if (emptyIdx !== -1) {
+      const next = [...specs];
+      next[emptyIdx].label = label;
+      setSpecs(next);
+    } else {
+      setSpecs([...specs, { label, value: "" }]);
+    }
   };
 
   const removeSpecRow = (index: number) => {
+    markDirty();
     setSpecs(specs.filter((_, i) => i !== index));
   };
 
   const moveSpecRow = (index: number, direction: "up" | "down") => {
+    markDirty();
     const targetIndex = direction === "up" ? index - 1 : index + 1;
     if (targetIndex < 0 || targetIndex >= specs.length) return;
     const next = [...specs];
@@ -103,28 +213,51 @@ export function ProductFormClient({
   };
 
   const handleSpecChange = (index: number, field: "label" | "value", val: string) => {
+    markDirty();
     const next = [...specs];
     next[index][field] = val;
     setSpecs(next);
   };
 
-  const handleNameChange = (val: string) => {
-    setNameVal(val);
-    if (!isEditing && !slugVal) {
-      const generated = val
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^\w-]+/g, "");
-      setSlugVal(generated);
-    }
-  };
+  const currentCategorySlug = categories.find((c) => c.id === selectedCategory)?.slug || "";
+  const suggestions = SPEC_SUGGESTIONS[currentCategorySlug] || [
+    "Nominal Power",
+    "Efficiency",
+    "Warranty",
+    "Dimensions",
+  ];
 
   return (
-    <form action={formAction} encType="multipart/form-data" className="space-y-8">
+    <form
+      action={(fd) => {
+        setIsDirty(false);
+        formAction(fd);
+      }}
+      encType="multipart/form-data"
+      className="space-y-8"
+      onChange={markDirty}
+    >
       {state.error && (
         <div className="p-4 rounded-2xl bg-red-50 border border-red-200 flex items-start gap-3 text-xs text-red-800">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
-          <span>{state.error}</span>
+          <div>
+            <p className="font-bold">Validation Error</p>
+            <p>{state.error}</p>
+          </div>
+        </div>
+      )}
+
+      {saveSuccess && (
+        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center gap-3 text-xs text-emerald-800">
+          <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
+          <span className="font-medium">Product saved successfully. Redirecting to inventory...</span>
+        </div>
+      )}
+
+      {isDirty && !isPending && (
+        <div className="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center justify-between">
+          <span>You have unsaved changes in this form.</span>
+          <span className="font-mono text-[10px] text-amber-700 uppercase tracking-wider">Unsaved</span>
         </div>
       )}
 
@@ -132,7 +265,7 @@ export function ProductFormClient({
         <input type="hidden" name="id" value={initialProduct?.id} />
       )}
 
-      {/* Basic Info */}
+      {/* 1. General Information */}
       <div className="space-y-4">
         <h2 className="text-sm font-mono font-bold uppercase text-[#111311] pb-2 border-b border-[#EDEDED]">
           1. General Information
@@ -147,10 +280,11 @@ export function ProductFormClient({
               type="text"
               name="name"
               required
+              minLength={2}
               value={nameVal}
               onChange={(e) => handleNameChange(e.target.value)}
               placeholder="e.g. N-Type TOPCon 620W Bifacial Module"
-              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none focus:ring-1 focus:ring-[#111311]"
             />
           </div>
 
@@ -163,9 +297,12 @@ export function ProductFormClient({
               name="slug"
               required
               value={slugVal}
-              onChange={(e) => setSlugVal(e.target.value)}
+              onChange={(e) => {
+                setSlugVal(e.target.value);
+                markDirty();
+              }}
               placeholder="n-type-topcon-620w-bifacial"
-              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] font-mono outline-none"
+              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] font-mono outline-none focus:ring-1 focus:ring-[#111311]"
             />
           </div>
         </div>
@@ -178,7 +315,11 @@ export function ProductFormClient({
             <select
               name="categoryId"
               required
-              defaultValue={initialProduct?.categoryId || categories[0]?.id}
+              value={selectedCategory}
+              onChange={(e) => {
+                setSelectedCategory(e.target.value);
+                markDirty();
+              }}
               className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
             >
               {categories.map((c) => (
@@ -243,7 +384,7 @@ export function ProductFormClient({
         </div>
       </div>
 
-      {/* Commercial & Stock Settings */}
+      {/* 2. Commercial & Stock Parameters */}
       <div className="space-y-4">
         <h2 className="text-sm font-mono font-bold uppercase text-[#111311] pb-2 border-b border-[#EDEDED]">
           2. Wholesale & Commercial Parameters
@@ -286,13 +427,13 @@ export function ProductFormClient({
               type="text"
               name="leadTime"
               defaultValue={initialProduct?.leadTime || ""}
-              placeholder="e.g. Immediate delivery from Dahka"
+              placeholder="e.g. Immediate delivery from Dhaka"
               className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
               Unit Price (BDT, Optional)
@@ -303,19 +444,6 @@ export function ProductFormClient({
               defaultValue={initialProduct?.priceBdt || ""}
               placeholder="e.g. 14500"
               className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] font-mono outline-none"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-              Datasheet Link (PDF or URL)
-            </label>
-            <input
-              type="text"
-              name="datasheetUrl"
-              defaultValue={initialProduct?.datasheetUrl || ""}
-              placeholder="https://.../datasheet.pdf"
-              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
             />
           </div>
 
@@ -345,20 +473,97 @@ export function ProductFormClient({
         </div>
       </div>
 
-      {/* Dynamic Technical Specifications */}
+      {/* 3. Datasheet Management */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between pb-2 border-b border-[#EDEDED]">
-          <h2 className="text-sm font-mono font-bold uppercase text-[#111311]">
-            3. Technical Specifications Table
-          </h2>
+        <h2 className="text-sm font-mono font-bold uppercase text-[#111311] pb-2 border-b border-[#EDEDED]">
+          3. Technical Datasheet (PDF or URL)
+        </h2>
+
+        <div className="p-5 rounded-3xl bg-[#EDEDED]/60 border border-[#DDE1DC] space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+                Upload PDF Datasheet (Max 10MB)
+              </label>
+              <input
+                type="file"
+                name="datasheetFile"
+                accept="application/pdf,.pdf"
+                className="w-full text-xs font-mono file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#111311] file:text-[#CEF23E] hover:file:bg-[#222622] file:cursor-pointer"
+              />
+              <span className="text-[11px] text-[#5C605C] block mt-1">
+                Must be a valid PDF file. Safely stored with magic-byte validation.
+              </span>
+            </div>
+
+            <div>
+              <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+                Or External Datasheet URL
+              </label>
+              <input
+                type="text"
+                name="datasheetUrl"
+                defaultValue={initialProduct?.datasheetUrl || ""}
+                placeholder="https://example.com/datasheet.pdf"
+                className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
+              />
+            </div>
+          </div>
+
+          {initialProduct?.datasheetUrl && (
+            <div className="flex items-center gap-2 pt-2 border-t border-[#DDE1DC] text-xs font-mono text-[#5C605C]">
+              <FileText className="w-3.5 h-3.5 text-[#111311]" />
+              <span>Current Datasheet:</span>
+              <a
+                href={initialProduct.datasheetUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[#111311] underline hover:text-black inline-flex items-center gap-1 font-medium"
+              >
+                <span>View File</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 4. Dynamic Technical Specifications */}
+      <div className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-[#EDEDED]">
+          <div>
+            <h2 className="text-sm font-mono font-bold uppercase text-[#111311]">
+              4. Technical Specifications Table
+            </h2>
+            <p className="text-[11px] text-[#5C605C]">
+              Click suggestions below to quick-add common category parameters
+            </p>
+          </div>
           <button
             type="button"
             onClick={addSpecRow}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111311] text-[#CEF23E] text-xs font-mono hover:bg-[#222622]"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111311] text-[#CEF23E] text-xs font-mono hover:bg-[#222622] self-start sm:self-auto"
           >
             <Plus className="w-3 h-3" />
             <span>Add Row</span>
           </button>
+        </div>
+
+        {/* Category Spec Suggestions */}
+        <div className="flex flex-wrap items-center gap-1.5 p-3 rounded-2xl bg-[#EDEDED]/50 border border-[#DDE1DC]">
+          <span className="text-[10px] font-mono uppercase text-[#5C605C] mr-1 flex items-center gap-1">
+            <Sparkles className="w-3 h-3 text-[#111311]" /> Suggestions:
+          </span>
+          {suggestions.map((sug) => (
+            <button
+              key={sug}
+              type="button"
+              onClick={() => addSuggestedSpec(sug)}
+              className="px-2.5 py-1 rounded-full bg-white hover:bg-[#111311] hover:text-[#CEF23E] text-[#111311] text-[11px] font-mono border border-[#DDE1DC] transition-colors"
+            >
+              + {sug}
+            </button>
+          ))}
         </div>
 
         <div className="space-y-2">
@@ -369,7 +574,7 @@ export function ProductFormClient({
                 name="spec_labels[]"
                 value={spec.label}
                 onChange={(e) => handleSpecChange(index, "label", e.target.value)}
-                placeholder="Spec Name (e.g. Module Efficiency)"
+                placeholder="Spec Name (e.g. Nominal Power)"
                 className="w-1/2 px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs text-[#111311] outline-none"
               />
               <input
@@ -377,7 +582,7 @@ export function ProductFormClient({
                 name="spec_values[]"
                 value={spec.value}
                 onChange={(e) => handleSpecChange(index, "value", e.target.value)}
-                placeholder="Value (e.g. 22.6%)"
+                placeholder="Value (e.g. 620W)"
                 className="w-1/2 px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs font-mono text-[#111311] outline-none"
               />
               <div className="flex items-center gap-1 shrink-0">
@@ -413,59 +618,112 @@ export function ProductFormClient({
         </div>
       </div>
 
-      {/* Image Uploads */}
+      {/* 5. Product Images */}
       <div className="space-y-4">
         <h2 className="text-sm font-mono font-bold uppercase text-[#111311] pb-2 border-b border-[#EDEDED]">
-          4. Product Images (Sharp Processing)
+          5. Product Images (First Image is Primary)
         </h2>
 
-        {/* Existing Images Display if Editing */}
+        {/* Existing Images Display */}
         {initialProduct?.images && initialProduct.images.length > 0 && (
-          <div className="mb-4">
-            <span className="text-xs font-mono text-[#5C605C] block mb-2">
-              Existing Images:
+          <div className="mb-4 space-y-2">
+            <span className="text-xs font-mono text-[#5C605C] block">
+              Manage Existing Images (Alt Text, Order & Deletion):
             </span>
-            <div className="flex gap-4 overflow-x-auto pb-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {initialProduct.images.map((img, idx) => (
-                <div key={img.id} className="flex flex-col items-center gap-1.5 shrink-0">
-                  <div className="relative w-24 h-24 rounded-2xl overflow-hidden bg-[#EDEDED] border border-[#DDE1DC]">
+                <div
+                  key={img.id}
+                  className="p-3 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC] space-y-2"
+                >
+                  <input type="hidden" name="existing_image_ids[]" value={img.id} />
+                  <div className="relative w-full h-32 rounded-xl overflow-hidden bg-white border border-[#DDE1DC]">
                     <Image src={img.url} alt={img.alt} fill className="object-cover" />
-                    <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/60 text-[9px] font-mono text-white">
-                      #{idx + 1}
-                    </span>
+                    {idx === 0 ? (
+                      <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-[#111311] text-[#CEF23E] text-[10px] font-mono font-bold shadow-xs">
+                        #1 Primary Image
+                      </span>
+                    ) : (
+                      <span className="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/60 text-white text-[10px] font-mono">
+                        #{idx + 1}
+                      </span>
+                    )}
                   </div>
-                  <div className="flex items-center gap-1">
+
+                  <div>
+                    <label className="block text-[10px] font-mono text-[#5C605C] mb-1">
+                      Image Alt Text
+                    </label>
+                    <input
+                      type="text"
+                      name="existing_image_alts[]"
+                      defaultValue={img.alt}
+                      placeholder="Alt description for SEO"
+                      className="w-full px-2.5 py-1.5 rounded-xl bg-white text-xs text-[#111311] outline-none"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1">
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        disabled={idx === 0}
+                        onClick={() => {
+                          startTransition(async () => {
+                            const fd = new FormData();
+                            fd.append("imageId", img.id);
+                            fd.append("direction", "up");
+                            fd.append("productId", initialProduct.id);
+                            await reorderProductImageAction(fd);
+                            router.refresh();
+                          });
+                        }}
+                        title="Move Left"
+                        className="p-1 rounded-lg bg-white hover:bg-[#DDE1DC] disabled:opacity-25 text-[#111311] border border-[#DDE1DC]"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        disabled={idx === initialProduct.images.length - 1}
+                        onClick={() => {
+                          startTransition(async () => {
+                            const fd = new FormData();
+                            fd.append("imageId", img.id);
+                            fd.append("direction", "down");
+                            fd.append("productId", initialProduct.id);
+                            await reorderProductImageAction(fd);
+                            router.refresh();
+                          });
+                        }}
+                        title="Move Right"
+                        className="p-1 rounded-lg bg-white hover:bg-[#DDE1DC] disabled:opacity-25 text-[#111311] border border-[#DDE1DC]"
+                      >
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
                     <button
                       type="button"
-                      disabled={idx === 0}
-                      onClick={async () => {
-                        const fd = new FormData();
-                        fd.append("imageId", img.id);
-                        fd.append("direction", "up");
-                        fd.append("productId", initialProduct.id);
-                        await reorderProductImageAction(fd);
-                        router.refresh();
+                      onClick={() => {
+                        if (
+                          confirm(
+                            "Delete this image? The uploaded file will be permanently removed from disk."
+                          )
+                        ) {
+                          startTransition(async () => {
+                            const fd = new FormData();
+                            fd.append("imageId", img.id);
+                            fd.append("productId", initialProduct.id);
+                            await deleteProductImageAction(fd);
+                            router.refresh();
+                          });
+                        }
                       }}
-                      title="Move Image Left"
-                      className="p-1 rounded-full bg-white hover:bg-[#DDE1DC] disabled:opacity-25 text-[#111311] border border-[#DDE1DC] shadow-xs"
+                      className="p-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Delete Image"
                     >
-                      <ArrowLeft className="w-3 h-3" />
-                    </button>
-                    <button
-                      type="button"
-                      disabled={idx === initialProduct.images.length - 1}
-                      onClick={async () => {
-                        const fd = new FormData();
-                        fd.append("imageId", img.id);
-                        fd.append("direction", "down");
-                        fd.append("productId", initialProduct.id);
-                        await reorderProductImageAction(fd);
-                        router.refresh();
-                      }}
-                      title="Move Image Right"
-                      className="p-1 rounded-full bg-white hover:bg-[#DDE1DC] disabled:opacity-25 text-[#111311] border border-[#DDE1DC] shadow-xs"
-                    >
-                      <ArrowRight className="w-3 h-3" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -474,6 +732,7 @@ export function ProductFormClient({
           </div>
         )}
 
+        {/* Upload new images */}
         <div className="p-6 rounded-3xl bg-[#EDEDED] border border-dashed border-[#5C605C]/40 text-center">
           <Upload className="w-6 h-6 text-[#5C605C] mx-auto mb-2" />
           <label className="cursor-pointer">
@@ -481,7 +740,7 @@ export function ProductFormClient({
               Click to select photos
             </span>
             <span className="text-xs text-[#5C605C] block mt-1">
-              Supports JPEG, PNG, WebP up to 5MB (auto-converted to WebP + thumbnail)
+              Supports JPEG, PNG, WebP up to 5MB (auto-converted to WebP + responsive thumbnail)
             </span>
             <input
               type="file"
@@ -494,12 +753,66 @@ export function ProductFormClient({
         </div>
       </div>
 
+      {/* 6. SEO Meta Fields */}
+      <div className="space-y-4">
+        <h2 className="text-sm font-mono font-bold uppercase text-[#111311] pb-2 border-b border-[#EDEDED]">
+          6. Search Engine Optimization (SEO)
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-mono font-medium text-[#111311]">
+                Custom Meta Title
+              </label>
+              <span className="text-[10px] font-mono text-[#5C605C]">
+                {metaTitleVal.length}/60
+              </span>
+            </div>
+            <input
+              type="text"
+              name="metaTitle"
+              value={metaTitleVal}
+              onChange={(e) => {
+                setMetaTitleVal(e.target.value);
+                markDirty();
+              }}
+              placeholder={nameVal ? `${nameVal} — Noor Solar Energy` : "Title for search engines"}
+              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-mono font-medium text-[#111311]">
+                Meta Description
+              </label>
+              <span className="text-[10px] font-mono text-[#5C605C]">
+                {metaDescVal.length}/160
+              </span>
+            </div>
+            <textarea
+              name="metaDescription"
+              rows={2}
+              value={metaDescVal}
+              onChange={(e) => {
+                setMetaDescVal(e.target.value);
+                markDirty();
+              }}
+              placeholder="Concise summary for Google search snippets..."
+              className="w-full px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
+        </div>
+      </div>
+
       {/* Action Buttons */}
-      <div className="pt-6 border-t border-[#EDEDED] flex items-center justify-between gap-4">
+      <div className="pt-6 border-t border-[#EDEDED] flex flex-col sm:flex-row items-center justify-between gap-4">
         <button
           type="submit"
+          id="btn-save-product"
           disabled={isPending}
-          className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-semibold text-xs tracking-tight transition-all disabled:opacity-60 shadow-lg"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-semibold text-xs tracking-tight transition-all disabled:opacity-60 shadow-lg cursor-pointer"
         >
           <Save className="w-4 h-4" />
           <span>{isPending ? "Saving Product..." : isEditing ? "Update Product" : "Save New Product"}</span>
@@ -509,13 +822,17 @@ export function ProductFormClient({
           <button
             type="button"
             onClick={() => {
-              if (confirm("Are you sure you want to delete this product? This cannot be undone.")) {
+              if (
+                confirm(
+                  `Are you sure you want to permanently delete "${initialProduct?.name}"? All associated images and datasheet files will be removed from disk.`
+                )
+              ) {
                 const form = new FormData();
                 form.append("id", initialProduct!.id);
                 deleteProductAction(form);
               }
             }}
-            className="px-5 py-3 rounded-full text-xs font-mono text-red-600 hover:bg-red-50 transition-colors"
+            className="w-full sm:w-auto px-5 py-3 rounded-full text-xs font-mono text-red-600 hover:bg-red-50 transition-colors text-center"
           >
             Delete Product
           </button>

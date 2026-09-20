@@ -37,6 +37,9 @@ async function run() {
       for (const vp of VIEWPORTS) {
         const page = await browser.newPage();
         await page.setViewport({ width: vp.width, height: vp.height });
+        await page.evaluateOnNewDocument(() => {
+          sessionStorage.setItem("noor-preloader-seen", "1");
+        });
         await page.goto(`http://127.0.0.1:3000${p.path}`, {
           waitUntil: "domcontentloaded",
           timeout: 25000,

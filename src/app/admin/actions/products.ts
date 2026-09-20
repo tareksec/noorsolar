@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
-import { processAndSaveImage, deleteUploadedFile } from "@/lib/uploads";
+import { processAndSaveImage, processAndSavePdf, deleteUploadedFile } from "@/lib/uploads";
 
 function slugify(text: string): string {
   return text
@@ -33,10 +33,17 @@ export async function createProductAction(
 
   try {
     const name = (formData.get("name") as string)?.trim();
-    if (!name) return { success: false, error: "Product name is required." };
+    if (!name || name.length < 2) {
+      return { success: false, error: "Product name is required (minimum 2 characters)." };
+    }
 
     let slug = (formData.get("slug") as string)?.trim();
     if (!slug) slug = slugify(name);
+    else slug = slugify(slug);
+
+    if (!slug) {
+      return { success: false, error: "A valid URL slug is required." };
+    }
 
     // Check slug uniqueness
     const existing = await db.product.findUnique({ where: { slug } });
@@ -58,7 +65,22 @@ export async function createProductAction(
     const priceBdt = priceStr ? parseInt(priceStr, 10) : null;
     const showPrice = formData.get("showPrice") === "true";
     const isFeatured = formData.get("isFeatured") === "true";
-    const datasheetUrl = (formData.get("datasheetUrl") as string)?.trim() || null;
+    const metaTitle = (formData.get("metaTitle") as string)?.trim() || null;
+    const metaDescription = (formData.get("metaDescription") as string)?.trim() || null;
+
+    // Handle Datasheet: uploaded PDF file or text URL
+    let datasheetUrl = (formData.get("datasheetUrl") as string)?.trim() || null;
+    const datasheetFile = formData.get("datasheetFile") as File | null;
+    if (datasheetFile && datasheetFile.size > 0 && datasheetFile.name) {
+      const savedPdf = await processAndSavePdf(datasheetFile);
+      if (!savedPdf) {
+        return {
+          success: false,
+          error: "Invalid PDF datasheet. File must be a valid PDF document and under 10MB.",
+        };
+      }
+      datasheetUrl = savedPdf.url;
+    }
 
     // Parse specs from parallel arrays
     const specLabels = formData.getAll("spec_labels[]") as string[];
@@ -74,6 +96,7 @@ export async function createProductAction(
 
     // Process image uploads
     const files = formData.getAll("images") as File[];
+    const imageAlts = formData.getAll("new_image_alts[]") as string[];
     const imagesData = [];
 
     for (let i = 0; i < files.length; i++) {
@@ -81,10 +104,11 @@ export async function createProductAction(
       if (file && file.size > 0 && file.name) {
         const saved = await processAndSaveImage(file, "prod");
         if (saved) {
+          const altText: string = imageAlts[i]?.trim() || `${name} - Image ${imagesData.length + 1}`;
           imagesData.push({
             url: saved.url,
-            alt: `${name} - Image ${i + 1}`,
-            sortOrder: i,
+            alt: altText,
+            sortOrder: imagesData.length,
           });
         }
       }
@@ -117,6 +141,8 @@ export async function createProductAction(
         isActive: true,
         isDemo: false,
         datasheetUrl,
+        metaTitle,
+        metaDescription,
         images: { create: imagesData },
         specs: { create: specsData },
       },
@@ -149,10 +175,22 @@ export async function updateProductAction(
     if (!id) return { success: false, error: "Missing product ID." };
 
     const name = (formData.get("name") as string)?.trim();
-    if (!name) return { success: false, error: "Product name is required." };
+    if (!name || name.length < 2) {
+      return { success: false, error: "Product name is required (minimum 2 characters)." };
+    }
 
-    const slug = (formData.get("slug") as string)?.trim() || slugify(name);
+    let slug = (formData.get("slug") as string)?.trim() || slugify(name);
+    slug = slugify(slug);
+
+    // Check slug uniqueness against other products
+    const existingWithSlug = await db.product.findUnique({ where: { slug } });
+    if (existingWithSlug && existingWithSlug.id !== id) {
+      slug = `${slug}-${Date.now().toString().slice(-4)}`;
+    }
+
     const categoryId = formData.get("categoryId") as string;
+    if (!categoryId) return { success: false, error: "Category is required." };
+
     const shortDescription = (formData.get("shortDescription") as string)?.trim() || null;
     const description = (formData.get("description") as string)?.trim() || null;
     const brand = (formData.get("brand") as string)?.trim() || null;
@@ -164,7 +202,30 @@ export async function updateProductAction(
     const priceBdt = priceStr ? parseInt(priceStr, 10) : null;
     const showPrice = formData.get("showPrice") === "true";
     const isFeatured = formData.get("isFeatured") === "true";
-    const datasheetUrl = (formData.get("datasheetUrl") as string)?.trim() || null;
+    const metaTitle = (formData.get("metaTitle") as string)?.trim() || null;
+    const metaDescription = (formData.get("metaDescription") as string)?.trim() || null;
+
+    // Get current product to check old datasheet
+    const currentProduct = await db.product.findUnique({
+      where: { id },
+      include: { images: true },
+    });
+
+    let datasheetUrl = (formData.get("datasheetUrl") as string)?.trim() || currentProduct?.datasheetUrl || null;
+    const datasheetFile = formData.get("datasheetFile") as File | null;
+    if (datasheetFile && datasheetFile.size > 0 && datasheetFile.name) {
+      const savedPdf = await processAndSavePdf(datasheetFile);
+      if (!savedPdf) {
+        return {
+          success: false,
+          error: "Invalid PDF datasheet. File must be a valid PDF document and under 10MB.",
+        };
+      }
+      if (currentProduct?.datasheetUrl?.startsWith("/uploads/")) {
+        deleteUploadedFile(currentProduct.datasheetUrl);
+      }
+      datasheetUrl = savedPdf.url;
+    }
 
     // Parse specs
     const specLabels = formData.getAll("spec_labels[]") as string[];
@@ -178,9 +239,24 @@ export async function updateProductAction(
       }
     }
 
+    // Update existing images alt text
+    const existingImageIds = formData.getAll("existing_image_ids[]") as string[];
+    const existingImageAlts = formData.getAll("existing_image_alts[]") as string[];
+    for (let i = 0; i < existingImageIds.length; i++) {
+      const imgId = existingImageIds[i];
+      const alt = existingImageAlts[i]?.trim();
+      if (imgId) {
+        await db.productImage.update({
+          where: { id: imgId },
+          data: { alt: alt || `${name} - Image ${i + 1}` },
+        });
+      }
+    }
+
     // Process any new image uploads
     const files = formData.getAll("images") as File[];
     const newImages = [];
+    const currentImageCount = currentProduct?.images.length || 0;
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -189,8 +265,8 @@ export async function updateProductAction(
         if (saved) {
           newImages.push({
             url: saved.url,
-            alt: `${name} - Image ${i + 1}`,
-            sortOrder: i,
+            alt: `${name} - Image ${currentImageCount + newImages.length + 1}`,
+            sortOrder: currentImageCount + newImages.length,
             productId: id,
           });
         }
@@ -214,6 +290,8 @@ export async function updateProductAction(
         showPrice,
         isFeatured,
         datasheetUrl,
+        metaTitle,
+        metaDescription,
       },
     });
 
@@ -260,9 +338,13 @@ export async function deleteProductAction(formData: FormData) {
   });
 
   if (product) {
-    // Clean up uploaded files
+    // Clean up uploaded image files
     for (const img of product.images) {
       deleteUploadedFile(img.url);
+    }
+    // Clean up uploaded datasheet if stored locally
+    if (product.datasheetUrl?.startsWith("/uploads/")) {
+      deleteUploadedFile(product.datasheetUrl);
     }
     await db.product.delete({ where: { id } });
   }
@@ -271,6 +353,28 @@ export async function deleteProductAction(formData: FormData) {
   revalidatePath("/products");
   revalidatePath("/admin/products");
   redirect("/admin/products");
+}
+
+export async function deleteProductImageAction(formData: FormData) {
+  const session = await getSession();
+  if (!session) throw new Error("Unauthorized");
+
+  const imageId = formData.get("imageId") as string;
+  const productId = formData.get("productId") as string;
+  if (!imageId) return;
+
+  const image = await db.productImage.findUnique({
+    where: { id: imageId },
+  });
+
+  if (image) {
+    deleteUploadedFile(image.url);
+    await db.productImage.delete({ where: { id: imageId } });
+  }
+
+  revalidatePath(`/admin/products/${productId}`);
+  revalidatePath(`/product/${productId}`);
+  revalidatePath("/");
 }
 
 export async function duplicateProductAction(formData: FormData) {
@@ -311,6 +415,8 @@ export async function duplicateProductAction(formData: FormData) {
       priceBdt: original.priceBdt,
       showPrice: original.showPrice,
       datasheetUrl: original.datasheetUrl,
+      metaTitle: original.metaTitle,
+      metaDescription: original.metaDescription,
       isFeatured: false,
       isActive: false, // Inactive by default per Task E!
       isDemo: false,
@@ -377,6 +483,7 @@ export async function reorderProductImageAction(formData: FormData) {
 
   revalidatePath(`/admin/products/${productId}`);
   revalidatePath(`/product/${productId}`);
+  revalidatePath("/");
 }
 
 export async function reorderProductSpecAction(formData: FormData) {
@@ -420,3 +527,79 @@ export async function reorderProductSpecAction(formData: FormData) {
   revalidatePath(`/admin/products/${productId}`);
   revalidatePath(`/product/${productId}`);
 }
+
+export async function bulkUpdateProductsAction(formData: FormData) {
+  const session = await getSession();
+  if (!session) throw new Error("Unauthorized");
+
+  const action = formData.get("bulkAction") as "activate" | "deactivate" | "delete";
+  const ids = formData.getAll("selectedIds[]") as string[];
+  if (!ids.length) return;
+
+  if (action === "activate") {
+    await db.product.updateMany({
+      where: { id: { in: ids } },
+      data: { isActive: true },
+    });
+  } else if (action === "deactivate") {
+    await db.product.updateMany({
+      where: { id: { in: ids } },
+      data: { isActive: false },
+    });
+  } else if (action === "delete") {
+    for (const id of ids) {
+      const p = await db.product.findUnique({
+        where: { id },
+        include: { images: true },
+      });
+      if (p) {
+        for (const img of p.images) {
+          deleteUploadedFile(img.url);
+        }
+        if (p.datasheetUrl?.startsWith("/uploads/")) {
+          deleteUploadedFile(p.datasheetUrl);
+        }
+        await db.product.delete({ where: { id } });
+      }
+    }
+  }
+
+  revalidatePath("/");
+  revalidatePath("/products");
+  revalidatePath("/admin/products");
+}
+
+export async function toggleProductFeaturedAction(formData: FormData) {
+  const session = await getSession();
+  if (!session) throw new Error("Unauthorized");
+
+  const id = formData.get("id") as string;
+  const current = formData.get("current") === "true";
+
+  if (id) {
+    await db.product.update({
+      where: { id },
+      data: { isFeatured: !current },
+    });
+    revalidatePath("/admin/products");
+    revalidatePath("/");
+  }
+}
+
+export async function toggleProductActiveAction(formData: FormData) {
+  const session = await getSession();
+  if (!session) throw new Error("Unauthorized");
+
+  const id = formData.get("id") as string;
+  const current = formData.get("current") === "true";
+
+  if (id) {
+    await db.product.update({
+      where: { id },
+      data: { isActive: !current },
+    });
+    revalidatePath("/admin/products");
+    revalidatePath("/products");
+    revalidatePath("/");
+  }
+}

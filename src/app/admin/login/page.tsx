@@ -93,7 +93,7 @@ export default function AdminLoginPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-block mb-4 group">
             <Image
-              src="/logo/logo.png"
+              src="/brand/logo-default.png"
               alt="Noor Solar Energy"
               width={180}
               height={45}

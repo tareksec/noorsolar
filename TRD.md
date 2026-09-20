@@ -117,7 +117,10 @@ model Product {
   sortOrder        Int            @default(0)
   images           ProductImage[]
   specs            ProductSpec[]
+  metaTitle        String?
+  metaDescription  String?
   quotes           QuoteRequest[]
+  reviews          ProductReview[]
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 }
@@ -161,78 +164,112 @@ model SiteSetting {
   value String // plain text or a JSON string
 }
 
+model Stat {
+  id          String   @id @default(cuid())
+  label       String
+  value       Float
+  prefix      String?
+  suffix      String?
+  description String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  isSample    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
 
-  model Stat {
-    id          String   @id @default(cuid())
-    label       String
-    value       Float
-    prefix      String?
-    suffix      String?
-    description String?
-    sortOrder   Int      @default(0)
-    isActive    Boolean  @default(true)
-    isSample    Boolean  @default(true)
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-  }
+model Certification {
+  id          String   @id @default(cuid())
+  name        String
+  issuer      String?
+  description String?
+  image       String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  isSample    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
 
-  model Certification {
-    id          String   @id @default(cuid())
-    name        String
-    issuer      String?
-    description String?
-    image       String?
-    sortOrder   Int      @default(0)
-    isActive    Boolean  @default(true)
-    isSample    Boolean  @default(true)
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-  }
+model Partner {
+  id        String   @id @default(cuid())
+  name      String
+  logo      String?
+  url       String?
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  isSample  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-  model Partner {
-    id        String   @id @default(cuid())
-    name      String
-    logo      String?
-    url       String?
-    sortOrder Int      @default(0)
-    isActive  Boolean  @default(true)
-    isSample  Boolean  @default(true)
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
-  }
+model Testimonial {
+  id         String   @id @default(cuid())
+  quote      String
+  authorName String
+  authorRole String?
+  company    String?
+  photo      String?
+  sortOrder  Int      @default(0)
+  isActive   Boolean  @default(true)
+  isSample   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
 
-  model Testimonial {
-    id         String   @id @default(cuid())
-    quote      String
-    authorName String
-    authorRole String?
-    company    String?
-    photo      String?
-    sortOrder  Int      @default(0)
-    isActive   Boolean  @default(true)
-    isSample   Boolean  @default(true)
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
-  }
+model FaqItem {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  isSample  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-  model FaqItem {
-    id        String   @id @default(cuid())
-    question  String
-    answer    String
-    sortOrder Int      @default(0)
-    isActive  Boolean  @default(true)
-    isSample  Boolean  @default(true)
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
-  }
+model BlogPost {
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  title           String
+  excerpt         String?
+  content         String    // Markdown text
+  coverImage      String?
+  coverAlt        String?
+  tags            String?   // comma-separated string
+  status          String    @default("DRAFT") // DRAFT | PUBLISHED
+  publishedAt     DateTime?
+  authorName      String?
+  metaTitle       String?
+  metaDescription String?
+  isSample        Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model ProductReview {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  authorName String
+  authorRole String?
+  company    String?
+  rating     Int      // 1 to 5
+  title      String?
+  body       String
+  status     String   @default("PENDING") // PENDING | APPROVED | REJECTED
+  source     String   @default("PUBLIC")  // ADMIN | PUBLIC
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
 ```
 
 Spec rows are free-form, so each category can show different specs (panel wattage and efficiency, battery voltage and capacity, inverter rating and MPPT) without schema changes.
 
 ## 4. Routes
 
-Public: `/`, `/products`, `/category/[slug]`, `/product/[slug]`, `/about`, `/contact`.
-Admin: `/admin/login`, `/admin`, `/admin/categories`, `/admin/products`, `/admin/products/new`, `/admin/products/[id]`, `/admin/quotes`, `/admin/quotes/[id]`, `/admin/settings`.
+Public: `/`, `/products`, `/category/[slug]`, `/product/[slug]`, `/blog`, `/blog/[slug]`, `/about`, `/contact`.
+Admin: `/admin/login`, `/admin`, `/admin/categories`, `/admin/products`, `/admin/products/new`, `/admin/products/[id]`, `/admin/blog`, `/admin/reviews`, `/admin/quotes`, `/admin/quotes/[id]`, `/admin/settings`.
 Files: `/uploads/[...path]`.
 
 Only active categories and products appear on the public site. Unknown slugs return `notFound()`.

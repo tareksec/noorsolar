@@ -13,6 +13,7 @@ import { SiteConfig } from "@/lib/site-config";
 
 interface FooterProps {
   settings: SiteConfig;
+  showBlog?: boolean;
 }
 
 function FacebookIcon({ className }: { className?: string }) {
@@ -47,7 +48,7 @@ function TwitterIcon({ className }: { className?: string }) {
   );
 }
 
-export function Footer({ settings }: FooterProps) {
+export function Footer({ settings, showBlog = false }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   const phoneRaw = settings.phone || "+8801700000000";
@@ -72,12 +73,11 @@ export function Footer({ settings }: FooterProps) {
               <div className="mb-5">
                 <Link href="/" className="inline-block group">
                   <Image
-                    src="/logo/logo.png"
+                    src="/brand/logo-default.png"
                     alt="Noor Solar Energy"
                     width={200}
                     height={50}
                     className="h-10 sm:h-11 w-auto object-contain group-hover:opacity-90 transition-opacity"
-                    priority
                   />
                 </Link>
               </div>
@@ -229,6 +229,13 @@ export function Footer({ settings }: FooterProps) {
                   Certifications & Standards
                 </Link>
               </li>
+              {showBlog && (
+                <li>
+                  <Link href="/blog" className="hover:text-[#111311] transition-colors font-medium">
+                    Technical Blog
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link href="/admin/login" className="hover:text-[#111311] transition-colors text-[11px] font-mono text-[#828B7D]">
                   B2B Staff Portal

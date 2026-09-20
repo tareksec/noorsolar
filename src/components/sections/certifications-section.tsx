@@ -8,13 +8,7 @@ interface CertificationsSectionProps {
   certifications: Certification[];
 }
 
-export function CertificationsSection({ certifications }: CertificationsSectionProps) {
-  // Find BSREA Certificate
-  const bsreaCert = certifications.find(
-    (c) =>
-      c.name.toLowerCase().includes("bsrea") ||
-      (c.issuer && c.issuer.toLowerCase().includes("bsrea"))
-  ) || certifications[0];
+export function CertificationsSection({}: CertificationsSectionProps) {
 
   const docUrl =
     "https://drive.google.com/file/d/1GR4hILXnDjJblqNmrxRNnWH_M7It4Md2/view?usp=sharing";
@@ -25,7 +19,7 @@ export function CertificationsSection({ certifications }: CertificationsSectionP
       {/* 1. Ambient Section Background Blend */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <Image
-          src="/photos/bsrea-compliance-bg.webp"
+          src="/photos/bsrea-compliance-bg-hd.webp"
           alt="BSREA Compliance Background"
           fill
           sizes="100vw"
