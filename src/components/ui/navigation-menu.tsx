@@ -18,7 +18,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
   { name: "About", href: "/about" },
   { name: "Why Us", href: "/#why-choose-us" },
   { name: "Process", href: "/#process" },
-  { name: "Pricing", href: "/#quote-section" },
+  { name: "Contact", href: "/contact" },
 ];
 
 const EXPAND_SCROLL_THRESHOLD = 80;
@@ -35,7 +35,7 @@ export function AnimatedNavFramer({
   items,
   brandName = "Noor Solar Energy",
   ctaText = "Book A Call",
-  ctaHref = "/#quote-section",
+  ctaHref = "/contact",
   showBlog = false,
 }: AnimatedNavFramerProps) {
   const [isExpanded, setExpanded] = React.useState(true);
@@ -91,7 +91,7 @@ export function AnimatedNavFramer({
   };
 
   return (
-    <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50">
+    <div className="fixed top-4 sm:top-5 inset-x-0 z-50 flex justify-center pointer-events-none px-3 sm:px-4">
       <motion.nav
         layout
         initial={{ y: -80, opacity: 0 }}
@@ -110,10 +110,10 @@ export function AnimatedNavFramer({
         whileTap={!isExpanded ? { scale: 0.95 } : {}}
         onClick={handleNavClick}
         className={cn(
-          "flex items-center overflow-hidden rounded-full border border-white/15 bg-slate-950/85 shadow-[0_12px_36px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-colors",
+          "pointer-events-auto flex items-center overflow-hidden rounded-full border border-white/15 bg-slate-950/85 shadow-[0_12px_36px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-colors shrink-0 max-w-full",
           !isExpanded
             ? "cursor-pointer justify-center p-0 border-[#CEF23E]/40 bg-slate-950/95 shadow-[0_0_24px_rgba(206,242,62,0.35)]"
-            : "px-2"
+            : "px-2 sm:px-2.5"
         )}
       >
         <AnimatePresence mode="wait">
@@ -124,13 +124,13 @@ export function AnimatedNavFramer({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.15 }}
-              className="flex items-center"
+              className="flex items-center shrink-0 min-w-0"
             >
               {/* Brand Logo in Header Navbar */}
-              <div className="flex-shrink-0 flex items-center pl-2 pr-3">
+              <div className="flex-shrink-0 flex items-center pl-1.5 sm:pl-2 pr-2 sm:pr-3">
                 <Link href="/" className="flex items-center gap-2 group">
                   {/* Mobile: compact brand icon */}
-                  <div className="flex min-[400px]:hidden items-center justify-center w-8 h-8">
+                  <div className="flex min-[480px]:hidden items-center justify-center w-8 h-8">
                     <Image
                       src="/brand/logo-icon.png"
                       alt={brandName}
@@ -141,7 +141,7 @@ export function AnimatedNavFramer({
                     />
                   </div>
                   {/* Desktop / Tablet: full horizontal brand logo */}
-                  <div className="hidden min-[400px]:flex items-center">
+                  <div className="hidden min-[480px]:flex items-center">
                     <Image
                       src="/brand/logo-white.png"
                       alt="Noor Solar Energy"
@@ -155,7 +155,7 @@ export function AnimatedNavFramer({
               </div>
 
               {/* Navigation Links */}
-              <div className="flex items-center gap-1 sm:gap-1.5 pr-2">
+              <div className="flex items-center gap-0.5 sm:gap-1 lg:gap-1.5 pr-1 sm:pr-2">
                 {navItems.map((item) => {
                   const isActive = pathname === item.href;
                   return (
@@ -164,7 +164,7 @@ export function AnimatedNavFramer({
                       href={item.href}
                       onClick={(e) => e.stopPropagation()}
                       className={cn(
-                        "max-[399px]:hidden text-xs sm:text-sm font-medium transition-colors px-2.5 sm:px-3 py-1.5 rounded-full whitespace-nowrap",
+                        "hidden md:inline-flex text-xs lg:text-sm font-medium transition-colors px-2 lg:px-3 py-1.5 rounded-full whitespace-nowrap",
                         isActive
                           ? "text-[#CEF23E] font-semibold bg-white/10"
                           : "text-slate-300 hover:text-white hover:bg-white/5"
@@ -176,14 +176,14 @@ export function AnimatedNavFramer({
                 })}
 
                 {/* Right CTA Button in Brand Volt Lime */}
-                <div className="pl-1 sm:pl-2">
+                <div className="pl-1 sm:pl-2 shrink-0">
                   <Link
                     href={ctaHref}
                     onClick={(e) => e.stopPropagation()}
-                    className="group inline-flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] text-xs font-bold tracking-tight shadow-[0_4px_14px_rgba(206,242,62,0.35)] transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
+                    className="group inline-flex items-center gap-1.5 sm:gap-2 pl-3 sm:pl-4 pr-1.5 py-1.5 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] text-xs font-bold tracking-tight shadow-[0_4px_14px_rgba(206,242,62,0.35)] transition-all hover:scale-105 active:scale-95 whitespace-nowrap shrink-0"
                   >
                     <span>{ctaText}</span>
-                    <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#111311] flex items-center justify-center text-[#CEF23E] group-hover:translate-x-0.5 transition-transform shadow-2xs">
+                    <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#111311] flex items-center justify-center text-[#CEF23E] group-hover:translate-x-0.5 transition-transform shadow-2xs shrink-0">
                       <ArrowRight className="w-3 h-3 stroke-[2.5]" />
                     </span>
                   </Link>

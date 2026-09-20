@@ -20,8 +20,9 @@ export function HeroSection({
   primaryCta = "Book Service",
 }: HeroSectionProps) {
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-between overflow-hidden bg-[#0A0D0A] text-white">
-      {/* ================= BACKGROUND VIDEO ================= */}
+    <section className="relative w-full p-2.5 sm:p-4 lg:p-6 bg-white">
+      <div className="relative w-full min-h-[calc(100vh-1.25rem)] sm:min-h-[calc(100vh-2rem)] lg:min-h-[calc(100vh-3rem)] flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl lg:rounded-[36px] border-2 sm:border-[3px] border-white shadow-[0_20px_50px_rgba(0,0,0,0.18)] ring-1 ring-black/5 bg-[#0A0D0A] text-white">
+        {/* ================= BACKGROUND VIDEO ================= */}
       <video
         autoPlay
         loop
@@ -76,7 +77,7 @@ export function HeroSection({
           {/* Brand Volt Lime Pill CTA Button */}
           <div className="flex items-center gap-4">
             <Link
-              href="/#quote-section"
+              href="/contact"
               className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] font-bold text-sm sm:text-base shadow-[0_8px_25px_rgba(206,242,62,0.35)] transition-all hover:scale-[1.02] active:scale-[0.98] w-fit"
             >
               <span>{primaryCta}</span>
@@ -191,8 +192,8 @@ export function HeroSection({
           </div>
 
         </div>
-
       </div>
-    </section>
-  );
+    </div>
+  </section>
+);
 }
