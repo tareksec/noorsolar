@@ -52,7 +52,7 @@ function localizeProduct<
 }
 
 export async function getFeaturedProducts(locale?: string) {
-  const products = await db.product.findMany({
+  let products = await db.product.findMany({
     where: { isActive: true, isFeatured: true },
     orderBy: { sortOrder: "asc" },
     include: {
@@ -61,6 +61,24 @@ export async function getFeaturedProducts(locale?: string) {
       specs: { orderBy: { sortOrder: "asc" } },
     },
   });
+
+  // Ensure Shop Solar carousel always has a rich variety of at least 12 products
+  if (products.length < 12) {
+    const additional = await db.product.findMany({
+      where: {
+        isActive: true,
+        id: { notIn: products.map((p) => p.id) },
+      },
+      orderBy: { sortOrder: "asc" },
+      take: 12 - products.length,
+      include: {
+        category: true,
+        images: { orderBy: { sortOrder: "asc" } },
+        specs: { orderBy: { sortOrder: "asc" } },
+      },
+    });
+    products = [...products, ...additional];
+  }
 
   return products.map((p) => localizeProduct(p, locale));
 }

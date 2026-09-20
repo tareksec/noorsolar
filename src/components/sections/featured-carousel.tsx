@@ -48,7 +48,7 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
   const [carouselEndPosition, setCarouselEndPosition] = useState(0);
   const isBn = locale === "bn";
 
-  const displayProducts = products && products.length > 0 ? products.slice(0, 8) : [];
+  const displayProducts = products && products.length > 0 ? products.slice(0, 15) : [];
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
