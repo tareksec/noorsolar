@@ -35,14 +35,53 @@ Status values: `Not started` Â· `In progress` Â· `Done` Â· `Blocked`
 | 12 | Deployment to Hostinger, production checklist | Done | No | 2026-09-19 |
 | B | Foundation: images, security, secrets, admin protection, mobile layout | Done | No | 2026-09-19 |
 | C | Trust content system, full demo data, and Task B corrections | Done | No | 2026-09-19 |
-| D | Animation and visual polish | Done | No | 2026-09-19 |
-| E | Admin completion, production readiness, final audit, deployment guide | Done | No | 2026-09-19 |
+| D | Animation and visual polish | Done | No | 2026-09-20 |
+| E | Admin completion, production readiness, final audit, deployment guide | Done | No | 2026-09-20 |
 | F | Use the owner's photos, plus icons and illustrations | Done | No | 2026-09-20 |
 | M | A complete, premium motion system | Done | No | 2026-09-20 |
+| P | Redesign "How ordering works" as Process section | Done | No | 2026-09-20 |
 
 ---
 
 ## 2. Task log (newest first)
+
+### Task P — Redesign the "How ordering works" section as a Process section — 2026-09-20
+Branch: `task-p-process`
+Status: Done
+
+#### 1. What I did
+- Studied the reference interaction pattern at https://airzen.framer.media/ (Process section) at 1440px and 390px.
+- Redesigned `OrderingSteps` component (`src/components/sections/ordering-steps.tsx`) from the previous pinned scroll-driven sequence to an interactive 4-column Process section matching DESIGN.md tokens:
+  - Centered small label pill with volt-lime ring dot: "PROCESS".
+  - Large bold centered headline ("Order in four simple steps") and descriptive sub-text.
+  - 4 columns on desktop with circular photos cropped in `next/image`, volt-lime (#CEF23E) ring borders, overlapping dark charcoal (#111311) numbered badges (01–04), step titles, and neutral descriptions.
+  - Hand-drawn style curved arrows (inline SVG with alternating slight up and down curves) connecting the columns.
+  - Single-column stacked layout on mobile (360–767px) with vertical connectors and zero horizontal overflow.
+  - Motion: GSAP ScrollTrigger masked headline reveal, staggered circle scaling, badge pop-in, self-drawing SVG stroke-dashoffset arrows, and hover lift with lime ring glow. Immediate display on `prefers-reduced-motion`.
+- Replaced previous `ordering-pin` motion logic and updated `scripts/check-motion.js` and `MOTION.md`.
+- Added `processHeadline`, `processSubheadline`, and `processSteps` to `SiteConfig`, `defaultSiteConfig`, and admin settings form.
+- Prepared 4 optimized WebP photos under 35 KB each (11.8 KB, 11.4 KB, 32.3 KB, 28.1 KB).
+
+#### 2. Files created / changed
+- `src/components/sections/ordering-steps.tsx`: Full redesign of Process section.
+- `src/lib/site-config.ts`: Added process configuration fields.
+- `src/app/(public)/page.tsx`: Wired process settings to OrderingSteps.
+- `src/app/admin/(protected)/settings/page.tsx`: Added Process section configuration fields to admin UI and action.
+- `scripts/check-motion.js`: Updated motion verification to check `process-section` and 4 steps.
+- `MOTION.md`: Updated table item 6 for Process Section.
+- `scripts/capture-task-p.js`: Helper script for 1440px and 390px visual verification.
+- `docs/task-screenshots/task-p-1440.png`, `docs/task-screenshots/task-p-390.png`: Visual verification screenshots (not committed).
+
+#### 3. Verification & test results
+- `npm run lint`: PASSED (0 errors, 0 warnings).
+- `npm run build`: PASSED (Compiled Turbopack in 8.8s, TypeScript 6.2s, 26/26 static routes generated).
+- `npm run check:overflow`: PASSED (84/84 tests passed across 360px, 390px, 768px, 1440px).
+- `npm run check:images`: PASSED (All images verified, home page weight 269 KB < 600 KB budget).
+- `node scripts/check-motion.js`: PASSED (24/24 motion suites passed including `process-section`).
+- Mobile Lighthouse: Verified (CLS: 0.018, LCP: 3.6s on throttled mobile emulation).
+- Visual verification: Inspected 1440px and 390px screenshots; 4 circular photos with volt-lime rings, overlapping 01-04 badges, alternating curved arrows, and responsive vertical stack on mobile with zero clipping.
+
+---
 
 ### Task M — A Complete, Premium Motion System — 2026-09-20
 Branch: `task-m-motion`
