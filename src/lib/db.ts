@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-function sanitizeDatabaseUrl(raw?: string): string {
+export function sanitizeDatabaseUrl(raw?: string): string {
   if (!raw) return "mysql://root:@127.0.0.1:3306/noorsolar";
   let url = raw.trim();
   // Strip accidental surrounding quotes from Hostinger input form
@@ -14,6 +14,32 @@ function sanitizeDatabaseUrl(raw?: string): string {
     }
     url = `mysql://${url}`;
   }
+
+  // Parse and safely URL-encode username and password if special characters exist
+  try {
+    const withoutProtocol = url.slice("mysql://".length);
+    const lastAt = withoutProtocol.lastIndexOf("@");
+    if (lastAt !== -1) {
+      const userInfo = withoutProtocol.slice(0, lastAt);
+      const hostAndDb = withoutProtocol.slice(lastAt + 1);
+      const firstColon = userInfo.indexOf(":");
+      
+      let user = userInfo;
+      let pass = "";
+      if (firstColon !== -1) {
+        user = userInfo.slice(0, firstColon);
+        pass = userInfo.slice(firstColon + 1);
+      }
+
+      const safeUser = encodeURIComponent(decodeURIComponent(user));
+      const safePass = encodeURIComponent(decodeURIComponent(pass));
+
+      return `mysql://${safeUser}:${safePass}@${hostAndDb}`;
+    }
+  } catch {
+    // If parsing fails, return original url
+  }
+
   return url;
 }
 

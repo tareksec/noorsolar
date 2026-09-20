@@ -24,13 +24,11 @@ const envSchema = z.object({
   SEED_DEMO: z.string().optional(),
 });
 
+import { sanitizeDatabaseUrl } from "./db";
+
 function validateEnv() {
   if (process.env.DATABASE_URL) {
-    let url = process.env.DATABASE_URL.trim();
-    while ((url.startsWith('"') && url.endsWith('"')) || (url.startsWith("'") && url.endsWith("'"))) {
-      url = url.slice(1, -1).trim();
-    }
-    process.env.DATABASE_URL = url;
+    process.env.DATABASE_URL = sanitizeDatabaseUrl(process.env.DATABASE_URL);
   }
   const result = envSchema.safeParse(process.env);
   if (!result.success) {

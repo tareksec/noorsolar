@@ -18,12 +18,39 @@ function runCommand(command, description) {
 runCommand("npx prisma generate", "Generating Prisma Client");
 
 // 2. Database Sync & Seed if DATABASE_URL is configured
-if (process.env.DATABASE_URL) {
-  let url = process.env.DATABASE_URL.trim();
+function sanitizeDbUrl(raw) {
+  if (!raw) return "";
+  let url = raw.trim();
   while ((url.startsWith('"') && url.endsWith('"')) || (url.startsWith("'") && url.endsWith("'"))) {
     url = url.slice(1, -1).trim();
   }
-  process.env.DATABASE_URL = url;
+  if (!url.startsWith("mysql://")) {
+    if (url.startsWith("file:") || url.startsWith("sqlite:")) return "";
+    url = `mysql://${url}`;
+  }
+  try {
+    const withoutProtocol = url.slice("mysql://".length);
+    const lastAt = withoutProtocol.lastIndexOf("@");
+    if (lastAt !== -1) {
+      const userInfo = withoutProtocol.slice(0, lastAt);
+      const hostAndDb = withoutProtocol.slice(lastAt + 1);
+      const firstColon = userInfo.indexOf(":");
+      let user = userInfo;
+      let pass = "";
+      if (firstColon !== -1) {
+        user = userInfo.slice(0, firstColon);
+        pass = userInfo.slice(firstColon + 1);
+      }
+      const safeUser = encodeURIComponent(decodeURIComponent(user));
+      const safePass = encodeURIComponent(decodeURIComponent(pass));
+      return `mysql://${safeUser}:${safePass}@${hostAndDb}`;
+    }
+  } catch {}
+  return url;
+}
+
+if (process.env.DATABASE_URL) {
+  process.env.DATABASE_URL = sanitizeDbUrl(process.env.DATABASE_URL);
 }
 
 const dbUrl = process.env.DATABASE_URL;
