@@ -48,6 +48,12 @@ Direct Admin Link: [Admin Products Manager](/admin/products)
 - [ ] Toggle to **Inactive** any models not currently in inventory or available for indent.
 - [ ] Update real BDT pricing, minimum order quantities (MOQ), and attach real manufacturer PDF datasheets.
 
+### G. Product Reviews & Ratings (Mandatory Compliance)
+Direct Admin Link: [Admin Reviews Manager](/admin/reviews)
+- [ ] **Only Enter Genuine Customer Reviews:** Never invent, simulate, or fabricate product reviews. Only enter authentic, verified feedback received from actual commercial customers, factory engineers, and EPC contractors.
+- [ ] **Review Moderation:** Check the [Admin Reviews](/admin/reviews) queue regularly to review, approve, or reject public submissions. Unapproved reviews will remain strictly hidden from the public product pages.
+- [ ] **Public Reviews Toggle:** If public review submissions are not desired, ensure the toggle is disabled in [Admin Settings](/admin/settings).
+
 ---
 
 ## 2. Brand Assets & Visual Identity

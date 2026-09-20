@@ -1,6 +1,7 @@
 import React from "react";
 import { db } from "@/lib/db";
 import { CategoryCardClient } from "@/components/admin/category-card-client";
+import { CreateCategoryDialog } from "@/components/admin/create-category-dialog";
 
 export default async function AdminCategoriesPage() {
   const categories = await db.category.findMany({
@@ -12,13 +13,16 @@ export default async function AdminCategoriesPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-[#111311] tracking-tight">
-          Equipment Categories
-        </h1>
-        <p className="text-xs text-[#5C605C]">
-          The three primary B2B product lines ({categories.length} lines configured). Use arrows to reorder display sequence.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-[#111311] tracking-tight">
+            Equipment Categories
+          </h1>
+          <p className="text-xs text-[#5C605C]">
+            The primary B2B product lines ({categories.length} lines configured).
+          </p>
+        </div>
+        <CreateCategoryDialog />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

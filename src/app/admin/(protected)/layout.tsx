@@ -1,10 +1,10 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { logoutAdminAction } from "@/app/admin/actions/auth";
 import {
-  Sun,
   LayoutDashboard,
   Layers,
   Package,
@@ -13,6 +13,8 @@ import {
   LogOut,
   ExternalLink,
   FileText,
+  BookOpen,
+  Star,
 } from "lucide-react";
 
 export default async function AdminProtectedLayout({
@@ -31,7 +33,9 @@ export default async function AdminProtectedLayout({
     { label: "Quote Inbox", href: "/admin/quotes", icon: MessageSquare },
     { label: "Products", href: "/admin/products", icon: Package },
     { label: "Categories", href: "/admin/categories", icon: Layers },
-    { label: 'Content', href: '/admin/content', icon: FileText },
+    { label: "Blog", href: "/admin/blog", icon: BookOpen },
+    { label: "Reviews", href: "/admin/reviews", icon: Star },
+    { label: "Content", href: "/admin/content", icon: FileText },
     { label: "Settings", href: "/admin/settings", icon: Settings },
   ];
 
@@ -42,11 +46,14 @@ export default async function AdminProtectedLayout({
         <div>
           {/* Brand */}
           <Link href="/admin" className="flex items-center gap-3 mb-8">
-            <div className="w-8 h-8 rounded-full bg-[#CEF23E] flex items-center justify-center text-[#111311] font-bold">
-              <Sun className="w-4 h-4" />
-            </div>
+            <Image
+              src="/brand/logo-white.png"
+              alt="Noor Solar Energy"
+              width={140}
+              height={36}
+              className="h-8 w-auto object-contain"
+            />
             <div>
-              <span className="font-bold text-sm tracking-tight block">NOOR SOLAR</span>
               <span className="text-[9px] font-mono text-[#A0A4A0] uppercase">Admin Shell</span>
             </div>
           </Link>
@@ -83,7 +90,8 @@ export default async function AdminProtectedLayout({
           <form action={logoutAdminAction}>
             <button
               type="submit"
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-red-400 hover:bg-red-950/40 transition-colors"
+              id="btn-admin-logout"
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs text-red-400 hover:bg-red-950/40 transition-colors cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Log Out</span>
@@ -93,8 +101,8 @@ export default async function AdminProtectedLayout({
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-grow p-6 sm:p-10 overflow-y-auto">
-        <div className="max-w-6xl mx-auto">{children}</div>
+      <div className="flex-grow p-4 sm:p-10 overflow-y-auto min-w-0 max-w-full">
+        <div className="max-w-6xl mx-auto min-w-0 w-full">{children}</div>
       </div>
     </div>
   );

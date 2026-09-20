@@ -31,6 +31,7 @@ Goal of the design: an **interactive, modern, impressive** site with excellent a
 - Do not add a new dependency that is not in `TRD.md` without asking first. Propose it in the report with the reason.
 - Never put secrets, passwords, FTP or hosting credentials in code, docs or chat. Use `.env` and keep `.env.example` updated.
 - Do not edit `PRD.md`, `TRD.md`, `DESIGN.md` or this file unless the task tells you to.
+- `npm run check:motion` must pass before any branch is merged, and no animation may be removed unless the owner asks.
 
 ---
 

@@ -47,6 +47,20 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  async redirects() {
+    return [
+      {
+        source: "/product",
+        destination: "/products",
+        permanent: true,
+      },
+      {
+        source: "/bn/product",
+        destination: "/bn/products",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
@@ -57,4 +71,8 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin();
+
+export default withNextIntl(nextConfig);

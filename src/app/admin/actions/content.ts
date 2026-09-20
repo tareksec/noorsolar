@@ -1,4 +1,4 @@
-﻿"use server";
+"use server";
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
@@ -14,7 +14,9 @@ export type ContentActionResult = {
 // 1. Stats
 const StatSchema = z.object({
   label: z.string().min(1, "Label is required"),
+  labelBn: z.string().trim().optional().nullable(),
   value: z.coerce.number(),
+  valueBn: z.string().trim().optional().nullable(),
   prefix: z.string().trim().optional().nullable(),
   suffix: z.string().trim().optional().nullable(),
   description: z.string().trim().optional().nullable(),
@@ -30,7 +32,9 @@ export async function createStatAction(
 
   const raw = {
     label: formData.get("label"),
+    labelBn: formData.get("labelBn") || null,
     value: formData.get("value"),
+    valueBn: formData.get("valueBn") || null,
     prefix: formData.get("prefix") || null,
     suffix: formData.get("suffix") || null,
     description: formData.get("description") || null,
@@ -51,6 +55,7 @@ export async function createStatAction(
       },
     });
     revalidatePath("/");
+    revalidatePath("/bn");
     revalidatePath("/admin/content/stats");
     revalidatePath("/admin");
     return { success: true };
@@ -71,7 +76,9 @@ export async function updateStatAction(
 
   const raw = {
     label: formData.get("label"),
+    labelBn: formData.get("labelBn") || null,
     value: formData.get("value"),
+    valueBn: formData.get("valueBn") || null,
     prefix: formData.get("prefix") || null,
     suffix: formData.get("suffix") || null,
     description: formData.get("description") || null,
@@ -175,8 +182,11 @@ export async function reorderStatAction(formData: FormData): Promise<void> {
 // 2. Certifications
 const CertSchema = z.object({
   name: z.string().min(1, "Certification name is required"),
+  nameBn: z.string().trim().optional().nullable(),
   issuer: z.string().trim().optional().nullable(),
+  issuerBn: z.string().trim().optional().nullable(),
   description: z.string().trim().optional().nullable(),
+  descriptionBn: z.string().trim().optional().nullable(),
   sortOrder: z.coerce.number().default(0),
 });
 
@@ -189,8 +199,11 @@ export async function createCertificationAction(
 
   const raw = {
     name: formData.get("name"),
+    nameBn: formData.get("nameBn") || null,
     issuer: formData.get("issuer") || null,
+    issuerBn: formData.get("issuerBn") || null,
     description: formData.get("description") || null,
+    descriptionBn: formData.get("descriptionBn") || null,
     sortOrder: formData.get("sortOrder") || 0,
   };
 
@@ -216,6 +229,9 @@ export async function createCertificationAction(
       },
     });
     revalidatePath("/");
+    revalidatePath("/bn");
+    revalidatePath("/certifications");
+    revalidatePath("/bn/certifications");
     revalidatePath("/admin/content/certifications");
     revalidatePath("/admin");
     return { success: true };
@@ -236,8 +252,11 @@ export async function updateCertificationAction(
 
   const raw = {
     name: formData.get("name"),
+    nameBn: formData.get("nameBn") || null,
     issuer: formData.get("issuer") || null,
+    issuerBn: formData.get("issuerBn") || null,
     description: formData.get("description") || null,
+    descriptionBn: formData.get("descriptionBn") || null,
     sortOrder: formData.get("sortOrder") || 0,
   };
 
@@ -263,6 +282,9 @@ export async function updateCertificationAction(
       },
     });
     revalidatePath("/");
+    revalidatePath("/bn");
+    revalidatePath("/certifications");
+    revalidatePath("/bn/certifications");
     revalidatePath("/admin/content/certifications");
     revalidatePath("/admin");
     return { success: true };
@@ -523,9 +545,13 @@ export async function reorderPartnerAction(formData: FormData): Promise<void> {
 // 4. Testimonials
 const TestimonialSchema = z.object({
   quote: z.string().min(1, "Quote is required"),
+  quoteBn: z.string().trim().optional().nullable(),
   authorName: z.string().min(1, "Author name is required"),
+  authorNameBn: z.string().trim().optional().nullable(),
   authorRole: z.string().trim().optional().nullable(),
+  authorRoleBn: z.string().trim().optional().nullable(),
   company: z.string().trim().optional().nullable(),
+  companyBn: z.string().trim().optional().nullable(),
   sortOrder: z.coerce.number().default(0),
 });
 
@@ -538,9 +564,13 @@ export async function createTestimonialAction(
 
   const raw = {
     quote: formData.get("quote"),
+    quoteBn: formData.get("quoteBn") || null,
     authorName: formData.get("authorName"),
+    authorNameBn: formData.get("authorNameBn") || null,
     authorRole: formData.get("authorRole") || null,
+    authorRoleBn: formData.get("authorRoleBn") || null,
     company: formData.get("company") || null,
+    companyBn: formData.get("companyBn") || null,
     sortOrder: formData.get("sortOrder") || 0,
   };
 
@@ -566,6 +596,7 @@ export async function createTestimonialAction(
       },
     });
     revalidatePath("/");
+    revalidatePath("/bn");
     revalidatePath("/admin/content/testimonials");
     revalidatePath("/admin");
     return { success: true };
@@ -586,9 +617,13 @@ export async function updateTestimonialAction(
 
   const raw = {
     quote: formData.get("quote"),
+    quoteBn: formData.get("quoteBn") || null,
     authorName: formData.get("authorName"),
+    authorNameBn: formData.get("authorNameBn") || null,
     authorRole: formData.get("authorRole") || null,
+    authorRoleBn: formData.get("authorRoleBn") || null,
     company: formData.get("company") || null,
+    companyBn: formData.get("companyBn") || null,
     sortOrder: formData.get("sortOrder") || 0,
   };
 
@@ -614,6 +649,7 @@ export async function updateTestimonialAction(
       },
     });
     revalidatePath("/");
+    revalidatePath("/bn");
     revalidatePath("/admin/content/testimonials");
     revalidatePath("/admin");
     return { success: true };
@@ -701,7 +737,9 @@ export async function reorderTestimonialAction(formData: FormData): Promise<void
 // 5. FAQ
 const FaqItemSchema = z.object({
   question: z.string().min(1, "Question is required"),
+  questionBn: z.string().trim().optional().nullable(),
   answer: z.string().min(1, "Answer is required"),
+  answerBn: z.string().trim().optional().nullable(),
   sortOrder: z.coerce.number().default(0),
 });
 
@@ -714,7 +752,9 @@ export async function createFaqItemAction(
 
   const raw = {
     question: formData.get("question"),
+    questionBn: formData.get("questionBn") || null,
     answer: formData.get("answer"),
+    answerBn: formData.get("answerBn") || null,
     sortOrder: formData.get("sortOrder") || 0,
   };
 
@@ -732,6 +772,7 @@ export async function createFaqItemAction(
       },
     });
     revalidatePath("/");
+    revalidatePath("/bn");
     revalidatePath("/admin/content/faq");
     revalidatePath("/admin");
     return { success: true };
@@ -752,7 +793,9 @@ export async function updateFaqItemAction(
 
   const raw = {
     question: formData.get("question"),
+    questionBn: formData.get("questionBn") || null,
     answer: formData.get("answer"),
+    answerBn: formData.get("answerBn") || null,
     sortOrder: formData.get("sortOrder") || 0,
   };
 
@@ -770,6 +813,7 @@ export async function updateFaqItemAction(
       },
     });
     revalidatePath("/");
+    revalidatePath("/bn");
     revalidatePath("/admin/content/faq");
     revalidatePath("/admin");
     return { success: true };

@@ -11,7 +11,9 @@ interface CategoryCardProps {
     id: string;
     slug: string;
     name: string;
+    nameBn?: string | null;
     description?: string | null;
+    descriptionBn?: string | null;
     image?: string | null;
     sortOrder: number;
     _count: { products: number };
@@ -42,8 +44,34 @@ export function CategoryCardClient({ category, isFirst, isLast }: CategoryCardPr
         {isFormOpen ? (
           <form action={formAction} className="space-y-3 mb-4">
             <input type="hidden" name="id" value={category.id} />
-            <input type="hidden" name="name" value={category.name} />
             <input type="hidden" name="slug" value={category.slug} />
+
+            <div>
+              <label className="block text-[10px] font-mono text-[#5C605C] mb-1">
+                Category Name (English) *
+              </label>
+              <input
+                type="text"
+                name="name"
+                defaultValue={category.name}
+                required
+                className="w-full px-3 py-1.5 rounded-xl bg-[#EDEDED] text-xs text-[#111311] outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-mono text-[#5C605C] mb-1">
+                Category Name (বাংলা)
+              </label>
+              <input
+                type="text"
+                name="nameBn"
+                lang="bn"
+                defaultValue={category.nameBn || ""}
+                placeholder="যেমন: সোলার প্যানেল"
+                className="w-full px-3 py-1.5 rounded-xl bg-[#EDEDED] text-xs text-[#111311] outline-none"
+              />
+            </div>
 
             <div>
               <label className="block text-[10px] font-mono text-[#5C605C] mb-1">
@@ -59,12 +87,26 @@ export function CategoryCardClient({ category, isFirst, isLast }: CategoryCardPr
 
             <div>
               <label className="block text-[10px] font-mono text-[#5C605C] mb-1">
-                Description
+                Description (English)
               </label>
               <textarea
                 name="description"
-                rows={3}
+                rows={2}
                 defaultValue={category.description || ""}
+                className="w-full px-3 py-1.5 rounded-xl bg-[#EDEDED] text-xs text-[#111311] outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-mono text-[#5C605C] mb-1">
+                Description (বাংলা)
+              </label>
+              <textarea
+                name="descriptionBn"
+                lang="bn"
+                rows={2}
+                defaultValue={category.descriptionBn || ""}
+                placeholder="ক্যাটাগরির বিবরণ..."
                 className="w-full px-3 py-1.5 rounded-xl bg-[#EDEDED] text-xs text-[#111311] outline-none"
               />
             </div>
@@ -91,7 +133,18 @@ export function CategoryCardClient({ category, isFirst, isLast }: CategoryCardPr
         ) : (
           <>
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-bold text-base text-[#111311]">{category.name}</h3>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="font-bold text-base text-[#111311]">{category.name}</h3>
+                {category.nameBn ? (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-100 text-emerald-800 border border-emerald-300">
+                    BN ✓
+                  </span>
+                ) : (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-100 text-amber-800 border border-amber-300">
+                    BN missing
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-1.5">
                 <form action={reorderCategoryAction}>
                   <input type="hidden" name="id" value={category.id} />
@@ -132,6 +185,12 @@ export function CategoryCardClient({ category, isFirst, isLast }: CategoryCardPr
                 </button>
               </div>
             </div>
+
+            {category.nameBn && (
+              <p className="text-xs font-medium text-[#5C605C] mb-2" lang="bn">
+                {category.nameBn}
+              </p>
+            )}
 
             <p className="text-xs text-[#5C605C] line-clamp-3 leading-relaxed mb-4">
               {category.description}

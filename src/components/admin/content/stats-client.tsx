@@ -14,10 +14,13 @@ import { Plus, ArrowUp, ArrowDown, Eye, EyeOff, Check, Edit2, Trash2, X, AlertCi
 interface StatItem {
   id: string;
   label: string;
+  labelBn?: string | null;
   value: number;
+  valueBn?: string | null;
   prefix?: string | null;
   suffix?: string | null;
   description?: string | null;
+  descriptionBn?: string | null;
   sortOrder: number;
   isActive: boolean;
   isSample: boolean;
@@ -91,27 +94,34 @@ export function StatsClient({ items }: { items: StatItem[] }) {
           </div>
           <form onSubmit={handleCreate} className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4'>
             <div>
-              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Label *</label>
+              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Label (English) *</label>
               <input name='label' required placeholder='e.g. Years in Business' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+            </div>
+            <div>
+              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Label (বাংলা)</label>
+              <input name='labelBn' lang='bn' placeholder='যেমন: ব্যবসায়িক অভিজ্ঞতা' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
             </div>
             <div>
               <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Numeric Value *</label>
               <input name='value' type='number' step='any' required placeholder='e.g. 10' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
             </div>
             <div>
-              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Prefix (optional)</label>
-              <input name='prefix' placeholder='e.g. >' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Prefix / Suffix</label>
+              <div className='flex items-center gap-2'>
+                <input name='prefix' placeholder='e.g. >' className='w-1/2 px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+                <input name='suffix' placeholder='e.g. +' className='w-1/2 px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              </div>
             </div>
-            <div>
-              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Suffix (optional)</label>
-              <input name='suffix' placeholder='e.g. + or %' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
-            </div>
-            <div className='sm:col-span-2 md:col-span-3'>
-              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Description (optional)</label>
+            <div className='sm:col-span-2'>
+              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Description (English)</label>
               <input name='description' placeholder='e.g. Continuous commercial operations' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
             </div>
-            <div className='flex items-end gap-2'>
-              <button type='submit' disabled={isPending} className='w-full py-2 px-4 rounded-xl bg-[#111311] text-white text-xs font-bold font-mono hover:bg-black disabled:opacity-50'>
+            <div className='sm:col-span-2'>
+              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Description (বাংলা)</label>
+              <input name='descriptionBn' lang='bn' placeholder='যেমন: ধারাবাহিক শিল্প বাণিজ্যিক কার্যক্রম' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+            </div>
+            <div className='flex items-end gap-2 md:col-span-4'>
+              <button type='submit' disabled={isPending} className='py-2 px-6 rounded-xl bg-[#111311] text-white text-xs font-bold font-mono hover:bg-black disabled:opacity-50'>
                 {isPending ? 'Saving...' : 'Save Stat'}
               </button>
             </div>
@@ -129,26 +139,33 @@ export function StatsClient({ items }: { items: StatItem[] }) {
                 <form onSubmit={handleUpdate} className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3'>
                   <input type='hidden' name='id' value={item.id} />
                   <div>
-                    <label className='block text-[10px] font-mono text-[#5C605C]'>Label</label>
+                    <label className='block text-[10px] font-mono text-[#5C605C]'>Label (English)</label>
                     <input name='label' defaultValue={item.label} required className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                  </div>
+                  <div>
+                    <label className='block text-[10px] font-mono text-[#5C605C]'>Label (বাংলা)</label>
+                    <input name='labelBn' lang='bn' defaultValue={item.labelBn || ''} placeholder='বাংলা লেবেল' className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
                   </div>
                   <div>
                     <label className='block text-[10px] font-mono text-[#5C605C]'>Value</label>
                     <input name='value' type='number' step='any' defaultValue={item.value} required className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
                   </div>
                   <div>
-                    <label className='block text-[10px] font-mono text-[#5C605C]'>Prefix</label>
-                    <input name='prefix' defaultValue={item.prefix || ''} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                    <label className='block text-[10px] font-mono text-[#5C605C]'>Prefix / Suffix</label>
+                    <div className='flex items-center gap-1.5'>
+                      <input name='prefix' defaultValue={item.prefix || ''} placeholder='Prefix' className='w-1/2 px-2 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                      <input name='suffix' defaultValue={item.suffix || ''} placeholder='Suffix' className='w-1/2 px-2 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                    </div>
                   </div>
-                  <div>
-                    <label className='block text-[10px] font-mono text-[#5C605C]'>Suffix</label>
-                    <input name='suffix' defaultValue={item.suffix || ''} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
-                  </div>
-                  <div className='sm:col-span-2 md:col-span-3'>
-                    <label className='block text-[10px] font-mono text-[#5C605C]'>Description</label>
+                  <div className='sm:col-span-2'>
+                    <label className='block text-[10px] font-mono text-[#5C605C]'>Description (English)</label>
                     <input name='description' defaultValue={item.description || ''} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
                   </div>
-                  <div className='flex items-end gap-2'>
+                  <div className='sm:col-span-2'>
+                    <label className='block text-[10px] font-mono text-[#5C605C]'>Description (বাংলা)</label>
+                    <input name='descriptionBn' lang='bn' defaultValue={item.descriptionBn || ''} placeholder='বাংলা বিবরণ' className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                  </div>
+                  <div className='flex items-end gap-2 md:col-span-4'>
                     <button type='submit' disabled={isPending} className='px-3 py-1.5 rounded-lg bg-[#111311] text-white text-xs font-bold'>
                       Save
                     </button>
@@ -178,11 +195,23 @@ export function StatsClient({ items }: { items: StatItem[] }) {
                     </div>
 
                     <div className='space-y-1'>
-                      <div className='flex items-center gap-2'>
+                      <div className='flex items-center gap-2 flex-wrap'>
                         <span className='text-base font-bold font-mono text-[#111311]'>
                           {item.prefix}{item.value}{item.suffix}
                         </span>
                         <span className='text-xs font-bold text-[#111311]'>&bull; {item.label}</span>
+                        {item.labelBn && (
+                          <span className='text-xs text-[#5C605C]' lang='bn'>({item.labelBn})</span>
+                        )}
+                        {item.labelBn ? (
+                          <span className='px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-100 text-emerald-800 border border-emerald-300'>
+                            BN ✓
+                          </span>
+                        ) : (
+                          <span className='px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-100 text-amber-800 border border-amber-300'>
+                            BN missing
+                          </span>
+                        )}
                         {item.isSample && (
                           <span className='px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-700'>
                             SAMPLE

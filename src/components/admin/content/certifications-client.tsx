@@ -15,8 +15,11 @@ import { Plus, ArrowUp, ArrowDown, Eye, EyeOff, Check, Edit2, Trash2, X, AlertCi
 interface CertItem {
   id: string;
   name: string;
+  nameBn?: string | null;
   issuer?: string | null;
+  issuerBn?: string | null;
   description?: string | null;
+  descriptionBn?: string | null;
   image?: string | null;
   sortOrder: number;
   isActive: boolean;
@@ -91,23 +94,35 @@ export function CertificationsClient({ items }: { items: CertItem[] }) {
           </div>
           <form onSubmit={handleCreate} className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
             <div>
-              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Name *</label>
+              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Name (English) *</label>
               <input name='name' required placeholder='e.g. Quality Management Certificate' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
             </div>
             <div>
-              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Issuer (optional)</label>
-              <input name='issuer' placeholder='e.g. Standard Inspection Board' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Name (বাংলা)</label>
+              <input name='nameBn' lang='bn' placeholder='যেমন: কোয়ালিটি সার্টিফিকেট' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
             </div>
             <div>
               <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Upload Badge Image</label>
               <input name='image' type='file' accept='image/jpeg,image/png,image/webp' className='w-full text-xs text-[#5C605C] file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-mono file:bg-[#111311] file:text-white hover:file:bg-black' />
             </div>
-            <div className='sm:col-span-2 md:col-span-2'>
-              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Description (optional)</label>
+            <div>
+              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Issuer (English)</label>
+              <input name='issuer' placeholder='e.g. Standard Inspection Board' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+            </div>
+            <div>
+              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Issuer (বাংলা)</label>
+              <input name='issuerBn' lang='bn' placeholder='যেমন: মান নিয়ন্ত্রণ বোর্ড' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+            </div>
+            <div className='sm:col-span-2 md:col-span-3'>
+              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Description (English)</label>
               <input name='description' placeholder='e.g. ISO 9001 certified commercial operations' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
             </div>
-            <div className='flex items-end gap-2'>
-              <button type='submit' disabled={isPending} className='w-full py-2 px-4 rounded-xl bg-[#111311] text-white text-xs font-bold font-mono hover:bg-black disabled:opacity-50'>
+            <div className='sm:col-span-2 md:col-span-3'>
+              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Description (বাংলা)</label>
+              <input name='descriptionBn' lang='bn' placeholder='বাংলায় বিস্তারিত বিবরণ' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+            </div>
+            <div className='flex items-end gap-2 md:col-span-3'>
+              <button type='submit' disabled={isPending} className='py-2 px-6 rounded-xl bg-[#111311] text-white text-xs font-bold font-mono hover:bg-black disabled:opacity-50'>
                 {isPending ? 'Saving...' : 'Save Certification'}
               </button>
             </div>
@@ -125,22 +140,34 @@ export function CertificationsClient({ items }: { items: CertItem[] }) {
                 <form onSubmit={handleUpdate} className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
                   <input type='hidden' name='id' value={item.id} />
                   <div>
-                    <label className='block text-[10px] font-mono text-[#5C605C]'>Name</label>
+                    <label className='block text-[10px] font-mono text-[#5C605C]'>Name (English)</label>
                     <input name='name' defaultValue={item.name} required className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
                   </div>
                   <div>
-                    <label className='block text-[10px] font-mono text-[#5C605C]'>Issuer</label>
-                    <input name='issuer' defaultValue={item.issuer || ''} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                    <label className='block text-[10px] font-mono text-[#5C605C]'>Name (বাংলা)</label>
+                    <input name='nameBn' lang='bn' defaultValue={item.nameBn || ''} placeholder='বাংলা নাম' className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
                   </div>
                   <div>
                     <label className='block text-[10px] font-mono text-[#5C605C]'>Change Image</label>
                     <input name='image' type='file' accept='image/jpeg,image/png,image/webp' className='w-full text-xs text-[#5C605C] file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-[10px] file:bg-[#111311] file:text-white' />
                   </div>
-                  <div className='sm:col-span-2'>
-                    <label className='block text-[10px] font-mono text-[#5C605C]'>Description</label>
+                  <div>
+                    <label className='block text-[10px] font-mono text-[#5C605C]'>Issuer (English)</label>
+                    <input name='issuer' defaultValue={item.issuer || ''} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                  </div>
+                  <div>
+                    <label className='block text-[10px] font-mono text-[#5C605C]'>Issuer (বাংলা)</label>
+                    <input name='issuerBn' lang='bn' defaultValue={item.issuerBn || ''} placeholder='ইস্যুকারী (বাংলা)' className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                  </div>
+                  <div className='sm:col-span-2 md:col-span-3'>
+                    <label className='block text-[10px] font-mono text-[#5C605C]'>Description (English)</label>
                     <input name='description' defaultValue={item.description || ''} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
                   </div>
-                  <div className='flex items-end gap-2'>
+                  <div className='sm:col-span-2 md:col-span-3'>
+                    <label className='block text-[10px] font-mono text-[#5C605C]'>Description (বাংলা)</label>
+                    <input name='descriptionBn' lang='bn' defaultValue={item.descriptionBn || ''} placeholder='বিবরণ (বাংলা)' className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                  </div>
+                  <div className='flex items-end gap-2 md:col-span-3'>
                     <button type='submit' disabled={isPending} className='px-3 py-1.5 rounded-lg bg-[#111311] text-white text-xs font-bold'>
                       Save
                     </button>
@@ -178,8 +205,20 @@ export function CertificationsClient({ items }: { items: CertItem[] }) {
                     </div>
 
                     <div className='space-y-1'>
-                      <div className='flex items-center gap-2'>
+                      <div className='flex items-center gap-2 flex-wrap'>
                         <span className='text-sm font-bold text-[#111311]'>{item.name}</span>
+                        {item.nameBn && (
+                          <span className='text-xs text-[#5C605C]' lang='bn'>({item.nameBn})</span>
+                        )}
+                        {item.nameBn ? (
+                          <span className='px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-100 text-emerald-800 border border-emerald-300'>
+                            BN ✓
+                          </span>
+                        ) : (
+                          <span className='px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-100 text-amber-800 border border-amber-300'>
+                            BN missing
+                          </span>
+                        )}
                         {item.issuer && (
                           <span className='text-xs text-[#5C605C] font-mono'>({item.issuer})</span>
                         )}

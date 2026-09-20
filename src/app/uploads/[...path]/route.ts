@@ -33,13 +33,30 @@ export async function GET(
   }
 
   const fileBuffer = fs.readFileSync(targetPath);
+  const ext = path.extname(targetPath).toLowerCase();
+  let contentType = "application/octet-stream";
+  const headers: Record<string, string> = {
+    "Content-Length": stat.size.toString(),
+    "Cache-Control": "public, max-age=31536000, immutable",
+    "X-Content-Type-Options": "nosniff",
+  };
+
+  if (ext === ".pdf") {
+    contentType = "application/pdf";
+    const filename = path.basename(targetPath);
+    headers["Content-Disposition"] = `inline; filename="${filename}"`;
+  } else if (ext === ".webp") {
+    contentType = "image/webp";
+  } else if (ext === ".png") {
+    contentType = "image/png";
+  } else if (ext === ".jpg" || ext === ".jpeg") {
+    contentType = "image/jpeg";
+  }
+
+  headers["Content-Type"] = contentType;
 
   return new NextResponse(fileBuffer, {
     status: 200,
-    headers: {
-      "Content-Type": "image/webp",
-      "Content-Length": stat.size.toString(),
-      "Cache-Control": "public, max-age=31536000, immutable",
-    },
+    headers,
   });
 }

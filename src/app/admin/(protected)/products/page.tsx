@@ -3,10 +3,9 @@ import { db } from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { getSession } from "@/lib/auth";
-import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
-import { ExternalLink, Plus, Edit, Copy, Search, Star } from "lucide-react";
-import { duplicateProductAction } from "@/app/admin/actions/products";
+import { Plus, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { ProductListClient } from "@/components/admin/product-list-client";
 
 async function toggleProductFeatured(formData: FormData) {
   "use server";
@@ -52,11 +51,16 @@ interface AdminProductsPageProps {
     q?: string;
     category?: string;
     status?: string;
+    stock?: string;
+    page?: string;
   }>;
 }
 
 export default async function AdminProductsPage({ searchParams }: AdminProductsPageProps) {
-  const { q = "", category = "", status = "" } = await searchParams;
+  const { q = "", category = "", status = "", stock = "", page = "1" } = await searchParams;
+
+  const pageSize = 10;
+  const currentPage = Math.max(1, parseInt(page, 10) || 1);
 
   const categories = await db.category.findMany({
     orderBy: { sortOrder: "asc" },
@@ -85,17 +89,38 @@ export default async function AdminProductsPage({ searchParams }: AdminProductsP
     whereClause.isFeatured = true;
   }
 
-  const products = await db.product.findMany({
-    where: whereClause,
-    orderBy: [{ categoryId: "asc" }, { sortOrder: "asc" }],
-    include: {
-      category: true,
-      images: { take: 1, orderBy: { sortOrder: "asc" } },
-      specs: true,
-    },
-  });
+  if (stock) {
+    whereClause.stockStatus = stock;
+  }
 
-  const totalCount = await db.product.count();
+  const [totalCount, filteredCount, products] = await Promise.all([
+    db.product.count(),
+    db.product.count({ where: whereClause }),
+    db.product.findMany({
+      where: whereClause,
+      skip: (currentPage - 1) * pageSize,
+      take: pageSize,
+      orderBy: [{ categoryId: "asc" }, { sortOrder: "asc" }],
+      include: {
+        category: true,
+        images: { take: 1, orderBy: { sortOrder: "asc" } },
+        specs: true,
+      },
+    }),
+  ]);
+
+  const totalPages = Math.ceil(filteredCount / pageSize) || 1;
+
+  function buildFilterUrl(newPage: number) {
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    if (category) params.set("category", category);
+    if (status) params.set("status", status);
+    if (stock) params.set("stock", stock);
+    if (newPage > 1) params.set("page", String(newPage));
+    const qs = params.toString();
+    return `/admin/products${qs ? `?${qs}` : ""}`;
+  }
 
   return (
     <div className="space-y-6">
@@ -105,7 +130,7 @@ export default async function AdminProductsPage({ searchParams }: AdminProductsP
             Product Inventory
           </h1>
           <p className="text-xs text-[#5C605C]">
-            Manage models, specifications, and featured catalog items ({products.length} of {totalCount} shown)
+            Manage models, specifications, and featured catalog items ({filteredCount} of {totalCount} items)
           </p>
         </div>
 
@@ -132,11 +157,11 @@ export default async function AdminProductsPage({ searchParams }: AdminProductsP
             />
           </div>
 
-          <div className="flex items-center gap-2 w-full md:w-auto">
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full md:w-auto">
             <select
               name="category"
               defaultValue={category}
-              className="px-3 py-2 rounded-2xl bg-[#EDEDED] text-xs font-mono text-[#111311] outline-none w-full md:w-auto"
+              className="px-3 py-2 rounded-2xl bg-[#EDEDED] text-xs font-mono text-[#111311] outline-none w-full sm:w-auto"
             >
               <option value="">All Categories</option>
               {categories.map((c) => (
@@ -149,12 +174,23 @@ export default async function AdminProductsPage({ searchParams }: AdminProductsP
             <select
               name="status"
               defaultValue={status}
-              className="px-3 py-2 rounded-2xl bg-[#EDEDED] text-xs font-mono text-[#111311] outline-none w-full md:w-auto"
+              className="px-3 py-2 rounded-2xl bg-[#EDEDED] text-xs font-mono text-[#111311] outline-none w-full sm:w-auto"
             >
               <option value="">All Statuses</option>
               <option value="active">Active Only</option>
               <option value="inactive">Inactive Only</option>
               <option value="featured">Featured Only</option>
+            </select>
+
+            <select
+              name="stock"
+              defaultValue={stock}
+              className="px-3 py-2 rounded-2xl bg-[#EDEDED] text-xs font-mono text-[#111311] outline-none w-full sm:w-auto"
+            >
+              <option value="">All Stock</option>
+              <option value="IN_STOCK">In Stock</option>
+              <option value="INCOMING">Incoming</option>
+              <option value="ON_REQUEST">On Request</option>
             </select>
 
             <button
@@ -164,7 +200,7 @@ export default async function AdminProductsPage({ searchParams }: AdminProductsP
               Filter
             </button>
 
-            {(q || category || status) && (
+            {(q || category || status || stock) && (
               <Link
                 href="/admin/products"
                 className="px-3 py-2 rounded-2xl bg-[#EDEDED] text-[#5C605C] hover:text-[#111311] text-xs font-mono shrink-0 transition-colors"
@@ -176,137 +212,61 @@ export default async function AdminProductsPage({ searchParams }: AdminProductsP
         </form>
       </div>
 
-      {/* Product List */}
+      {/* Product List Table / Cards */}
       <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#DDE1DC] shadow-sm">
-        {products.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-sm font-mono text-[#5C605C] mb-2">No products matched your criteria.</p>
-            <Link
-              href="/admin/products"
-              className="text-xs font-mono text-[#111311] underline hover:text-black"
-            >
-              Clear filters
-            </Link>
-          </div>
-        ) : (
-          <div className="divide-y divide-[#EDEDED]">
-            {products.map((p) => (
-              <div
-                key={p.id}
-                className="py-4 flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+        <ProductListClient
+          products={products}
+          toggleProductActive={toggleProductActive}
+          toggleProductFeatured={toggleProductFeatured}
+        />
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="mt-6 pt-4 border-t border-[#EDEDED] flex items-center justify-between text-xs font-mono">
+            <span className="text-[#5C605C]">
+              Page {currentPage} of {totalPages} ({filteredCount} total)
+            </span>
+            <div className="flex items-center gap-2">
+              <Link
+                href={buildFilterUrl(currentPage - 1)}
+                className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-[#DDE1DC] text-[#111311] ${
+                  currentPage <= 1
+                    ? "opacity-30 pointer-events-none"
+                    : "hover:bg-[#EDEDED] transition-colors"
+                }`}
               >
-                <div className="flex items-center gap-4">
-                  <div className="relative w-14 h-14 rounded-2xl overflow-hidden bg-[#EDEDED] border border-[#DDE1DC] shrink-0">
-                    <Image
-                      src={p.images[0]?.url || "/demo/category-panels.svg"}
-                      alt={p.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+                <ChevronLeft className="w-3.5 h-3.5" />
+                <span>Prev</span>
+              </Link>
 
-                  <div>
-                    <div className="flex items-center flex-wrap gap-2">
-                      <span className="font-bold text-sm text-[#111311]">{p.name}</span>
-
-                      {/* Status indicator */}
-                      <form action={toggleProductActive}>
-                        <input type="hidden" name="id" value={p.id} />
-                        <input type="hidden" name="current" value={String(p.isActive)} />
-                        <button
-                          type="submit"
-                          title="Click to toggle Active status"
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-mono cursor-pointer transition-colors ${
-                            p.isActive
-                              ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
-                              : "bg-amber-100 text-amber-800 hover:bg-amber-200"
-                          }`}
-                        >
-                          {p.isActive ? "Active" : "Inactive"}
-                        </button>
-                      </form>
-
-                      {p.isDemo && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#EDEDED] text-[#5C605C] border border-[#DDE1DC]">
-                          Demo
-                        </span>
-                      )}
-                      {p.isFeatured && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#CEF23E] text-[#111311]">
-                          Featured
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="flex items-center gap-3 text-xs text-[#5C605C] font-mono mt-1">
-                      <span>{p.category.name}</span>
-                      <span>&bull;</span>
-                      <span>{p.model || "No model code"}</span>
-                      <span>&bull;</span>
-                      <span>{p.specs.length} specs</span>
-                      {p.priceBdt && (
-                        <>
-                          <span>&bull;</span>
-                          <span>{p.priceBdt.toLocaleString()} BDT</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 self-end lg:self-auto flex-wrap">
-                  {/* Toggle Featured */}
-                  <form action={toggleProductFeatured}>
-                    <input type="hidden" name="id" value={p.id} />
-                    <input type="hidden" name="current" value={String(p.isFeatured)} />
-                    <button
-                      type="submit"
-                      title="Toggle featured status"
-                      className={`px-3 py-1.5 rounded-full text-xs font-mono inline-flex items-center gap-1.5 transition-colors ${
-                        p.isFeatured
-                          ? "bg-[#111311] text-[#CEF23E]"
-                          : "bg-[#EDEDED] text-[#5C605C] hover:bg-[#DDE1DC]"
-                      }`}
-                    >
-                      <Star className={`w-3.5 h-3.5 ${p.isFeatured ? "fill-[#CEF23E]" : ""}`} />
-                      <span>{p.isFeatured ? "Featured" : "Make Featured"}</span>
-                    </button>
-                  </form>
-
-                  {/* Duplicate Product */}
-                  <form action={duplicateProductAction}>
-                    <input type="hidden" name="id" value={p.id} />
-                    <button
-                      type="submit"
-                      title="Duplicate product (copies specs & images, sets inactive)"
-                      className="px-3 py-1.5 rounded-full bg-[#EDEDED] hover:bg-[#DDE1DC] text-[#111311] text-xs font-mono inline-flex items-center gap-1 transition-colors"
-                    >
-                      <Copy className="w-3.5 h-3.5 text-[#5C605C]" />
-                      <span>Duplicate</span>
-                    </button>
-                  </form>
-
-                  {/* Edit */}
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pNum) => (
                   <Link
-                    href={`/admin/products/${p.id}`}
-                    className="px-3 py-1.5 rounded-full bg-[#EDEDED] hover:bg-[#DDE1DC] text-[#111311] text-xs font-mono inline-flex items-center gap-1 transition-colors"
+                    key={pNum}
+                    href={buildFilterUrl(pNum)}
+                    className={`w-7 h-7 rounded-full inline-flex items-center justify-center transition-colors ${
+                      pNum === currentPage
+                        ? "bg-[#111311] text-[#CEF23E] font-bold"
+                        : "text-[#5C605C] hover:bg-[#EDEDED]"
+                    }`}
                   >
-                    <Edit className="w-3.5 h-3.5" />
-                    <span>Edit</span>
+                    {pNum}
                   </Link>
-
-                  {/* Live View */}
-                  <Link
-                    href={`/product/${p.slug}`}
-                    target="_blank"
-                    className="p-2 rounded-full text-[#5C605C] hover:text-[#111311] hover:bg-[#EDEDED]"
-                    title="View live product page"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                  </Link>
-                </div>
+                ))}
               </div>
-            ))}
+
+              <Link
+                href={buildFilterUrl(currentPage + 1)}
+                className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-[#DDE1DC] text-[#111311] ${
+                  currentPage >= totalPages
+                    ? "opacity-30 pointer-events-none"
+                    : "hover:bg-[#EDEDED] transition-colors"
+                }`}
+              >
+                <span>Next</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         )}
       </div>

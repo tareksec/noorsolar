@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 438 431" fill="none">
+  <g stroke="#CDF300" stroke-width="38" stroke-linecap="round" stroke-linejoin="round">
+    <path id="bar" d="M25 215.5H413" />
+    <path id="curve-top" d="M225 18C186 78 186 151 224 193C238 208 254 215.5 282 215.5" />
+    <path id="curve-bottom" d="M213 413C251 344 250 276 214 237C201 223 184 215.5 157 215.5" />
+    <path id="ray-top-left" d="M119 112L69 62" />
+    <path id="ray-top-right" d="M319 112L369 62" />
+    <path id="ray-bottom-left" d="M119 319L69 369" />
+    <path id="ray-bottom-right" d="M319 319L369 369" />
+  </g>
+</svg>
