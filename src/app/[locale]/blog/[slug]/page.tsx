@@ -1,7 +1,8 @@
 import React from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/routing";
 import { AppImage as Image } from "@/components/ui/app-image";
 import { getBlogPostBySlug } from "@/lib/data/blog";
 import { MarkdownRenderer } from "@/components/blog/markdown-renderer";
@@ -12,29 +13,42 @@ export const dynamic = "force-dynamic";
 interface BlogPostPageProps {
   params: Promise<{
     slug: string;
+    locale: string;
   }>;
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const data = await getBlogPostBySlug(slug);
+  const { slug, locale } = await params;
+  const isBn = locale === "bn";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const data = await getBlogPostBySlug(slug, locale);
 
   if (!data || !data.post) {
-    return { title: "Article Not Found" };
+    return { title: isBn ? "নিবন্ধটি পাওয়া যায়নি" : "Article Not Found" };
   }
 
   const { post } = data;
   const title = post.metaTitle || `${post.title} — Noor Solar Energy`;
   const description = post.metaDescription || post.excerpt || `Technical article: ${post.title}`;
+  const hasBn = !!post.contentBn?.trim();
 
   return {
     title,
     description,
+    alternates: {
+      canonical: isBn ? `${siteUrl}/bn/blog/${post.slug}` : `${siteUrl}/blog/${post.slug}`,
+      languages: {
+        en: `${siteUrl}/blog/${post.slug}`,
+        bn: hasBn ? `${siteUrl}/bn/blog/${post.slug}` : `${siteUrl}/bn/blog`,
+        "x-default": `${siteUrl}/blog/${post.slug}`,
+      },
+    },
     openGraph: {
       title,
       description,
-      url: `/blog/${post.slug}`,
+      url: isBn ? `/bn/blog/${post.slug}` : `/blog/${post.slug}`,
       type: "article",
+      locale: isBn ? "bn_BD" : "en_US",
       publishedTime: post.publishedAt ? new Date(post.publishedAt).toISOString() : undefined,
       authors: post.authorName ? [post.authorName] : undefined,
       images: post.coverImage ? [{ url: post.coverImage }] : [],
@@ -43,8 +57,10 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 export default async function BlogPostDetailPage({ params }: BlogPostPageProps) {
-  const { slug } = await params;
-  const data = await getBlogPostBySlug(slug);
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
+
+  const data = await getBlogPostBySlug(slug, locale);
 
   if (!data || !data.post) {
     notFound();
@@ -98,7 +114,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
           <div className="mb-8">
             {post.tags && (
               <div className="flex flex-wrap gap-1.5 mb-4">
-                {post.tags.split(",").map((tag) => (
+                {post.tags.split(",").map((tag: string) => (
                   <span
                     key={tag.trim()}
                     className="px-3 py-1 rounded-full bg-[#EDEDED] text-[11px] font-mono text-[#111311]"
@@ -122,11 +138,14 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5" />
                 {post.publishedAt
-                  ? new Date(post.publishedAt).toLocaleDateString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    })
+                  ? new Date(post.publishedAt).toLocaleDateString(
+                      locale === "bn" ? "bn-BD-u-nu-latn" : "en-US",
+                      {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                      }
+                    )
                   : "Recently Published"}
               </span>
               <span>&bull;</span>

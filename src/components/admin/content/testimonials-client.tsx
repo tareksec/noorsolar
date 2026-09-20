@@ -15,9 +15,13 @@ import { Plus, ArrowUp, ArrowDown, Eye, EyeOff, Check, Edit2, Trash2, X, AlertCi
 interface TestimonialItem {
   id: string;
   quote: string;
+  quoteBn?: string | null;
   authorName: string;
+  authorNameBn?: string | null;
   authorRole?: string | null;
+  authorRoleBn?: string | null;
   company?: string | null;
+  companyBn?: string | null;
   photo?: string | null;
   sortOrder: number;
   isActive: boolean;
@@ -93,21 +97,39 @@ export function TestimonialsClient({ items }: { items: TestimonialItem[] }) {
           <form onSubmit={handleCreate} className='space-y-4'>
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
               <div>
-                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Author Name *</label>
+                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Author Name (English) *</label>
                 <input name='authorName' required placeholder='e.g. John Doe' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
               </div>
               <div>
-                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Role (optional)</label>
+                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Author Name (বাংলা)</label>
+                <input name='authorNameBn' lang='bn' placeholder='যেমন: জন ডো' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              </div>
+              <div>
+                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Role (English)</label>
                 <input name='authorRole' placeholder='e.g. Procurement Lead' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
               </div>
               <div>
-                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Company (optional)</label>
+                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Role (বাংলা)</label>
+                <input name='authorRoleBn' lang='bn' placeholder='যেমন: প্রকিউরমেন্ট লিড' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              </div>
+              <div>
+                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Company (English)</label>
                 <input name='company' placeholder='e.g. Solar EPC Ltd' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
               </div>
+              <div>
+                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Company (বাংলা)</label>
+                <input name='companyBn' lang='bn' placeholder='যেমন: সোলার ইপিসি লি:' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              </div>
             </div>
-            <div>
-              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Quote Content *</label>
-              <textarea name='quote' required rows={3} placeholder='Write quote text...' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+              <div>
+                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Quote (English) *</label>
+                <textarea name='quote' required rows={3} placeholder='Write quote text in English...' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              </div>
+              <div>
+                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Quote (বাংলা)</label>
+                <textarea name='quoteBn' lang='bn' rows={3} placeholder='বাংলায় গ্রাহকের মন্তব্য লিখুন...' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              </div>
             </div>
             <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 items-end'>
               <div>
@@ -133,23 +155,41 @@ export function TestimonialsClient({ items }: { items: TestimonialItem[] }) {
               {editingId === item.id ? (
                 <form onSubmit={handleUpdate} className='w-full space-y-3'>
                   <input type='hidden' name='id' value={item.id} />
-                  <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
+                  <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3'>
                     <div>
-                      <label className='block text-[10px] font-mono text-[#5C605C]'>Author Name</label>
+                      <label className='block text-[10px] font-mono text-[#5C605C]'>Author Name (English)</label>
                       <input name='authorName' defaultValue={item.authorName} required className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
                     </div>
                     <div>
-                      <label className='block text-[10px] font-mono text-[#5C605C]'>Role</label>
+                      <label className='block text-[10px] font-mono text-[#5C605C]'>Author Name (বাংলা)</label>
+                      <input name='authorNameBn' lang='bn' defaultValue={item.authorNameBn || ''} placeholder='নাম (বাংলা)' className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                    </div>
+                    <div>
+                      <label className='block text-[10px] font-mono text-[#5C605C]'>Role (English)</label>
                       <input name='authorRole' defaultValue={item.authorRole || ''} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
                     </div>
                     <div>
-                      <label className='block text-[10px] font-mono text-[#5C605C]'>Company</label>
+                      <label className='block text-[10px] font-mono text-[#5C605C]'>Role (বাংলা)</label>
+                      <input name='authorRoleBn' lang='bn' defaultValue={item.authorRoleBn || ''} placeholder='পদবী (বাংলা)' className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                    </div>
+                    <div>
+                      <label className='block text-[10px] font-mono text-[#5C605C]'>Company (English)</label>
                       <input name='company' defaultValue={item.company || ''} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
                     </div>
+                    <div>
+                      <label className='block text-[10px] font-mono text-[#5C605C]'>Company (বাংলা)</label>
+                      <input name='companyBn' lang='bn' defaultValue={item.companyBn || ''} placeholder='প্রতিষ্ঠান (বাংলা)' className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                    </div>
                   </div>
-                  <div>
-                    <label className='block text-[10px] font-mono text-[#5C605C]'>Quote</label>
-                    <textarea name='quote' defaultValue={item.quote} required rows={2} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                  <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
+                    <div>
+                      <label className='block text-[10px] font-mono text-[#5C605C]'>Quote (English)</label>
+                      <textarea name='quote' defaultValue={item.quote} required rows={2} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                    </div>
+                    <div>
+                      <label className='block text-[10px] font-mono text-[#5C605C]'>Quote (বাংলা)</label>
+                      <textarea name='quoteBn' lang='bn' defaultValue={item.quoteBn || ''} placeholder='মন্তব্য (বাংলা)' rows={2} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                    </div>
                   </div>
                   <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 items-end'>
                     <div>
@@ -195,11 +235,20 @@ export function TestimonialsClient({ items }: { items: TestimonialItem[] }) {
                     </div>
 
                     <div className='space-y-1'>
-                      <div className='flex items-center gap-2'>
+                      <div className='flex items-center gap-2 flex-wrap'>
                         <span className='text-sm font-bold text-[#111311]'>{item.authorName}</span>
                         {(item.authorRole || item.company) && (
                           <span className='text-xs text-[#5C605C]'>
                             &bull; {[item.authorRole, item.company].filter(Boolean).join(', ')}
+                          </span>
+                        )}
+                        {item.quoteBn ? (
+                          <span className='px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-100 text-emerald-800 border border-emerald-300'>
+                            BN ✓
+                          </span>
+                        ) : (
+                          <span className='px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-100 text-amber-800 border border-amber-300'>
+                            BN missing
                           </span>
                         )}
                         {item.isSample && (
@@ -214,6 +263,9 @@ export function TestimonialsClient({ items }: { items: TestimonialItem[] }) {
                         )}
                       </div>
                       <p className='text-xs text-[#5C605C] italic leading-relaxed'>&ldquo;{item.quote}&rdquo;</p>
+                      {item.quoteBn && (
+                        <p className='text-xs text-[#5C605C] italic leading-relaxed' lang='bn'>&ldquo;{item.quoteBn}&rdquo;</p>
+                      )}
                     </div>
                   </div>
 

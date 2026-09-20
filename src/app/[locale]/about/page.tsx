@@ -1,25 +1,57 @@
 import React from "react";
 import Image from "next/image";
 import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import { getSiteSettings } from "@/lib/data/settings";
-import Link from "next/link";
 import { CheckCircle2, ArrowUpRight, ShieldCheck, Box, Zap, Award } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "About Us — Noor Solar Energy",
-  description:
-    "Learn about Noor Solar Energy, premier direct importer and bulk B2B supplier of solar panels, lithium-ion batteries, and inverters in Bangladesh.",
-  openGraph: {
-    title: "About Us — Noor Solar Energy",
-    description:
-      "Direct importer and container-scale wholesale distributor of renewable energy systems in Bangladesh.",
-    url: "/about",
-    type: "website",
-  },
-};
+interface AboutPageProps {
+  params: Promise<{
+    locale: string;
+  }>;
+}
 
-export default async function AboutPage() {
-  const settings = await getSiteSettings();
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }: AboutPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const isBn = locale === "bn";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+
+  return {
+    title: isBn ? "আমাদের সম্পর্কে — নূর সোলার এনার্জি" : "About Us — Noor Solar Energy",
+    description: isBn
+      ? "নূর সোলার এনার্জি সম্পর্কে জানুন — বাংলাদেশে সোলার প্যানেল, লিথিয়াম-আয়ন ব্যাটারি এবং ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
+      : "Learn about Noor Solar Energy, premier direct importer and bulk B2B supplier of solar panels, lithium-ion batteries, and inverters in Bangladesh.",
+    alternates: {
+      canonical: isBn ? `${siteUrl}/bn/about` : `${siteUrl}/about`,
+      languages: {
+        en: `${siteUrl}/about`,
+        bn: `${siteUrl}/bn/about`,
+        "x-default": `${siteUrl}/about`,
+      },
+    },
+    openGraph: {
+      title: isBn ? "আমাদের সম্পর্কে — নূর সোলার এনার্জি" : "About Us — Noor Solar Energy",
+      description: isBn
+        ? "বাংলাদেশে নবায়নযোগ্য শক্তি সরঞ্জামের সরাসরি আমদানিকারক ও পাইকারি পরিবেশক।"
+        : "Direct importer and container-scale wholesale distributor of renewable energy systems in Bangladesh.",
+      url: isBn ? "/bn/about" : "/about",
+      type: "website",
+      locale: isBn ? "bn_BD" : "en_US",
+    },
+  };
+}
+
+export default async function AboutPage({ params }: AboutPageProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const settings = await getSiteSettings(locale);
 
   return (
     <div className="pt-28 sm:pt-36 pb-24 bg-[#E4E7E4] min-h-screen">

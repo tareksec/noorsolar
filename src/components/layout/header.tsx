@@ -7,10 +7,12 @@ interface HeaderProps {
   phoneDisplay?: string;
   phoneRaw?: string;
   showBlog?: boolean;
+  currentLocale?: string;
 }
 
 export function Header({
   showBlog = false,
+  currentLocale,
 }: HeaderProps) {
   return (
     <AnimatedNavFramer
@@ -18,6 +20,7 @@ export function Header({
       ctaText="Book A Call"
       ctaHref="/contact"
       showBlog={showBlog}
+      currentLocale={currentLocale}
     />
   );
 }

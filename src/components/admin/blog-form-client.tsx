@@ -32,15 +32,22 @@ interface BlogFormClientProps {
     id: string;
     slug: string;
     title: string;
+    titleBn?: string | null;
     excerpt?: string | null;
+    excerptBn?: string | null;
     content: string;
+    contentBn?: string | null;
     coverImage?: string | null;
     coverAlt?: string | null;
+    coverAltBn?: string | null;
     tags?: string | null;
+    tagsBn?: string | null;
     status: string;
     authorName?: string | null;
     metaTitle?: string | null;
+    metaTitleBn?: string | null;
     metaDescription?: string | null;
+    metaDescriptionBn?: string | null;
   };
 }
 
@@ -56,18 +63,26 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
   const [state, formAction, isPending] = useActionState(actionFn, initialState);
 
   const [isDirty, setIsDirty] = useState(false);
+  const [langTab, setLangTab] = useState<"en" | "bn">("en");
   const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const [titleVal, setTitleVal] = useState(initialPost?.title || "");
+  const [titleBnVal, setTitleBnVal] = useState(initialPost?.titleBn || "");
   const [slugVal, setSlugVal] = useState(initialPost?.slug || "");
   const [contentVal, setContentVal] = useState(
     initialPost?.content || "## Overview\n\nWrite your article here in Markdown..."
   );
+  const [contentBnVal, setContentBnVal] = useState(
+    initialPost?.contentBn || ""
+  );
   const [metaTitleVal, setMetaTitleVal] = useState(initialPost?.metaTitle || "");
+  const [metaTitleBnVal, setMetaTitleBnVal] = useState(initialPost?.metaTitleBn || "");
   const [metaDescVal, setMetaDescVal] = useState(initialPost?.metaDescription || "");
+  const [metaDescBnVal, setMetaDescBnVal] = useState(initialPost?.metaDescriptionBn || "");
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaBnRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const saveSuccess = state.success;
@@ -113,7 +128,7 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
   // Markdown Toolbar helper to insert syntax around selection
   const insertSyntax = (before: string, after: string = "", placeholder: string = "") => {
     markDirty();
-    const textarea = textareaRef.current;
+    const textarea = langTab === "en" ? textareaRef.current : textareaBnRef.current;
     if (!textarea) return;
 
     const start = textarea.selectionStart;
@@ -124,7 +139,11 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
     const replacement = `${before}${selectedText}${after}`;
 
     const nextText = currentText.substring(0, start) + replacement + currentText.substring(end);
-    setContentVal(nextText);
+    if (langTab === "en") {
+      setContentVal(nextText);
+    } else {
+      setContentBnVal(nextText);
+    }
 
     setTimeout(() => {
       textarea.focus();
@@ -192,16 +211,57 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
 
       {isEditing && <input type="hidden" name="id" value={initialPost?.id} />}
 
+      {/* Language Tabs Selector */}
+      <div className="flex items-center justify-between p-3 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC]">
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-mono font-bold uppercase text-[#111311]">
+            Editing Language:
+          </span>
+          <div className="inline-flex p-1 rounded-xl bg-white border border-[#DDE1DC]">
+            <button
+              type="button"
+              onClick={() => setLangTab("en")}
+              className={`px-3 py-1 text-xs font-mono rounded-lg transition-colors cursor-pointer ${
+                langTab === "en"
+                  ? "bg-[#111311] text-[#CEF23E] font-bold"
+                  : "text-[#5C605C] hover:text-[#111311]"
+              }`}
+            >
+              English
+            </button>
+            <button
+              type="button"
+              onClick={() => setLangTab("bn")}
+              className={`px-3 py-1 text-xs font-mono rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 ${
+                langTab === "bn"
+                  ? "bg-[#111311] text-[#CEF23E] font-bold"
+                  : "text-[#5C605C] hover:text-[#111311]"
+              }`}
+            >
+              <span>বাংলা</span>
+              {isEditing && !initialPost?.titleBn && (
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+              )}
+            </button>
+          </div>
+        </div>
+        {isEditing && !initialPost?.titleBn && (
+          <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+            BN missing
+          </span>
+        )}
+      </div>
+
       {/* Basic Post Metadata */}
       <div className="space-y-4">
         <h2 className="text-sm font-mono font-bold uppercase text-[#111311] pb-2 border-b border-[#EDEDED]">
-          1. Article Details
+          1. Article Details ({langTab === "en" ? "English" : "বাংলা"})
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
+          <div className={langTab === "en" ? "" : "hidden"}>
             <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-              Post Title *
+              Post Title (English) *
             </label>
             <input
               type="text"
@@ -211,6 +271,24 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
               value={titleVal}
               onChange={(e) => handleTitleChange(e.target.value)}
               placeholder="e.g. How to Choose Industrial Solar Inverters for Bangladeshi Factories"
+              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none focus:ring-1 focus:ring-[#111311]"
+            />
+          </div>
+
+          <div className={langTab === "bn" ? "" : "hidden"}>
+            <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+              Post Title (বাংলা)
+            </label>
+            <input
+              type="text"
+              name="titleBn"
+              lang="bn"
+              value={titleBnVal}
+              onChange={(e) => {
+                setTitleBnVal(e.target.value);
+                markDirty();
+              }}
+              placeholder="যেমন: বাংলাদেশের কারখানার জন্য সৌর ইনভার্টার নির্বাচনের নির্দেশিকা"
               className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none focus:ring-1 focus:ring-[#111311]"
             />
           </div>
@@ -264,29 +342,53 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
 
           <div>
             <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-              Tags (Comma-Separated)
+              Tags {langTab === "en" ? "(English)" : "(বাংলা)"}
             </label>
-            <input
-              type="text"
-              name="tags"
-              defaultValue={initialPost?.tags || "Solar, Inverters, Commercial"}
-              placeholder="Inverters, TOPCon, Battery"
-              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
-            />
+            <div className={langTab === "en" ? "" : "hidden"}>
+              <input
+                type="text"
+                name="tags"
+                defaultValue={initialPost?.tags || "Solar, Inverters, Commercial"}
+                placeholder="Inverters, TOPCon, Battery"
+                className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+              />
+            </div>
+            <div className={langTab === "bn" ? "" : "hidden"}>
+              <input
+                type="text"
+                name="tagsBn"
+                lang="bn"
+                defaultValue={initialPost?.tagsBn || ""}
+                placeholder="ইনভার্টার, সোলার, বাণিজ্যিক"
+                className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+              />
+            </div>
           </div>
         </div>
 
         <div>
           <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-            Excerpt / Summary (Article Preview)
+            Excerpt / Summary (Article Preview) {langTab === "en" ? "(English)" : "(বাংলা)"}
           </label>
-          <textarea
-            name="excerpt"
-            rows={2}
-            defaultValue={initialPost?.excerpt || ""}
-            placeholder="A concise summary explaining the engineering factors when sizing solar inverters for high-load commercial facilities."
-            className="w-full px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
-          />
+          <div className={langTab === "en" ? "" : "hidden"}>
+            <textarea
+              name="excerpt"
+              rows={2}
+              defaultValue={initialPost?.excerpt || ""}
+              placeholder="A concise summary explaining the engineering factors when sizing solar inverters for high-load commercial facilities."
+              className="w-full px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
+          <div className={langTab === "bn" ? "" : "hidden"}>
+            <textarea
+              name="excerptBn"
+              lang="bn"
+              rows={2}
+              defaultValue={initialPost?.excerptBn || ""}
+              placeholder="নিবন্ধের সংক্ষিপ্ত বাংলা সারসংক্ষেপ..."
+              className="w-full px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
         </div>
       </div>
 
@@ -326,15 +428,27 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
 
           <div>
             <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-              Cover Alt Text
+              Cover Alt Text {langTab === "en" ? "(English)" : "(বাংলা)"}
             </label>
-            <input
-              type="text"
-              name="coverAlt"
-              defaultValue={initialPost?.coverAlt || ""}
-              placeholder="Rooftop solar installation at industrial facility"
-              className="w-full px-4 py-2 rounded-2xl bg-white text-xs text-[#111311] outline-none"
-            />
+            <div className={langTab === "en" ? "" : "hidden"}>
+              <input
+                type="text"
+                name="coverAlt"
+                defaultValue={initialPost?.coverAlt || ""}
+                placeholder="Rooftop solar installation at industrial facility"
+                className="w-full px-4 py-2 rounded-2xl bg-white text-xs text-[#111311] outline-none"
+              />
+            </div>
+            <div className={langTab === "bn" ? "" : "hidden"}>
+              <input
+                type="text"
+                name="coverAltBn"
+                lang="bn"
+                defaultValue={initialPost?.coverAltBn || ""}
+                placeholder="শিল্প কারখানায় রুফটপ সোলার প্যানেল ইনস্টলেশন"
+                className="w-full px-4 py-2 rounded-2xl bg-white text-xs text-[#111311] outline-none"
+              />
+            </div>
           </div>
 
           {initialPost?.coverImage && (
@@ -357,7 +471,7 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
       <div className="space-y-4">
         <div className="flex items-center justify-between pb-2 border-b border-[#EDEDED]">
           <h2 className="text-sm font-mono font-bold uppercase text-[#111311]">
-            3. Article Content (Markdown)
+            3. Article Content (Markdown) — {langTab === "en" ? "English" : "বাংলা"}
           </h2>
 
           {/* Edit / Preview Tabs */}
@@ -481,7 +595,7 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
               </label>
             </div>
 
-            {/* Markdown Textarea */}
+            {/* Markdown Textareas (Both mounted for form submission) */}
             <textarea
               ref={textareaRef}
               name="content"
@@ -492,13 +606,36 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
                 setContentVal(e.target.value);
                 markDirty();
               }}
-              placeholder="Write your article in Markdown..."
-              className="w-full p-4 text-sm font-mono text-[#111311] outline-none resize-y leading-relaxed bg-white"
+              placeholder="Write your article in Markdown (English)..."
+              className={`w-full p-4 text-sm font-mono text-[#111311] outline-none resize-y leading-relaxed bg-white ${
+                langTab === "en" ? "" : "hidden"
+              }`}
+            />
+            <textarea
+              ref={textareaBnRef}
+              name="contentBn"
+              lang="bn"
+              rows={14}
+              value={contentBnVal}
+              onChange={(e) => {
+                setContentBnVal(e.target.value);
+                markDirty();
+              }}
+              placeholder="বাংলায় আর্টিকেল লিখুন (Markdown)..."
+              className={`w-full p-4 text-sm font-mono text-[#111311] outline-none resize-y leading-relaxed bg-white ${
+                langTab === "bn" ? "" : "hidden"
+              }`}
             />
           </div>
         ) : (
           <div className="p-6 sm:p-10 rounded-3xl bg-white border border-[#DDE1DC] shadow-xs min-h-[350px]">
-            <MarkdownRenderer content={contentVal} />
+            <MarkdownRenderer
+              content={
+                langTab === "en"
+                  ? contentVal
+                  : contentBnVal || "*কোনো বাংলা কনটেন্ট লেখা হয়নি*"
+              }
+            />
           </div>
         )}
       </div>
@@ -506,14 +643,14 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
       {/* SEO Fields */}
       <div className="space-y-4">
         <h2 className="text-sm font-mono font-bold uppercase text-[#111311] pb-2 border-b border-[#EDEDED]">
-          4. Search Engine Optimization (SEO)
+          4. Search Engine Optimization (SEO) — {langTab === "en" ? "English" : "বাংলা"}
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className={langTab === "en" ? "grid grid-cols-1 sm:grid-cols-2 gap-4" : "hidden"}>
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="block text-xs font-mono font-medium text-[#111311]">
-                Custom Meta Title
+                Custom Meta Title (English)
               </label>
               <span className="text-[10px] font-mono text-[#5C605C]">
                 {metaTitleVal.length}/60
@@ -535,7 +672,7 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="block text-xs font-mono font-medium text-[#111311]">
-                Meta Description
+                Meta Description (English)
               </label>
               <span className="text-[10px] font-mono text-[#5C605C]">
                 {metaDescVal.length}/160
@@ -550,6 +687,54 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
                 markDirty();
               }}
               placeholder="Search snippet summary..."
+              className="w-full px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
+        </div>
+
+        <div className={langTab === "bn" ? "grid grid-cols-1 sm:grid-cols-2 gap-4" : "hidden"}>
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-mono font-medium text-[#111311]">
+                Custom Meta Title (বাংলা)
+              </label>
+              <span className="text-[10px] font-mono text-[#5C605C]">
+                {metaTitleBnVal.length}/60
+              </span>
+            </div>
+            <input
+              type="text"
+              name="metaTitleBn"
+              lang="bn"
+              value={metaTitleBnVal}
+              onChange={(e) => {
+                setMetaTitleBnVal(e.target.value);
+                markDirty();
+              }}
+              placeholder={titleBnVal ? `${titleBnVal} | নূর সোলার এনার্জি` : "সার্চ ইঞ্জিনের শিরোনাম"}
+              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-mono font-medium text-[#111311]">
+                Meta Description (বাংলা)
+              </label>
+              <span className="text-[10px] font-mono text-[#5C605C]">
+                {metaDescBnVal.length}/160
+              </span>
+            </div>
+            <textarea
+              name="metaDescriptionBn"
+              lang="bn"
+              rows={2}
+              value={metaDescBnVal}
+              onChange={(e) => {
+                setMetaDescBnVal(e.target.value);
+                markDirty();
+              }}
+              placeholder="গুগল সার্চ ফলাফলের জন্য সংক্ষিপ্ত বিবরণ..."
               className="w-full px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
             />
           </div>

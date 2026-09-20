@@ -14,6 +14,7 @@ import {
 interface ProductItem {
   id: string;
   name: string;
+  nameBn?: string | null;
   slug: string;
   model: string | null;
   stockStatus: string;
@@ -182,6 +183,15 @@ export function ProductListClient({
                 <div>
                   <div className="flex items-center flex-wrap gap-2">
                     <span className="font-bold text-sm text-[#111311]">{p.name}</span>
+                    {!p.nameBn ? (
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-amber-100 text-amber-800 border border-amber-300">
+                        BN missing
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-100 text-emerald-800 border border-emerald-300">
+                        BN ✓
+                      </span>
+                    )}
 
                     {/* Status indicator button */}
                     <form

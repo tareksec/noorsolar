@@ -89,7 +89,7 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.Rea
   if (displayProducts.length === 0) return null;
 
   return (
-    <section ref={mainRef} className="relative bg-[#E4E7E4]">
+    <section ref={mainRef} data-motion="featured-carousel" className="relative bg-[#E4E7E4]">
       
       {/* 1. Header: Shop Solar / Featured Products */}
       <div className="pt-16 sm:pt-24 pb-6 text-center max-w-3xl mx-auto px-4">
@@ -126,7 +126,7 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.Rea
           {/* Moving Horizontal Track */}
           <motion.div
             ref={carouselRef}
-            className="flex gap-6 sm:gap-8 px-6 sm:px-12 items-center will-change-transform"
+            className="featured-carousel-scroll flex gap-6 sm:gap-8 px-6 sm:px-12 items-center will-change-transform"
             style={{ x }}
           >
             {displayProducts.map((product, index) => {
@@ -138,6 +138,8 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.Rea
               return (
                 <div
                   key={product.id || index}
+                  role="group"
+                  aria-roledescription="slide"
                   className="w-[280px] sm:w-[330px] md:w-[360px] h-[450px] sm:h-[470px] shrink-0 rounded-[28px] bg-white border border-[#DDE1DC] shadow-[0_6px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-500 overflow-hidden flex flex-col justify-between group"
                 >
                   <Link href={`/product/${product.slug}`} className="flex flex-col h-full">

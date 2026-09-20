@@ -9,6 +9,7 @@ import {
   ArrowRight,
   BookOpen,
   Star,
+  Languages,
 } from "lucide-react";
 import { getLiveSampleContentSummary } from "@/lib/data/content";
 
@@ -23,6 +24,17 @@ export default async function AdminDashboardPage() {
     pendingReviewCount,
     approvedReviewCount,
     latestQuotes,
+    bnProducts,
+    bnCats,
+    bnPosts,
+    bnStats,
+    totalStats,
+    bnCerts,
+    totalCerts,
+    bnTestimonials,
+    totalTestimonials,
+    bnFaqs,
+    totalFaqs,
   ] = await Promise.all([
     getLiveSampleContentSummary(),
     db.product.count(),
@@ -37,7 +49,24 @@ export default async function AdminDashboardPage() {
       orderBy: { createdAt: "desc" },
       include: { product: true },
     }),
+    db.product.count({ where: { nameBn: { not: null } } }),
+    db.category.count({ where: { nameBn: { not: null } } }),
+    db.blogPost.count({ where: { titleBn: { not: null } } }),
+    db.stat.count({ where: { labelBn: { not: null } } }),
+    db.stat.count(),
+    db.certification.count({ where: { nameBn: { not: null } } }),
+    db.certification.count(),
+    db.testimonial.count({ where: { quoteBn: { not: null } } }),
+    db.testimonial.count(),
+    db.faqItem.count({ where: { questionBn: { not: null } } }),
+    db.faqItem.count(),
   ]);
+
+  const totalTranslatable =
+    productCount + categoryCount + publishedPostCount + draftPostCount + totalStats + totalCerts + totalTestimonials + totalFaqs;
+  const totalTranslated =
+    bnProducts + bnCats + bnPosts + bnStats + bnCerts + bnTestimonials + bnFaqs;
+  const missingBnCount = Math.max(0, totalTranslatable - totalTranslated);
 
   return (
     <div className="space-y-8">
@@ -114,7 +143,7 @@ export default async function AdminDashboardPage() {
       )}
 
       {/* KPI Dashboard Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         {/* Products Card */}
         <Link
           href="/admin/products"
@@ -197,6 +226,27 @@ export default async function AdminDashboardPage() {
             Requiring follow-up
           </span>
         </Link>
+
+        {/* Bangla Translation Card */}
+        <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC] shadow-sm">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-mono text-[#5C605C] uppercase">Bangla Translation</span>
+            <div className="w-8 h-8 rounded-full bg-[#EDEDED] flex items-center justify-center text-[#111311]">
+              <Languages className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-bold font-mono text-[#111311]">
+              {totalTranslated}/{totalTranslatable}
+            </span>
+            <span className={`text-xs font-mono font-medium ${missingBnCount === 0 ? "text-emerald-700" : "text-amber-700"}`}>
+              {missingBnCount === 0 ? "100%" : `${Math.round((totalTranslated / (totalTranslatable || 1)) * 100)}%`}
+            </span>
+          </div>
+          <span className="text-xs text-[#5C605C] block mt-1">
+            {missingBnCount > 0 ? `${missingBnCount} items missing Bangla` : "All content translated"}
+          </span>
+        </div>
       </div>
 
       {/* Latest Quotation Inquiries */}

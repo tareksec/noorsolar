@@ -97,6 +97,7 @@ export function CategoryDock({}: CategoryDockProps) {
             return (
               <motion.div
                 key={item.id}
+                data-motion="category-panel"
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 0.999, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}

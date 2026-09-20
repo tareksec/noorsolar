@@ -1,5 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 import { getCategories } from "@/lib/data/categories";
 import { getFeaturedProducts } from "@/lib/data/products";
 import { getSiteSettings } from "@/lib/data/settings";
@@ -24,28 +26,61 @@ import { SustainabilityImpact } from "@/components/sections/sustainability-impac
 import { VideoCtaBanner } from "@/components/sections/video-cta-banner";
 import { DynamicHomeSections } from "@/components/sections/dynamic-home-sections";
 import { SitePreloader } from "@/components/ui/site-preloader";
-
 import { HomeContactBanner } from "@/components/sections/home-contact-banner";
 
 export const revalidate = 60; // On-demand or 60s cache revalidation
 
-export const metadata: Metadata = {
-  title: "Noor Solar Energy — Solar Panels, Batteries & Inverters Wholesale",
-  description:
-    "Direct importer and bulk supplier of high-efficiency solar panels, Lithium-ion batteries, and hybrid solar inverters in Bangladesh.",
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: "Noor Solar Energy — Industrial Solar Panels, Storage & Inverters",
-    description:
-      "Direct importer and container-scale wholesale supplier of commercial-grade solar panels, LiFePO4 batteries, and inverters in Bangladesh.",
-    url: "/",
-    type: "website",
-  },
-};
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
-export default async function HomePage() {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isBn = locale === "bn";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+
+  return {
+    title: isBn
+      ? "নূর সোলার এনার্জি — সোলার প্যানেল, ব্যাটারি ও ইনভার্টার পাইকারি সরবরাহকারী"
+      : "Noor Solar Energy — Solar Panels, Batteries & Inverters Wholesale",
+    description: isBn
+      ? "বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল, লিথিয়াম-আয়ন ব্যাটারি এবং হাইব্রিড সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
+      : "Direct importer and bulk supplier of high-efficiency solar panels, Lithium-ion batteries, and hybrid solar inverters in Bangladesh.",
+    alternates: {
+      canonical: isBn ? `${siteUrl}/bn` : siteUrl,
+      languages: {
+        en: `${siteUrl}/`,
+        bn: `${siteUrl}/bn`,
+        "x-default": `${siteUrl}/`,
+      },
+    },
+    openGraph: {
+      title: isBn
+        ? "নূর সোলার এনার্জি — ইন্ডাস্ট্রিয়াল সোলার প্যানেল, ব্যাটারি ও ইনভার্টার"
+        : "Noor Solar Energy — Industrial Solar Panels, Storage & Inverters",
+      description: isBn
+        ? "বাংলাদেশে কন্টেইনার-স্কেল পাইকারি সরবরাহকারী: কমার্শিয়াল সোলার প্যানেল, LiFePO4 ব্যাটারি ও ইনভার্টার।"
+        : "Direct importer and container-scale wholesale supplier of commercial-grade solar panels, LiFePO4 batteries, and inverters in Bangladesh.",
+      url: isBn ? "/bn" : "/",
+      type: "website",
+      locale: isBn ? "bn_BD" : "en_US",
+      images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Noor Solar Energy" }],
+    },
+  };
+}
+
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const [
     categories,
     featuredProducts,
@@ -56,14 +91,14 @@ export default async function HomePage() {
     testimonials,
     faqItems,
   ] = await Promise.all([
-    getCategories(),
-    getFeaturedProducts(),
-    getSiteSettings(),
-    getStats(),
-    getCertifications(),
+    getCategories(locale),
+    getFeaturedProducts(locale),
+    getSiteSettings(locale),
+    getStats(locale),
+    getCertifications(locale),
     getPartners(),
-    getTestimonials(),
-    getFaqItems(),
+    getTestimonials(locale),
+    getFaqItems(locale),
   ]);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";

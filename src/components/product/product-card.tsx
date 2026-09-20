@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { ArrowUpRight, ArrowRight, MessageSquare, Clock, CheckCircle2 } from "lucide-react";
 import { isPointerFine, prefersReducedMotion as checkReducedMotion } from "@/lib/motion";
 

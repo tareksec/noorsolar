@@ -54,7 +54,7 @@ export function CreateCategoryDialog() {
             <form action={formAction} className="space-y-4" id="create-category-form">
               <div>
                 <label className="block text-xs font-mono text-[#5C605C] mb-1">
-                  Category Name *
+                  Category Name (English) *
                 </label>
                 <input
                   type="text"
@@ -62,6 +62,20 @@ export function CreateCategoryDialog() {
                   id="category-name-input"
                   required
                   placeholder="e.g. Solar Cables & Connectors"
+                  className="w-full px-3 py-2 rounded-xl bg-[#EDEDED] border border-transparent focus:border-[#111311] text-xs text-[#111311] outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono text-[#5C605C] mb-1">
+                  Category Name (বাংলা)
+                </label>
+                <input
+                  type="text"
+                  name="nameBn"
+                  lang="bn"
+                  id="category-name-bn-input"
+                  placeholder="যেমন: সোলার ক্যাবল ও কানেক্টর"
                   className="w-full px-3 py-2 rounded-xl bg-[#EDEDED] border border-transparent focus:border-[#111311] text-xs text-[#111311] outline-none"
                 />
               </div>
@@ -81,13 +95,27 @@ export function CreateCategoryDialog() {
 
               <div>
                 <label className="block text-xs font-mono text-[#5C605C] mb-1">
-                  Description
+                  Description (English)
                 </label>
                 <textarea
                   name="description"
                   id="category-desc-input"
                   rows={2}
                   placeholder="Brief summary of this product category"
+                  className="w-full px-3 py-2 rounded-xl bg-[#EDEDED] border border-transparent focus:border-[#111311] text-xs text-[#111311] outline-none resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono text-[#5C605C] mb-1">
+                  Description (বাংলা)
+                </label>
+                <textarea
+                  name="descriptionBn"
+                  lang="bn"
+                  id="category-desc-bn-input"
+                  rows={2}
+                  placeholder="ক্যাটাগরির সংক্ষিপ্ত বাংলা বিবরণ"
                   className="w-full px-3 py-2 rounded-xl bg-[#EDEDED] border border-transparent focus:border-[#111311] text-xs text-[#111311] outline-none resize-none"
                 />
               </div>

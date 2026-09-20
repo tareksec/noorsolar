@@ -1,47 +1,84 @@
 import React from "react";
 import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import { getCategories } from "@/lib/data/categories";
 import { getAllProducts } from "@/lib/data/products";
 import { ProductCard } from "@/components/product/product-card";
-import Link from "next/link";
 import { Search } from "lucide-react";
 import { EmptyCatalogIllustration } from "@/components/illustrations/empty-catalog-illustration";
 
-export const metadata: Metadata = {
-  title: "Equipment Catalog — Solar Panels, Batteries & Inverters",
-  description:
-    "Explore our complete inventory of Solar Panels, Lithium-ion Storage Batteries, and Industrial Inverters available for bulk wholesale in Bangladesh.",
-  alternates: {
-    canonical: "/products",
-  },
-  openGraph: {
-    title: "Solar Equipment Catalog — Noor Solar Energy",
-    description:
-      "Explore bulk wholesale inventory of Tier-1 solar panels, LiFePO4 batteries, and industrial inverters in Bangladesh.",
-    url: "/products",
-    type: "website",
-  },
-};
-
 interface ProductsPageProps {
+  params: Promise<{
+    locale: string;
+  }>;
   searchParams: Promise<{
     category?: string;
     q?: string;
   }>;
 }
 
-export default async function ProductsPage({ searchParams }: ProductsPageProps) {
-  const params = await searchParams;
-  const activeCategorySlug = params.category || "all";
-  const searchQuery = params.q || "";
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isBn = locale === "bn";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+
+  return {
+    title: isBn
+      ? "সোলার ইকুইপমেন্ট ক্যাটালগ — প্যানেল, ব্যাটারি ও ইনভার্টার"
+      : "Equipment Catalog — Solar Panels, Batteries & Inverters",
+    description: isBn
+      ? "বাংলাদেশে পাইকারি আমদানিকৃত সোলার প্যানেল, লিথিয়াম-আয়ন স্টোরেজ ব্যাটারি এবং ইন্ডাস্ট্রিয়াল ইনভার্টারের সম্পূর্ণ ক্যাটালগ।"
+      : "Explore our complete inventory of Solar Panels, Lithium-ion Storage Batteries, and Industrial Inverters available for bulk wholesale in Bangladesh.",
+    alternates: {
+      canonical: isBn ? `${siteUrl}/bn/products` : `${siteUrl}/products`,
+      languages: {
+        en: `${siteUrl}/products`,
+        bn: `${siteUrl}/bn/products`,
+        "x-default": `${siteUrl}/products`,
+      },
+    },
+    openGraph: {
+      title: isBn
+        ? "সোলার ইকুইপমেন্ট ক্যাটালগ — নূর সোলার এনার্জি"
+        : "Solar Equipment Catalog — Noor Solar Energy",
+      description: isBn
+        ? "বাংলাদেশে পাইকারি আমদানিকৃত সোলার প্যানেল, LiFePO4 ব্যাটারি এবং ইন্ডাস্ট্রিয়াল ইনভার্টার।"
+        : "Explore bulk wholesale inventory of Tier-1 solar panels, LiFePO4 batteries, and industrial inverters in Bangladesh.",
+      url: isBn ? "/bn/products" : "/products",
+      type: "website",
+      locale: isBn ? "bn_BD" : "en_US",
+    },
+  };
+}
+
+export default async function ProductsPage({ params, searchParams }: ProductsPageProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const queryParams = await searchParams;
+  const activeCategorySlug = queryParams.category || "all";
+  const searchQuery = queryParams.q || "";
 
   const [categories, products] = await Promise.all([
-    getCategories(),
+    getCategories(locale),
     getAllProducts({
       categorySlug: activeCategorySlug !== "all" ? activeCategorySlug : undefined,
       query: searchQuery || undefined,
+      locale,
     }),
   ]);
+
+  const isBn = locale === "bn";
 
   return (
     <div className="pt-28 sm:pt-36 pb-24 bg-[#E4E7E4] min-h-screen">
@@ -96,7 +133,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           </div>
 
           {/* Search Input Box */}
-          <form method="GET" action="/products" className="relative w-full md:w-72">
+          <form method="GET" action={isBn ? "/bn/products" : "/products"} className="relative w-full md:w-72">
             {activeCategorySlug !== "all" && (
               <input type="hidden" name="category" value={activeCategorySlug} />
             )}

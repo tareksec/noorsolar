@@ -34,14 +34,21 @@ const VIEWPORTS = [
 
 const PUBLIC_ROUTES = [
   "/",
+  "/bn",
   "/products",
+  "/bn/products",
   "/category/solar-panels",
+  "/bn/category/solar-panels",
   "/category/lithium-batteries",
   "/category/solar-inverters",
   "/product/n-type-topcon-bifacial-module-620w",
+  "/bn/product/n-type-topcon-bifacial-module-620w",
   "/blog",
+  "/bn/blog",
   "/about",
+  "/bn/about",
   "/contact",
+  "/bn/contact",
   "/admin/login",
 ];
 

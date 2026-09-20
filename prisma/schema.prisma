@@ -15,46 +15,55 @@ model AdminUser {
 }
 
 model Category {
-  id          String    @id @default(cuid())
-  slug         String   @unique
-  name        String
-  description String?
-  image       String?
-  sortOrder   Int      @default(0)
-  isActive    Boolean  @default(true)
-  products    Product[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  name          String
+  nameBn        String?
+  description   String?
+  descriptionBn String?
+  image         String?
+  sortOrder     Int       @default(0)
+  isActive      Boolean   @default(true)
+  products      Product[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Product {
-  id               String         @id @default(cuid())
-  slug             String         @unique
-  name             String
-  categoryId       String
-  category         Category       @relation(fields: [categoryId], references: [id])
-  shortDescription String?
-  description      String?
-  brand            String?
-  model            String?
-  stockStatus      String         @default("ON_REQUEST") // IN_STOCK | INCOMING | ON_REQUEST
-  moq              String?
-  leadTime         String?
-  priceBdt         Int?
-  showPrice        Boolean        @default(false)
-  datasheetUrl     String?
-  isFeatured       Boolean        @default(false)
-  isActive         Boolean        @default(true)
-  isDemo           Boolean        @default(true)
-  sortOrder        Int            @default(0)
-  metaTitle        String?
-  metaDescription  String?
-  images           ProductImage[]
-  specs            ProductSpec[]
-  quotes           QuoteRequest[]
-  reviews          ProductReview[]
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  id                 String          @id @default(cuid())
+  slug               String          @unique
+  name               String
+  nameBn             String?
+  categoryId         String
+  category           Category        @relation(fields: [categoryId], references: [id])
+  shortDescription   String?
+  shortDescriptionBn String?
+  description        String?
+  descriptionBn      String?
+  brand              String?
+  model              String?
+  stockStatus        String          @default("ON_REQUEST") // IN_STOCK | INCOMING | ON_REQUEST
+  moq                String?
+  moqBn              String?
+  leadTime           String?
+  leadTimeBn         String?
+  priceBdt           Int?
+  showPrice          Boolean         @default(false)
+  datasheetUrl       String?
+  isFeatured         Boolean         @default(false)
+  isActive           Boolean         @default(true)
+  isDemo             Boolean         @default(true)
+  sortOrder          Int             @default(0)
+  metaTitle          String?
+  metaTitleBn        String?
+  metaDescription    String?
+  metaDescriptionBn  String?
+  images             ProductImage[]
+  specs              ProductSpec[]
+  quotes             QuoteRequest[]
+  reviews            ProductReview[]
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 }
 
 model ProductImage {
@@ -63,7 +72,8 @@ model ProductImage {
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   url       String
   alt       String
-  sortOrder Int    @default(0)
+  altBn     String?
+  sortOrder Int     @default(0)
 }
 
 model ProductSpec {
@@ -71,14 +81,16 @@ model ProductSpec {
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   label     String
+  labelBn   String?
   value     String
-  sortOrder Int    @default(0)
+  valueBn   String?
+  sortOrder Int     @default(0)
 }
 
 model QuoteRequest {
   id        String   @id @default(cuid())
-  productId  String?
-  product    Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
   name      String
   company   String?
   phone     String
@@ -97,30 +109,35 @@ model SiteSetting {
 }
 
 model Stat {
-  id          String   @id @default(cuid())
-  label       String
-  value       Float
-  prefix      String?
-  suffix      String?
-  description String?
-  sortOrder   Int      @default(0)
-  isActive    Boolean  @default(true)
-  isSample    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(cuid())
+  label         String
+  labelBn       String?
+  value         Float
+  prefix        String?
+  suffix        String?
+  description   String?
+  descriptionBn String?
+  sortOrder     Int      @default(0)
+  isActive      Boolean  @default(true)
+  isSample      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Certification {
-  id          String   @id @default(cuid())
-  name        String
-  issuer      String?
-  description String?
-  image       String?
-  sortOrder   Int      @default(0)
-  isActive    Boolean  @default(true)
-  isSample    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(cuid())
+  name          String
+  nameBn        String?
+  issuer        String?
+  issuerBn      String?
+  description   String?
+  descriptionBn String?
+  image         String?
+  sortOrder     Int      @default(0)
+  isActive      Boolean  @default(true)
+  isSample      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Partner {
@@ -136,47 +153,60 @@ model Partner {
 }
 
 model Testimonial {
-  id         String   @id @default(cuid())
-  quote      String
-  authorName String
-  authorRole String?
-  company    String?
-  photo      String?
-  sortOrder  Int      @default(0)
-  isActive   Boolean  @default(true)
-  isSample   Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id           String   @id @default(cuid())
+  quote        String
+  quoteBn      String?
+  authorName   String
+  authorNameBn String?
+  authorRole   String?
+  authorRoleBn String?
+  company      String?
+  companyBn    String?
+  photo        String?
+  sortOrder    Int      @default(0)
+  isActive     Boolean  @default(true)
+  isSample     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model FaqItem {
-  id        String   @id @default(cuid())
-  question  String
-  answer    String
-  sortOrder Int      @default(0)
-  isActive  Boolean  @default(true)
-  isSample  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  question    String
+  questionBn  String?
+  answer      String
+  answerBn    String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  isSample    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model BlogPost {
-  id              String    @id @default(cuid())
-  slug            String    @unique
-  title           String
-  excerpt         String?
-  content         String
-  coverImage      String?
-  coverAlt        String?
-  tags            String?
-  status          String    @default("DRAFT") // "DRAFT" | "PUBLISHED"
-  publishedAt     DateTime?
-  authorName      String?
-  metaTitle       String?
-  metaDescription String?
-  isSample        Boolean   @default(false)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                String    @id @default(cuid())
+  slug              String    @unique
+  title             String
+  titleBn           String?
+  excerpt           String?
+  excerptBn         String?
+  content           String
+  contentBn         String?
+  coverImage        String?
+  coverAlt          String?
+  coverAltBn        String?
+  tags              String?
+  tagsBn            String?
+  status            String    @default("DRAFT") // "DRAFT" | "PUBLISHED"
+  publishedAt       DateTime?
+  authorName        String?
+  metaTitle         String?
+  metaTitleBn       String?
+  metaDescription   String?
+  metaDescriptionBn String?
+  isSample          Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }
 
 model ProductReview {
@@ -186,12 +216,11 @@ model ProductReview {
   authorName String
   authorRole String?
   company    String?
-  rating     Int      // 1 to 5
+  rating     Int // 1 to 5
   title      String?
   body       String
   status     String   @default("PENDING") // "PENDING" | "APPROVED" | "REJECTED"
-  source     String   @default("PUBLIC")  // "ADMIN" | "PUBLIC"
+  source     String   @default("PUBLIC") // "ADMIN" | "PUBLIC"
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
-

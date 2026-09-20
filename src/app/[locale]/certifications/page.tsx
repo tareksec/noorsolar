@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import type { Metadata } from "next";
 import { getCertifications } from "@/lib/data/content";
 import { AppImage } from "@/components/ui/app-image";
@@ -18,21 +17,59 @@ import {
   Lock,
 } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Certifications & Compliance Standards | Noor Solar Energy",
-  description:
-    "Official BSREA membership, ISO quality management, factory electrical test reports, and municipal trade compliance for Noor Solar Energy commercial equipment.",
-  openGraph: {
-    title: "Certifications & Compliance Standards — Noor Solar Energy",
-    description:
-      "Explore verified BSREA membership, ISO standards, laboratory electrical testing, and safety certifications for Noor Solar Energy.",
-    url: "/certifications",
-    type: "website",
-  },
-};
+import { routing } from "@/i18n/routing";
+import { setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/routing";
 
-export default async function CertificationsPage() {
-  const certifications = await getCertifications();
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+interface CertificationsPageProps {
+  params: Promise<{
+    locale: string;
+  }>;
+}
+
+export async function generateMetadata({ params }: CertificationsPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const isBn = locale === "bn";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+
+  return {
+    title: isBn
+      ? "সার্টিফিকেশন ও কমপ্লায়েন্স মানদণ্ড | নূর সোলার এনার্জি"
+      : "Certifications & Compliance Standards | Noor Solar Energy",
+    description: isBn
+      ? "নূর সোলার এনার্জির বাণিজ্যিক সরঞ্জামের অফিসিয়াল BSREA সদস্যপদ, ISO কোয়ালিটি ম্যানেজমেন্ট এবং ফ্যাক্টরি টেস্ট রিপোর্ট।"
+      : "Official BSREA membership, ISO quality management, factory electrical test reports, and municipal trade compliance for Noor Solar Energy commercial equipment.",
+    alternates: {
+      canonical: isBn ? `${siteUrl}/bn/certifications` : `${siteUrl}/certifications`,
+      languages: {
+        en: `${siteUrl}/certifications`,
+        bn: `${siteUrl}/bn/certifications`,
+        "x-default": `${siteUrl}/certifications`,
+      },
+    },
+    openGraph: {
+      title: isBn
+        ? "সার্টিফিকেশন ও কমপ্লায়েন্স — নূর সোলার এনার্জি"
+        : "Certifications & Compliance Standards — Noor Solar Energy",
+      description: isBn
+        ? "নূর সোলার এনার্জির ভেরিফাইড BSREA সদস্যপদ, ISO মানদণ্ড এবং ল্যাবরেটরি টেস্ট সার্টিফিকেট।"
+        : "Explore verified BSREA membership, ISO standards, laboratory electrical testing, and safety certifications for Noor Solar Energy.",
+      url: isBn ? "/bn/certifications" : "/certifications",
+      type: "website",
+      locale: isBn ? "bn_BD" : "en_US",
+    },
+  };
+}
+
+export default async function CertificationsPage({ params }: CertificationsPageProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const certifications = await getCertifications(locale);
 
   // Find BSREA Certificate
   const bsreaCert = certifications.find(

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Mail, ArrowRight } from "lucide-react";
+import { MagneticButton } from "@/components/ui/magnetic-button";
 
 interface HomeContactBannerProps {
   phoneDisplay?: string;
@@ -33,10 +34,9 @@ export function HomeContactBanner({}: HomeContactBannerProps = {}) {
           {/* Background Panoramic Solar Artwork */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/banners/clean-energy-banner.jpg"
+              src="/banners/clean-energy-banner.webp"
               alt="Clean Energy for a Brighter Tomorrow"
               fill
-              priority
               className="object-cover object-[75%_center] sm:object-center"
               sizes="(max-width: 1280px) 100vw, 1280px"
             />
@@ -59,8 +59,8 @@ export function HomeContactBanner({}: HomeContactBannerProps = {}) {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0F172A] leading-none">
-                  Noor Solar
+                <span className="text-xl sm:text-2xl font-black tracking-tight text-[#0F172A] uppercase leading-none">
+                  NOOR SOLAR
                 </span>
                 <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.38em] text-[#84CC16] uppercase mt-1 leading-none">
                   ENERGY
@@ -69,7 +69,7 @@ export function HomeContactBanner({}: HomeContactBannerProps = {}) {
             </div>
 
             {/* Headline */}
-            <h2 className="text-3xl sm:text-4xl lg:text-[2.85rem] font-extrabold tracking-tight text-[#0F172A] leading-[1.14] mb-3.5">
+            <h2 data-motion="closing-headline" className="text-3xl sm:text-4xl lg:text-[2.85rem] font-extrabold tracking-tight text-[#0F172A] leading-[1.14] mb-3.5">
               Clean Energy for a <br />
               <span className="text-[#84CC16]">Brighter Tomorrow</span>
             </h2>
@@ -94,13 +94,16 @@ export function HomeContactBanner({}: HomeContactBannerProps = {}) {
                   className="w-full bg-transparent border-none text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
                 />
               </div>
-              <button
-                type="submit"
-                className="rounded-full bg-[#CEF23E] hover:bg-[#D8FA45] text-[#111311] font-bold px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 shrink-0 shadow-sm transition-all hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
-              >
-                <span>Join Now</span>
-                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
-              </button>
+              <MagneticButton dataMotion="magnetic-cta">
+                <button
+                  type="submit"
+                  data-motion="button-slide"
+                  className="rounded-full bg-[#CEF23E] hover:bg-[#D8FA45] text-[#111311] font-bold px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 shrink-0 shadow-sm transition-all hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
+                >
+                  <span>Join Now</span>
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
+                </button>
+              </MagneticButton>
             </form>
 
             {/* Social Proof Avatars */}

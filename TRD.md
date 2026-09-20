@@ -28,36 +28,47 @@ Do not add other dependencies without approval. Remove packages that stay unused
 - Mutations (quote submit, admin CRUD, uploads) use **Server Actions** or route handlers with zod validation and auth checks.
 - The data layer exposes functions such as `getCategories()`, `getProductsByCategory(slug)`, `getProduct(slug)`, `getFeaturedProducts()`, `getSiteSettings()`. If an ERP is added later, only this layer changes.
 - Site-wide values (company name, phone, WhatsApp, address, hours, socials, hero text, FAQ) live in the `SiteSetting` table, with defaults in `src/lib/site-config.ts` used as fallback.
+- Bilingual routing is managed via `next-intl` (`src/i18n/routing.ts`, `src/proxy.ts`), split between localized public routes under `src/app/[locale]/` and English-only admin shell under `src/app/admin/`.
 
 ```
 src/
+  proxy.ts               Next.js 16 proxy middleware (admin JWT + next-intl routing)
+  i18n/
+    routing.ts           i18n configuration (en, bn; default en; localePrefix: as-needed)
+    request.ts           next-intl request config & message loading
   app/
-    (public)/            layout with header, footer, WhatsApp button
-      page.tsx           home
-      products/page.tsx
+    [locale]/            Localized public tree with NextIntlClientProvider, Header, Footer
+      page.tsx           home (/ and /bn)
+      products/page.tsx  products list (/products and /bn/products)
       category/[slug]/page.tsx
       product/[slug]/page.tsx
+      blog/page.tsx
+      blog/[slug]/page.tsx
       about/page.tsx
       contact/page.tsx
     admin/
+      layout.tsx         Isolated admin shell with html, body, no next-intl provider
       login/page.tsx
       (protected)/       layout with auth check and admin shell
         page.tsx         dashboard
         categories/
         products/        list, new, [id]
+        blog/
         quotes/          list, [id]
+        reviews/
         settings/
+        content/         stats, certifications, partners, testimonials, faq
     uploads/[...path]/route.ts   serves uploaded files
     sitemap.ts  robots.ts  not-found.tsx  error.tsx
   components/
-    ui/                  shadcn primitives
+    ui/                  shadcn primitives, language-switcher
     layout/              header, footer, whatsapp button, admin shell
-    sections/            home sections
+    sections/            home sections, category-dock, hero, ordering-steps
     product/             card, gallery, spec table, quote dialog
-    motion/              animation helpers and signature scenes
+    admin/               bilingual form clients (product, blog, settings, category, content)
   lib/
     db.ts                Prisma client singleton
-    data/                data layer functions
+    data/                localized data layer functions with English fallback
     auth.ts              session helpers
     validation.ts        zod schemas
     uploads.ts           image processing and storage
@@ -73,6 +84,7 @@ public/demo/             procedural placeholder images
 ## 3. Data model (Prisma)
 
 Keep types portable to MySQL: use `String` with zod-checked values instead of database enums, and no JSON columns.
+Bilingual fields use `*Bn` naming alongside standard English fields. Fallback logic returns the English field whenever `*Bn` is absent.
 
 ```prisma
 model AdminUser {
@@ -83,31 +95,38 @@ model AdminUser {
 }
 
 model Category {
-  id          String    @id @default(cuid())
-  slug        String    @unique
-  name        String
-  description String?
-  image       String?
-  sortOrder   Int       @default(0)
-  isActive    Boolean   @default(true)
-  products    Product[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  name          String
+  nameBn        String?
+  description   String?
+  descriptionBn String?
+  image         String?
+  sortOrder     Int       @default(0)
+  isActive      Boolean   @default(true)
+  products      Product[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Product {
   id               String         @id @default(cuid())
   slug             String         @unique
   name             String
+  nameBn           String?
   categoryId       String
   category         Category       @relation(fields: [categoryId], references: [id])
   shortDescription String?
+  shortDescBn      String?
   description      String?
+  descriptionBn    String?
   brand            String?
   model            String?
   stockStatus      String         @default("ON_REQUEST") // IN_STOCK | INCOMING | ON_REQUEST
   moq              String?
+  moqBn            String?
   leadTime         String?
+  leadTimeBn       String?
   priceBdt         Int?
   showPrice        Boolean        @default(false)
   datasheetUrl     String?
@@ -118,7 +137,9 @@ model Product {
   images           ProductImage[]
   specs            ProductSpec[]
   metaTitle        String?
+  metaTitleBn      String?
   metaDescription  String?
+  metaDescriptionBn String?
   quotes           QuoteRequest[]
   reviews          ProductReview[]
   createdAt        DateTime       @default(now())
@@ -131,6 +152,7 @@ model ProductImage {
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   url       String
   alt       String
+  altBn     String?
   sortOrder Int     @default(0)
 }
 
@@ -139,7 +161,9 @@ model ProductSpec {
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   label     String
+  labelBn   String?
   value     String
+  valueBn   String?
   sortOrder Int     @default(0)
 }
 
@@ -268,8 +292,10 @@ Spec rows are free-form, so each category can show different specs (panel wattag
 
 ## 4. Routes
 
-Public: `/`, `/products`, `/category/[slug]`, `/product/[slug]`, `/blog`, `/blog/[slug]`, `/about`, `/contact`.
-Admin: `/admin/login`, `/admin`, `/admin/categories`, `/admin/products`, `/admin/products/new`, `/admin/products/[id]`, `/admin/blog`, `/admin/reviews`, `/admin/quotes`, `/admin/quotes/[id]`, `/admin/settings`.
+Public (English, default): `/`, `/products`, `/category/[slug]`, `/product/[slug]`, `/blog`, `/blog/[slug]`, `/about`, `/contact`.
+Public (Bangla, `/bn` prefix): `/bn`, `/bn/products`, `/bn/category/[slug]`, `/bn/product/[slug]`, `/bn/blog`, `/bn/blog/[slug]`, `/bn/about`, `/bn/contact`.
+Language selection is persisted via `NEXT_LOCALE` cookie (set to `en` or `bn` on user toggle, 1-year max age, SameSite=Lax). No automatic redirection occurs based on `Accept-Language` headers.
+Admin: `/admin/login`, `/admin`, `/admin/categories`, `/admin/products`, `/admin/products/new`, `/admin/products/[id]`, `/admin/blog`, `/admin/reviews`, `/admin/quotes`, `/admin/quotes/[id]`, `/admin/settings`, `/admin/content/*`.
 Files: `/uploads/[...path]`.
 
 Only active categories and products appear on the public site. Unknown slugs return `notFound()`.

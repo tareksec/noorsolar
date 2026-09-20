@@ -5,17 +5,51 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolarbd.com";
   const hideSample = process.env.HIDE_SAMPLE_CONTENT === "true";
 
-  const staticRoutes = [
+  const staticPaths = [
     "",
     "/products",
     "/about",
     "/contact",
-  ].map((route) => ({
-    url: `${siteUrl}${route}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: route === "" ? 1.0 : 0.8,
-  }));
+    "/certifications",
+  ];
+
+  const now = new Date();
+
+  const entries: MetadataRoute.Sitemap = [];
+
+  for (const path of staticPaths) {
+    const enUrl = `${siteUrl}${path}`;
+    const bnUrl = `${siteUrl}/bn${path}`;
+    const priority = path === "" ? 1.0 : 0.8;
+
+    entries.push({
+      url: enUrl,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority,
+      alternates: {
+        languages: {
+          en: enUrl,
+          bn: bnUrl,
+          "x-default": enUrl,
+        },
+      },
+    });
+
+    entries.push({
+      url: bnUrl,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority,
+      alternates: {
+        languages: {
+          en: enUrl,
+          bn: bnUrl,
+          "x-default": enUrl,
+        },
+      },
+    });
+  }
 
   try {
     const categories = await db.category.findMany({
@@ -23,24 +57,76 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       select: { slug: true, updatedAt: true },
     });
 
-    const categoryRoutes = categories.map((cat) => ({
-      url: `${siteUrl}/category/${cat.slug}`,
-      lastModified: cat.updatedAt,
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    }));
+    for (const cat of categories) {
+      const enUrl = `${siteUrl}/category/${cat.slug}`;
+      const bnUrl = `${siteUrl}/bn/category/${cat.slug}`;
+
+      entries.push({
+        url: enUrl,
+        lastModified: cat.updatedAt,
+        changeFrequency: "weekly",
+        priority: 0.8,
+        alternates: {
+          languages: {
+            en: enUrl,
+            bn: bnUrl,
+            "x-default": enUrl,
+          },
+        },
+      });
+
+      entries.push({
+        url: bnUrl,
+        lastModified: cat.updatedAt,
+        changeFrequency: "weekly",
+        priority: 0.8,
+        alternates: {
+          languages: {
+            en: enUrl,
+            bn: bnUrl,
+            "x-default": enUrl,
+          },
+        },
+      });
+    }
 
     const products = await db.product.findMany({
       where: { isActive: true },
       select: { slug: true, updatedAt: true },
     });
 
-    const productRoutes = products.map((prod) => ({
-      url: `${siteUrl}/product/${prod.slug}`,
-      lastModified: prod.updatedAt,
-      changeFrequency: "daily" as const,
-      priority: 0.9,
-    }));
+    for (const prod of products) {
+      const enUrl = `${siteUrl}/product/${prod.slug}`;
+      const bnUrl = `${siteUrl}/bn/product/${prod.slug}`;
+
+      entries.push({
+        url: enUrl,
+        lastModified: prod.updatedAt,
+        changeFrequency: "daily",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            en: enUrl,
+            bn: bnUrl,
+            "x-default": enUrl,
+          },
+        },
+      });
+
+      entries.push({
+        url: bnUrl,
+        lastModified: prod.updatedAt,
+        changeFrequency: "daily",
+        priority: 0.9,
+        alternates: {
+          languages: {
+            en: enUrl,
+            bn: bnUrl,
+            "x-default": enUrl,
+          },
+        },
+      });
+    }
 
     // Blog posts
     const blogPosts = await db.blogPost.findMany({
@@ -48,27 +134,81 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         status: "PUBLISHED",
         ...(hideSample ? { isSample: false } : {}),
       },
-      select: { slug: true, updatedAt: true },
+      select: { slug: true, updatedAt: true, contentBn: true },
     });
 
-    const blogRoutes = blogPosts.length > 0 ? [
-      {
-        url: `${siteUrl}/blog`,
-        lastModified: new Date(),
-        changeFrequency: "daily" as const,
-        priority: 0.8,
-      },
-      ...blogPosts.map((post) => ({
-        url: `${siteUrl}/blog/${post.slug}`,
-        lastModified: post.updatedAt,
-        changeFrequency: "weekly" as const,
-        priority: 0.7,
-      })),
-    ] : [];
+    if (blogPosts.length > 0) {
+      const enBlog = `${siteUrl}/blog`;
+      const bnBlog = `${siteUrl}/bn/blog`;
 
-    return [...staticRoutes, ...categoryRoutes, ...productRoutes, ...blogRoutes];
+      entries.push({
+        url: enBlog,
+        lastModified: now,
+        changeFrequency: "daily",
+        priority: 0.8,
+        alternates: {
+          languages: {
+            en: enBlog,
+            bn: bnBlog,
+            "x-default": enBlog,
+          },
+        },
+      });
+
+      entries.push({
+        url: bnBlog,
+        lastModified: now,
+        changeFrequency: "daily",
+        priority: 0.8,
+        alternates: {
+          languages: {
+            en: enBlog,
+            bn: bnBlog,
+            "x-default": enBlog,
+          },
+        },
+      });
+
+      for (const post of blogPosts) {
+        const enPost = `${siteUrl}/blog/${post.slug}`;
+        const hasBn = !!post.contentBn?.trim();
+        const bnPost = hasBn ? `${siteUrl}/bn/blog/${post.slug}` : bnBlog;
+
+        entries.push({
+          url: enPost,
+          lastModified: post.updatedAt,
+          changeFrequency: "weekly",
+          priority: 0.7,
+          alternates: {
+            languages: {
+              en: enPost,
+              ...(hasBn ? { bn: bnPost } : {}),
+              "x-default": enPost,
+            },
+          },
+        });
+
+        if (hasBn) {
+          entries.push({
+            url: bnPost,
+            lastModified: post.updatedAt,
+            changeFrequency: "weekly",
+            priority: 0.7,
+            alternates: {
+              languages: {
+                en: enPost,
+                bn: bnPost,
+                "x-default": enPost,
+              },
+            },
+          });
+        }
+      }
+    }
+
+    return entries;
   } catch (error) {
     console.error("Failed to generate dynamic sitemap routes:", error);
-    return staticRoutes;
+    return entries;
   }
 }

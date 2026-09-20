@@ -14,7 +14,9 @@ import { Plus, ArrowUp, ArrowDown, Eye, EyeOff, Check, Edit2, Trash2, X, AlertCi
 interface FaqItemData {
   id: string;
   question: string;
+  questionBn?: string | null;
   answer: string;
+  answerBn?: string | null;
   sortOrder: number;
   isActive: boolean;
   isSample: boolean;
@@ -87,13 +89,25 @@ export function FaqClient({ items }: { items: FaqItemData[] }) {
             </button>
           </div>
           <form onSubmit={handleCreate} className='space-y-4'>
-            <div>
-              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Question *</label>
-              <input name='question' required placeholder='e.g. How does the quotation process work?' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+              <div>
+                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Question (English) *</label>
+                <input name='question' required placeholder='e.g. How does the quotation process work?' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              </div>
+              <div>
+                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Question (বাংলা)</label>
+                <input name='questionBn' lang='bn' placeholder='যেমন: কীভাবে কোটেশন প্রক্রিয়া কাজ করে?' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              </div>
             </div>
-            <div>
-              <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Answer *</label>
-              <textarea name='answer' required rows={3} placeholder='Write answer content...' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+              <div>
+                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Answer (English) *</label>
+                <textarea name='answer' required rows={3} placeholder='Write answer in English...' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              </div>
+              <div>
+                <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Answer (বাংলা)</label>
+                <textarea name='answerBn' lang='bn' rows={3} placeholder='বাংলায় উত্তর লিখুন...' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              </div>
             </div>
             <div className='flex justify-end gap-2'>
               <button type='submit' disabled={isPending} className='py-2 px-6 rounded-xl bg-[#111311] text-white text-xs font-bold font-mono hover:bg-black disabled:opacity-50'>
@@ -113,13 +127,25 @@ export function FaqClient({ items }: { items: FaqItemData[] }) {
               {editingId === item.id ? (
                 <form onSubmit={handleUpdate} className='w-full space-y-3'>
                   <input type='hidden' name='id' value={item.id} />
-                  <div>
-                    <label className='block text-[10px] font-mono text-[#5C605C]'>Question</label>
-                    <input name='question' defaultValue={item.question} required className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                  <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
+                    <div>
+                      <label className='block text-[10px] font-mono text-[#5C605C]'>Question (English)</label>
+                      <input name='question' defaultValue={item.question} required className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                    </div>
+                    <div>
+                      <label className='block text-[10px] font-mono text-[#5C605C]'>Question (বাংলা)</label>
+                      <input name='questionBn' lang='bn' defaultValue={item.questionBn || ''} placeholder='প্রশ্ন (বাংলা)' className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                    </div>
                   </div>
-                  <div>
-                    <label className='block text-[10px] font-mono text-[#5C605C]'>Answer</label>
-                    <textarea name='answer' defaultValue={item.answer} required rows={3} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                  <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
+                    <div>
+                      <label className='block text-[10px] font-mono text-[#5C605C]'>Answer (English)</label>
+                      <textarea name='answer' defaultValue={item.answer} required rows={3} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                    </div>
+                    <div>
+                      <label className='block text-[10px] font-mono text-[#5C605C]'>Answer (বাংলা)</label>
+                      <textarea name='answerBn' lang='bn' defaultValue={item.answerBn || ''} placeholder='উত্তর (বাংলা)' rows={3} className='w-full px-2.5 py-1.5 rounded-lg border border-[#DDE1DC] text-xs' />
+                    </div>
                   </div>
                   <div className='flex justify-end gap-2'>
                     <button type='submit' disabled={isPending} className='px-3 py-1.5 rounded-lg bg-[#111311] text-white text-xs font-bold'>
@@ -151,8 +177,17 @@ export function FaqClient({ items }: { items: FaqItemData[] }) {
                     </div>
 
                     <div className='space-y-1.5'>
-                      <div className='flex items-center gap-2'>
+                      <div className='flex items-center gap-2 flex-wrap'>
                         <span className='text-sm font-bold text-[#111311]'>{item.question}</span>
+                        {item.questionBn ? (
+                          <span className='px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-100 text-emerald-800 border border-emerald-300'>
+                            BN ✓
+                          </span>
+                        ) : (
+                          <span className='px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-100 text-amber-800 border border-amber-300'>
+                            BN missing
+                          </span>
+                        )}
                         {item.isSample && (
                           <span className='px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-700'>
                             SAMPLE
@@ -164,6 +199,9 @@ export function FaqClient({ items }: { items: FaqItemData[] }) {
                           </span>
                         )}
                       </div>
+                      {item.questionBn && (
+                        <p className='text-xs font-semibold text-[#5C605C]' lang='bn'>{item.questionBn}</p>
+                      )}
                       <p className='text-xs text-[#5C605C] leading-relaxed'>{item.answer}</p>
                     </div>
                   </div>

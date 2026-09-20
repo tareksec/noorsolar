@@ -1,35 +1,52 @@
 export interface SiteConfig {
   companyName: string;
   tagline: string;
+  taglineBn?: string;
   description: string;
+  descriptionBn?: string;
   phone: string;
   phoneDisplay: string;
   whatsapp: string;
   whatsappDisplay: string;
   email: string;
   address: string;
+  addressBn?: string;
   hours: string;
+  hoursBn?: string;
   heroHeadline: string;
+  heroHeadlineBn?: string;
   heroSubheadline: string;
+  heroSubheadlineBn?: string;
   heroPrimaryCta: string;
+  heroPrimaryCtaBn?: string;
   heroSecondaryCta: string;
+  heroSecondaryCtaBn?: string;
   processHeadline?: string;
+  processHeadlineBn?: string;
   processSubheadline?: string;
+  processSubheadlineBn?: string;
   processSteps?: Array<{
     title: string;
     desc: string;
+    titleBn?: string;
+    descBn?: string;
   }>;
   closingCtaHeadline: string;
+  closingCtaHeadlineBn?: string;
   closingCtaSubheadline: string;
+  closingCtaSubheadlineBn?: string;
   aboutHeadline: string;
+  aboutHeadlineBn?: string;
   aboutBody: string;
+  aboutBodyBn?: string;
   socials: {
     facebook?: string;
     linkedin?: string;
   };
   faq: Array<
-    { question: string; answer: string }
+    { question: string; answer: string; questionBn?: string; answerBn?: string }
   >;
+  [key: string]: unknown;
 }
 
 export const defaultSiteConfig: SiteConfig = {

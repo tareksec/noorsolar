@@ -1,7 +1,8 @@
 import React from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/routing";
 import { getProductBySlug } from "@/lib/data/products";
 import { getApprovedReviewsForProduct, isPublicReviewsEnabled } from "@/lib/data/reviews";
 import { ProductCard } from "@/components/product/product-card";
@@ -13,16 +14,19 @@ export const dynamic = "force-dynamic";
 
 interface ProductPageProps {
   params: Promise<{
+    locale: string;
     slug: string;
   }>;
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const data = await getProductBySlug(slug);
+  const { locale, slug } = await params;
+  const isBn = locale === "bn";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const data = await getProductBySlug(slug, locale);
 
   if (!data || !data.product) {
-    return { title: "Product Not Found" };
+    return { title: isBn ? "পণ্য পাওয়া যায়নি" : "Product Not Found" };
   }
 
   const { product } = data;
@@ -36,21 +40,29 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     title,
     description: desc,
     alternates: {
-      canonical: `/product/${product.slug}`,
+      canonical: isBn ? `${siteUrl}/bn/product/${product.slug}` : `${siteUrl}/product/${product.slug}`,
+      languages: {
+        en: `${siteUrl}/product/${product.slug}`,
+        bn: `${siteUrl}/bn/product/${product.slug}`,
+        "x-default": `${siteUrl}/product/${product.slug}`,
+      },
     },
     openGraph: {
       title,
       description: desc,
-      url: `/product/${product.slug}`,
+      url: isBn ? `/bn/product/${product.slug}` : `/product/${product.slug}`,
       type: "website",
+      locale: isBn ? "bn_BD" : "en_US",
       images: product.images[0]?.url ? [{ url: product.images[0].url }] : [],
     },
   };
 }
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
-  const { slug } = await params;
-  const data = await getProductBySlug(slug);
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
+
+  const data = await getProductBySlug(slug, locale);
 
   if (!data || !data.product) {
     notFound();

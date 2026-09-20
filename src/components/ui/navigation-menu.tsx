@@ -22,8 +22,6 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
   { name: "Contact", href: "/contact" },
 ];
 
-const EXPAND_SCROLL_THRESHOLD = 80;
-
 interface AnimatedNavFramerProps {
   items?: NavItem[];
   brandName?: string;
@@ -147,7 +145,7 @@ export function AnimatedNavFramer({
 
   return (
     <>
-      <div className="fixed top-3 sm:top-5 inset-x-0 z-50 flex justify-center pointer-events-none px-2 sm:px-4">
+      <div data-motion="header-scroll" className="fixed top-3 sm:top-5 inset-x-0 z-50 flex justify-center pointer-events-none px-2 sm:px-4">
         <motion.nav
           ref={navRef}
           initial={false}
@@ -277,7 +275,7 @@ export function AnimatedNavFramer({
                   {/* Mobile Hamburger Toggle Button */}
                   <button
                     type="button"
-                    aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                    aria-label="Toggle mobile menu"
                     onClick={(e) => {
                       e.stopPropagation();
                       setMobileOpen((prev) => !prev);

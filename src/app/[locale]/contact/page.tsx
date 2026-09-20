@@ -1,25 +1,61 @@
 import React from "react";
 import Image from "next/image";
 import type { Metadata } from "next";
+import { setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
 import { getSiteSettings } from "@/lib/data/settings";
 import { ClosingCTA } from "@/components/sections/closing-cta";
 import { MapPin, Phone, Mail, Clock, MessageCircle, Sun, Headphones } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Contact & Warehouse Logistics — Noor Solar Energy",
-  description:
-    "Get in touch with Noor Solar Energy sales and logistics team for container pricing, tender specifications, and warehouse pickup.",
-  openGraph: {
-    title: "Contact & Warehouse Logistics — Noor Solar Energy",
-    description:
-      "Direct contact details, warehouse pickup locations, and commercial quotation request form.",
-    url: "/contact",
-    type: "website",
-  },
-};
+interface ContactPageProps {
+  params: Promise<{
+    locale: string;
+  }>;
+}
 
-export default async function ContactPage() {
-  const settings = await getSiteSettings();
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }: ContactPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const isBn = locale === "bn";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+
+  return {
+    title: isBn
+      ? "যোগাযোগ ও ওয়্যারহাউস লজিস্টিকস — নূর সোলার এনার্জি"
+      : "Contact & Warehouse Logistics — Noor Solar Energy",
+    description: isBn
+      ? "কন্টেইনার মূল্য নির্ধারণ, টেন্ডার স্পেসিফিকেশন এবং ওয়্যারহাউস পিকআপের জন্য নূর সোলার এনার্জির সাথে যোগাযোগ করুন।"
+      : "Get in touch with Noor Solar Energy sales and logistics team for container pricing, tender specifications, and warehouse pickup.",
+    alternates: {
+      canonical: isBn ? `${siteUrl}/bn/contact` : `${siteUrl}/contact`,
+      languages: {
+        en: `${siteUrl}/contact`,
+        bn: `${siteUrl}/bn/contact`,
+        "x-default": `${siteUrl}/contact`,
+      },
+    },
+    openGraph: {
+      title: isBn
+        ? "যোগাযোগ ও লজিস্টিকস — নূর সোলার এনার্জি"
+        : "Contact & Warehouse Logistics — Noor Solar Energy",
+      description: isBn
+        ? "সরাসরি যোগাযোগের ঠিকানা, ওয়্যারহাউস পিকআপ লোকেশন এবং বাণিজ্যিক কোটেশন অনুরোধ।"
+        : "Direct contact details, warehouse pickup locations, and commercial quotation request form.",
+      url: isBn ? "/bn/contact" : "/contact",
+      type: "website",
+      locale: isBn ? "bn_BD" : "en_US",
+    },
+  };
+}
+
+export default async function ContactPage({ params }: ContactPageProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const settings = await getSiteSettings(locale);
 
   return (
     <div className="pt-28 sm:pt-36 pb-24 bg-[#E4E7E4] min-h-screen">

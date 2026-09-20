@@ -49,6 +49,36 @@ Status values: `Not started` Â· `In progress` Â· `Done` Â· `Blocked`
 
 ## 2. Task log (newest first)
 
+### Task I18N-A — Bangla Language Infrastructure — 2026-09-20
+Branch: `task-i18n-a`
+Status: Done
+
+#### Implementation
+- **Routing & Proxy Architecture**:
+  - `src/i18n/routing.ts`: configured locales `["en", "bn"]`, `defaultLocale: "en"`, `localePrefix: "as-needed"`, and `localeDetection: false`.
+  - `src/proxy.ts`: Next.js 16 proxy middleware handling both admin JWT authentication and `next-intl` localization.
+  - Split root layouts: `src/app/[locale]/layout.tsx` (public tree with `<html>`, `<body>`, NextIntlClientProvider, Header, Footer) and `src/app/admin/layout.tsx` (isolated admin shell with `<html>`, `<body>`, unaffected by i18n).
+- **Data Layer & Actions**:
+  - Prisma schema updated and migrated with `*Bn` fields across Category, Product, ProductSpec, ProductImage, BlogPost, Testimonial, FaqItem, Stat, and Certification.
+  - Data retrieval queries localized with English fallback across categories, products, blog, trust content, and site settings.
+  - Backend server actions accept and persist bilingual inputs for categories, products, blog, content, and site settings.
+- **Public Localized Pages & Navigation**:
+  - All public routes localized under `[locale]`: Home (`/` and `/bn`), Products, Category detail, Product detail, Blog index, Blog detail, About, Contact, Certifications, and `sitemap.ts` with hreflang alternates.
+  - Floating language switcher pill (`src/components/ui/language-switcher.tsx`) with active indicator layoutId spring animation (`[data-motion="lang-switch"]`), route & query parameter preservation, and `NEXT_LOCALE` cookie persistence.
+  - Western Arabic numerals (`0-9`) retained across all languages; dates formatted with `"bn-BD-u-nu-latn"`.
+- **Admin Bilingual Controls & Badges**:
+  - Product editor: `English | বাংলা` tab toggle, "BN missing" badge, dual inputs for name, short description, description, MOQ, lead time, specs, image alts, and SEO meta. Inactive inputs kept mounted in DOM with `hidden` to ensure full FormData submission.
+  - Category editor: `nameBn` and `descriptionBn` inputs with `lang="bn"`, plus "BN missing" / "BN ✓" badges.
+  - Blog editor: bilingual tabs, dual markdown textareas with synchronized toolbar and live preview, and post list status badges.
+  - Trust content & Settings: bilingual inputs for stats, certifications, testimonials, FAQs, address, hours, hero copy, ordering steps, closing CTA, and about copy.
+- **Verification Suite**:
+  - `npm run lint`: PASSED (0 errors, 0 warnings).
+  - `npm run build`: PASSED (Turbopack, 44 routes compiled).
+  - `npm run check:overflow`: PASSED (128/128 tests across 360px, 390px, 768px, 1440px on all English and Bangla routes).
+  - `npm run check:motion`: PASSED (30/30 motion tests passed).
+  - `npm run check:images`: PASSED (338 KB / 600 KB mobile budget, all images verified).
+  - `npm run check:admin`: PASSED (All 17 admin lifecycle tests passed).
+
 ### Task Lighthouse Fix — Mobile Accessibility, SEO & Read-Only Motion Audit — 2026-09-20
 Branch: `task-lighthouse-fix`
 Status: Done

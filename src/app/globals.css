@@ -341,3 +341,54 @@ noscript + #preloader {
   opacity: 0;
   pointer-events: none;
 }
+
+/* ==========================================================================
+   BANGLA TYPOGRAPHY LAYER (lang="bn")
+   Enforces Hind Siliguri font, unclipped diacritics, and prevents conjunct breakage.
+   ========================================================================== */
+
+[lang="bn"] {
+  font-family: var(--font-bengali), var(--font-inter), sans-serif;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  font-style: normal !important;
+}
+
+[lang="bn"] * {
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  font-style: normal !important;
+}
+
+/* Ensure vowel diacritics (kar/falas) are never vertically clipped */
+[lang="bn"] body,
+[lang="bn"] p,
+[lang="bn"] span,
+[lang="bn"] a,
+[lang="bn"] li,
+[lang="bn"] label,
+[lang="bn"] input,
+[lang="bn"] textarea,
+[lang="bn"] select,
+[lang="bn"] button {
+  line-height: 1.6;
+}
+
+[lang="bn"] h1,
+[lang="bn"] h2,
+[lang="bn"] h3,
+[lang="bn"] h4,
+[lang="bn"] h5,
+[lang="bn"] h6 {
+  line-height: 1.38 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+/* Preserve Inter font for Latin digits and technical codes inside Bangla pages */
+[lang="bn"] .font-mono,
+[lang="bn"] code,
+[lang="bn"] kbd,
+[lang="bn"] samp {
+  font-family: var(--font-jetbrains-mono), monospace !important;
+}

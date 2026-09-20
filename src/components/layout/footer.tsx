@@ -10,6 +10,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { SiteConfig } from "@/lib/site-config";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 
 interface FooterProps {
   settings: SiteConfig;
@@ -352,8 +353,9 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
 
         {/* Sub-Footer Copyright & Disclaimer */}
         <div className="py-4 border-t border-[#DCE2D8] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-[#6A7365]">
-          <div>
-            &copy; {currentYear} Noor Solar Energy. All rights reserved.
+          <div className="flex items-center gap-4 flex-wrap">
+            <span>&copy; {currentYear} Noor Solar Energy. All rights reserved.</span>
+            <LanguageSwitcher idPrefix="ftr" />
           </div>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-[#111311] transition-colors">

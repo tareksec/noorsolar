@@ -111,27 +111,43 @@ export async function createBlogPostAction(
     }
     const coverAlt = (formData.get("coverAlt") as string)?.trim() || `${parsed.data.title} cover`;
 
+    const titleBn = (formData.get("titleBn") as string)?.trim() || null;
+    const excerptBn = (formData.get("excerptBn") as string)?.trim() || null;
+    const contentBn = (formData.get("contentBn") as string)?.trim() || null;
+    const coverAltBn = (formData.get("coverAltBn") as string)?.trim() || null;
+    const tagsBn = (formData.get("tagsBn") as string)?.trim() || null;
+    const metaTitleBn = (formData.get("metaTitleBn") as string)?.trim() || null;
+    const metaDescriptionBn = (formData.get("metaDescriptionBn") as string)?.trim() || null;
+
     const publishedAt = status === "PUBLISHED" ? new Date() : null;
 
     const created = await db.blogPost.create({
       data: {
         title: parsed.data.title,
+        titleBn,
         slug,
         excerpt: parsed.data.excerpt || null,
+        excerptBn,
         content: parsed.data.content,
+        contentBn,
         authorName: parsed.data.authorName || "Noor Solar Engineering Team",
         tags: parsed.data.tags || null,
+        tagsBn,
         status,
         publishedAt,
         coverImage,
         coverAlt,
+        coverAltBn,
         metaTitle: parsed.data.metaTitle || null,
+        metaTitleBn,
         metaDescription: parsed.data.metaDescription || null,
+        metaDescriptionBn,
         isSample: false,
       },
     });
 
     revalidatePath("/blog");
+    revalidatePath("/bn/blog");
     revalidatePath("/admin/blog");
     revalidatePath("/sitemap.xml");
 
@@ -191,6 +207,14 @@ export async function updateBlogPostAction(
       slug = `${slug}-${Date.now().toString().slice(-4)}`;
     }
 
+    const titleBn = (formData.get("titleBn") as string)?.trim() || null;
+    const excerptBn = (formData.get("excerptBn") as string)?.trim() || null;
+    const contentBn = (formData.get("contentBn") as string)?.trim() || null;
+    const coverAltBn = (formData.get("coverAltBn") as string)?.trim() || null;
+    const tagsBn = (formData.get("tagsBn") as string)?.trim() || null;
+    const metaTitleBn = (formData.get("metaTitleBn") as string)?.trim() || null;
+    const metaDescriptionBn = (formData.get("metaDescriptionBn") as string)?.trim() || null;
+
     // Cover image
     let coverImage = (formData.get("coverImageUrl") as string)?.trim() || currentPost.coverImage;
     const coverFile = formData.get("coverFile") as File | null;
@@ -216,24 +240,34 @@ export async function updateBlogPostAction(
       where: { id },
       data: {
         title: parsed.data.title,
+        titleBn,
         slug,
         excerpt: parsed.data.excerpt || null,
+        excerptBn,
         content: parsed.data.content,
+        contentBn,
         authorName: parsed.data.authorName || "Noor Solar Engineering Team",
         tags: parsed.data.tags || null,
+        tagsBn,
         status,
         publishedAt,
         coverImage,
         coverAlt,
+        coverAltBn,
         metaTitle: parsed.data.metaTitle || null,
+        metaTitleBn,
         metaDescription: parsed.data.metaDescription || null,
+        metaDescriptionBn,
       },
     });
 
     revalidatePath("/blog");
+    revalidatePath("/bn/blog");
     revalidatePath(`/blog/${slug}`);
+    revalidatePath(`/bn/blog/${slug}`);
     if (currentPost.slug !== slug) {
       revalidatePath(`/blog/${currentPost.slug}`);
+      revalidatePath(`/bn/blog/${currentPost.slug}`);
     }
     revalidatePath("/admin/blog");
     revalidatePath("/sitemap.xml");

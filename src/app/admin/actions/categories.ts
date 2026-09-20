@@ -32,7 +32,9 @@ export async function createCategoryAction(
     if (!name) return { success: false, error: "Category name is required" };
 
     let slug = (formData.get("slug") as string)?.trim() || slugify(name);
+    const nameBn = (formData.get("nameBn") as string)?.trim() || null;
     const description = (formData.get("description") as string)?.trim() || null;
+    const descriptionBn = (formData.get("descriptionBn") as string)?.trim() || null;
     const sortOrderStr = formData.get("sortOrder") as string;
     const sortOrder = sortOrderStr ? parseInt(sortOrderStr, 10) : 0;
 
@@ -51,8 +53,10 @@ export async function createCategoryAction(
     await db.category.create({
       data: {
         name,
+        nameBn,
         slug,
         description,
+        descriptionBn,
         sortOrder,
         image,
         isActive: true,
@@ -60,7 +64,9 @@ export async function createCategoryAction(
     });
 
     revalidatePath("/");
+    revalidatePath("/bn");
     revalidatePath("/products");
+    revalidatePath("/bn/products");
     revalidatePath("/admin/categories");
     revalidatePath("/admin/products");
     revalidatePath("/admin/products/new");
@@ -88,8 +94,10 @@ export async function updateCategoryAction(
     const name = (formData.get("name") as string)?.trim();
     if (!name) return { success: false, error: "Category name is required" };
 
+    const nameBn = (formData.get("nameBn") as string)?.trim() || null;
     const slug = (formData.get("slug") as string)?.trim() || slugify(name);
     const description = (formData.get("description") as string)?.trim() || null;
+    const descriptionBn = (formData.get("descriptionBn") as string)?.trim() || null;
     const sortOrderStr = formData.get("sortOrder") as string;
     const sortOrder = sortOrderStr ? parseInt(sortOrderStr, 10) : 0;
 
@@ -104,16 +112,21 @@ export async function updateCategoryAction(
       where: { id },
       data: {
         name,
+        nameBn,
         slug,
         description,
+        descriptionBn,
         sortOrder,
         ...(newImageUrl ? { image: newImageUrl } : {}),
       },
     });
 
     revalidatePath("/");
+    revalidatePath("/bn");
     revalidatePath("/products");
+    revalidatePath("/bn/products");
     revalidatePath(`/category/${slug}`);
+    revalidatePath(`/bn/category/${slug}`);
     revalidatePath("/admin/categories");
     return { success: true };
   } catch (err: unknown) {

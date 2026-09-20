@@ -1,24 +1,15 @@
 import React from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
+import { setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/routing";
 import { AppImage as Image } from "@/components/ui/app-image";
 import { getPublishedBlogPosts } from "@/lib/data/blog";
 import { Clock, Calendar, ArrowRight, BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Solar Engineering Blog & Technical Insights — Noor Solar Energy",
-  description:
-    "Expert technical articles, equipment selection guides, and commercial rooftop solar installation best practices in Bangladesh.",
-  openGraph: {
-    title: "Solar Engineering Blog & Technical Insights — Noor Solar Energy",
-    description:
-      "Expert technical articles, equipment selection guides, and commercial rooftop solar installation best practices in Bangladesh.",
-    url: "/blog",
-    type: "website",
-  },
-};
-
 interface BlogIndexPageProps {
+  params: Promise<{
+    locale: string;
+  }>;
   searchParams: Promise<{
     page?: string;
     tag?: string;
@@ -26,7 +17,48 @@ interface BlogIndexPageProps {
   }>;
 }
 
-export default async function BlogIndexPage({ searchParams }: BlogIndexPageProps) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const isBn = locale === "bn";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+
+  return {
+    title: isBn
+      ? "সোলার ইঞ্জিনিয়ারিং ব্লগ ও কারিগরি দিকনির্দেশনা — নূর সোলার এনার্জি"
+      : "Solar Engineering Blog & Technical Insights — Noor Solar Energy",
+    description: isBn
+      ? "বাংলাদেশে বাণিজ্যিক রুফটপ সোলার প্যানেল ইনস্টলেশন এবং সরঞ্জাম নির্বাচনের বিশদ কারিগরি গাইড।"
+      : "Expert technical articles, equipment selection guides, and commercial rooftop solar installation best practices in Bangladesh.",
+    alternates: {
+      canonical: isBn ? `${siteUrl}/bn/blog` : `${siteUrl}/blog`,
+      languages: {
+        en: `${siteUrl}/blog`,
+        bn: `${siteUrl}/bn/blog`,
+        "x-default": `${siteUrl}/blog`,
+      },
+    },
+    openGraph: {
+      title: isBn
+        ? "সোলার ইঞ্জিনিয়ারিং ব্লগ — নূর সোলার এনার্জি"
+        : "Solar Engineering Blog & Technical Insights — Noor Solar Energy",
+      description: isBn
+        ? "বাংলাদেশে বাণিজ্যিক সোলার প্রজেক্টের কারিগরি প্রকাশনা ও দিকনির্দেশনা।"
+        : "Expert technical articles, equipment selection guides, and commercial rooftop solar installation best practices in Bangladesh.",
+      url: isBn ? "/bn/blog" : "/blog",
+      type: "website",
+      locale: isBn ? "bn_BD" : "en_US",
+    },
+  };
+}
+
+export default async function BlogIndexPage({ params, searchParams }: BlogIndexPageProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   const { page = "1", tag = "", q = "" } = await searchParams;
   const currentPage = Math.max(1, parseInt(page, 10) || 1);
 
@@ -35,14 +67,15 @@ export default async function BlogIndexPage({ searchParams }: BlogIndexPageProps
     pageSize: 9,
     tag: tag || undefined,
     query: q || undefined,
+    locale,
   });
 
   function buildPageUrl(p: number) {
-    const params = new URLSearchParams();
-    if (tag) params.set("tag", tag);
-    if (q) params.set("q", q);
-    if (p > 1) params.set("page", String(p));
-    const qs = params.toString();
+    const searchParamObj = new URLSearchParams();
+    if (tag) searchParamObj.set("tag", tag);
+    if (q) searchParamObj.set("q", q);
+    if (p > 1) searchParamObj.set("page", String(p));
+    const qs = searchParamObj.toString();
     return `/blog${qs ? `?${qs}` : ""}`;
   }
 
@@ -116,11 +149,14 @@ export default async function BlogIndexPage({ searchParams }: BlogIndexPageProps
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {post.publishedAt
-                          ? new Date(post.publishedAt).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            })
+                          ? new Date(post.publishedAt).toLocaleDateString(
+                              locale === "bn" ? "bn-BD-u-nu-latn" : "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              }
+                            )
                           : "Recent"}
                       </span>
                       <span>&bull;</span>

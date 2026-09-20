@@ -1,24 +1,44 @@
 import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
+import { db } from "@/lib/db";
 import { getCategoryBySlug } from "@/lib/data/categories";
 import { ProductCard } from "@/components/product/product-card";
-import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { EmptyCatalogIllustration } from "@/components/illustrations/empty-catalog-illustration";
 
 interface CategoryPageProps {
   params: Promise<{
+    locale: string;
     slug: string;
   }>;
 }
 
+export async function generateStaticParams() {
+  try {
+    const categories = await db.category.findMany({
+      where: { isActive: true },
+      select: { slug: true },
+    });
+    return routing.locales.flatMap((locale) =>
+      categories.map((c) => ({ locale, slug: c.slug }))
+    );
+  } catch {
+    return [];
+  }
+}
+
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const category = await getCategoryBySlug(slug);
+  const { locale, slug } = await params;
+  const isBn = locale === "bn";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const category = await getCategoryBySlug(slug, locale);
 
   if (!category) {
-    return { title: "Category Not Found" };
+    return { title: isBn ? "ক্যাটাগরি পাওয়া যায়নি" : "Category Not Found" };
   }
 
   const desc = category.description || `Explore bulk ${category.name} available for wholesale import in Bangladesh.`;
@@ -26,19 +46,30 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   return {
     title: `${category.name} Wholesale — Noor Solar Energy`,
     description: desc,
+    alternates: {
+      canonical: isBn ? `${siteUrl}/bn/category/${category.slug}` : `${siteUrl}/category/${category.slug}`,
+      languages: {
+        en: `${siteUrl}/category/${category.slug}`,
+        bn: `${siteUrl}/bn/category/${category.slug}`,
+        "x-default": `${siteUrl}/category/${category.slug}`,
+      },
+    },
     openGraph: {
       title: `${category.name} Wholesale — Noor Solar Energy`,
       description: desc,
-      url: `/category/${category.slug}`,
+      url: isBn ? `/bn/category/${category.slug}` : `/category/${category.slug}`,
       type: "website",
+      locale: isBn ? "bn_BD" : "en_US",
       images: category.image ? [{ url: category.image }] : [],
     },
   };
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { slug } = await params;
-  const category = await getCategoryBySlug(slug);
+  const { locale, slug } = await params;
+  setRequestLocale(locale);
+
+  const category = await getCategoryBySlug(slug, locale);
 
   if (!category) {
     notFound();

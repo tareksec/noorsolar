@@ -36,13 +36,16 @@ interface CategoryOption {
 interface ProductSpecItem {
   id?: string;
   label: string;
+  labelBn?: string | null;
   value: string;
+  valueBn?: string | null;
 }
 
 interface ProductImageItem {
   id: string;
   url: string;
   alt: string;
+  altBn?: string | null;
 }
 
 interface ProductFormClientProps {
@@ -50,21 +53,28 @@ interface ProductFormClientProps {
   initialProduct?: {
     id: string;
     name: string;
+    nameBn?: string | null;
     slug: string;
     categoryId: string;
     shortDescription?: string | null;
+    shortDescriptionBn?: string | null;
     description?: string | null;
+    descriptionBn?: string | null;
     brand?: string | null;
     model?: string | null;
     stockStatus: string;
     moq?: string | null;
+    moqBn?: string | null;
     leadTime?: string | null;
+    leadTimeBn?: string | null;
     priceBdt?: number | null;
     showPrice: boolean;
     isFeatured: boolean;
     datasheetUrl?: string | null;
     metaTitle?: string | null;
+    metaTitleBn?: string | null;
     metaDescription?: string | null;
+    metaDescriptionBn?: string | null;
     specs: ProductSpecItem[];
     images: ProductImageItem[];
   };
@@ -132,10 +142,14 @@ export function ProductFormClient({
     initialProduct?.categoryId || categories[0]?.id || ""
   );
 
+  const [langTab, setLangTab] = useState<"en" | "bn">("en");
   const [nameVal, setNameVal] = useState(initialProduct?.name || "");
+  const [nameBnVal, setNameBnVal] = useState(initialProduct?.nameBn || "");
   const [slugVal, setSlugVal] = useState(initialProduct?.slug || "");
   const [metaTitleVal, setMetaTitleVal] = useState(initialProduct?.metaTitle || "");
+  const [metaTitleBnVal, setMetaTitleBnVal] = useState(initialProduct?.metaTitleBn || "");
   const [metaDescVal, setMetaDescVal] = useState(initialProduct?.metaDescription || "");
+  const [metaDescBnVal, setMetaDescBnVal] = useState(initialProduct?.metaDescriptionBn || "");
 
   const saveSuccess = state.success;
 
@@ -212,10 +226,14 @@ export function ProductFormClient({
     setSpecs(next);
   };
 
-  const handleSpecChange = (index: number, field: "label" | "value", val: string) => {
+  const handleSpecChange = (
+    index: number,
+    field: "label" | "value" | "labelBn" | "valueBn",
+    val: string
+  ) => {
     markDirty();
     const next = [...specs];
-    next[index][field] = val;
+    next[index] = { ...next[index], [field]: val };
     setSpecs(next);
   };
 
@@ -265,16 +283,57 @@ export function ProductFormClient({
         <input type="hidden" name="id" value={initialProduct?.id} />
       )}
 
+      {/* Language Tabs Selector */}
+      <div className="flex items-center justify-between p-3 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC]">
+        <div className="flex items-center gap-3">
+          <span className="text-xs font-mono font-bold uppercase text-[#111311]">
+            Editing Language:
+          </span>
+          <div className="inline-flex p-1 rounded-xl bg-white border border-[#DDE1DC]">
+            <button
+              type="button"
+              onClick={() => setLangTab("en")}
+              className={`px-3 py-1 text-xs font-mono rounded-lg transition-colors cursor-pointer ${
+                langTab === "en"
+                  ? "bg-[#111311] text-[#CEF23E] font-bold"
+                  : "text-[#5C605C] hover:text-[#111311]"
+              }`}
+            >
+              English
+            </button>
+            <button
+              type="button"
+              onClick={() => setLangTab("bn")}
+              className={`px-3 py-1 text-xs font-mono rounded-lg transition-colors cursor-pointer flex items-center gap-1.5 ${
+                langTab === "bn"
+                  ? "bg-[#111311] text-[#CEF23E] font-bold"
+                  : "text-[#5C605C] hover:text-[#111311]"
+              }`}
+            >
+              <span>বাংলা</span>
+              {isEditing && !initialProduct?.nameBn && (
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+              )}
+            </button>
+          </div>
+        </div>
+        {isEditing && !initialProduct?.nameBn && (
+          <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+            BN missing
+          </span>
+        )}
+      </div>
+
       {/* 1. General Information */}
       <div className="space-y-4">
         <h2 className="text-sm font-mono font-bold uppercase text-[#111311] pb-2 border-b border-[#EDEDED]">
-          1. General Information
+          1. General Information ({langTab === "en" ? "English" : "বাংলা"})
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
+          <div className={langTab === "en" ? "" : "hidden"}>
             <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-              Product Name *
+              Product Name (English) *
             </label>
             <input
               type="text"
@@ -284,6 +343,24 @@ export function ProductFormClient({
               value={nameVal}
               onChange={(e) => handleNameChange(e.target.value)}
               placeholder="e.g. N-Type TOPCon 620W Bifacial Module"
+              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none focus:ring-1 focus:ring-[#111311]"
+            />
+          </div>
+
+          <div className={langTab === "bn" ? "" : "hidden"}>
+            <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+              Product Name (বাংলা)
+            </label>
+            <input
+              type="text"
+              name="nameBn"
+              lang="bn"
+              value={nameBnVal}
+              onChange={(e) => {
+                setNameBnVal(e.target.value);
+                markDirty();
+              }}
+              placeholder="যেমন: এন-টাইপ টপকন ৬২০ ওয়াট বাইফেসিয়াল মডিউল"
               className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none focus:ring-1 focus:ring-[#111311]"
             />
           </div>
@@ -359,28 +436,52 @@ export function ProductFormClient({
 
         <div>
           <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-            Short Description (Catalog Preview)
+            Short Description (Catalog Preview) {langTab === "en" ? "(English)" : "(বাংলা)"}
           </label>
-          <input
-            type="text"
-            name="shortDescription"
-            defaultValue={initialProduct?.shortDescription || ""}
-            placeholder="High-efficiency dual glass module designed for industrial commercial rooftops."
-            className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
-          />
+          <div className={langTab === "en" ? "" : "hidden"}>
+            <input
+              type="text"
+              name="shortDescription"
+              defaultValue={initialProduct?.shortDescription || ""}
+              placeholder="High-efficiency dual glass module designed for industrial commercial rooftops."
+              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
+          <div className={langTab === "bn" ? "" : "hidden"}>
+            <input
+              type="text"
+              name="shortDescriptionBn"
+              lang="bn"
+              defaultValue={initialProduct?.shortDescriptionBn || ""}
+              placeholder="বাণিজ্যিক ও শিল্প কারখানার জন্য উচ্চ-দক্ষতাসম্পন্ন ডুয়াল গ্লাস মডিউল।"
+              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
         </div>
 
         <div>
           <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-            Full Engineering Description
+            Full Engineering Description {langTab === "en" ? "(English)" : "(বাংলা)"}
           </label>
-          <textarea
-            name="description"
-            rows={3}
-            defaultValue={initialProduct?.description || ""}
-            placeholder="Detailed overview of cells, structure, temperature coefficients, and durability..."
-            className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
-          />
+          <div className={langTab === "en" ? "" : "hidden"}>
+            <textarea
+              name="description"
+              rows={3}
+              defaultValue={initialProduct?.description || ""}
+              placeholder="Detailed overview of cells, structure, temperature coefficients, and durability..."
+              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
+          <div className={langTab === "bn" ? "" : "hidden"}>
+            <textarea
+              name="descriptionBn"
+              lang="bn"
+              rows={3}
+              defaultValue={initialProduct?.descriptionBn || ""}
+              placeholder="সেল, কাঠামো, তাপমাত্রা সহগ এবং স্থায়িত্বের বিস্তারিত প্রযুক্তিগত বিবরণ..."
+              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
         </div>
       </div>
 
@@ -408,28 +509,52 @@ export function ProductFormClient({
 
           <div>
             <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-              Minimum Order Quantity (MOQ)
+              Minimum Order Quantity (MOQ) {langTab === "en" ? "(English)" : "(বাংলা)"}
             </label>
-            <input
-              type="text"
-              name="moq"
-              defaultValue={initialProduct?.moq || ""}
-              placeholder="e.g. 50 pcs or 1 Pallet"
-              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
-            />
+            <div className={langTab === "en" ? "" : "hidden"}>
+              <input
+                type="text"
+                name="moq"
+                defaultValue={initialProduct?.moq || ""}
+                placeholder="e.g. 50 pcs or 1 Pallet"
+                className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+              />
+            </div>
+            <div className={langTab === "bn" ? "" : "hidden"}>
+              <input
+                type="text"
+                name="moqBn"
+                lang="bn"
+                defaultValue={initialProduct?.moqBn || ""}
+                placeholder="যেমন: ৫০ টি বা ১ প্যালেট"
+                className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-              Delivery Lead Time
+              Delivery Lead Time {langTab === "en" ? "(English)" : "(বাংলা)"}
             </label>
-            <input
-              type="text"
-              name="leadTime"
-              defaultValue={initialProduct?.leadTime || ""}
-              placeholder="e.g. Immediate delivery from Dhaka"
-              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
-            />
+            <div className={langTab === "en" ? "" : "hidden"}>
+              <input
+                type="text"
+                name="leadTime"
+                defaultValue={initialProduct?.leadTime || ""}
+                placeholder="e.g. Immediate delivery from Dhaka"
+                className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+              />
+            </div>
+            <div className={langTab === "bn" ? "" : "hidden"}>
+              <input
+                type="text"
+                name="leadTimeBn"
+                lang="bn"
+                defaultValue={initialProduct?.leadTimeBn || ""}
+                placeholder="যেমন: ঢাকা গুদাম থেকে তাৎক্ষণিক ডেলিভারি"
+                className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+              />
+            </div>
           </div>
         </div>
 
@@ -569,22 +694,44 @@ export function ProductFormClient({
         <div className="space-y-2">
           {specs.map((spec, index) => (
             <div key={index} className="flex items-center gap-3">
-              <input
-                type="text"
-                name="spec_labels[]"
-                value={spec.label}
-                onChange={(e) => handleSpecChange(index, "label", e.target.value)}
-                placeholder="Spec Name (e.g. Nominal Power)"
-                className="w-1/2 px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs text-[#111311] outline-none"
-              />
-              <input
-                type="text"
-                name="spec_values[]"
-                value={spec.value}
-                onChange={(e) => handleSpecChange(index, "value", e.target.value)}
-                placeholder="Value (e.g. 620W)"
-                className="w-1/2 px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs font-mono text-[#111311] outline-none"
-              />
+              <div className={`flex items-center gap-3 flex-1 ${langTab === "en" ? "" : "hidden"}`}>
+                <input
+                  type="text"
+                  name="spec_labels[]"
+                  value={spec.label}
+                  onChange={(e) => handleSpecChange(index, "label", e.target.value)}
+                  placeholder="Spec Name (e.g. Nominal Power)"
+                  className="w-1/2 px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs text-[#111311] outline-none"
+                />
+                <input
+                  type="text"
+                  name="spec_values[]"
+                  value={spec.value}
+                  onChange={(e) => handleSpecChange(index, "value", e.target.value)}
+                  placeholder="Value (e.g. 620W)"
+                  className="w-1/2 px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs font-mono text-[#111311] outline-none"
+                />
+              </div>
+              <div className={`flex items-center gap-3 flex-1 ${langTab === "bn" ? "" : "hidden"}`}>
+                <input
+                  type="text"
+                  name="spec_labels_bn[]"
+                  lang="bn"
+                  value={spec.labelBn || ""}
+                  onChange={(e) => handleSpecChange(index, "labelBn", e.target.value)}
+                  placeholder={`বাংলা নাম (যেমন: ${spec.label || "নমিনাল পাওয়ার"})`}
+                  className="w-1/2 px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs text-[#111311] outline-none"
+                />
+                <input
+                  type="text"
+                  name="spec_values_bn[]"
+                  lang="bn"
+                  value={spec.valueBn || ""}
+                  onChange={(e) => handleSpecChange(index, "valueBn", e.target.value)}
+                  placeholder={`বাংলা মান (যেমন: ${spec.value || "৬২০W"})`}
+                  className="w-1/2 px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs font-mono text-[#111311] outline-none"
+                />
+              </div>
               <div className="flex items-center gap-1 shrink-0">
                 <button
                   type="button"
@@ -652,15 +799,27 @@ export function ProductFormClient({
 
                   <div>
                     <label className="block text-[10px] font-mono text-[#5C605C] mb-1">
-                      Image Alt Text
+                      Image Alt Text ({langTab === "en" ? "English" : "বাংলা"})
                     </label>
-                    <input
-                      type="text"
-                      name="existing_image_alts[]"
-                      defaultValue={img.alt}
-                      placeholder="Alt description for SEO"
-                      className="w-full px-2.5 py-1.5 rounded-xl bg-white text-xs text-[#111311] outline-none"
-                    />
+                    <div className={langTab === "en" ? "" : "hidden"}>
+                      <input
+                        type="text"
+                        name="existing_image_alts[]"
+                        defaultValue={img.alt}
+                        placeholder="Alt description for SEO"
+                        className="w-full px-2.5 py-1.5 rounded-xl bg-white text-xs text-[#111311] outline-none"
+                      />
+                    </div>
+                    <div className={langTab === "bn" ? "" : "hidden"}>
+                      <input
+                        type="text"
+                        name="existing_image_alts_bn[]"
+                        lang="bn"
+                        defaultValue={img.altBn || ""}
+                        placeholder="ছবির বিবরণ (বাংলা)"
+                        className="w-full px-2.5 py-1.5 rounded-xl bg-white text-xs text-[#111311] outline-none"
+                      />
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-between pt-1">
@@ -756,14 +915,14 @@ export function ProductFormClient({
       {/* 6. SEO Meta Fields */}
       <div className="space-y-4">
         <h2 className="text-sm font-mono font-bold uppercase text-[#111311] pb-2 border-b border-[#EDEDED]">
-          6. Search Engine Optimization (SEO)
+          6. Search Engine Optimization (SEO) — {langTab === "en" ? "English" : "বাংলা"}
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className={langTab === "en" ? "grid grid-cols-1 sm:grid-cols-2 gap-4" : "hidden"}>
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="block text-xs font-mono font-medium text-[#111311]">
-                Custom Meta Title
+                Custom Meta Title (English)
               </label>
               <span className="text-[10px] font-mono text-[#5C605C]">
                 {metaTitleVal.length}/60
@@ -785,7 +944,7 @@ export function ProductFormClient({
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="block text-xs font-mono font-medium text-[#111311]">
-                Meta Description
+                Meta Description (English)
               </label>
               <span className="text-[10px] font-mono text-[#5C605C]">
                 {metaDescVal.length}/160
@@ -800,6 +959,54 @@ export function ProductFormClient({
                 markDirty();
               }}
               placeholder="Concise summary for Google search snippets..."
+              className="w-full px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
+        </div>
+
+        <div className={langTab === "bn" ? "grid grid-cols-1 sm:grid-cols-2 gap-4" : "hidden"}>
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-mono font-medium text-[#111311]">
+                Custom Meta Title (বাংলা)
+              </label>
+              <span className="text-[10px] font-mono text-[#5C605C]">
+                {metaTitleBnVal.length}/60
+              </span>
+            </div>
+            <input
+              type="text"
+              name="metaTitleBn"
+              lang="bn"
+              value={metaTitleBnVal}
+              onChange={(e) => {
+                setMetaTitleBnVal(e.target.value);
+                markDirty();
+              }}
+              placeholder={nameBnVal ? `${nameBnVal} — নূর সোলার এনার্জি` : "গুগল সার্চ ফলাফলের শিরোনাম"}
+              className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-mono font-medium text-[#111311]">
+                Meta Description (বাংলা)
+              </label>
+              <span className="text-[10px] font-mono text-[#5C605C]">
+                {metaDescBnVal.length}/160
+              </span>
+            </div>
+            <textarea
+              name="metaDescriptionBn"
+              lang="bn"
+              rows={2}
+              value={metaDescBnVal}
+              onChange={(e) => {
+                setMetaDescBnVal(e.target.value);
+                markDirty();
+              }}
+              placeholder="গুগল সার্চ ফলাফলের জন্য সংক্ষিপ্ত বাংলা বিবরণ..."
               className="w-full px-4 py-2 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
             />
           </div>

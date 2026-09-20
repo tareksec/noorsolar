@@ -54,19 +54,26 @@ export async function createProductAction(
     const categoryId = formData.get("categoryId") as string;
     if (!categoryId) return { success: false, error: "Category is required." };
 
+    const nameBn = (formData.get("nameBn") as string)?.trim() || null;
     const shortDescription = (formData.get("shortDescription") as string)?.trim() || null;
+    const shortDescriptionBn = (formData.get("shortDescriptionBn") as string)?.trim() || null;
     const description = (formData.get("description") as string)?.trim() || null;
+    const descriptionBn = (formData.get("descriptionBn") as string)?.trim() || null;
     const brand = (formData.get("brand") as string)?.trim() || null;
     const model = (formData.get("model") as string)?.trim() || null;
     const stockStatus = (formData.get("stockStatus") as string) || "ON_REQUEST";
     const moq = (formData.get("moq") as string)?.trim() || null;
+    const moqBn = (formData.get("moqBn") as string)?.trim() || null;
     const leadTime = (formData.get("leadTime") as string)?.trim() || null;
+    const leadTimeBn = (formData.get("leadTimeBn") as string)?.trim() || null;
     const priceStr = formData.get("priceBdt") as string;
     const priceBdt = priceStr ? parseInt(priceStr, 10) : null;
     const showPrice = formData.get("showPrice") === "true";
     const isFeatured = formData.get("isFeatured") === "true";
     const metaTitle = (formData.get("metaTitle") as string)?.trim() || null;
+    const metaTitleBn = (formData.get("metaTitleBn") as string)?.trim() || null;
     const metaDescription = (formData.get("metaDescription") as string)?.trim() || null;
+    const metaDescriptionBn = (formData.get("metaDescriptionBn") as string)?.trim() || null;
 
     // Handle Datasheet: uploaded PDF file or text URL
     let datasheetUrl = (formData.get("datasheetUrl") as string)?.trim() || null;
@@ -84,19 +91,24 @@ export async function createProductAction(
 
     // Parse specs from parallel arrays
     const specLabels = formData.getAll("spec_labels[]") as string[];
+    const specLabelsBn = formData.getAll("spec_labels_bn[]") as string[];
     const specValues = formData.getAll("spec_values[]") as string[];
+    const specValuesBn = formData.getAll("spec_values_bn[]") as string[];
     const specsData = [];
     for (let i = 0; i < specLabels.length; i++) {
       const label = specLabels[i]?.trim();
+      const labelBn = specLabelsBn[i]?.trim() || null;
       const value = specValues[i]?.trim();
+      const valueBn = specValuesBn[i]?.trim() || null;
       if (label && value) {
-        specsData.push({ label, value, sortOrder: i });
+        specsData.push({ label, labelBn, value, valueBn, sortOrder: i });
       }
     }
 
     // Process image uploads
     const files = formData.getAll("images") as File[];
     const imageAlts = formData.getAll("new_image_alts[]") as string[];
+    const imageAltsBn = formData.getAll("new_image_alts_bn[]") as string[];
     const imagesData = [];
 
     for (let i = 0; i < files.length; i++) {
@@ -105,9 +117,11 @@ export async function createProductAction(
         const saved = await processAndSaveImage(file, "prod");
         if (saved) {
           const altText: string = imageAlts[i]?.trim() || `${name} - Image ${imagesData.length + 1}`;
+          const altBnText = imageAltsBn[i]?.trim() || null;
           imagesData.push({
             url: saved.url,
             alt: altText,
+            altBn: altBnText,
             sortOrder: imagesData.length,
           });
         }
@@ -119,6 +133,7 @@ export async function createProductAction(
       imagesData.push({
         url: "/demo/category-panels.svg",
         alt: `${name} placeholder`,
+        altBn: null,
         sortOrder: 0,
       });
     }
@@ -126,15 +141,20 @@ export async function createProductAction(
     const created = await db.product.create({
       data: {
         name,
+        nameBn,
         slug,
         categoryId,
         shortDescription,
+        shortDescriptionBn,
         description,
+        descriptionBn,
         brand,
         model,
         stockStatus,
         moq,
+        moqBn,
         leadTime,
+        leadTimeBn,
         priceBdt,
         showPrice,
         isFeatured,
@@ -142,14 +162,18 @@ export async function createProductAction(
         isDemo: false,
         datasheetUrl,
         metaTitle,
+        metaTitleBn,
         metaDescription,
+        metaDescriptionBn,
         images: { create: imagesData },
         specs: { create: specsData },
       },
     });
 
     revalidatePath("/");
+    revalidatePath("/bn");
     revalidatePath("/products");
+    revalidatePath("/bn/products");
     revalidatePath("/admin/products");
     return { success: true, productId: created.id };
   } catch (err: unknown) {
@@ -191,19 +215,26 @@ export async function updateProductAction(
     const categoryId = formData.get("categoryId") as string;
     if (!categoryId) return { success: false, error: "Category is required." };
 
+    const nameBn = (formData.get("nameBn") as string)?.trim() || null;
     const shortDescription = (formData.get("shortDescription") as string)?.trim() || null;
+    const shortDescriptionBn = (formData.get("shortDescriptionBn") as string)?.trim() || null;
     const description = (formData.get("description") as string)?.trim() || null;
+    const descriptionBn = (formData.get("descriptionBn") as string)?.trim() || null;
     const brand = (formData.get("brand") as string)?.trim() || null;
     const model = (formData.get("model") as string)?.trim() || null;
     const stockStatus = (formData.get("stockStatus") as string) || "ON_REQUEST";
     const moq = (formData.get("moq") as string)?.trim() || null;
+    const moqBn = (formData.get("moqBn") as string)?.trim() || null;
     const leadTime = (formData.get("leadTime") as string)?.trim() || null;
+    const leadTimeBn = (formData.get("leadTimeBn") as string)?.trim() || null;
     const priceStr = formData.get("priceBdt") as string;
     const priceBdt = priceStr ? parseInt(priceStr, 10) : null;
     const showPrice = formData.get("showPrice") === "true";
     const isFeatured = formData.get("isFeatured") === "true";
     const metaTitle = (formData.get("metaTitle") as string)?.trim() || null;
+    const metaTitleBn = (formData.get("metaTitleBn") as string)?.trim() || null;
     const metaDescription = (formData.get("metaDescription") as string)?.trim() || null;
+    const metaDescriptionBn = (formData.get("metaDescriptionBn") as string)?.trim() || null;
 
     // Get current product to check old datasheet
     const currentProduct = await db.product.findUnique({
@@ -229,32 +260,42 @@ export async function updateProductAction(
 
     // Parse specs
     const specLabels = formData.getAll("spec_labels[]") as string[];
+    const specLabelsBn = formData.getAll("spec_labels_bn[]") as string[];
     const specValues = formData.getAll("spec_values[]") as string[];
+    const specValuesBn = formData.getAll("spec_values_bn[]") as string[];
     const specsData = [];
     for (let i = 0; i < specLabels.length; i++) {
       const label = specLabels[i]?.trim();
+      const labelBn = specLabelsBn[i]?.trim() || null;
       const value = specValues[i]?.trim();
+      const valueBn = specValuesBn[i]?.trim() || null;
       if (label && value) {
-        specsData.push({ label, value, sortOrder: i });
+        specsData.push({ label, labelBn, value, valueBn, sortOrder: i });
       }
     }
 
     // Update existing images alt text
     const existingImageIds = formData.getAll("existing_image_ids[]") as string[];
     const existingImageAlts = formData.getAll("existing_image_alts[]") as string[];
+    const existingImageAltsBn = formData.getAll("existing_image_alts_bn[]") as string[];
     for (let i = 0; i < existingImageIds.length; i++) {
       const imgId = existingImageIds[i];
       const alt = existingImageAlts[i]?.trim();
+      const altBn = existingImageAltsBn[i]?.trim() || null;
       if (imgId) {
         await db.productImage.update({
           where: { id: imgId },
-          data: { alt: alt || `${name} - Image ${i + 1}` },
+          data: {
+            alt: alt || `${name} - Image ${i + 1}`,
+            altBn,
+          },
         });
       }
     }
 
     // Process any new image uploads
     const files = formData.getAll("images") as File[];
+    const newImageAltsBn = formData.getAll("new_image_alts_bn[]") as string[];
     const newImages = [];
     const currentImageCount = currentProduct?.images.length || 0;
 
@@ -266,6 +307,7 @@ export async function updateProductAction(
           newImages.push({
             url: saved.url,
             alt: `${name} - Image ${currentImageCount + newImages.length + 1}`,
+            altBn: newImageAltsBn[i]?.trim() || null,
             sortOrder: currentImageCount + newImages.length,
             productId: id,
           });
@@ -277,21 +319,28 @@ export async function updateProductAction(
       where: { id },
       data: {
         name,
+        nameBn,
         slug,
         categoryId,
         shortDescription,
+        shortDescriptionBn,
         description,
+        descriptionBn,
         brand,
         model,
         stockStatus,
         moq,
+        moqBn,
         leadTime,
+        leadTimeBn,
         priceBdt,
         showPrice,
         isFeatured,
         datasheetUrl,
         metaTitle,
+        metaTitleBn,
         metaDescription,
+        metaDescriptionBn,
       },
     });
 
@@ -309,8 +358,11 @@ export async function updateProductAction(
     }
 
     revalidatePath("/");
+    revalidatePath("/bn");
     revalidatePath("/products");
+    revalidatePath("/bn/products");
     revalidatePath(`/product/${slug}`);
+    revalidatePath(`/bn/product/${slug}`);
     revalidatePath("/admin/products");
 
     return { success: true, productId: id };
