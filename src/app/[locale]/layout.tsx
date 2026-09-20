@@ -114,7 +114,7 @@ export default async function LocaleLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-[#E4E7E4] text-[#111311] antialiased selection:bg-[#CEF23E] selection:text-[#111311]">
+      <body suppressHydrationWarning className="min-h-screen bg-[#E4E7E4] text-[#111311] antialiased selection:bg-[#CEF23E] selection:text-[#111311]">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SmoothScrollProvider>
             <div className="flex flex-col min-h-screen bg-[#E4E7E4]">
@@ -128,7 +128,7 @@ export default async function LocaleLayout({
                 <RouteTransition>{children}</RouteTransition>
               </main>
               <Footer settings={settings} showBlog={showBlog} />
-              <WhatsAppButton phone={settings.whatsapp} />
+              <WhatsAppButton phone={settings.whatsapp} locale={locale} />
             </div>
           </SmoothScrollProvider>
         </NextIntlClientProvider>

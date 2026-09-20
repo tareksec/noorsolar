@@ -25,8 +25,8 @@ const jetbrainsMono = JetBrains_Mono({
 
 export default function NotFound() {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="min-h-screen bg-[#E4E7E4] text-[#111311] antialiased">
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <body suppressHydrationWarning className="min-h-screen bg-[#E4E7E4] text-[#111311] antialiased">
         <div className="min-h-screen bg-[#E4E7E4] flex items-center justify-center p-4">
           <div className="max-w-md w-full p-8 sm:p-10 rounded-[36px] bg-white border border-[#DDE1DC] text-center shadow-xl">
             <Image

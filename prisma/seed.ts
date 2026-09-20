@@ -64,42 +64,70 @@ async function main() {
       },
     });
     console.log(`✓ Admin user ensured: ${adminEmail}`);
-
-    // Ensure default site config
-    await prisma.siteSetting.upsert({
-      where: { key: "site_config" },
-      update: {},
-      create: {
-        key: "site_config",
-        value: JSON.stringify(defaultSiteConfig),
-      },
-    });
-    console.log("✓ Core site settings ensured.");
   }
+
+  // Ensure default site config with Bangla values
+  const existingConfigSetting = await prisma.siteSetting.findUnique({
+    where: { key: "site_config" },
+  });
+  let mergedConfig: Record<string, unknown> = { ...defaultSiteConfig };
+  if (existingConfigSetting?.value) {
+    try {
+      const parsed = JSON.parse(existingConfigSetting.value);
+      mergedConfig = {
+        ...defaultSiteConfig,
+        ...parsed,
+        socials: {
+          ...defaultSiteConfig.socials,
+          ...(parsed.socials || {}),
+        },
+      };
+    } catch {
+      mergedConfig = { ...defaultSiteConfig };
+    }
+  }
+  await prisma.siteSetting.upsert({
+    where: { key: "site_config" },
+    update: { value: JSON.stringify(mergedConfig) },
+    create: {
+      key: "site_config",
+      value: JSON.stringify(mergedConfig),
+    },
+  });
+  console.log("✓ Core site settings ensured with Bangla defaults.");
 
   // 2. Categories
   const categoriesData = [
     {
       slug: "solar-panels",
       name: "Solar Panels",
+      nameBn: "সোলার প্যানেল",
       description:
         "Monocrystalline, N-Type TOPCon, and bifacial solar modules for commercial rooftop and industrial utility installations.",
+      descriptionBn:
+        "বাণিজ্যিক ছাদ ও শিল্প কারখানার জন্য উন্নত মনোক্রিস্টালাইন, এন-টাইপ TOPCon এবং বাইফেসিয়াল সোলার মডিউল।",
       image: "/photos/cat-solar-panels.webp",
       sortOrder: 1,
     },
     {
       slug: "lithium-batteries",
       name: "Lithium-ion Batteries",
+      nameBn: "লিথিয়াম-আয়ন ব্যাটারি",
       description:
         "High-density LiFePO4 server rack batteries and modular energy storage systems with smart BMS protocols.",
+      descriptionBn:
+        "স্মার্ট BMS প্রোটোকল সমৃদ্ধ উচ্চ ঘনত্বের LiFePO4 সার্ভার র্যাক ব্যাটারি এবং মডুলার এনার্জি স্টোরেজ সিস্টেম।",
       image: "/photos/cat-lithium-batteries.webp",
       sortOrder: 2,
     },
     {
       slug: "solar-inverters",
       name: "Inverters",
+      nameBn: "ইনভার্টার",
       description:
         "Grid-tied, hybrid three-phase, and off-grid pure sine wave solar inverters engineered for commercial reliability and microgrids.",
+      descriptionBn:
+        "বাণিজ্যিক নির্ভরযোগ্যতা ও মাইক্রোগ্রিডের জন্য তৈরি গ্রিড-টাইড, হাইব্রিড থ্রি-ফেজ এবং অফ-গ্রিড পিওর সাইন ওয়েভ সোলার ইনভার্টার।",
       image: "/photos/cat-solar-inverters.webp",
       sortOrder: 3,
     },
@@ -151,6 +179,7 @@ async function main() {
   await prisma.partner.deleteMany({ where: { isSample: true } });
   await prisma.testimonial.deleteMany({ where: { isSample: true } });
   await prisma.faqItem.deleteMany({ where: { isSample: true } });
+  await prisma.blogPost.deleteMany({ where: { isSample: true } });
 
   // 4. Seed 15 Full Demo Products
   console.log("Creating 15 demo products with 3 views and specs...");
@@ -160,18 +189,24 @@ async function main() {
       throw new Error(`Unknown category slug: ${p.categorySlug}`);
     }
 
+    const pRec = p as Record<string, unknown>;
     const createdProduct = await prisma.product.create({
       data: {
         slug: p.slug,
         name: p.name,
+        nameBn: (pRec.nameBn as string) || null,
         categoryId,
         shortDescription: p.shortDescription,
+        shortDescriptionBn: (pRec.shortDescriptionBn as string) || null,
         description: p.description,
+        descriptionBn: (pRec.descriptionBn as string) || null,
         brand: p.brand,
         model: p.model,
         stockStatus: p.stockStatus,
         moq: p.moq,
+        moqBn: (pRec.moqBn as string) || null,
         leadTime: p.leadTime,
+        leadTimeBn: (pRec.leadTimeBn as string) || null,
         priceBdt: null,
         showPrice: false,
         datasheetUrl: null,
@@ -179,13 +214,17 @@ async function main() {
         isActive: true,
         isDemo: true,
         sortOrder: p.sortOrder,
+        metaTitle: (pRec.metaTitle as string) || null,
+        metaTitleBn: (pRec.metaTitleBn as string) || null,
+        metaDescription: (pRec.metaDescription as string) || null,
+        metaDescriptionBn: (pRec.metaDescriptionBn as string) || null,
       },
     });
 
     // Images
     const views = ["front", "angled", "detail"] as const;
     for (let i = 0; i < p.images.length; i++) {
-      const img = p.images[i];
+      const img = p.images[i] as { url: string; alt: string; altBn?: string | null; sortOrder: number };
       const view = views[i] || "front";
       const resolvedUrl = getProductImagePath(p.slug, view, img.url);
       await prisma.productImage.create({
@@ -193,6 +232,7 @@ async function main() {
           productId: createdProduct.id,
           url: resolvedUrl,
           alt: img.alt,
+          altBn: img.altBn || null,
           sortOrder: img.sortOrder,
         },
       });
@@ -200,12 +240,15 @@ async function main() {
 
     // Specs
     for (const spec of p.specs) {
+      const sp = spec as { label: string; labelBn?: string | null; value: string; valueBn?: string | null; sortOrder: number };
       await prisma.productSpec.create({
         data: {
           productId: createdProduct.id,
-          label: spec.label,
-          value: spec.value,
-          sortOrder: spec.sortOrder,
+          label: sp.label,
+          labelBn: sp.labelBn || null,
+          value: sp.value,
+          valueBn: sp.valueBn || null,
+          sortOrder: sp.sortOrder,
         },
       });
     }
