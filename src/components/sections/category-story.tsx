@@ -17,6 +17,7 @@ interface CategoryStoryProps {
     description?: string | null;
     image?: string | null;
   }>;
+  locale?: string;
 }
 
 interface StoryItem {
@@ -38,68 +39,130 @@ interface StoryItem {
   bullets: string[];
 }
 
-export function CategoryStory({ categories }: CategoryStoryProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+const STORIES_EN: StoryItem[] = [
+  {
+    slug: "solar-panels",
+    kicker: "Power Generation",
+    title: "N-Type TOPCon & Bifacial Panels",
+    highlight: "Up to 620W Peak Commercial Ratings",
+    body: "We import advanced dual-glass bifacial modules designed for extreme ambient humidity and solar irradiance. Higher bifaciality factor ensures significant rear-side harvest for industrial factories, rooftop garments, and EPC utility plants.",
+    icon: Zap,
+    previewImage: "/photos/story-panels.webp",
+    counters: [
+      { label: "Nominal Max Power", value: 620, prefix: "", suffix: " W", decimals: 0, subtext: "16BB N-Type TOPCon" },
+      { label: "Module Efficiency", value: 22.6, prefix: "", suffix: "%", decimals: 1, subtext: "Anti-PID Dual Glass" },
+      { label: "Rear Bifacial Gain", value: 25, prefix: "+", suffix: "%", decimals: 0, subtext: "Reflective Yield" },
+    ],
+    bullets: [
+      "Anti-PID & low temperature coefficient for tropical climate",
+      "Dual-glass 2.0mm + 2.0mm tempered glass protection",
+      "Containerized consignments and pallet deliveries nationwide",
+    ],
+  },
+  {
+    slug: "lithium-batteries",
+    kicker: "Energy Storage",
+    title: "LiFePO4 Server Rack & Modular ESS",
+    highlight: "6,000+ Cycles @ 80% Depth of Discharge",
+    body: "Safe, durable Lithium Iron Phosphate (LiFePO4) storage batteries. Available in standard 3U/4U 51.2V rack-mountable units as well as high-voltage modular systems for three-phase commercial hybrid solar backups.",
+    icon: BatteryCharging,
+    previewImage: "/bettry/500_F_2090872600_mpL6CKZulRNh7R8OMe31iD00cXQpEpR7.jpg",
+    counters: [
+      { label: "Nominal Pack Energy", value: 14.33, prefix: "", suffix: " kWh", decimals: 2, subtext: "51.2V 280Ah Grade-A" },
+      { label: "Cycle Life Rating", value: 6000, prefix: "", suffix: "+", decimals: 0, subtext: "@ 80% Depth of Discharge" },
+      { label: "Parallel Expansion", value: 16, prefix: "Up to ", suffix: " Packs", decimals: 0, subtext: "229 kWh Scalable ESS" },
+    ],
+    bullets: [
+      "Intelligent multi-stage Battery Management System (BMS)",
+      "Multi-protocol CAN / RS485 for leading hybrid inverters",
+      "Zero maintenance sealed prismatic Grade-A cells",
+    ],
+  },
+  {
+    slug: "solar-inverters",
+    kicker: "Power Conversion",
+    title: "Commercial Hybrid & String Inverters",
+    highlight: "Up to 30kW Industrial Units & 98.7% Peak Efficiency",
+    body: "High-efficiency pure sine wave solar inverters engineered for maximum uptime and grid stability. Featuring dual and 3-channel MPPT tracking, IP65/IP66 outdoor enclosures, and sub-10ms automatic UPS transfer for mission-critical industrial loads.",
+    icon: Cpu,
+    previewImage: "/Inverter/solar-inverter-with-battery-storage.jpg",
+    counters: [
+      { label: "Rated AC Output", value: 10, prefix: "", suffix: " kW", decimals: 0, subtext: "3-Phase 380V/400V" },
+      { label: "Max Peak Efficiency", value: 98.7, prefix: "", suffix: "%", decimals: 1, subtext: "Multi-MPPT High Yield" },
+      { label: "UPS Switchover Speed", value: 8, prefix: "< ", suffix: " ms", decimals: 0, subtext: "Instant Automatic Transfer" },
+    ],
+    bullets: [
+      "Smart string monitoring and real-time telemetry",
+      "Built-in DC/AC Type II surge arresters",
+      "Seamless compatibility with leading lithium battery protocols",
+    ],
+  },
+];
 
-  const stories: StoryItem[] = [
-    {
-      slug: "solar-panels",
-      kicker: "Power Generation",
-      title: "N-Type TOPCon & Bifacial Panels",
-      highlight: "Up to 620W Peak Commercial Ratings",
-      body: "We import advanced dual-glass bifacial modules designed for extreme ambient humidity and solar irradiance. Higher bifaciality factor ensures significant rear-side harvest for industrial factories, rooftop garments, and EPC utility plants.",
-      icon: Zap,
-      previewImage: "/photos/story-panels.webp",
-      counters: [
-        { label: "Nominal Max Power", value: 620, prefix: "", suffix: " W", decimals: 0, subtext: "16BB N-Type TOPCon" },
-        { label: "Module Efficiency", value: 22.6, prefix: "", suffix: "%", decimals: 1, subtext: "Anti-PID Dual Glass" },
-        { label: "Rear Bifacial Gain", value: 25, prefix: "+", suffix: "%", decimals: 0, subtext: "Reflective Yield" },
-      ],
-      bullets: [
-        "Anti-PID & low temperature coefficient for tropical climate",
-        "Dual-glass 2.0mm + 2.0mm tempered glass protection",
-        "Containerized consignments and pallet deliveries nationwide",
-      ],
-    },
-    {
-      slug: "lithium-batteries",
-      kicker: "Energy Storage",
-      title: "LiFePO4 Server Rack & Modular ESS",
-      highlight: "6,000+ Cycles @ 80% Depth of Discharge",
-      body: "Safe, durable Lithium Iron Phosphate (LiFePO4) storage batteries. Available in standard 3U/4U 51.2V rack-mountable units as well as high-voltage modular systems for three-phase commercial hybrid solar backups.",
-      icon: BatteryCharging,
-      previewImage: "/bettry/500_F_2090872600_mpL6CKZulRNh7R8OMe31iD00cXQpEpR7.jpg",
-      counters: [
-        { label: "Nominal Pack Energy", value: 14.33, prefix: "", suffix: " kWh", decimals: 2, subtext: "51.2V 280Ah Grade-A" },
-        { label: "Cycle Life Rating", value: 6000, prefix: "", suffix: "+", decimals: 0, subtext: "@ 80% Depth of Discharge" },
-        { label: "Parallel Expansion", value: 16, prefix: "Up to ", suffix: " Packs", decimals: 0, subtext: "229 kWh Scalable ESS" },
-      ],
-      bullets: [
-        "Intelligent multi-stage Battery Management System (BMS)",
-        "Multi-protocol CAN / RS485 for leading hybrid inverters",
-        "Zero maintenance sealed prismatic Grade-A cells",
-      ],
-    },
-    {
-      slug: "solar-inverters",
-      kicker: "Power Conversion",
-      title: "Commercial Hybrid & String Inverters",
-      highlight: "Up to 30kW Industrial Units & 98.7% Peak Efficiency",
-      body: "High-efficiency pure sine wave solar inverters engineered for maximum uptime and grid stability. Featuring dual and 3-channel MPPT tracking, IP65/IP66 outdoor enclosures, and sub-10ms automatic UPS transfer for mission-critical industrial loads.",
-      icon: Cpu,
-      previewImage: "/Inverter/solar-inverter-with-battery-storage.jpg",
-      counters: [
-        { label: "Rated AC Output", value: 10, prefix: "", suffix: " kW", decimals: 0, subtext: "3-Phase 380V/400V" },
-        { label: "Max Peak Efficiency", value: 98.7, prefix: "", suffix: "%", decimals: 1, subtext: "Multi-MPPT High Yield" },
-        { label: "UPS Switchover Speed", value: 8, prefix: "< ", suffix: " ms", decimals: 0, subtext: "Instant Automatic Transfer" },
-      ],
-      bullets: [
-        "Smart string monitoring and real-time telemetry",
-        "Built-in DC/AC Type II surge arresters",
-        "Seamless compatibility with leading lithium battery protocols",
-      ],
-    },
-  ];
+const STORIES_BN: StoryItem[] = [
+  {
+    slug: "solar-panels",
+    kicker: "বিদ্যুৎ উৎপাদন",
+    title: "N-Type TOPCon ও বাইফেসিয়াল সোলার প্যানেল",
+    highlight: "সর্বোচ্চ 620W কমার্শিয়াল সক্ষমতা",
+    body: "আমরা আমদানি করি উন্নত ডুয়াল-গ্লাস বাইফেসিয়াল মডিউল, যা বাংলাদেশের উচ্চ তাপমাত্রা ও আর্দ্রতায় সর্বোচ্চ বিদ্যুৎ উৎপাদন করে। উভয় পাশ দিয়ে সূর্যালোক শোষণের ফলে শিল্পকারখানা ও রুফটপ প্রকল্পে অতিরিক্ত উৎপাদন পাওয়া যায়।",
+    icon: Zap,
+    previewImage: "/photos/story-panels.webp",
+    counters: [
+      { label: "সর্বোচ্চ আউটপুট", value: 620, prefix: "", suffix: " W", decimals: 0, subtext: "16BB N-Type TOPCon" },
+      { label: "মডিউল কর্মদক্ষতা", value: 22.6, prefix: "", suffix: "%", decimals: 1, subtext: "Anti-PID ডুয়াল গ্লাস" },
+      { label: "বাইফেসিয়াল বৃদ্ধি", value: 25, prefix: "+", suffix: "%", decimals: 0, subtext: "উভয়মুখী আলো শোষণ" },
+    ],
+    bullets: [
+      "উচ্চ তাপমাত্রা সহনশীল ও অ্যান্টি-PID সুরক্ষা",
+      "2.0mm + 2.0mm টেম্পার্ড ডুয়াল-গ্লাস স্থায়িত্ব",
+      "সারাদেশে নিরাপদ প্যালেট ও কন্টেইনার সরবরাহ",
+    ],
+  },
+  {
+    slug: "lithium-batteries",
+    kicker: "এনার্জি স্টোরেজ",
+    title: "LiFePO4 সার্ভার র্যাক ও মডুলার ব্যাটারি",
+    highlight: "৮০% DOD-তে ৬,০০০+ সাইকেল লাইফ",
+    body: "নিরাপদ ও দীর্ঘস্থায়ী লিথিয়াম আয়রন ফসফেট (LiFePO4) স্টোরেজ ব্যাটারি। ইন্ডাস্ট্রিয়াল ব্যাকআপ ও সোলার হাইব্রিড সিস্টেমের জন্য 51.2V র্যাক মাউন্ট ও উচ্চ ভোল্টেজ মডুলার সিস্টেমে সরবরাহযোগ্য।",
+    icon: BatteryCharging,
+    previewImage: "/bettry/500_F_2090872600_mpL6CKZulRNh7R8OMe31iD00cXQpEpR7.jpg",
+    counters: [
+      { label: "ব্যাটারি এনার্জি", value: 14.33, prefix: "", suffix: " kWh", decimals: 2, subtext: "51.2V 280Ah গ্রেড-A" },
+      { label: "সাইকেল লাইফ", value: 6000, prefix: "", suffix: "+", decimals: 0, subtext: "৮০% ডিসচার্জ গভীরতায়" },
+      { label: "প্যারালাল সংযোগ", value: 16, prefix: "সর্বোচ্চ ", suffix: " প্যাক", decimals: 0, subtext: "229 kWh পর্যন্ত স্কেলযোগ্য" },
+    ],
+    bullets: [
+      "ইন্টেলিজেন্ট মাল্টি-স্টেজ ব্যাটারি ম্যানেজমেন্ট (BMS)",
+      "শীর্ষস্থানীয় হাইব্রিড ইনভার্টারের সাথে CAN/RS485 সাপোর্ট",
+      "রক্ষণাবেক্ষণমুক্ত সিল্ড গ্রেড-A প্রিজম্যাটিক সেল",
+    ],
+  },
+  {
+    slug: "solar-inverters",
+    kicker: "পাওয়ার কনভার্সন",
+    title: "কমার্শিয়াল হাইব্রিড ও স্ট্রিং ইনভার্টার",
+    highlight: "সর্বোচ্চ 30kW ক্যাপাসিটি ও ৯৮.৭% রূপান্তর দক্ষতা",
+    body: "উচ্চ-দক্ষতাসম্পন্ন পিওর সাইন ওয়েভ সোলার ইনভার্টার, যা দীর্ঘস্থায়ী এবং গ্রিডের ওঠানামায় নিখুঁত কাজ করে। মাল্টি-চ্যানেল MPPT ট্র্যাকিং, IP65 সুরক্ষা এবং সংবেদনশীল লোডের জন্য তাৎক্ষণিক ইউপিএস সুইচিং।",
+    icon: Cpu,
+    previewImage: "/Inverter/solar-inverter-with-battery-storage.jpg",
+    counters: [
+      { label: "রেটেড এসি আউটপুট", value: 10, prefix: "", suffix: " kW", decimals: 0, subtext: "৩-ফেজ ৩৮০V/৪০০V" },
+      { label: "সর্বোচ্চ কর্মদক্ষতা", value: 98.7, prefix: "", suffix: "%", decimals: 1, subtext: "মাল্টি-MPPT হাই ইল্ড" },
+      { label: "ইউপিএস রূপান্তর", value: 8, prefix: "< ", suffix: " ms", decimals: 0, subtext: "তাত্ক্ষণিক অটো ট্রান্সফার" },
+    ],
+    bullets: [
+      "রিয়েল-টাইম স্ট্রিং মনিটরিং ও রিমোট কন্ট্রোল",
+      "অন্তর্নির্মিত DC/AC Type II সার্জ প্রোটেকশন",
+      "শীর্ষস্থানীয় লিথিয়াম ব্যাটারি প্রটোকলের সাথে পূর্ণ সামঞ্জস্য",
+    ],
+  },
+];
+
+export function CategoryStory({ locale }: CategoryStoryProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isBn = locale === "bn";
+  const stories = isBn ? STORIES_BN : STORIES_EN;
 
   useGSAP(
     () => {
@@ -156,7 +219,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
     { scope: containerRef }
   );
 
-  if (!categories || categories.length === 0) {
+  if (!stories || stories.length === 0) {
     return null;
   }
 
@@ -174,11 +237,11 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
                 <div className="flex items-center gap-2 mb-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E]"></span>
                   <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C]">
-                    Scroll Story &bull; Three Core Categories
+                    {isBn ? "স্ক্রোল স্টোরি • তিনটি মূল ক্যাটাগরি" : "Scroll Story • Three Core Categories"}
                   </span>
                 </div>
                 <h2 className="text-3xl font-bold tracking-tight text-[#111311]">
-                  Engineered Clean Energy Systems
+                  {isBn ? "উন্নত প্রযুক্তির পরিচ্ছন্ন শক্তি ব্যবস্থা" : "Engineered Clean Energy Systems"}
                 </h2>
               </div>
 
@@ -202,6 +265,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
             <div className="relative min-h-[580px] w-full">
               {stories.map((story) => {
                 const IconComponent = story.icon;
+                const linkHref = isBn ? `/bn/category/${story.slug}` : `/category/${story.slug}`;
                 return (
                   <div
                     key={story.slug}
@@ -228,7 +292,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
                     <div className="col-span-7 flex flex-col justify-between h-full py-2">
                       <div>
                         <div className="inline-flex items-center gap-2 text-xs font-mono text-[#5C605C] mb-2 uppercase">
-                          <span>Verified Specification</span>
+                          <span>{isBn ? "যাচাইকৃত স্পেসিফিকেশন" : "Verified Specification"}</span>
                         </div>
                         <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111311] mb-2">
                           {story.title}
@@ -277,10 +341,10 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
 
                       <div className="pt-4 flex items-center justify-between">
                         <Link
-                          href={`/category/${story.slug}`}
+                          href={linkHref}
                           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] text-xs font-semibold tracking-tight transition-colors shadow-xs"
                         >
-                          <span>Explore {story.kicker}</span>
+                          <span>{isBn ? "বিস্তারিত দেখুন" : `Explore ${story.kicker}`}</span>
                           <ArrowUpRight className="w-3.5 h-3.5" />
                         </Link>
                       </div>
@@ -301,16 +365,17 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
           <div className="mb-8 text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3 border border-[#DDE1DC]">
               <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-              <span>Category Showcase</span>
+              <span>{isBn ? "ক্যাটাগরি শোকেস" : "Category Showcase"}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111311]">
-              Three Pillars of Clean Energy
+              {isBn ? "পরিচ্ছন্ন জ্বালানির তিনটি স্তম্ভ" : "Three Pillars of Clean Energy"}
             </h2>
           </div>
 
           <div className="space-y-8">
             {stories.map((story) => {
               const IconComponent = story.icon;
+              const linkHref = isBn ? `/bn/category/${story.slug}` : `/category/${story.slug}`;
               return (
                 <div
                   key={story.slug}
@@ -373,10 +438,10 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
                     </div>
 
                     <Link
-                      href={`/category/${story.slug}`}
+                      href={linkHref}
                       className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-full bg-[#111311] text-[#CEF23E] text-xs font-semibold tracking-tight"
                     >
-                      <span>Explore {story.kicker}</span>
+                      <span>{isBn ? "বিস্তারিত দেখুন" : `Explore ${story.kicker}`}</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>

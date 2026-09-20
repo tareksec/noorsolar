@@ -5,10 +5,12 @@ import Link from "next/link";
 import { ShieldCheck, ExternalLink, ArrowRight, Award, CheckCircle2, FileText, Globe } from "lucide-react";
 
 interface CertificationsSectionProps {
-  certifications: Certification[];
+  certifications?: Certification[];
+  locale?: string;
 }
 
-export function CertificationsSection({}: CertificationsSectionProps) {
+export function CertificationsSection({ locale }: CertificationsSectionProps) {
+  const isBn = locale === "bn";
 
   const docUrl =
     "https://drive.google.com/file/d/1GR4hILXnDjJblqNmrxRNnWH_M7It4Md2/view?usp=sharing";
