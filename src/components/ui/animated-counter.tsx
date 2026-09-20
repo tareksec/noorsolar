@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
+import { prefersReducedMotion, motionTokens } from "@/lib/motion";
 
 interface AnimatedCounterProps {
   value: number;
@@ -22,9 +23,9 @@ export function AnimatedCounter({
   useEffect(() => {
     const el = spanRef.current;
     if (!el) return;
-
     if (typeof window === "undefined") return;
-    if (window.innerWidth < 1024 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+
+    if (prefersReducedMotion()) {
       el.innerText = `${prefix || ""}${value.toFixed(decimals)}${suffix || ""}`;
       return;
     }
@@ -37,7 +38,7 @@ export function AnimatedCounter({
             const counter = { val: 0 };
             gsap.to(counter, {
               val: value,
-              duration: 1.6,
+              duration: motionTokens.duration.countUp,
               ease: "power2.out",
               onUpdate: () => {
                 if (el) {
@@ -53,7 +54,7 @@ export function AnimatedCounter({
           });
         }
       },
-      { rootMargin: "50px" }
+      { rootMargin: "60px" }
     );
 
     observer.observe(el);
@@ -61,7 +62,11 @@ export function AnimatedCounter({
   }, [value, prefix, suffix, decimals]);
 
   return (
-    <span ref={spanRef} className={className}>
+    <span
+      ref={spanRef}
+      className={className}
+      data-motion="stat-counter"
+    >
       {prefix || ""}
       {value.toFixed(decimals)}
       {suffix || ""}

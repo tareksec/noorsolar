@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, ShieldCheck, Box } from "lucide-react";
 import { HeroVisual } from "@/components/sections/hero-visual";
 import { HeroEntrance } from "@/components/sections/hero-entrance";
+import { MagneticButton } from "@/components/ui/magnetic-button";
 
 interface HeroSectionProps {
   headline?: string;
@@ -19,7 +20,7 @@ export function HeroSection({
   secondaryCta = "Browse Products",
 }: HeroSectionProps) {
   return (
-    <section className="relative pt-28 sm:pt-36 pb-12 overflow-hidden">
+    <section className="hero-section relative pt-28 sm:pt-36 pb-12 overflow-hidden">
       {/* Desktop entrance animation loaded dynamically without blocking mobile SSR */}
       <HeroEntrance />
 
@@ -30,14 +31,17 @@ export function HeroSection({
         {/* Main Dashboard Container Card per DESIGN.md Section 4 */}
         <div className="relative p-6 sm:p-10 lg:p-14 rounded-[36px] sm:rounded-[44px] bg-[#EDEDED] border border-[#DDE1DC] shadow-[0_20px_50px_-15px_rgba(0,0,0,0.06)] overflow-hidden">
           {/* Subtle Authentic Solar Field Photo Layer */}
-          <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+          <div
+            className="absolute inset-0 pointer-events-none z-0 overflow-hidden"
+            data-motion="hero-photo"
+          >
             <Image
               src="/photos/hero-solar-field.webp"
               alt="Industrial solar field installations in Bangladesh"
               fill
               priority
               sizes="(max-width: 1280px) 100vw, 1280px"
-              className="object-cover object-center opacity-10 mix-blend-multiply"
+              className="hero-photo-img object-cover object-center opacity-10 mix-blend-multiply will-change-transform"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#EDEDED] via-[#EDEDED]/90 to-[#EDEDED]/50" />
           </div>
@@ -52,8 +56,17 @@ export function HeroSection({
               </div>
 
               {/* Title H1: Visible immediately on SSR for instant LCP */}
-              <h1 className="hero-headline text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#111311] leading-[1.12] mb-6">
-                {headline}
+              <h1
+                className="hero-headline text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#111311] leading-[1.12] mb-6"
+                data-motion="hero-headline"
+              >
+                {headline.split(" ").map((word, i) => (
+                  <span key={i} className="inline-block overflow-hidden mr-[0.25em] align-top">
+                    <span className="hero-word-inner inline-block will-change-transform">
+                      {word}
+                    </span>
+                  </span>
+                ))}
               </h1>
 
               {/* Description */}
@@ -63,19 +76,30 @@ export function HeroSection({
 
               {/* Button Group */}
               <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-10 w-full sm:w-auto">
-                <Link
-                  href="/#quote-section"
-                  className="hero-cta-btn inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#CEF23E] hover:bg-[#B8DC2F] text-[#111311] font-semibold text-sm tracking-tight shadow-[0_10px_25px_-5px_rgba(206,242,62,0.4)] transition-all duration-300 hover:scale-[1.02] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111311] w-full sm:w-auto text-center"
-                >
-                  <span>{primaryCta}</span>
-                </Link>
+                <MagneticButton dataMotion="magnetic-button">
+                  <Link
+                    href="/#quote-section"
+                    data-motion="button-slide"
+                    className="hero-cta-btn btn-slide-fill group inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#CEF23E] text-[#111311] font-semibold text-sm tracking-tight shadow-[0_10px_25px_-5px_rgba(206,242,62,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111311] w-full sm:w-auto text-center"
+                  >
+                    <span>{primaryCta}</span>
+                    <span className="btn-arrow-swap">
+                      <ArrowRight className="w-4 h-4 arrow-primary" />
+                      <ArrowRight className="w-4 h-4 arrow-secondary" />
+                    </span>
+                  </Link>
+                </MagneticButton>
 
                 <Link
                   href="/products"
-                  className="hero-cta-btn inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/80 hover:bg-white text-[#111311] font-medium text-sm border border-[#DDE1DC] transition-all hover:border-[#111311] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] w-full sm:w-auto text-center"
+                  data-motion="button-slide"
+                  className="hero-cta-btn btn-slide-fill group inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/80 hover:bg-white text-[#111311] font-medium text-sm border border-[#DDE1DC] transition-all hover:border-[#111311] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] w-full sm:w-auto text-center"
                 >
                   <span>{secondaryCta}</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span className="btn-arrow-swap">
+                    <ArrowRight className="w-4 h-4 arrow-primary" />
+                    <ArrowRight className="w-4 h-4 arrow-secondary" />
+                  </span>
                 </Link>
               </div>
 

@@ -20,7 +20,7 @@ const PAGES = [
 ];
 
 const VIEWPORTS = [
-  { name: "360", width: 360, height: 800 },
+  { name: "390", width: 390, height: 844 },
   { name: "1440", width: 1440, height: 900 },
 ];
 

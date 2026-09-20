@@ -1,9 +1,10 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ArrowUpRight, Phone, Sun } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface HeaderProps {
   phoneDisplay?: string;
@@ -51,11 +52,12 @@ export function Header({
 
   return (
     <header
+      data-motion="header-scroll"
       className={`fixed top-0 left-0 right-0 z-40 transition-[transform,padding,background-color] duration-300 ease-out will-change-transform ${
         hidden ? "-translate-y-full" : "translate-y-0"
       } ${
         scrolled
-          ? "py-2 bg-[rgba(228,231,228,0.85)] backdrop-blur-md border-b border-[rgba(255,255,255,0.7)] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]"
+          ? "py-2 bg-[rgba(228,231,228,0.9)] backdrop-blur-md border-b border-[rgba(255,255,255,0.7)] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)]"
           : "py-4 sm:py-5 bg-transparent"
       }`}
     >
@@ -115,10 +117,14 @@ export function Header({
 
             <Link
               href="/#quote-section"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#111311] text-white text-[13px] font-medium tracking-tight transition-all duration-200 hover:bg-[#222622] hover:shadow-[0_4px_16px_-2px_rgba(0,0,0,0.2)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
+              data-motion="button-slide"
+              className="btn-slide-fill group inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#111311] text-white text-[13px] font-medium tracking-tight transition-all duration-200 hover:bg-[#222622] hover:shadow-[0_4px_16px_-2px_rgba(0,0,0,0.2)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
             >
               <span>Request Quote</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-[#CEF23E]" />
+              <span className="btn-arrow-swap">
+                <ArrowUpRight className="w-3.5 h-3.5 text-[#CEF23E] arrow-primary" />
+                <ArrowUpRight className="w-3.5 h-3.5 text-[#CEF23E] arrow-secondary" />
+              </span>
             </Link>
           </div>
 
@@ -133,7 +139,7 @@ export function Header({
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-1.5 sm:p-2 rounded-full text-[#111311] hover:bg-[rgba(255,255,255,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] shrink-0"
+              className="p-1.5 sm:p-2 rounded-full text-[#111311] hover:bg-[rgba(255,255,255,0.6)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] shrink-0 cursor-pointer"
               aria-label="Toggle mobile menu"
               aria-expanded={mobileMenuOpen}
             >
@@ -143,44 +149,79 @@ export function Header({
         </div>
       </div>
 
-      {/* Mobile Animated Drawer */}
-      {mobileMenuOpen && (
-        <div
-          key="mobile-drawer"
-          className="lg:hidden fixed inset-x-4 top-20 z-50 p-6 rounded-3xl glass-card bg-white/95 backdrop-blur-xl border border-white/80 shadow-2xl transition-all duration-200 animate-in fade-in slide-in-from-top-4"
-        >
-          <nav className="flex flex-col gap-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={closeMobileMenu}
-                className="px-4 py-3 rounded-2xl text-sm font-semibold text-[#111311] hover:bg-[#EDEDED] transition-colors"
+      {/* Mobile Menu Full-Screen Overlay with Staggered Link Reveals */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            key="mobile-drawer"
+            data-motion="mobile-menu"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:hidden fixed inset-x-4 top-20 z-50 p-6 rounded-3xl glass-card bg-white/98 backdrop-blur-2xl border border-white shadow-2xl overflow-hidden"
+          >
+            <motion.nav
+              initial="closed"
+              animate="open"
+              exit="closed"
+              variants={{
+                open: {
+                  transition: { staggerChildren: 0.05, delayChildren: 0.05 },
+                },
+                closed: {
+                  transition: { staggerChildren: 0.03, staggerDirection: -1 },
+                },
+              }}
+              className="flex flex-col gap-2"
+            >
+              {navLinks.map((link) => (
+                <motion.div
+                  key={link.href}
+                  variants={{
+                    open: { opacity: 1, y: 0 },
+                    closed: { opacity: 0, y: 8 },
+                  }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <Link
+                    href={link.href}
+                    onClick={closeMobileMenu}
+                    className="block px-4 py-3 rounded-2xl text-base font-semibold text-[#111311] hover:bg-[#EDEDED] transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
+
+              <motion.div
+                variants={{
+                  open: { opacity: 1, y: 0 },
+                  closed: { opacity: 0, y: 8 },
+                }}
+                className="pt-4 border-t border-[#DDE1DC] mt-2 flex flex-col gap-3"
               >
-                {link.label}
-              </Link>
-            ))}
-            <div className="pt-4 border-t border-[#DDE1DC] mt-2 flex flex-col gap-3">
-              <a
-                href={`tel:${phoneRaw}`}
-                onClick={closeMobileMenu}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#EDEDED] text-xs font-mono text-[#111311]"
-              >
-                <Phone className="w-4 h-4 text-[#111311]" />
-                <span>{phoneDisplay}</span>
-              </a>
-              <Link
-                href="/#quote-section"
-                onClick={closeMobileMenu}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-full bg-[#111311] text-white text-sm font-medium"
-              >
-                <span>Request Commercial Quote</span>
-                <ArrowUpRight className="w-4 h-4 text-[#CEF23E]" />
-              </Link>
-            </div>
-          </nav>
-        </div>
-      )}
+                <a
+                  href={`tel:${phoneRaw}`}
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#EDEDED] text-xs font-mono text-[#111311]"
+                >
+                  <Phone className="w-4 h-4 text-[#111311]" />
+                  <span>{phoneDisplay}</span>
+                </a>
+                <Link
+                  href="/#quote-section"
+                  onClick={closeMobileMenu}
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-full bg-[#111311] text-white text-sm font-medium"
+                >
+                  <span>Request Commercial Quote</span>
+                  <ArrowUpRight className="w-4 h-4 text-[#CEF23E]" />
+                </Link>
+              </motion.div>
+            </motion.nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

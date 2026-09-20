@@ -4,8 +4,9 @@ import { Zap, Cpu } from "lucide-react";
 export function HeroVisual() {
   return (
     <div
-      className="relative w-full max-w-[560px] aspect-[4/3] mx-auto select-none perspective-[1000px] flex items-center justify-center"
+      className="relative w-full max-w-[560px] aspect-[4/3] mx-auto select-none perspective-[1000px] flex items-center justify-center hero-visual-parallax"
       aria-label="Layered glass composition of high-efficiency solar panel, lithium battery rack, and hybrid inverter"
+      data-motion="hero-parallax"
     >
       {/* Background Soft Glow Aura */}
       <div className="absolute inset-4 rounded-full bg-[radial-gradient(circle,rgba(206,242,62,0.18)_0%,transparent_70%)] -z-10 pointer-events-none" />
@@ -176,6 +177,7 @@ export function HeroVisual() {
       {/* Floating Glass Info Card 1: Panel Metric (Top Left) */}
       <div
         className="absolute -top-2 left-2 sm:-left-3 p-3 sm:p-3.5 rounded-2xl glass-card bg-white/90 border border-white shadow-[0_12px_28px_-6px_rgba(0,0,0,0.12)] backdrop-blur-md max-w-[190px] pointer-events-none hv-anim-card1"
+        data-motion="hero-glass"
       >
         <div className="flex items-center gap-2 mb-1">
           <div className="w-5 h-5 rounded-full bg-[#111311] text-[#CEF23E] flex items-center justify-center shrink-0">
@@ -193,6 +195,7 @@ export function HeroVisual() {
       {/* Floating Glass Info Card 2: Battery Metric (Bottom Right) */}
       <div
         className="absolute -bottom-3 right-2 sm:-right-4 p-3 sm:p-3.5 rounded-2xl glass-card bg-white/90 border border-white shadow-[0_12px_28px_-6px_rgba(0,0,0,0.12)] backdrop-blur-md min-w-[180px] pointer-events-none hv-anim-card2"
+        data-motion="hero-glass"
       >
         <div className="flex items-center justify-between gap-2 mb-1.5">
           <div className="flex items-center gap-1.5">

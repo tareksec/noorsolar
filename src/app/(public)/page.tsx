@@ -17,6 +17,7 @@ import { StatsBand } from "@/components/sections/stats-band";
 import { CertificationsSection } from "@/components/sections/certifications-section";
 import { OrderingSteps } from "@/components/sections/ordering-steps";
 import { PartnersStrip } from "@/components/sections/partners-strip";
+import { TextMarquee } from "@/components/sections/text-marquee";
 import dynamic from "next/dynamic";
 import { DynamicHomeSections } from "@/components/sections/dynamic-home-sections";
 
@@ -102,7 +103,10 @@ export default async function HomePage() {
         secondaryCta={settings.heroSecondaryCta}
       />
 
-      {/* 2. Category Dock (Server Component - 3 Horizontal Cards) */}
+      {/* 2. Text Marquee Band */}
+      <TextMarquee />
+
+      {/* 3. Category Dock (Server Component - 3 Horizontal Cards) */}
       <CategoryDock categories={categories} />
 
       {/* 3. Business Statistics Band (Server Component - 4 Counters) */}
@@ -111,8 +115,12 @@ export default async function HomePage() {
       {/* 6. Certifications Grid (Server Component) */}
       <CertificationsSection certifications={certifications} />
 
-      {/* 7. How Ordering Works Sequence (Server Component) */}
-      <OrderingSteps />
+      {/* 7. How Ordering Works Sequence (Process Section) */}
+      <OrderingSteps
+        headline={settings.processHeadline}
+        subheadline={settings.processSubheadline}
+        steps={settings.processSteps}
+      />
 
       {/* 8. Partners and Clients Strip (Server Component) */}
       <PartnersStrip partners={partners} />

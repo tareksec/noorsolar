@@ -171,6 +171,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
 
   return (
     <div
+      data-motion="product-gallery"
       className="flex flex-col gap-4 focus:outline-none"
       onKeyDown={handleGalleryKeyDown}
       tabIndex={0}
@@ -285,6 +286,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
         {lightboxOpen && (
           <motion.div
             key="lightbox-modal"
+            data-motion="lightbox"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

@@ -51,5 +51,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-docs/
+docs/task-screenshots/
 source-images/
+.audit/
+.cache/

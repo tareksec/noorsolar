@@ -38,10 +38,60 @@ Status values: `Not started` Â· `In progress` Â· `Done` Â· `Blocked`
 | D | Animation and visual polish | Done | No | 2026-09-19 |
 | E | Admin completion, production readiness, final audit, deployment guide | Done | No | 2026-09-19 |
 | F | Use the owner's photos, plus icons and illustrations | Done | No | 2026-09-20 |
+| M | A complete, premium motion system | Done | No | 2026-09-20 |
 
 ---
 
 ## 2. Task log (newest first)
+
+### Task M — A Complete, Premium Motion System — 2026-09-20
+Branch: `task-m-motion`
+Status: Done
+
+#### 1. Overview & Architectural Principles
+- Built a unified, performant motion layer mapped strictly to the 16 core moments in TASK M specification.
+- Clean ownership: GSAP + ScrollTrigger for scroll-driven/pinned timelines, Motion (`motion/react`) for layout, enter/exit presence, hover springs, and draggable interactions.
+- Zero layout shift: only `transform`, `opacity`, and `clip-path` are animated.
+- Instant LCP: Above-the-fold headline and kicker text is rendered in server-generated HTML without `opacity: 0`.
+- Strict accessibility: Full compliance with `prefers-reduced-motion: reduce`. Native scrolling, unpinned cards, static marquee, instant count values, no parallax.
+- Input grounding: Pointer-only effects (3D card tilt, magnetic CTA attraction, custom Drag cursor) activate only on `(pointer: fine)` devices and never hijack touch events.
+- Single source of truth: `src/lib/motion.ts` with standardized durations, easings, distances, and spring tokens.
+
+#### 2. Verification of the 16 Motion Moments
+
+| # | Motion Moment | Component / Selector | Verification Method | Result |
+|---|---|---|---|---|
+| 1 | **Smooth Scrolling** | `SmoothScrollProvider`<br>`[data-motion="smooth-scroll"]` | Evaluated via Puppeteer in `npm run check:motion` (Suite 1: `smooth-scroll`). Confirmed Lenis runs on desktop pointer devices, syncs with ScrollTrigger ticker, and is disabled on touch devices and under `prefers-reduced-motion`. | **Verified: PASSED** |
+| 2 | **Hero Section Reveals & Parallax** | `HeroSection`, `HeroVisual`, `HeroEntrance`<br>`[data-motion="hero-headline"]`<br>`[data-motion="hero-photo"]`<br>`[data-motion="hero-glass"]`<br>`[data-motion="hero-parallax"]` | Masked slide-up word split, photo scale-in (1.15 to 1), floating glass cards stagger settle-in, and multi-layer SVG composition parallax verified via `npm run check:motion` and 1440px/390px screenshot inspections. SSR text visible immediately before JS hydration. | **Verified: PASSED** |
+| 3 | **Text Marquee Band** | `TextMarquee`<br>`[data-motion="text-marquee"]` | Marquee track continuous translation measured over time in `npm run check:motion` (`text-marquee`). Accelerated with scroll velocity on desktop, paused on hover/focus, and halted under reduced motion. | **Verified: PASSED** |
+| 4 | **Business Statistics Count-Up** | `AnimatedCounter`<br>`[data-motion="stat-counter"]` | Count-up numbers with prefix/suffix/decimals triggered once when scrolled into view. Verified via `npm run check:motion` (`stat-counter`) detecting numeric rendered values and instant values on reduced motion. | **Verified: PASSED** |
+| 5 | **Category Showcase Dock** | `CategoryDock`<br>`[data-motion="category-panel"]` | Expanding panels on desktop (hover/focus expands to flex-2.2 and compresses peers; tap to expand on touch). Verified via `npm run check:motion` (`category-panel`) measuring bounding rect width increase on expansion. | **Verified: PASSED** |
+| 6 | **Ordering Steps Process** | `OrderingSteps`<br>`[data-motion="process-section"]`<br>`[data-motion="process-step"]` | Headline reveal, staggered circle photo pop-in, numbered badge overlapping, and self-drawing curved connecting SVG arrows verified via `npm run check:motion` (`process-section`). Stacked cards on mobile. | **Verified: PASSED** |
+| 7 | **Photo Reveals & Parallax** | `PhotoReveal`<br>`[data-motion="photo-reveal"]` | Scale reveal (1.15 to 1) on viewport enter + ~8% scroll parallax verified via `npm run check:motion` (`photo-reveal`). Disabled on mobile and reduced motion to preserve performance. | **Verified: PASSED** |
+| 8 | **Featured Equipment Carousel** | `FeaturedCarousel`<br>`[data-motion="featured-carousel"]` | Draggable horizontal track with snap, arrow navigation, progress bar indicator, and custom floating "DRAG ↔" cursor verified via `npm run check:motion` (`featured-carousel`). Native touch scroll on mobile. | **Verified: PASSED** |
+| 9 | **Product Cards** | `ProductCard`<br>`[data-motion="product-card"]` | 3D tilt affordance on pointer move, arrow translation swap, and sliding "Request quote" pill verified via `npm run check:motion` (`product-card`) simulating pointer movements. | **Verified: PASSED** |
+| 10 | **Interactive Buttons** | `globals.css`, `MagneticButton`<br>`[data-motion="button-slide"]`<br>`[data-motion="magnetic-button"]` | Button fill-slide hover and arrow swap verified in DOM; magnetic attraction verified via `npm run check:motion` (`magnetic-button`) measuring translate3d transform offset on mousemove. | **Verified: PASSED** |
+| 11 | **Testimonials Slider** | `TestimonialsSection`<br>`[data-motion="testimonials-slider"]` | Autoplay crossfade loop (5s), pause on hover/focus, dot and arrow controls verified via `npm run check:motion` (`testimonials-slider`). | **Verified: PASSED** |
+| 12 | **FAQ Accordion** | `FAQSection`<br>`[data-motion="faq-accordion"]` | Animated height accordion with keyboard accessibility (`Enter`, `Space`, `ArrowUp`, `ArrowDown`) and ARIA expanded state verified via `npm run check:motion` (`faq-accordion`). | **Verified: PASSED** |
+| 13 | **Closing Call-To-Action** | `ClosingCTA`<br>`[data-motion="closing-headline"]`<br>`[data-motion="magnetic-cta"]` | Large headline reveal and magnetic CTA button attraction verified via `npm run check:motion` (`closing-headline`, `magnetic-cta`). | **Verified: PASSED** |
+| 14 | **Header & Mobile Menu** | `Header`<br>`[data-motion="header-scroll"]`<br>`[data-motion="mobile-menu"]` | Hide on scroll down, return on scroll up, compact height on scroll; full-screen mobile menu overlay with staggered link reveals verified via `npm run check:motion` (`header-scroll`, `mobile-menu`). | **Verified: PASSED** |
+| 15 | **Route Transitions** | `RouteTransition`<br>`[data-motion="route-transition"]` | Fast (<250ms) page fade/slide transition that never blocks navigation verified via `npm run check:motion` (`route-transition`). | **Verified: PASSED** |
+| 16 | **Product Gallery & Lightbox** | `ProductGallery`<br>`[data-motion="product-gallery"]`<br>`[data-motion="lightbox"]` | Swipeable image carousel, arrow keys, thumbnail selection, and fullscreen lightbox modal with zoom controls verified via `npm run check:motion` (`product-gallery`, `lightbox`). | **Verified: PASSED** |
+
+#### 3. Verification & Quality Audits
+- **`npm run lint`**: 0 errors, 0 warnings.
+- **`npm run build`**: 0 errors (production build with Turbopack, 26 routes statically optimized).
+- **`npm run check:overflow`**: 84/84 passed, 0 failed across 360px, 390px, 768px, and 1440px viewports.
+- **`npm run check:images`**: All images evaluated and verified; total image weight 269 KB (well under 600 KB budget).
+- **`npm run check:motion`**: All 24 motion tests passed successfully across 5 test suites (Desktop, Route Navigation, Product Gallery/Lightbox, Mobile Viewport/Menu, and `prefers-reduced-motion` Emulation).
+- **Slow Phone (4x CPU Throttling)**: Simulated via CDP on mobile viewport (390x844). Page loaded in 1.59s, hero text visible immediately, 9,444px scroll completed smoothly across 48 frames at 33ms average frame duration.
+- **Mobile Lighthouse Audits**:
+  - `Home (/)`: Performance 78 (TBT 270ms, down from 1,110ms; CLS 0.018), Accessibility 96, SEO 100.
+  - `Products (/products)`: Performance 84, Accessibility 98, SEO 100, TBT 130ms, CLS 0.
+  - `Detail (/product/...)`: Performance 77, Accessibility 100, SEO 100, TBT 190ms, CLS 0.
+- **Documentation**: `docs/motion-study.md` written; `MOTION.md` created; `AGENT.md` updated with regression guard rule.
+
+---
 
 ### Task F — Use the Owner's Photos, Plus Icons and Illustrations — 2026-09-20
 Branch: `task-f-imagery`

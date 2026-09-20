@@ -4,6 +4,9 @@ import React, { useActionState, useState } from "react";
 import Image from "next/image";
 import { submitQuoteRequest, QuoteActionResult } from "@/app/actions/quote";
 import { MessageCircle, CheckCircle, Send, AlertCircle, Phone } from "lucide-react";
+import { MagneticButton } from "@/components/ui/magnetic-button";
+import { PhotoReveal } from "@/components/ui/photo-reveal";
+import { prefersReducedMotion } from "@/lib/motion";
 
 interface ClosingCTAProps {
   phoneDisplay?: string;
@@ -27,6 +30,29 @@ export function ClosingCTA({
   const [state, formAction, isPending] = useActionState(submitQuoteRequest, initialState);
   const [phoneVal, setPhoneVal] = useState("");
 
+  React.useEffect(() => {
+    if (typeof window === "undefined" || prefersReducedMotion()) return;
+    let ctx: { revert: () => void } | undefined;
+    import("@/lib/gsap").then(({ gsap }) => {
+      ctx = gsap.context(() => {
+        gsap.from(".closing-headline-anim", {
+          y: 28,
+          opacity: 0,
+          duration: 0.85,
+          ease: "expo.out",
+          scrollTrigger: {
+            trigger: ".closing-headline-anim",
+            start: "top 85%",
+            once: true,
+          },
+        });
+      });
+    });
+    return () => {
+      if (ctx) ctx.revert();
+    };
+  }, []);
+
   const whatsappFollowupUrl = `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
     `Hello Noor Solar Energy, I just submitted a quotation request through your website. My phone number is ${phoneVal}.`
   )}`;
@@ -44,7 +70,10 @@ export function ClosingCTA({
               <span>Fast Wholesale Quotations</span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#111311] leading-tight mb-4">
+            <h2
+              className="closing-headline-anim text-3xl sm:text-4xl font-bold tracking-tight text-[#111311] leading-tight mb-4 will-change-transform"
+              data-motion="closing-headline"
+            >
               {headline}
             </h2>
 
@@ -87,7 +116,7 @@ export function ClosingCTA({
               </div>
             </div>
 
-            <div className="relative aspect-16/9 w-full rounded-3xl overflow-hidden border border-[#DDE1DC] mt-6 shadow-sm bg-[#111311]">
+            <PhotoReveal className="relative aspect-16/9 w-full rounded-3xl overflow-hidden border border-[#DDE1DC] mt-6 shadow-sm bg-[#111311]">
               <Image
                 src="/photos/cta-sunset-panels.webp"
                 alt="Solar panel array against sunset sky"
@@ -95,12 +124,12 @@ export function ClosingCTA({
                 sizes="(max-width: 1024px) 100vw, 450px"
                 className="object-cover opacity-90"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/85 via-transparent to-transparent" />
-              <div className="absolute bottom-3.5 left-4 right-4 text-white">
+              <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/85 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-3.5 left-4 right-4 text-white pointer-events-none">
                 <span className="text-[11px] font-mono text-[#CEF23E] font-semibold block">Commercial Indents & Supply</span>
                 <span className="text-xs text-white/90 leading-tight block mt-0.5">Reliable dispatch across all 64 districts in Bangladesh</span>
               </div>
-            </div>
+            </PhotoReveal>
           </div>
 
           {/* Right Form Card */}
@@ -250,20 +279,23 @@ export function ClosingCTA({
                     />
                   </div>
 
-                  <button
-                    type="submit"
-                    disabled={isPending}
-                    className="w-full flex items-center justify-center gap-2 py-4 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-semibold text-sm tracking-tight transition-all duration-200 active:scale-[0.99] disabled:opacity-60 shadow-lg"
-                  >
-                    {isPending ? (
-                      <span>Submitting Request...</span>
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        <span>Submit Wholesale Quote Request</span>
-                      </>
-                    )}
-                  </button>
+                  <MagneticButton dataMotion="magnetic-cta" className="w-full">
+                    <button
+                      type="submit"
+                      disabled={isPending}
+                      data-motion="button-slide"
+                      className="btn-slide-fill w-full flex items-center justify-center gap-2 py-4 rounded-full bg-[#111311] text-[#CEF23E] font-semibold text-sm tracking-tight transition-all duration-200 active:scale-[0.99] disabled:opacity-60 shadow-lg cursor-pointer"
+                    >
+                      {isPending ? (
+                        <span>Submitting Request...</span>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>Submit Wholesale Quote Request</span>
+                        </>
+                      )}
+                    </button>
+                  </MagneticButton>
 
                   <p className="text-center text-[11px] font-mono text-[#5C605C] pt-2">
                     Direct B2B importer pricing with complete technical datasheets

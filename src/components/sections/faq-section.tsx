@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useRef } from "react";
 import { ChevronDown } from "lucide-react";
@@ -58,7 +58,7 @@ export function FAQSection({ items }: FAQSectionProps) {
           </h2>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3" data-motion="faq-accordion">
           {items.map((item, index) => {
             const isOpen = openIndex === index;
             const buttonId = `faq-btn-${index}`;

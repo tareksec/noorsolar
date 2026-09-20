@@ -7,6 +7,7 @@ import { ArrowUpRight, Check, Zap, BatteryCharging, Cpu } from "lucide-react";
 import { gsap } from "@/lib/gsap";
 import { useGSAP } from "@/lib/gsap";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
+import { PhotoReveal } from "@/components/ui/photo-reveal";
 
 interface CategoryStoryProps {
   categories: Array<{
@@ -208,7 +209,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
                   >
                     {/* Left Column: Product Visual */}
                     <div className="col-span-5 h-[480px] rounded-3xl bg-white/60 border border-white flex items-center justify-center p-3 relative overflow-hidden group">
-                      <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                      <PhotoReveal className="w-full h-full rounded-2xl">
                         <Image
                           src={story.previewImage}
                           alt={story.title}
@@ -216,7 +217,7 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
                           sizes="40vw"
                           className="object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                      </div>
+                      </PhotoReveal>
                       <div className="absolute top-5 left-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-xs border border-[#DDE1DC] text-[11px] font-mono text-[#111311] z-10 shadow-xs">
                         <IconComponent className="w-3.5 h-3.5 text-[#111311]" />
                         <span>{story.kicker}</span>
@@ -316,13 +317,15 @@ export function CategoryStory({ categories }: CategoryStoryProps) {
                   className="rounded-3xl bg-[#EDEDED] border border-[#DDE1DC] p-6 shadow-sm flex flex-col space-y-6"
                 >
                   <div className="relative w-full aspect-4/3 rounded-2xl bg-white/60 border border-white overflow-hidden">
-                    <Image
-                      src={story.previewImage}
-                      alt={story.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 500px"
-                      className="object-cover"
-                    />
+                    <PhotoReveal className="w-full h-full rounded-xl">
+                      <Image
+                        src={story.previewImage}
+                        alt={story.title}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 500px"
+                        className="object-cover"
+                      />
+                    </PhotoReveal>
                     <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-xs border border-[#DDE1DC] text-[10px] font-mono text-[#111311] z-10 shadow-xs">
                       <IconComponent className="w-3 h-3 text-[#111311]" />
                       <span>{story.kicker}</span>

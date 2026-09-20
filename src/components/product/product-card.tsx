@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
 import { ArrowUpRight, ArrowRight, MessageSquare, Clock, CheckCircle2 } from "lucide-react";
+import { isPointerFine, prefersReducedMotion as checkReducedMotion } from "@/lib/motion";
 
 interface ProductCardProps {
   product: {
@@ -23,32 +24,21 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, priority = false }: ProductCardProps) {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [isPointerDevice, setIsPointerDevice] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   const imageContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-      setPrefersReducedMotion(mq.matches);
-      const listener = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-      mq.addEventListener("change", listener);
-      return () => mq.removeEventListener("change", listener);
-    }
-  }, []);
-
   const handlePointerEnter = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType === "mouse") {
+    if (e.pointerType === "mouse" || isPointerFine()) {
       setIsPointerDevice(true);
       setIsHovered(true);
     }
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType !== "mouse" || prefersReducedMotion || !imageContainerRef.current) return;
+    if (!isPointerFine() || checkReducedMotion() || !imageContainerRef.current) return;
     const rect = imageContainerRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -93,7 +83,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
     }
   };
 
-  const imageTransform = isPointerDevice && !prefersReducedMotion
+  const imageTransform = isPointerDevice && !checkReducedMotion()
     ? {
         transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) scale(${isHovered ? 1.05 : 1})`,
         transition: isHovered ? "transform 0.1s ease-out" : "transform 0.35s ease-out",
@@ -102,6 +92,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
   return (
     <div
+      data-motion="product-card"
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       className="group relative flex flex-col justify-between p-5 rounded-[28px] bg-white border border-[#DDE1DC] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] transition-all duration-300 hover:shadow-[0_16px_36px_-10px_rgba(0,0,0,0.08)] hover:border-[#111311]/25 hover:-translate-y-1 h-full"
@@ -136,7 +127,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         )}
 
         {/* Sliding "Request Quote" Affordance on Pointer Devices */}
-        {isPointerDevice && !prefersReducedMotion && (
+        {isPointerDevice && !checkReducedMotion() && (
           <div
             className={`absolute bottom-3 inset-x-3 z-20 transition-all duration-200 ${
               isHovered ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-3 pointer-events-none"
@@ -203,11 +194,14 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         <div className="flex items-center gap-1.5">
           <Link
             href={`/product/${product.slug}`}
-            className="p-2 rounded-full text-[#5C605C] hover:text-[#111311] hover:bg-[#EDEDED] transition-colors"
+            className="p-2 rounded-full text-[#5C605C] hover:text-[#111311] hover:bg-[#EDEDED] transition-colors flex items-center justify-center"
             title="View Technical Details"
             aria-label={`View details for ${product.name}`}
           >
-            <ArrowUpRight className="w-4 h-4" />
+            <span className="btn-arrow-swap">
+              <ArrowUpRight className="w-4 h-4 arrow-primary" />
+              <ArrowUpRight className="w-4 h-4 arrow-secondary" />
+            </span>
           </Link>
 
           <Link

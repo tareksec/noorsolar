@@ -13,6 +13,12 @@ export interface SiteConfig {
   heroSubheadline: string;
   heroPrimaryCta: string;
   heroSecondaryCta: string;
+  processHeadline?: string;
+  processSubheadline?: string;
+  processSteps?: Array<{
+    title: string;
+    desc: string;
+  }>;
   closingCtaHeadline: string;
   closingCtaSubheadline: string;
   aboutHeadline: string;
@@ -43,6 +49,26 @@ export const defaultSiteConfig: SiteConfig = {
     "Direct B2B importer providing engineering-grade solar equipment and wholesale delivery across Bangladesh.",
   heroPrimaryCta: "Request Quote",
   heroSecondaryCta: "Browse Products",
+  processHeadline: "Order in four simple steps",
+  processSubheadline: "A straightforward procurement workflow engineered for commercial contractors, installers, and B2B buyers across Bangladesh.",
+  processSteps: [
+    {
+      title: "Request a quote",
+      desc: "Tell us the products and quantity you need. Send the form, call us or message us on WhatsApp.",
+    },
+    {
+      title: "Confirm specifications",
+      desc: "Our team checks the datasheets and matches the right models and quantities to your project.",
+    },
+    {
+      title: "Receive your quotation",
+      desc: "Get a formal quotation with pricing and terms for your order.",
+    },
+    {
+      title: "Confirm and arrange delivery",
+      desc: "Confirm the order and we coordinate delivery. Contact sales for current schedules.",
+    },
+  ],
   closingCtaHeadline: "Ready to Order or Inquire About Container Pricing?",
   closingCtaSubheadline:
     "Submit your project specifications or required equipment quantity below. Our commercial sales engineers respond with formal quotations within working hours.",

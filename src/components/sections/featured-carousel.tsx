@@ -1,9 +1,10 @@
-﻿"use client";
+"use client";
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/product/product-card";
 import { motion, useReducedMotion } from "motion/react";
+import { isPointerFine } from "@/lib/motion";
 
 interface CarouselProduct {
   id: string;
@@ -25,9 +26,16 @@ interface FeaturedCarouselProps {
 
 export function FeaturedCarousel({ products }: FeaturedCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // Custom "Drag" cursor state
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef({ startX: 0, scrollLeft: 0 });
 
   const updateProgress = useCallback(() => {
     if (!scrollRef.current) return;
@@ -70,19 +78,56 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps) {
     }
   };
 
+  // Mouse Drag to Scroll handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!isPointerFine()) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    setIsDragging(true);
+    dragStartRef.current = {
+      startX: e.pageX - el.offsetLeft,
+      scrollLeft: el.scrollLeft,
+    };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isPointerFine()) return;
+    const container = containerRef.current;
+    if (container) {
+      const rect = container.getBoundingClientRect();
+      setCursorPos({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+    }
+
+    if (!isDragging) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - dragStartRef.current.startX) * 1.5;
+    el.scrollLeft = dragStartRef.current.scrollLeft - walk;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
   if (!products || products.length === 0) return null;
 
   return (
     <section
-      className="py-20 bg-[#EDEDED] border-y border-[#DDE1DC] overflow-hidden"
+      className="py-20 bg-[#EDEDED] border-y border-[#DDE1DC] overflow-hidden relative"
       aria-roledescription="carousel"
       aria-label="Featured equipment carousel"
+      data-motion="featured-carousel"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E]"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E]" />
               <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C]">
                 Featured Equipment
               </span>
@@ -112,15 +157,42 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps) {
         </div>
       </div>
 
-      {/* Horizontal Carousel Track with Motion drag affordance & scroll-snap */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Horizontal Carousel Track */}
+      <div
+        ref={containerRef}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => {
+          setIsHovered(false);
+          setIsDragging(false);
+        }}
+        onMouseMove={handleMouseMove}
+      >
+        {/* Custom "Drag" Cursor for Desktop Pointer */}
+        {isHovered && !shouldReduceMotion && (
+          <div
+            className="pointer-events-none hidden md:flex items-center justify-center absolute z-40 px-3 py-1.5 rounded-full bg-[#111311] text-[#CEF23E] text-[11px] font-mono font-bold tracking-wider shadow-lg transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-75"
+            style={{
+              left: `${cursorPos.x}px`,
+              top: `${cursorPos.y}px`,
+              scale: isDragging ? 0.9 : 1,
+            }}
+          >
+            {isDragging ? "DRAGGING" : "DRAG ↔"}
+          </div>
+        )}
+
         <div
           ref={scrollRef}
           onKeyDown={handleKeyDown}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
           tabIndex={0}
           role="region"
           aria-label="Equipment slides. Use arrow keys to navigate."
-          className="featured-carousel-scroll flex gap-6 overflow-x-auto pb-6 pt-2 scrollbar-none snap-x snap-mandatory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-3xl"
+          className={`featured-carousel-scroll flex gap-6 overflow-x-auto pb-6 pt-2 scrollbar-none snap-x snap-mandatory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-3xl ${
+            isDragging ? "cursor-grabbing select-none snap-none" : "cursor-grab"
+          }`}
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {products.map((prod, idx) => (
