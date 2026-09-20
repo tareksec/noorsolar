@@ -41,10 +41,18 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     return { title: isBn ? "ক্যাটাগরি পাওয়া যায়নি" : "Category Not Found" };
   }
 
-  const desc = category.description || `Explore bulk ${category.name} available for wholesale import in Bangladesh.`;
+  const desc =
+    category.description ||
+    (isBn
+      ? `বাংলাদেশে পাইকারি আমদানিকৃত ${category.name}-এর সম্পূর্ণ তালিকা দেখুন।`
+      : `Explore bulk ${category.name} available for wholesale import in Bangladesh.`);
+
+  const pageTitle = isBn
+    ? `${category.name} পাইকারি সরবরাহ — নূর সোলার এনার্জি`
+    : `${category.name} Wholesale — Noor Solar Energy`;
 
   return {
-    title: `${category.name} Wholesale — Noor Solar Energy`,
+    title: pageTitle,
     description: desc,
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/category/${category.slug}` : `${siteUrl}/category/${category.slug}`,
@@ -55,7 +63,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       },
     },
     openGraph: {
-      title: `${category.name} Wholesale — Noor Solar Energy`,
+      title: pageTitle,
       description: desc,
       url: isBn ? `/bn/category/${category.slug}` : `/category/${category.slug}`,
       type: "website",
@@ -75,6 +83,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
+  const isBn = locale === "bn";
+
   return (
     <div className="pt-28 sm:pt-36 pb-24 bg-[#E4E7E4] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -86,7 +96,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             className="inline-flex items-center gap-1.5 text-xs font-mono text-[#5C605C] hover:text-[#111311] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to All Equipment</span>
+            <span>{isBn ? "সকল পণ্যে ফিরে যান" : "Back to All Equipment"}</span>
           </Link>
         </div>
 
@@ -95,7 +105,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3">
               <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-              <span>Direct Import Line</span>
+              <span>{isBn ? "সরাসরি আমদানি লাইন" : "Direct Import Line"}</span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111311]">
               {category.name}
@@ -126,16 +136,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <div className="p-12 text-center rounded-3xl bg-white border border-[#DDE1DC] max-w-lg mx-auto">
             <EmptyCatalogIllustration className="w-40 h-36 mx-auto mb-2" />
             <h3 className="text-lg font-bold text-[#111311] mb-2">
-              No active products listed yet
+              {isBn ? "এই ক্যাটাগরিতে এখনও কোনো পণ্য নেই" : "No active products listed yet"}
             </h3>
             <p className="text-xs text-[#5C605C] mb-6">
-              New container inventory for this category is currently being staged in our warehouse.
+              {isBn
+                ? "এই ক্যাটাগরির জন্য নতুন কনটেইনারের পণ্য ওয়্যারহাউসে যুক্ত হওয়ার প্রক্রিয়ায় রয়েছে।"
+                : "New container inventory for this category is currently being staged in our warehouse."}
             </p>
             <Link
               href="/products"
               className="inline-flex items-center px-5 py-2.5 rounded-full bg-[#111311] text-white text-xs font-medium hover:bg-black transition-colors"
             >
-              View Full Catalog
+              {isBn ? "পূর্ণাঙ্গ ক্যাটালগ দেখুন" : "View Full Catalog"}
             </Link>
           </div>
         )}

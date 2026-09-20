@@ -68,9 +68,23 @@ export function AnimatedNavFramer({
 
   const rawNavItems = items || defaultItems;
 
-  // Localize hrefs for current locale
+  const BN_NAV_NAMES: Record<string, string> = {
+    "Services": "সেবাসমূহ",
+    "About": "আমাদের সম্পর্কে",
+    "Why Us": "কেন আমরা",
+    "Process": "কার্যপ্রণালী",
+    "Contact": "যোগাযোগ",
+    "Solar Panels": "সোলার প্যানেল",
+    "Batteries": "ব্যাটারি",
+    "Inverters": "ইনভার্টার",
+    "All Products": "সকল পণ্য",
+    "Blog": "ব্লগ",
+  };
+
+  // Localize hrefs and names for current locale
   const navItems = rawNavItems.map((item) => {
     let href = item.href;
+    const name = isBn && BN_NAV_NAMES[item.name] ? BN_NAV_NAMES[item.name] : item.name;
     if (isBn) {
       if (href.startsWith("/#")) {
         href = `/bn${href.slice(1)}`;
@@ -78,9 +92,10 @@ export function AnimatedNavFramer({
         href = `/bn${href}`;
       }
     }
-    return { ...item, href };
+    return { ...item, name, href };
   });
 
+  const displayCtaText = isBn && (ctaText === "Book A Call" || !ctaText) ? "যোগাযোগ করুন" : ctaText;
   const finalCtaHref = isBn && !ctaHref.startsWith("/bn") ? `/bn${ctaHref}` : ctaHref;
   const brandHref = isBn ? "/bn" : "/";
 
@@ -247,7 +262,7 @@ export function AnimatedNavFramer({
                       onClick={(e) => e.stopPropagation()}
                       className="group inline-flex items-center gap-1.5 sm:gap-2 pl-3 sm:pl-4 pr-1.5 py-1.5 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] text-xs font-bold tracking-tight shadow-[0_4px_14px_rgba(206,242,62,0.35)] transition-all hover:scale-105 active:scale-95 whitespace-nowrap shrink-0"
                     >
-                      <span>{ctaText}</span>
+                      <span>{displayCtaText}</span>
                       <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#111311] flex items-center justify-center text-[#CEF23E] group-hover:translate-x-0.5 transition-transform shadow-2xs shrink-0">
                         <ArrowRight className="w-3 h-3 stroke-[2.5]" />
                       </span>
@@ -275,7 +290,7 @@ export function AnimatedNavFramer({
                   {/* Mobile Hamburger Toggle Button */}
                   <button
                     type="button"
-                    aria-label="Toggle mobile menu"
+                    aria-label={isBn ? "মোবাইল মেনু পরিবর্তন করুন" : "Toggle mobile menu"}
                     onClick={(e) => {
                       e.stopPropagation();
                       setMobileOpen((prev) => !prev);
@@ -332,7 +347,7 @@ export function AnimatedNavFramer({
           >
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
               <span className="text-xs font-mono uppercase tracking-widest text-[#CEF23E]">
-                Navigation
+                {isBn ? "ন্যাভিগেশন" : "Navigation"}
               </span>
               <LanguageSwitcher idPrefix="mob" currentLocale={currentLocale} />
             </div>
@@ -367,7 +382,7 @@ export function AnimatedNavFramer({
                 onClick={() => setMobileOpen(false)}
                 className="flex items-center justify-center gap-2 w-full py-3 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] font-bold text-sm shadow-md"
               >
-                <span>{ctaText}</span>
+                <span>{displayCtaText}</span>
                 <ArrowRight className="w-4 h-4 stroke-[2.5]" />
               </Link>
             </div>

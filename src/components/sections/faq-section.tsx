@@ -12,12 +12,14 @@ interface FAQItemLike {
 
 interface FAQSectionProps {
   items: FAQItemLike[];
+  locale?: string;
 }
 
-export function FAQSection({ items }: FAQSectionProps) {
+export function FAQSection({ items, locale }: FAQSectionProps) {
   const shouldReduceMotion = useReducedMotion();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const isBn = locale === "bn" || (items?.[0]?.question ? /[\u0980-\u09FF]/.test(items[0].question) : false);
 
   if (!items || items.length === 0) {
     return null;
@@ -51,10 +53,10 @@ export function FAQSection({ items }: FAQSectionProps) {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3 border border-[#DDE1DC]">
             <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-            <span>Commercial Inquiries</span>
+            <span>{isBn ? "সাধারণ প্রশ্নোত্তর" : "Commercial Inquiries"}</span>
           </div>
           <h2 className="text-3xl font-bold tracking-tight text-[#111311]">
-            Frequently Asked Questions
+            {isBn ? "সচরাচর জিজ্ঞাসিত প্রশ্ন" : "Frequently Asked Questions"}
           </h2>
         </div>
 

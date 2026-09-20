@@ -133,6 +133,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       : {}),
   };
 
+  const isBn = locale === "bn";
+
   return (
     <div className="pt-24 pb-20 sm:pb-32 bg-[#E4E7E4] min-h-screen">
       {/* Schema.org Product Metadata */}
@@ -145,11 +147,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         {/* Breadcrumb Navigation */}
         <div className="flex items-center gap-2 text-xs font-mono text-[#5C605C] mb-8 overflow-x-auto whitespace-nowrap pb-2">
           <Link href="/" className="hover:text-[#111311] transition-colors">
-            Home
+            {isBn ? "হোম" : "Home"}
           </Link>
           <span>/</span>
           <Link href="/products" className="hover:text-[#111311] transition-colors">
-            Products
+            {isBn ? "পণ্যসমূহ" : "Products"}
           </Link>
           <span>/</span>
           <Link
@@ -185,7 +187,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   </span>
                   {product.model && (
                     <span className="text-xs font-mono text-[#5C605C]">
-                      Model: {product.model}
+                      {isBn ? "মডেল:" : "Model:"} {product.model}
                     </span>
                   )}
                 </div>
@@ -203,13 +205,15 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 {/* Status & MOQ Metadata */}
                 <div className="p-5 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC] space-y-3 mb-8">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-[#5C605C] font-mono">Stock Availability:</span>
+                    <span className="text-[#5C605C] font-mono">
+                      {isBn ? "স্টক প্রাপ্যতা:" : "Stock Availability:"}
+                    </span>
                     <span className="font-mono font-bold text-[#111311] bg-white px-2.5 py-0.5 rounded-full">
                       {product.stockStatus === "IN_STOCK"
-                        ? "Dhaka Warehouse In-Stock"
+                        ? (isBn ? "ঢাকা ওয়্যারহাউস রেডি স্টক" : "Dhaka Warehouse In-Stock")
                         : product.stockStatus === "INCOMING"
-                        ? "Incoming Shipment"
-                        : "On Request / Container Indent"}
+                        ? (isBn ? "আসন্ন চালান" : "Incoming Shipment")
+                        : (isBn ? "অনুরোধ সাপেক্ষে / কনটেইনার অর্ডার" : "On Request / Container Indent")}
                     </span>
                   </div>
 
@@ -217,7 +221,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                     <div className="flex items-center justify-between text-xs pt-2 border-t border-[#DDE1DC]">
                       <span className="text-[#5C605C] font-mono flex items-center gap-1.5">
                         <Box className="w-3.5 h-3.5 text-[#111311]" />
-                        Minimum Order Quantity:
+                        {isBn ? "ন্যূনতম অর্ডার পরিমাণ:" : "Minimum Order Quantity:"}
                       </span>
                       <span className="font-mono font-medium text-[#111311]">
                         {product.moq}
@@ -229,7 +233,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                     <div className="flex items-center justify-between text-xs pt-2 border-t border-[#DDE1DC]">
                       <span className="text-[#5C605C] font-mono flex items-center gap-1.5">
                         <Clock className="w-3.5 h-3.5 text-[#111311]" />
-                        Delivery Lead Time:
+                        {isBn ? "ডেলিভারি সময়সীমা:" : "Delivery Lead Time:"}
                       </span>
                       <span className="font-mono font-medium text-[#111311]">
                         {product.leadTime}
@@ -245,7 +249,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   href={`/contact?product=${encodeURIComponent(product.slug)}`}
                   className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 py-4 px-6 rounded-full bg-[#CEF23E] hover:bg-[#bce02b] text-[#111311] font-bold text-sm tracking-tight transition-all duration-200 shadow-sm active:scale-95"
                 >
-                  <span>Request Wholesale Quotation</span>
+                  <span>{isBn ? "পাইকারি কোটেশন চান" : "Request Wholesale Quotation"}</span>
                   <ArrowUpRight className="w-4 h-4" />
                 </Link>
 
@@ -257,7 +261,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#EDEDED] hover:bg-[#DDE1DC] text-[#111311] text-xs font-semibold font-mono transition-colors"
                   >
                     <Download className="w-4 h-4" />
-                    <span>Download Datasheet</span>
+                    <span>{isBn ? "ডেটাশিট ডাউনলোড করুন" : "Download Datasheet"}</span>
                   </a>
                 )}
               </div>
@@ -272,16 +276,18 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           <div className="lg:col-span-5 flex flex-col gap-6">
             <div className="p-8 rounded-3xl bg-white border border-[#DDE1DC]">
               <h2 className="text-xl font-bold text-[#111311] tracking-tight mb-4">
-                Engineering Summary
+                {isBn ? "কারিগরি সারসংক্ষেপ" : "Engineering Summary"}
               </h2>
               <div className="text-xs sm:text-sm text-[#5C605C] leading-relaxed space-y-4">
                 <p>
                   {product.description ||
-                    "This solar equipment is imported according to strict quality compliance standards, ensuring long-term durability and high energy yield under Bangladesh climatic conditions."}
+                    (isBn
+                      ? "বাংলাদেশের আবহাওয়ায় দীর্ঘস্থায়ী স্থায়িত্ব এবং উচ্চ বিদ্যুৎ উৎপাদন নিশ্চিত করতে এই সোলার সরঞ্জামটি কঠোর আন্তর্জাতিক মান মেনে আমদানি করা হয়েছে।"
+                      : "This solar equipment is imported according to strict quality compliance standards, ensuring long-term durability and high energy yield under Bangladesh climatic conditions.")}
                 </p>
                 <div className="pt-4 border-t border-[#EDEDED] flex items-center gap-2 text-xs font-mono text-[#111311]">
                   <ShieldCheck className="w-4 h-4 text-[#111311]" />
-                  <span>Supplied with Complete Technical Datasheet</span>
+                  <span>{isBn ? "সম্পূর্ণ কারিগরি ডেটাশিট সহ সরবরাহকৃত" : "Supplied with Complete Technical Datasheet"}</span>
                 </div>
               </div>
             </div>
@@ -291,10 +297,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             <div className="p-8 rounded-3xl bg-white border border-[#DDE1DC]">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-[#111311] tracking-tight">
-                  Technical Specifications
+                  {isBn ? "কারিগরি স্পেসিফিকেশন" : "Technical Specifications"}
                 </h2>
                 <span className="text-xs font-mono text-[#5C605C]">
-                  STC Lab Standards
+                  {isBn ? "STC ল্যাব মানদণ্ড" : "STC Lab Standards"}
                 </span>
               </div>
 
@@ -314,7 +320,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </div>
               ) : (
                 <p className="text-xs text-[#5C605C]">
-                  Detailed specs available upon formal quote request.
+                  {isBn ? "কোটেশনের অনুরোধ জানালে বিস্তারিত ডেটাশিট সরবরাহ করা হবে।" : "Detailed specs available upon formal quote request."}
                 </p>
               )}
             </div>
@@ -338,17 +344,17 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <span className="text-xs font-mono uppercase text-[#5C605C] block mb-1">
-                  Matched Recommendations
+                  {isBn ? "সম্পর্কিত সুপারিশ" : "Matched Recommendations"}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-bold text-[#111311]">
-                  Related {product.category.name}
+                  {isBn ? `সম্পর্কিত ${product.category.name}` : `Related ${product.category.name}`}
                 </h2>
               </div>
               <Link
                 href={`/category/${product.category.slug}`}
                 className="text-xs font-mono text-[#111311] hover:underline"
               >
-                View Category
+                {isBn ? "ক্যাটাগরি দেখুন" : "View Category"}
               </Link>
             </div>
 

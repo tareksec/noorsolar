@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Mail, ArrowRight } from "lucide-react";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 
@@ -11,18 +11,26 @@ interface HomeContactBannerProps {
   whatsappNumber?: string;
   headline?: string;
   subheadline?: string;
+  locale?: string;
 }
 
-export function HomeContactBanner({}: HomeContactBannerProps = {}) {
+export function HomeContactBanner({
+  headline,
+  subheadline,
+  locale,
+}: HomeContactBannerProps = {}) {
   const [email, setEmail] = useState("");
   const router = useRouter();
+  const pathname = usePathname() || "";
+  const isBn = locale === "bn" || pathname.startsWith("/bn/") || pathname === "/bn";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const contactBase = isBn ? "/bn/contact" : "/contact";
     if (email.trim()) {
-      router.push(`/contact?email=${encodeURIComponent(email.trim())}`);
+      router.push(`${contactBase}?email=${encodeURIComponent(email.trim())}`);
     } else {
-      router.push("/contact");
+      router.push(contactBase);
     }
   };
 
@@ -35,7 +43,7 @@ export function HomeContactBanner({}: HomeContactBannerProps = {}) {
           <div className="absolute inset-0 z-0">
             <Image
               src="/banners/clean-energy-banner.webp"
-              alt="Clean Energy for a Brighter Tomorrow"
+              alt={isBn ? "পরিচ্ছন্ন জ্বালানি দিয়ে সুন্দর ভবিষ্যৎ" : "Clean Energy for a Brighter Tomorrow"}
               fill
               className="object-cover object-[75%_center] sm:object-center"
               sizes="(max-width: 1280px) 100vw, 1280px"
@@ -70,13 +78,26 @@ export function HomeContactBanner({}: HomeContactBannerProps = {}) {
 
             {/* Headline */}
             <h2 data-motion="closing-headline" className="text-3xl sm:text-4xl lg:text-[2.85rem] font-extrabold tracking-tight text-[#0F172A] leading-[1.14] mb-3.5">
-              Clean Energy for a <br />
-              <span className="text-[#84CC16]">Brighter Tomorrow</span>
+              {headline ? (
+                <span>{headline}</span>
+              ) : isBn ? (
+                <>
+                  পরিচ্ছন্ন জ্বালানি দিয়ে <br />
+                  <span className="text-[#84CC16]">উজ্জ্বল ভবিষ্যৎ গড়ুন</span>
+                </>
+              ) : (
+                <>
+                  Clean Energy for a <br />
+                  <span className="text-[#84CC16]">Brighter Tomorrow</span>
+                </>
+              )}
             </h2>
 
             {/* Subtitle */}
             <p className="text-xs sm:text-sm lg:text-base text-slate-700/90 leading-relaxed max-w-lg mb-6 sm:mb-8 font-medium">
-              We provide high-quality solar solutions to power homes, businesses and a sustainable future.
+              {subheadline || (isBn
+                ? "আমরা ঘরবাড়ি ও শিল্পপ্রতিষ্ঠানের জন্য উচ্চমানের সোলার সরঞ্জাম সরবরাহ করি, যা দীর্ঘমেয়াদে নিশ্চিত করে বিদ্যুৎ সাশ্রয়।"
+                : "We provide high-quality solar solutions to power homes, businesses and a sustainable future.")}
             </p>
 
             {/* Interactive Email Pill Form */}
@@ -88,7 +109,7 @@ export function HomeContactBanner({}: HomeContactBannerProps = {}) {
                 <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 shrink-0" />
                 <input
                   type="email"
-                  placeholder="Enter your email here"
+                  placeholder={isBn ? "আপনার ইমেইল ঠিকানা দিন" : "Enter your email here"}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-transparent border-none text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
@@ -100,7 +121,7 @@ export function HomeContactBanner({}: HomeContactBannerProps = {}) {
                   data-motion="button-slide"
                   className="rounded-full bg-[#CEF23E] hover:bg-[#D8FA45] text-[#111311] font-bold px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 shrink-0 shadow-sm transition-all hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
                 >
-                  <span>Join Now</span>
+                  <span>{isBn ? "যোগাযোগ করুন" : "Join Now"}</span>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </button>
               </MagneticButton>
@@ -138,7 +159,7 @@ export function HomeContactBanner({}: HomeContactBannerProps = {}) {
                 </div>
               </div>
               <span className="text-xs sm:text-sm font-semibold text-slate-700">
-                8,650+ happy customers
+                {isBn ? "৮,৬৫০+ সন্তুষ্ট গ্রাহক" : "8,650+ happy customers"}
               </span>
             </div>
 

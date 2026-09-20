@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
 import { Link } from "@/i18n/routing";
+import { usePathname } from "next/navigation";
 import { ArrowUpRight, ArrowRight, MessageSquare, Clock, CheckCircle2 } from "lucide-react";
 import { isPointerFine, prefersReducedMotion as checkReducedMotion } from "@/lib/motion";
 
@@ -24,6 +25,9 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, priority = false }: ProductCardProps) {
+  const pathname = usePathname() || "";
+  const isBn = pathname.startsWith("/bn/") || pathname === "/bn";
+
   const [isPointerDevice, setIsPointerDevice] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -63,21 +67,21 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-[#CEF23E]/25 text-[#111311] border border-[#CEF23E]/50">
             <span className="w-1.5 h-1.5 rounded-full bg-[#111311]"></span>
-            In Stock
+            {isBn ? "স্টকে আছে" : "In Stock"}
           </span>
         );
       case "INCOMING":
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-amber-100 text-amber-900 border border-amber-300">
             <Clock className="w-3 h-3 text-amber-700" />
-            Incoming
+            {isBn ? "আসছে" : "Incoming"}
           </span>
         );
       default:
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-[#EDEDED] text-[#5C605C] border border-[#DDE1DC]">
             <CheckCircle2 className="w-3 h-3 text-[#5C605C]" />
-            On Request
+            {isBn ? "অনুরোধে প্রাপ্য" : "On Request"}
           </span>
         );
     }
@@ -138,7 +142,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               className="w-full py-2.5 px-4 rounded-full bg-[#111311] hover:bg-black text-[#CEF23E] font-semibold text-xs tracking-tight flex items-center justify-center gap-2 shadow-lg transition-colors"
             >
               <MessageSquare className="w-3.5 h-3.5" />
-              <span>Request Quote</span>
+              <span>{isBn ? "কোটেশন চান" : "Request Quote"}</span>
               <ArrowRight className="w-3.5 h-3.5 text-white" />
             </Link>
           </div>
@@ -181,14 +185,16 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         <div>
           {product.showPrice && product.priceBdt ? (
             <div className="flex flex-col">
-              <span className="text-[10px] font-mono uppercase text-[#5C605C]">Wholesale</span>
+              <span className="text-[10px] font-mono uppercase text-[#5C605C]">
+                {isBn ? "পাইকারি মূল্য" : "Wholesale"}
+              </span>
               <span className="text-sm font-mono font-bold text-[#111311]">
                 BDT {product.priceBdt.toLocaleString()}
               </span>
             </div>
           ) : (
             <span className="text-xs font-mono font-medium text-[#5C605C]">
-              Bulk Pricing on Quote
+              {isBn ? "কোটেশনে পাইকারি মূল্য" : "Bulk Pricing on Quote"}
             </span>
           )}
         </div>
@@ -197,8 +203,8 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           <Link
             href={`/product/${product.slug}`}
             className="p-2 rounded-full text-[#5C605C] hover:text-[#111311] hover:bg-[#EDEDED] transition-colors flex items-center justify-center"
-            title="View Technical Details"
-            aria-label={`View details for ${product.name}`}
+            title={isBn ? "প্রযুক্তিগত বিবরণ দেখুন" : "View Technical Details"}
+            aria-label={isBn ? `${product.name}-এর বিবরণ দেখুন` : `View details for ${product.name}`}
           >
             <span className="btn-arrow-swap">
               <ArrowUpRight className="w-4 h-4 arrow-primary" />
@@ -210,7 +216,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             href={`/contact?product=${product.slug}`}
             className="px-3.5 py-1.5 rounded-full bg-[#111311] text-white text-xs font-medium tracking-tight transition-all duration-200 hover:bg-[#CEF23E] hover:text-[#111311] active:scale-95"
           >
-            Request Quote
+            {isBn ? "কোটেশন চান" : "Request Quote"}
           </Link>
         </div>
       </div>

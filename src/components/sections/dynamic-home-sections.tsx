@@ -73,28 +73,29 @@ interface DynamicHomeSectionsProps {
     question: string;
     answer: string;
   }>;
+  locale?: string;
 }
-
 
 export function DynamicHomeSections({
   categories,
   featuredProducts,
   testimonials,
   faqItems,
+  locale,
 }: DynamicHomeSectionsProps) {
   return (
     <>
       {/* 4. Scroll-Linked Category Story */}
-      <CategoryStory categories={categories} />
+      <CategoryStory categories={categories} locale={locale} />
 
       {/* 5. Featured Products Carousel */}
-      <FeaturedCarousel products={featuredProducts} />
+      <FeaturedCarousel products={featuredProducts} locale={locale} />
 
       {/* 9. Testimonials */}
-      <TestimonialsSection testimonials={testimonials} />
+      <TestimonialsSection testimonials={testimonials} locale={locale} />
 
       {/* 10. Frequently Asked Questions */}
-      <FAQSection items={faqItems} />
+      <FAQSection items={faqItems} locale={locale} />
     </>
   );
 }

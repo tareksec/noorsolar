@@ -44,8 +44,53 @@ const DEMO_TESTIMONIALS: Array<{
   },
 ];
 
-export function TestimonialsSection({ testimonials }: { testimonials?: Testimonial[] }) {
-  const displayItems = testimonials && testimonials.length > 0 ? testimonials : DEMO_TESTIMONIALS;
+const DEMO_TESTIMONIALS_BN: Array<{
+  id: string;
+  authorName: string;
+  authorRole: string | null;
+  company: string | null;
+  photo: string | null;
+  quote: string;
+}> = [
+  {
+    id: "demo-1",
+    authorName: "আরিফ হোসেন",
+    authorRole: "স্বত্বাধিকারী",
+    company: "ইকোপাওয়ার বিডি",
+    photo: "/photos/testimonial-arif.jpg",
+    quote:
+      "নূর সোলার আমাদের কারখানায় ইন্ডাস্ট্রিয়াল গ্রেডের সোলার ও ব্যাটারি সিস্টেম স্থাপন করেছে। আমাদের বিদ্যুৎ খরচ উল্লেখযোগ্য হারে কমেছে এবং বর্ষাকালেও প্যানেলগুলো দারুণ পারফর্ম করেছে।",
+  },
+  {
+    id: "demo-2",
+    authorName: "মাহমুদ করিম",
+    authorRole: "প্রজেক্ট ডিরেক্টর",
+    company: "অ্যাপেক্স ডেভেলপমেন্টস",
+    photo: "/photos/testimonial-mahmud.jpg",
+    quote:
+      "আমাদের বাণিজ্যিক ভবনে স্থাপিত 51.2V LiFePO4 র্যাক ব্যাটারি ও হাইব্রিড স্ট্রিং ইনভার্টার গ্রিডের ওপর নির্ভরতা ৬৫% কমিয়েছে। সময়মতো ডেলিভারি ও প্রতিটি পণ্যের টেকনিক্যাল ডেটাশিট পেয়েছি।",
+  },
+  {
+    id: "demo-3",
+    authorName: "ফারহানা আহমেদ",
+    authorRole: "প্ল্যান্ট ডিরেক্টর",
+    company: "ডেল্টা ম্যানুফ্যাকচারিং",
+    photo: "/photos/testimonial-farhana.jpg",
+    quote:
+      "প্রাথমিক ইঞ্জিনিয়ারিং অ্যাসেসমেন্ট থেকে শুরু করে কন্টেইনার ডেলিভারি পর্যন্ত তাদের সেবা ছিল অসাধারণ। তাদের উচ্চ-দক্ষতার TOPCon মডিউল আমাদের কারখানায় দ্রুত বিনিয়োগের সুফল এনে দিয়েছে।",
+  },
+];
+
+export function TestimonialsSection({
+  testimonials,
+  locale,
+}: {
+  testimonials?: Testimonial[];
+  locale?: string;
+}) {
+  const isBn = locale === "bn";
+  const fallbackList = isBn ? DEMO_TESTIMONIALS_BN : DEMO_TESTIMONIALS;
+  const displayItems = testimonials && testimonials.length > 0 ? testimonials : fallbackList;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -85,7 +130,7 @@ export function TestimonialsSection({ testimonials }: { testimonials?: Testimoni
   return (
     <section
       className="py-20 lg:py-28 bg-[#EDEDED] border-y border-[#DDE1DC]"
-      aria-label="Client testimonials"
+      aria-label={isBn ? "গ্রাহক মতামত" : "Client testimonials"}
       data-motion="testimonials-slider"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -95,14 +140,18 @@ export function TestimonialsSection({ testimonials }: { testimonials?: Testimoni
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E]" />
               <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C]">
-                Verified Testimonials
+                {isBn ? "যাচাইকৃত গ্রাহক অভিজ্ঞতা" : "Verified Testimonials"}
               </span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#111311] leading-[1.12] mb-6">
-              Trusted by Leading EPCs & Commercial Plants
+              {isBn
+                ? "শীর্ষস্থানীয় ইপিসি ও শিল্পপ্রতিষ্ঠানসমূহের আস্থা"
+                : "Trusted by Leading EPCs & Commercial Plants"}
             </h2>
             <p className="text-[#5C605C] text-sm sm:text-base leading-relaxed mb-8">
-              Over 250 completed commercial installations and wholesale container dispatches across Bangladesh.
+              {isBn
+                ? "সারাদেশে ২৫০+ সফল কমার্শিয়াল সোলার প্রকল্প ও পাইকারি কন্টেইনার সরবরাহ সম্পন্ন।"
+                : "Over 250 completed commercial installations and wholesale container dispatches across Bangladesh."}
             </p>
 
             {/* Navigation Arrows & Dot Indicators */}
@@ -110,14 +159,14 @@ export function TestimonialsSection({ testimonials }: { testimonials?: Testimoni
               <div className="flex items-center gap-2">
                 <button
                   onClick={prevSlide}
-                  aria-label="Previous testimonial"
+                  aria-label={isBn ? "পূর্ববর্তী মন্তব্য" : "Previous testimonial"}
                   className="w-11 h-11 rounded-full bg-white border border-[#DDE1DC] hover:border-[#111311] text-[#111311] flex items-center justify-center transition-all shadow-xs hover:scale-105 active:scale-95 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
                 >
                   <ArrowLeft className="w-4 h-4" />
                 </button>
                 <button
                   onClick={nextSlide}
-                  aria-label="Next testimonial"
+                  aria-label={isBn ? "পরবর্তী মন্তব্য" : "Next testimonial"}
                   className="w-11 h-11 rounded-full bg-white border border-[#DDE1DC] hover:border-[#111311] text-[#111311] flex items-center justify-center transition-all shadow-xs hover:scale-105 active:scale-95 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
                 >
                   <ArrowRight className="w-4 h-4" />
@@ -130,7 +179,7 @@ export function TestimonialsSection({ testimonials }: { testimonials?: Testimoni
                   <button
                     key={idx}
                     onClick={() => setCurrentIndex(idx)}
-                    aria-label={`Go to testimonial ${idx + 1}`}
+                    aria-label={isBn ? `মন্তব্য ${idx + 1} দেখুন` : `Go to testimonial ${idx + 1}`}
                     className="p-2 flex items-center justify-center min-w-[28px] min-h-[32px] cursor-pointer rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
                   >
                     <span
@@ -156,7 +205,7 @@ export function TestimonialsSection({ testimonials }: { testimonials?: Testimoni
             tabIndex={0}
             role="region"
             aria-roledescription="carousel"
-            aria-label="Testimonial slider"
+            aria-label={isBn ? "গ্রাহক মতামত স্লাইডার" : "Testimonial slider"}
           >
             <div className="relative min-h-[320px] sm:min-h-[280px] bg-white rounded-[32px] p-8 sm:p-10 border border-[#DDE1DC] shadow-[0_16px_40px_-12px_rgba(0,0,0,0.06)] flex flex-col justify-between overflow-hidden">
               {/* Quote Mark Watermark */}

@@ -6,9 +6,11 @@ import Image from "next/image";
 const SESSION_KEY = "noor-preloader-seen";
 
 export function SitePreloader() {
+  console.log("RENDER SitePreloader");
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    console.log("MOUNT SitePreloader useEffect");
     const root = rootRef.current;
     if (!root) return;
 

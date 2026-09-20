@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 interface ImpactItem {
   badge: string;
@@ -13,32 +13,44 @@ interface ImpactItem {
   reverse?: boolean;
 }
 
-const impactItems: ImpactItem[] = [
-  {
-    badge: "Future ready",
-    title: "Built for a lower impact on your business future",
-    description:
-      "Sustainability is becoming a business standard, not a trend. Align your operations with regulations, market expectations, and environmental responsibility.",
-    buttonText: "Talk to an expert",
-    buttonHref: "/contact",
-    imageSrc: "/photos/impact-future-ready.webp",
-    imageAlt: "Green hillside landscape with clean energy wind turbines",
-    reverse: false,
-  },
-  {
-    badge: "Cost efficiency",
-    title: "Reduce waste, lower hidden operational and energy costs",
-    description:
-      "Energy loss, emissions, and resource inefficiencies create real financial impact. Optimising systems helps cut costs while improving performance and stability.",
-    buttonText: "Talk to an expert",
-    buttonHref: "/contact",
-    imageSrc: "/photos/impact-cost-efficiency.webp",
-    imageAlt: "Solar photovoltaic panels installed across a green field",
-    reverse: true,
-  },
-];
+interface SustainabilityImpactProps {
+  locale?: string;
+}
 
-export function SustainabilityImpact() {
+export function SustainabilityImpact({ locale }: SustainabilityImpactProps = {}) {
+  const isBn = locale === "bn";
+
+  const impactItems: ImpactItem[] = [
+    {
+      badge: isBn ? "ভবিষ্যতের জন্য প্রস্তুত" : "Future ready",
+      title: isBn
+        ? "আপনার ব্যবসার দীর্ঘমেয়াদী সমৃদ্ধির উপযোগী"
+        : "Built for a lower impact on your business future",
+      description: isBn
+        ? "টেকসই নবায়নযোগ্য জ্বালানি এখন ব্যবসায়িক মানদণ্ড। আপনার বাণিজ্যিক পরিচালন ক্ষমতাকে সরকারি নীতিমালা এবং পরিবেশগত দায়িত্বের সাথে সামঞ্জস্যপূর্ণ করুন।"
+        : "Sustainability is becoming a business standard, not a trend. Align your operations with regulations, market expectations, and environmental responsibility.",
+      buttonText: isBn ? "বিশেষজ্ঞের সাথে কথা বলুন" : "Talk to an expert",
+      buttonHref: "/contact",
+      imageSrc: "/photos/impact-future-ready.webp",
+      imageAlt: isBn ? "বায়ুকল সহ পরিবেশবান্ধব সবুজ পাহাড়" : "Green hillside landscape with clean energy wind turbines",
+      reverse: false,
+    },
+    {
+      badge: isBn ? "ব্যয় সাশ্রয়ী" : "Cost efficiency",
+      title: isBn
+        ? "বিদ্যুৎ অপচয় কমান, অপারেশনাল ও এনার্জি খরচ সাশ্রয় করুন"
+        : "Reduce waste, lower hidden operational and energy costs",
+      description: isBn
+        ? "বিদ্যুৎ অপচয় এবং জ্বালানি ঘাটতি ব্যবসায়িক মুনাফায় প্রভাব ফেলে। আধুনিক সোলার সিস্টেম বিদ্যুৎ খরচ উল্লেখযোগ্যভাবে কমিয়ে উৎপাদনের স্থিতিশীলতা নিশ্চিত করে।"
+        : "Energy loss, emissions, and resource inefficiencies create real financial impact. Optimising systems helps cut costs while improving performance and stability.",
+      buttonText: isBn ? "পরামর্শ নিন" : "Talk to an expert",
+      buttonHref: "/contact",
+      imageSrc: "/photos/impact-cost-efficiency.webp",
+      imageAlt: isBn ? "সবুজ মাঠে সোলার ফটোভোলটাইক প্যানেল ইনস্টলেশন" : "Solar photovoltaic panels installed across a green field",
+      reverse: true,
+    },
+  ];
+
   return (
     <section className="w-full bg-white py-20 lg:py-32 border-b border-[#E5E7EB]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 lg:space-y-36">

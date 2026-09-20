@@ -22,12 +22,16 @@ export async function submitQuoteRequest(
     const forwarded = headerList.get("x-forwarded-for");
     const ip = forwarded ? forwarded.split(",")[0].trim() : "127.0.0.1";
 
+    const isBn = formData.get("locale") === "bn";
+
     // Rate limit per IP
     const rateCheck = checkRateLimit(`quote:${ip}`, 5, 10 * 60 * 1000);
     if (!rateCheck.success) {
       return {
         success: false,
-        error: "Too many quote requests. Please wait a few minutes or contact us directly via WhatsApp/Phone.",
+        error: isBn
+          ? "অতিরিক্ত অনুরোধ পাঠানো হয়েছে। অনুগ্রহ করে কিছুক্ষণ পর আবার চেষ্টা করুন অথবা সরাসরি ফোন বা হোয়াটসঅ্যাপে যোগাযোগ করুন।"
+          : "Too many quote requests. Please wait a few minutes or contact us directly via WhatsApp/Phone.",
       };
     }
 
@@ -43,14 +47,22 @@ export async function submitQuoteRequest(
       // Fake success for spam bots
       return {
         success: true,
-        message: "Your inquiry has been received. Our sales engineer will reach out shortly.",
+        message: isBn
+          ? "আপনার কোটেশন রিকোয়েস্ট জমা হয়েছে! আমাদের টিম দ্রুত যোগাযোগ করবে।"
+          : "Your inquiry has been received. Our sales engineer will reach out shortly.",
       };
     }
 
     const validation = quoteRequestSchema.safeParse(rawData);
     if (!validation.success) {
       const fieldErrors = validation.error.flatten().fieldErrors;
-      const firstError = Object.values(fieldErrors)[0]?.[0] || "Invalid form submission.";
+      let firstError = Object.values(fieldErrors)[0]?.[0] || (isBn ? "ফর্ম তথ্য সঠিক নয়।" : "Invalid form submission.");
+      if (isBn) {
+        if (firstError.includes("at least 2")) firstError = "নাম কমপক্ষে ২ অক্ষরের হতে হবে।";
+        else if (firstError.includes("Phone number is required")) firstError = "ফোন নম্বর দেওয়া আবশ্যক।";
+        else if (firstError.includes("valid phone")) firstError = "অনুগ্রহ করে একটি সঠিক ফোন বা মোবাইল নম্বর দিন।";
+        else if (firstError.includes("valid email")) firstError = "অনুগ্রহ করে সঠিক ইমেইল ঠিকানা দিন।";
+      }
       return {
         success: false,
         error: firstError,
@@ -80,13 +92,18 @@ export async function submitQuoteRequest(
 
     return {
       success: true,
-      message: "Quote request received! Our engineering team will contact you promptly with pricing and availability.",
+      message: isBn
+        ? "আপনার কোটেশন রিকোয়েস্ট জমা হয়েছে! আমাদের টিম দ্রুত পণ্য প্রাপ্যতা ও পাইকারি দর নিয়ে যোগাযোগ করবে।"
+        : "Quote request received! Our engineering team will contact you promptly with pricing and availability.",
     };
   } catch (err: unknown) {
     console.error("Quote submission error:", err);
+    const isBn = formData.get("locale") === "bn";
     return {
       success: false,
-      error: "An unexpected error occurred while submitting your request. Please call or WhatsApp us directly.",
+      error: isBn
+        ? "অনুরোধ পাঠাতে সমস্যা হয়েছে। অনুগ্রহ করে সরাসরি আমাদের ফোন অথবা হোয়াটসঅ্যাপে যোগাযোগ করুন।"
+        : "An unexpected error occurred while submitting your request. Please call or WhatsApp us directly.",
     };
   }
 }

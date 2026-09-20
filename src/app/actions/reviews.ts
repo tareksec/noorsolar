@@ -36,11 +36,13 @@ export async function submitPublicReviewAction(
   formData: FormData
 ): Promise<ReviewActionResult> {
   try {
+    const isBn = formData.get("locale") === "bn";
+
     const publicEnabled = await isPublicReviewsEnabled();
     if (!publicEnabled) {
       return {
         success: false,
-        error: "Public review submission is currently disabled.",
+        error: isBn ? "বর্তমানে রিভিউ গ্রহণ সাময়িকভাবে বন্ধ রয়েছে।" : "Public review submission is currently disabled.",
       };
     }
 
@@ -53,7 +55,9 @@ export async function submitPublicReviewAction(
     if (!rateCheck.success) {
       return {
         success: false,
-        error: "Too many submissions. Please wait a few minutes before submitting another review.",
+        error: isBn
+          ? "অতিরিক্ত অনুরোধ পাঠানো হয়েছে। অনুগ্রহ করে কিছুক্ষণ অপেক্ষা করুন।"
+          : "Too many submissions. Please wait a few minutes before submitting another review.",
       };
     }
 
@@ -63,7 +67,9 @@ export async function submitPublicReviewAction(
       // Return fake success for bot
       return {
         success: true,
-        message: "Thank you for your review! It has been submitted for moderation.",
+        message: isBn
+          ? "ধন্যবাদ! আপনার রিভিউ জমা হয়েছে। যাচাইয়ের পর এটি প্রদর্শিত হবে।"
+          : "Thank you for your review! It has been submitted for moderation.",
       };
     }
 
@@ -78,9 +84,16 @@ export async function submitPublicReviewAction(
     });
 
     if (!parsed.success) {
+      let err = parsed.error.issues[0]?.message || "Invalid review data.";
+      if (isBn) {
+        if (err.includes("at least 2")) err = "নাম কমপক্ষে ২ অক্ষরের হতে হবে।";
+        else if (err.includes("at least 10")) err = "রিভিউ কমপক্ষে ১০ অক্ষরের হতে হবে।";
+        else if (err.includes("HTML")) err = "রিভিউতে HTML ট্যাগ ব্যবহার করা যাবে না।";
+        else err = "রিভিউ তথ্য সঠিক নয়। অনুগ্রহ করে আবার পরীক্ষা করুন।";
+      }
       return {
         success: false,
-        error: parsed.error.issues[0]?.message || "Invalid review data.",
+        error: err,
       };
     }
 
@@ -90,7 +103,7 @@ export async function submitPublicReviewAction(
       select: { id: true, slug: true },
     });
     if (!product) {
-      return { success: false, error: "Product not found." };
+      return { success: false, error: isBn ? "পণ্যটি খুঁজে পাওয়া যায়নি।" : "Product not found." };
     }
 
     await db.productReview.create({

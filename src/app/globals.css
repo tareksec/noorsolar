@@ -31,6 +31,11 @@ body {
   overflow-x: hidden;
 }
 
+html[lang="bn"] body,
+html[lang="bn"] {
+  font-family: var(--font-bengali), var(--font-sans);
+}
+
 /* Glassmorphic Utilities from DESIGN.md */
 .glass-panel {
   background: rgba(255, 255, 255, 0.45);

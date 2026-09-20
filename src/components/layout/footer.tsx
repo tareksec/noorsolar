@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import {
   MapPin,
@@ -15,6 +15,7 @@ import { LanguageSwitcher } from "@/components/ui/language-switcher";
 interface FooterProps {
   settings: SiteConfig;
   showBlog?: boolean;
+  locale?: string;
 }
 
 function FacebookIcon({ className }: { className?: string }) {
@@ -49,8 +50,9 @@ function TwitterIcon({ className }: { className?: string }) {
   );
 }
 
-export function Footer({ settings, showBlog = false }: FooterProps) {
+export function Footer({ settings, showBlog = false, locale }: FooterProps) {
   const currentYear = new Date().getFullYear();
+  const isBn = locale === "bn";
 
   const phoneRaw = settings.phone || "+8801700000000";
   const phoneDisplay = settings.phoneDisplay || "+880 1700-000000";
@@ -83,7 +85,9 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                 </Link>
               </div>
               <p className="text-xs sm:text-[13px] text-[#5C6457] leading-relaxed mb-6 max-w-sm">
-                Direct container-scale importer and bulk B2B wholesale distributor of Tier-1 solar panels, LiFePO4 batteries, and hybrid inverters across Bangladesh.
+                {isBn
+                  ? "সরাসরি কন্টেইনার স্কেল আমদানিকারক এবং বাংলাদেশে টায়ার-১ সোলার প্যানেল, LiFePO4 ব্যাটারি ও হাইব্রিড ইনভার্টারের পাইকারি B2B সরবরাহকারী।"
+                  : "Direct container-scale importer and bulk B2B wholesale distributor of Tier-1 solar panels, LiFePO4 batteries, and hybrid inverters across Bangladesh."}
               </p>
 
               {/* Contact Information List with Icons */}
@@ -121,7 +125,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                     rel="noopener noreferrer"
                     className="font-medium text-[#111311] hover:text-[#128C7E] transition-colors"
                   >
-                    {whatsappDisplay} <span className="text-[11px] font-mono text-[#62705C]">(WhatsApp Desk)</span>
+                    {whatsappDisplay} <span className="text-[11px] font-mono text-[#62705C]">{isBn ? "(হোয়াটসঅ্যাপ ডেস্ক)" : "(WhatsApp Desk)"}</span>
                   </a>
                 </div>
 
@@ -153,7 +157,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
           {/* Col 2: Products & Catalog (2.5 cols) */}
           <div className="lg:col-span-3">
             <h2 className="font-bold text-sm text-[#111311] tracking-tight mb-4">
-              Equipment Catalog
+              {isBn ? "সরঞ্জাম ক্যাটালগ" : "Equipment Catalog"}
             </h2>
             <ul className="space-y-2.5 text-xs sm:text-sm text-[#4F574A]">
               <li>
@@ -161,7 +165,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                   href="/products?category=solar-panels"
                   className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all"
                 >
-                  <span>N-Type TOPCon Panels (585W–620W)</span>
+                  <span>{isBn ? "এন-টাইপ TOPCon প্যানেল (585W–620W)" : "N-Type TOPCon Panels (585W–620W)"}</span>
                 </Link>
               </li>
               <li>
@@ -169,7 +173,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                   href="/products?category=lithium-batteries"
                   className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all"
                 >
-                  <span>LiFePO4 Storage Banks (48V / 51.2V)</span>
+                  <span>{isBn ? "LiFePO4 স্টোরেজ ব্যাংক (48V / 51.2V)" : "LiFePO4 Storage Banks (48V / 51.2V)"}</span>
                 </Link>
               </li>
               <li>
@@ -177,7 +181,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                   href="/products?category=solar-inverters"
                   className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all"
                 >
-                  <span>Hybrid & Three-Phase Inverters</span>
+                  <span>{isBn ? "হাইব্রিড ও থ্রি-ফেজ ইনভার্টার" : "Hybrid & Three-Phase Inverters"}</span>
                 </Link>
               </li>
               <li>
@@ -185,7 +189,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                   href="/products"
                   className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all font-semibold text-[#111311]"
                 >
-                  <span>Browse Full Wholesale Inventory &rarr;</span>
+                  <span>{isBn ? "সম্পূর্ণ পাইকারি ইনভেন্টরি দেখুন →" : "Browse Full Wholesale Inventory →"}</span>
                 </Link>
               </li>
               <li>
@@ -193,7 +197,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                   href="/contact"
                   className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all"
                 >
-                  <span>Request Container Procurement Quote</span>
+                  <span>{isBn ? "কন্টেইনার ক্রয়ের কোটেশন চান" : "Request Container Procurement Quote"}</span>
                 </Link>
               </li>
             </ul>
@@ -202,44 +206,44 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
           {/* Col 3: Company & Information (2.5 cols) */}
           <div className="lg:col-span-2">
             <h2 className="font-bold text-sm text-[#111311] tracking-tight mb-4">
-              Company
+              {isBn ? "কোম্পানি" : "Company"}
             </h2>
             <ul className="space-y-2.5 text-xs sm:text-sm text-[#4F574A]">
               <li>
                 <Link href="/about" className="hover:text-[#111311] transition-colors">
-                  About Noor Solar
+                  {isBn ? "নূর সোলার পরিচিতি" : "About Noor Solar"}
                 </Link>
               </li>
               <li>
                 <Link href="/#process" className="hover:text-[#111311] transition-colors">
-                  Ordering Process
+                  {isBn ? "অর্ডার প্রক্রিয়া" : "Ordering Process"}
                 </Link>
               </li>
               <li>
                 <Link href="/contact" className="hover:text-[#111311] transition-colors">
-                  Contact Sales Desk
+                  {isBn ? "সেলস ডেস্কে যোগাযোগ" : "Contact Sales Desk"}
                 </Link>
               </li>
               <li>
                 <Link href="/#faq" className="hover:text-[#111311] transition-colors">
-                  FAQ & Support
+                  {isBn ? "প্রশ্নোত্তর ও সহায়তা" : "FAQ & Support"}
                 </Link>
               </li>
               <li>
                 <Link href="/certifications" className="hover:text-[#111311] transition-colors font-medium">
-                  Certifications & Standards
+                  {isBn ? "সার্টিফিকেশন ও মানদণ্ড" : "Certifications & Standards"}
                 </Link>
               </li>
               {showBlog && (
                 <li>
                   <Link href="/blog" className="hover:text-[#111311] transition-colors font-medium">
-                    Technical Blog
+                    {isBn ? "কারিগরি ব্লগ" : "Technical Blog"}
                   </Link>
                 </li>
               )}
               <li>
                 <Link href="/admin/login" className="hover:text-[#111311] transition-colors text-[11px] font-mono text-[#4A5445]">
-                  B2B Staff Portal
+                  {isBn ? "স্টাফ পোর্টাল" : "B2B Staff Portal"}
                 </Link>
               </li>
             </ul>
@@ -249,7 +253,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
           <div className="lg:col-span-3 flex flex-col justify-between">
             <div>
               <h2 className="font-bold text-sm text-[#111311] tracking-tight mb-4">
-                Affiliation & Compliance
+                {isBn ? "স্বীকৃতি ও কমপ্লায়েন্স" : "Affiliation & Compliance"}
               </h2>
 
               {/* BSREA Membership Verified Badge Card */}
@@ -266,7 +270,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                   </div>
                   <div>
                     <span className="text-[11px] font-bold text-[#111311] block leading-tight">
-                      BSREA Registered Member
+                      {isBn ? "BSREA নিবন্ধিত সদস্য" : "BSREA Registered Member"}
                     </span>
                     <span className="text-[10px] font-mono text-[#6A7465]">
                       No. 20260915GEN113
@@ -279,21 +283,21 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#111311] hover:text-[#426B1F] transition-colors underline underline-offset-2"
                 >
-                  <span>View Official Certificate</span>
+                  <span>{isBn ? "অফিসিয়াল সনদ দেখুন" : "View Official Certificate"}</span>
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
 
               {/* Social Channels with Modern Icon Buttons */}
               <h3 className="text-xs font-mono font-semibold text-[#111311] mb-2.5">
-                Connect With Us
+                {isBn ? "যুক্ত থাকুন" : "Connect With Us"}
               </h3>
               <div className="flex items-center gap-2">
                 <a
                   href={settings.socials?.facebook || "https://facebook.com"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Follow Noor Solar on Facebook"
+                  aria-label={isBn ? "ফেসবুকে নূর সোলার অনুসরণ করুন" : "Follow Noor Solar on Facebook"}
                   className="w-8 h-8 rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-110 shadow-2xs"
                 >
                   <FacebookIcon className="w-4 h-4" />
@@ -303,7 +307,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                   href={settings.socials?.linkedin || "https://linkedin.com"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Connect with Noor Solar on LinkedIn"
+                  aria-label={isBn ? "লিংকডইনে নূর সোলারের সাথে যুক্ত হন" : "Connect with Noor Solar on LinkedIn"}
                   className="w-8 h-8 rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-110 shadow-2xs"
                 >
                   <LinkedinIcon className="w-4 h-4" />
@@ -313,7 +317,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                   href={`https://wa.me/${whatsappNum}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Chat with Noor Solar on WhatsApp"
+                  aria-label={isBn ? "হোয়াটসঅ্যাপে নূর সোলারের সাথে চ্যাট করুন" : "Chat with Noor Solar on WhatsApp"}
                   className="w-8 h-8 rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-110 shadow-2xs"
                 >
                   <MessageCircle className="w-4 h-4" />
@@ -323,7 +327,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                   href="https://youtube.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Watch Noor Solar on YouTube"
+                  aria-label={isBn ? "ইউটিউবে নূর সোলারের ভিডিও দেখুন" : "Watch Noor Solar on YouTube"}
                   className="w-8 h-8 rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-110 shadow-2xs"
                 >
                   <YoutubeIcon className="w-4 h-4" />
@@ -333,7 +337,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
                   href="https://twitter.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Follow Noor Solar on X"
+                  aria-label={isBn ? "এক্সে নূর সোলার অনুসরণ করুন" : "Follow Noor Solar on X"}
                   className="w-8 h-8 rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-110 shadow-2xs"
                 >
                   <TwitterIcon className="w-4 h-4" />
@@ -354,19 +358,19 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
         {/* Sub-Footer Copyright & Disclaimer */}
         <div className="py-4 border-t border-[#DCE2D8] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-[#6A7365]">
           <div className="flex items-center gap-4 flex-wrap">
-            <span>&copy; {currentYear} Noor Solar Energy. All rights reserved.</span>
-            <LanguageSwitcher idPrefix="ftr" />
+            <span>&copy; {currentYear} {isBn ? "নূর সোলার এনার্জি। সর্বস্বত্ব সংরক্ষিত।" : "Noor Solar Energy. All rights reserved."}</span>
+            <LanguageSwitcher idPrefix="ftr" currentLocale={locale} />
           </div>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-[#111311] transition-colors">
-              Privacy Policy
+              {isBn ? "প্রাইভেসি পলিসি" : "Privacy Policy"}
             </Link>
             <span>&bull;</span>
             <Link href="/contact" className="hover:text-[#111311] transition-colors">
-              Wholesale Terms
+              {isBn ? "বাণিজ্যিক শর্তাবলী" : "Wholesale Terms"}
             </Link>
             <span>&bull;</span>
-            <span>Made for B2B Bangladesh</span>
+            <span>{isBn ? "বাংলাদেশের B2B শিল্পের জন্য নিবেদিত" : "Made for B2B Bangladesh"}</span>
           </div>
         </div>
 

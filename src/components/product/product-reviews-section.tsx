@@ -3,6 +3,7 @@
 import React, { useState, useActionState } from "react";
 import { Star, MessageSquare, CheckCircle2, AlertCircle, Send, ChevronDown } from "lucide-react";
 import { submitPublicReviewAction, ReviewActionResult } from "@/app/actions/reviews";
+import { useLocale } from "next-intl";
 
 interface ReviewItem {
   id: string;
@@ -36,6 +37,15 @@ export function ProductReviewsSection({
   averageRating,
   publicSubmissionEnabled,
 }: ProductReviewsSectionProps) {
+  let locale = "en";
+  try {
+    const l = useLocale();
+    if (l) locale = l;
+  } catch {
+    // fallback
+  }
+  const isBn = locale === "bn";
+
   const [showForm, setShowForm] = useState(false);
   const [selectedRating, setSelectedRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
@@ -61,17 +71,17 @@ export function ProductReviewsSection({
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="px-3 py-1 rounded-full bg-[#EDEDED] text-[11px] font-mono text-[#111311]">
-                Customer Feedback
+                {isBn ? "গ্রাহকদের মতামত" : "Customer Feedback"}
               </span>
               {totalReviews > 0 && (
                 <span className="text-xs font-mono text-[#5C605C]">
-                  {totalReviews} Verified {totalReviews === 1 ? "Review" : "Reviews"}
+                  {isBn ? `${totalReviews}টি যাচাইকৃত রিভিউ` : `${totalReviews} Verified ${totalReviews === 1 ? "Review" : "Reviews"}`}
                 </span>
               )}
             </div>
 
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111311]">
-              Performance & Client Ratings
+              {isBn ? "কর্মক্ষমতা ও গ্রাহক রেটিং" : "Performance & Client Ratings"}
             </h2>
 
             {totalReviews > 0 ? (
@@ -91,11 +101,13 @@ export function ProductReviewsSection({
                 <span className="text-lg font-bold text-[#111311] font-mono">
                   {averageRating.toFixed(1)}
                 </span>
-                <span className="text-xs text-[#5C605C] font-mono">out of 5.0</span>
+                <span className="text-xs text-[#5C605C] font-mono">{isBn ? "৫.০ এর মধ্যে" : "out of 5.0"}</span>
               </div>
             ) : (
               <p className="text-xs sm:text-sm text-[#5C605C] mt-2">
-                No customer reviews yet. Be the first partner or client to submit feedback.
+                {isBn
+                  ? "এখনও কোনো গ্রাহক রিভিউ নেই। আপনার অভিজ্ঞতা শেয়ার করতে প্রথম রিভিউ দিন।"
+                  : "No customer reviews yet. Be the first partner or client to submit feedback."}
               </p>
             )}
           </div>
@@ -108,7 +120,7 @@ export function ProductReviewsSection({
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-semibold text-xs tracking-tight transition-all self-start sm:self-auto shadow-sm"
             >
               <MessageSquare className="w-4 h-4" />
-              <span>{showForm ? "Cancel Review" : "Write a Review"}</span>
+              <span>{showForm ? (isBn ? "বাতিল করুন" : "Cancel Review") : (isBn ? "রিভিউ লিখুন" : "Write a Review")}</span>
               <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showForm ? "rotate-180" : ""}`} />
             </button>
           )}
@@ -119,8 +131,8 @@ export function ProductReviewsSection({
           <div className="my-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-start gap-3 text-xs text-emerald-900">
             <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600 mt-0.5" />
             <div>
-              <p className="font-bold">Thank you for your feedback!</p>
-              <p>{state.message || "Your review has been submitted for moderation and will appear once verified."}</p>
+              <p className="font-bold">{isBn ? "আপনার মতামতের জন্য ধন্যবাদ!" : "Thank you for your feedback!"}</p>
+              <p>{state.message || (isBn ? "আপনার রিভিউ জমা হয়েছে। যাচাইয়ের পর এটি প্রদর্শিত হবে।" : "Your review has been submitted for moderation and will appear once verified.")}</p>
             </div>
           </div>
         )}
@@ -129,7 +141,7 @@ export function ProductReviewsSection({
         {publicSubmissionEnabled && isFormVisible && (
           <form action={formAction} className="my-8 p-6 sm:p-8 rounded-3xl bg-[#EDEDED]/60 border border-[#DDE1DC] space-y-4">
             <h3 className="text-base font-bold text-[#111311]">
-              Submit Feedback for {productName}
+              {isBn ? `${productName}-এর জন্য রিভিউ দিন` : `Submit Feedback for ${productName}`}
             </h3>
 
             {state.error && (
@@ -140,6 +152,7 @@ export function ProductReviewsSection({
             )}
 
             <input type="hidden" name="productId" value={productId} />
+            <input type="hidden" name="locale" value={locale} />
 
             {/* Honeypot field for bot protection */}
             <div className="hidden" aria-hidden="true">
@@ -156,7 +169,7 @@ export function ProductReviewsSection({
             {/* Star Rating Picker */}
             <div>
               <label className="block text-xs font-mono font-medium text-[#111311] mb-2">
-                Your Overall Rating *
+                {isBn ? "আপনার সামগ্রিক রেটিং *" : "Your Overall Rating *"}
               </label>
               <input type="hidden" name="rating" value={selectedRating} />
               <div className="flex items-center gap-1.5">
@@ -179,7 +192,7 @@ export function ProductReviewsSection({
                   </button>
                 ))}
                 <span className="text-xs font-mono text-[#5C605C] ml-2">
-                  {selectedRating} of 5 Stars
+                  {isBn ? `৫ তারকার মধ্যে ${selectedRating}` : `${selectedRating} of 5 Stars`}
                 </span>
               </div>
             </div>
@@ -187,37 +200,37 @@ export function ProductReviewsSection({
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                  Your Full Name *
+                  {isBn ? "আপনার পূর্ণ নাম *" : "Your Full Name *"}
                 </label>
                 <input
                   type="text"
                   name="authorName"
                   required
-                  placeholder="e.g. Engr. Tanvir Ahmed"
+                  placeholder={isBn ? "যেমন: প্রকৌশলী তানভীর আহমেদ" : "e.g. Engr. Tanvir Ahmed"}
                   className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                  Role / Designation (Optional)
+                  {isBn ? "পদবী / ভূমিকা (ঐচ্ছিক)" : "Role / Designation (Optional)"}
                 </label>
                 <input
                   type="text"
                   name="authorRole"
-                  placeholder="Project Director / EPC Engineer"
+                  placeholder={isBn ? "প্রকল্প পরিচালক / লিড ইঞ্জিনিয়ার" : "Project Director / EPC Engineer"}
                   className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                  Company / Organization (Optional)
+                  {isBn ? "প্রতিষ্ঠান / সংস্থা (ঐচ্ছিক)" : "Company / Organization (Optional)"}
                 </label>
                 <input
                   type="text"
                   name="company"
-                  placeholder="Solar EPC Bangladesh Ltd."
+                  placeholder={isBn ? "সোলার ইপিসি বাংলাদেশ লি." : "Solar EPC Bangladesh Ltd."}
                   className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
                 />
               </div>
@@ -225,19 +238,19 @@ export function ProductReviewsSection({
 
             <div>
               <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                Headline / Summary (Optional)
+                {isBn ? "রিভিউ শিরোনাম (ঐচ্ছিক)" : "Headline / Summary (Optional)"}
               </label>
               <input
                 type="text"
                 name="title"
-                placeholder="High generation yield and sturdy module frames"
+                placeholder={isBn ? "উন্নত বিদ্যুৎ ফলন ও টেকসই মডিউল ফ্রেম" : "High generation yield and sturdy module frames"}
                 className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
               />
             </div>
 
             <div>
               <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                Detailed Review *
+                {isBn ? "বিস্তারিত রিভিউ *" : "Detailed Review *"}
               </label>
               <textarea
                 name="body"
@@ -245,14 +258,20 @@ export function ProductReviewsSection({
                 rows={4}
                 minLength={10}
                 maxLength={2000}
-                placeholder="Share your experience with product efficiency, build quality, and installation performance..."
+                placeholder={
+                  isBn
+                    ? "পণ্যের কর্মক্ষমতা, বিল্ড কোয়ালিটি ও ইনস্টলেশনের অভিজ্ঞতা শেয়ার করুন..."
+                    : "Share your experience with product efficiency, build quality, and installation performance..."
+                }
                 className="w-full px-4 py-3 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
               />
             </div>
 
             <div className="flex items-center justify-between pt-2">
               <span className="text-[11px] text-[#5C605C]">
-                Submissions are screened by engineers before publishing. Only genuine project feedback is accepted.
+                {isBn
+                  ? "সব রিভিউ প্রকাশের আগে প্রকৌশলী দ্বারা যাচাই করা হয়। কেবল আসল প্রকল্পের মতামত গ্রহণযোগ্য।"
+                  : "Submissions are screened by engineers before publishing. Only genuine project feedback is accepted."}
               </span>
               <button
                 type="submit"
@@ -261,7 +280,7 @@ export function ProductReviewsSection({
                 className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-semibold text-xs tracking-tight transition-all disabled:opacity-60 shadow-sm shrink-0"
               >
                 <Send className="w-3.5 h-3.5" />
-                <span>{isPending ? "Submitting..." : "Submit Review"}</span>
+                <span>{isPending ? (isBn ? "জমা হচ্ছে..." : "Submitting...") : (isBn ? "রিভিউ জমা দিন" : "Submit Review")}</span>
               </button>
             </div>
           </form>
@@ -285,7 +304,7 @@ export function ProductReviewsSection({
                   </div>
 
                   <span className="text-[11px] font-mono text-[#5C605C]">
-                    {new Date(review.createdAt).toLocaleDateString("en-US", {
+                    {new Date(review.createdAt).toLocaleDateString(isBn ? "bn-BD" : "en-US", {
                       year: "numeric",
                       month: "short",
                       day: "numeric",

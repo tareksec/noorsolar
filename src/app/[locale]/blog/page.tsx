@@ -79,6 +79,8 @@ export default async function BlogIndexPage({ params, searchParams }: BlogIndexP
     return `/blog${qs ? `?${qs}` : ""}`;
   }
 
+  const isBn = locale === "bn";
+
   return (
     <div className="pt-24 pb-20 sm:pb-32 bg-[#E4E7E4] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -86,13 +88,15 @@ export default async function BlogIndexPage({ params, searchParams }: BlogIndexP
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3.5 border border-[#D5DDD2] shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-[#CEF23E]" />
-            <span>Technical Knowledge Base</span>
+            <span>{isBn ? "প্রযুক্তিগত জ্ঞানভাণ্ডার" : "Technical Knowledge Base"}</span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#111311]">
-            Engineering & Industry Insights
+            {isBn ? "ইঞ্জিনিয়ারিং ও শিল্প বিশ্লেষণ" : "Engineering & Industry Insights"}
           </h1>
           <p className="mt-4 text-sm sm:text-base text-[#525C4F] max-w-2xl mx-auto leading-relaxed">
-            In-depth guides on industrial solar modules, high-capacity energy storage, inverter sizing, and compliance standards for commercial installations in Bangladesh.
+            {isBn
+              ? "বাংলাদেশের বাণিজ্যিক প্রকল্পের জন্য সোলার প্যানেল, এনার্জি স্টোরেজ, ইনভার্টার সিলেকশন এবং কমপ্লায়েন্সের বিশদ কারিগরি গাইড।"
+              : "In-depth guides on industrial solar modules, high-capacity energy storage, inverter sizing, and compliance standards for commercial installations in Bangladesh."}
           </p>
         </div>
 
@@ -100,15 +104,19 @@ export default async function BlogIndexPage({ params, searchParams }: BlogIndexP
         {posts.length === 0 ? (
           <div className="p-12 text-center rounded-3xl bg-white border border-[#DDE1DC] max-w-md mx-auto">
             <BookOpen className="w-10 h-10 text-[#5C605C] mx-auto mb-3 opacity-60" />
-            <h2 className="text-base font-bold text-[#111311] mb-1">No Articles Found</h2>
+            <h2 className="text-base font-bold text-[#111311] mb-1">
+              {isBn ? "কোনো আর্টিকেল পাওয়া যায়নি" : "No Articles Found"}
+            </h2>
             <p className="text-xs text-[#5C605C] mb-4">
-              Check back soon for new technical publications and procurement guides.
+              {isBn
+                ? "নতুন প্রযুক্তিগত প্রকাশনা ও ক্রয়ের গাইডের জন্য শীঘ্রই আবার দেখুন।"
+                : "Check back soon for new technical publications and procurement guides."}
             </p>
             <Link
               href="/"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#111311] text-[#CEF23E] text-xs font-semibold"
             >
-              <span>Back to Home</span>
+              <span>{isBn ? "হোমে ফিরুন" : "Back to Home"}</span>
             </Link>
           </div>
         ) : (
@@ -157,7 +165,7 @@ export default async function BlogIndexPage({ params, searchParams }: BlogIndexP
                                 year: "numeric",
                               }
                             )
-                          : "Recent"}
+                          : (isBn ? "সাম্প্রতিক" : "Recent")}
                       </span>
                       <span>&bull;</span>
                       <span className="flex items-center gap-1">
@@ -179,14 +187,16 @@ export default async function BlogIndexPage({ params, searchParams }: BlogIndexP
 
                   <div className="pt-4 border-t border-[#EDEDED] flex items-center justify-between">
                     <span className="text-[11px] font-mono text-[#5C605C]">
-                      By {post.authorName || "Engineering Team"}
+                      {isBn
+                        ? `লেখক: ${post.authorName || "ইঞ্জিনিয়ারিং টিম"}`
+                        : `By ${post.authorName || "Engineering Team"}`}
                     </span>
 
                     <Link
                       href={`/blog/${post.slug}`}
                       className="inline-flex items-center gap-1 text-xs font-mono font-bold text-[#111311] group-hover:translate-x-0.5 transition-transform"
                     >
-                      <span>Read Article</span>
+                      <span>{isBn ? "সম্পূর্ণ পড়ুন" : "Read Article"}</span>
                       <ArrowRight className="w-3.5 h-3.5 text-[#111311]" />
                     </Link>
                   </div>
@@ -208,11 +218,13 @@ export default async function BlogIndexPage({ params, searchParams }: BlogIndexP
               }`}
             >
               <ChevronLeft className="w-3.5 h-3.5" />
-              <span>Previous</span>
+              <span>{isBn ? "পূর্ববর্তী" : "Previous"}</span>
             </Link>
 
             <span className="px-3 py-2 text-[#5C605C]">
-              Page {currentPage} of {totalPages} ({totalCount} articles)
+              {isBn
+                ? `পৃষ্ঠা ${currentPage} / ${totalPages} (মোট ${totalCount}টি আর্টিকেল)`
+                : `Page ${currentPage} of ${totalPages} (${totalCount} articles)`}
             </span>
 
             <Link
@@ -223,7 +235,7 @@ export default async function BlogIndexPage({ params, searchParams }: BlogIndexP
                   : "hover:bg-[#EDEDED] transition-colors"
               }`}
             >
-              <span>Next</span>
+              <span>{isBn ? "পরবর্তী" : "Next"}</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>

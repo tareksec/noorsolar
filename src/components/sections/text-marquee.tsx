@@ -2,8 +2,9 @@
 
 import React, { useEffect, useRef } from "react";
 import { prefersReducedMotion } from "@/lib/motion";
+import { usePathname } from "next/navigation";
 
-const MARQUEE_ITEMS = [
+const MARQUEE_ITEMS_EN = [
   "TIER 1 SOLAR PANELS",
   "LITHIUM LiFePO4 STORAGE",
   "HYBRID & ON-GRID INVERTERS",
@@ -13,7 +14,24 @@ const MARQUEE_ITEMS = [
   "DIRECT IMPORTER PRICING",
 ];
 
-export function TextMarquee() {
+const MARQUEE_ITEMS_BN = [
+  "টায়ার-১ সোলার প্যানেল",
+  "লিথিয়াম LiFePO4 স্টোরেজ",
+  "হাইব্রিড ও অন-গ্রিড ইনভার্টার",
+  "সরাসরি কন্টেইনার সরবরাহ",
+  "বাণিজ্যিক পাইকারি রেট",
+  "ইঞ্জিনিয়ারিং গ্রেড কোয়ালিটি",
+  "সরাসরি আমদানিকারক মূল্য",
+];
+
+interface TextMarqueeProps {
+  locale?: string;
+}
+
+export function TextMarquee({ locale }: TextMarqueeProps = {}) {
+  const pathname = usePathname() || "";
+  const isBn = locale === "bn" || pathname.startsWith("/bn/") || pathname === "/bn";
+  const items = isBn ? MARQUEE_ITEMS_BN : MARQUEE_ITEMS_EN;
   const marqueeRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -73,7 +91,7 @@ export function TextMarquee() {
         {/* Render twice for continuous loop */}
         {[...Array(2)].map((_, loopIdx) => (
           <div key={loopIdx} className="flex items-center shrink-0">
-            {MARQUEE_ITEMS.map((item, idx) => (
+            {items.map((item, idx) => (
               <div key={idx} className="flex items-center">
                 <span className="text-xs sm:text-sm font-mono font-bold tracking-widest text-white/95 px-6 sm:px-8 uppercase">
                   {item}

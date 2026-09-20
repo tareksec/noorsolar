@@ -5,8 +5,7 @@ export function calculateReadingTime(text: string, locale?: string): string {
   if (!text) return locale === "bn" ? "1 মিনিট পাঠ" : "1 min read";
   const words = text.trim().split(/\s+/).length;
   const minutes = Math.ceil(words / 200);
-  // Numbers stay in Western digits (0-9) everywhere per prompt instructions
-  return locale === "bn" ? `${minutes} min read` : `${minutes} min read`;
+  return locale === "bn" ? `${minutes} মিনিট পাঠ` : `${minutes} min read`;
 }
 
 export async function hasVisibleBlogPosts(): Promise<boolean> {

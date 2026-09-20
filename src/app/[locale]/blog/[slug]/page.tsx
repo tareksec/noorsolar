@@ -88,6 +88,8 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
     },
   };
 
+  const isBn = locale === "bn";
+
   return (
     <div className="pt-24 pb-20 sm:pb-32 bg-[#E4E7E4] min-h-screen">
       {/* Schema.org Article structured data */}
@@ -104,7 +106,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
             className="inline-flex items-center gap-2 text-xs font-mono text-[#5C605C] hover:text-[#111311] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Back to all articles</span>
+            <span>{isBn ? "সকল আর্টিকেলে ফিরুন" : "Back to all articles"}</span>
           </Link>
         </div>
 
@@ -132,7 +134,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
             <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-[#5C605C] pb-6 border-b border-[#EDEDED]">
               <span className="flex items-center gap-1.5 text-[#111311] font-medium">
                 <User className="w-3.5 h-3.5 text-[#5C605C]" />
-                {post.authorName || "Noor Solar Engineering Team"}
+                {post.authorName || (isBn ? "নূর সোলার ইঞ্জিনিয়ারিং টিম" : "Noor Solar Engineering Team")}
               </span>
               <span>&bull;</span>
               <span className="flex items-center gap-1.5">
@@ -146,7 +148,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
                         year: "numeric",
                       }
                     )
-                  : "Recently Published"}
+                  : (isBn ? "সম্প্রতি প্রকাশিত" : "Recently Published")}
               </span>
               <span>&bull;</span>
               <span className="flex items-center gap-1.5">
@@ -186,13 +188,15 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
           <div className="p-8 sm:p-10 rounded-3xl bg-[#111311] text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md mt-12">
             <div>
               <span className="text-[11px] font-mono text-[#CEF23E] uppercase tracking-wider block mb-1">
-                Direct B2B Importer
+                {isBn ? "সরাসরি B2B আমদানিকারক" : "Direct B2B Importer"}
               </span>
               <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white mb-2">
-                Need Commercial Equipment for Your Project?
+                {isBn ? "আপনার প্রকল্পের জন্য বাণিজ্যিক সোলার সরঞ্জাম প্রয়োজন?" : "Need Commercial Equipment for Your Project?"}
               </h2>
               <p className="text-xs sm:text-sm text-white/70 max-w-xl">
-                Get Tier-1 manufacturer direct wholesale pricing, complete compliance documentation, and Dhaka warehouse delivery lead times.
+                {isBn
+                  ? "টায়ার-১ প্রস্তুতকারকদের সরাসরি পাইকারি মূল্য, সম্পূর্ণ কমপ্লায়েন্স নথি এবং ঢাকা গুদাম থেকে দ্রুত ডেলিভারি সুবিধা নিন।"
+                  : "Get Tier-1 manufacturer direct wholesale pricing, complete compliance documentation, and Dhaka warehouse delivery lead times."}
               </p>
             </div>
 
@@ -200,7 +204,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
               href="/contact"
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#CEF23E] hover:bg-[#bce02b] text-[#111311] font-bold text-xs font-mono tracking-tight shrink-0 transition-transform active:scale-95 shadow-sm"
             >
-              <span>Request A Quote</span>
+              <span>{isBn ? "কোটেশন চান" : "Request A Quote"}</span>
               <ArrowUpRight className="w-4 h-4" />
             </Link>
           </div>
@@ -210,7 +214,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
         {related.length > 0 && (
           <div className="mt-16">
             <h2 className="text-xl font-bold text-[#111311] tracking-tight mb-6">
-              Related Technical Articles
+              {isBn ? "সম্পর্কিত কারিগরি আর্টিকেল" : "Related Technical Articles"}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {related.map((rel) => (
@@ -229,7 +233,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
                   </div>
 
                   <div className="pt-3 border-t border-[#EDEDED] flex items-center justify-between text-xs font-mono text-[#111311] mt-3">
-                    <span>Read</span>
+                    <span>{isBn ? "পড়ুন" : "Read"}</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </Link>

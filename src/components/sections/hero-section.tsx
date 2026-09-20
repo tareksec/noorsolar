@@ -15,11 +15,17 @@ interface HeroSectionProps {
   subheadline?: string;
   primaryCta?: string;
   secondaryCta?: string;
+  locale?: string;
 }
 
 export function HeroSection({
+  headline,
+  subheadline,
   primaryCta = "Book Service",
+  locale,
 }: HeroSectionProps) {
+  const isBn = locale === "bn" || (headline ? /[\u0980-\u09FF]/.test(headline) : false);
+
   return (
     <section className="relative w-full px-2.5 sm:px-4 lg:px-6 pb-2.5 sm:pb-4 lg:pb-6 pt-0 bg-white">
       <div className="relative w-full min-h-[calc(100vh-1rem)] sm:min-h-[calc(100vh-1.5rem)] lg:min-h-[calc(100vh-2rem)] flex flex-col justify-between overflow-hidden rounded-2xl sm:rounded-3xl lg:rounded-[36px] border-2 sm:border-[3px] border-white shadow-[0_20px_50px_rgba(0,0,0,0.18)] ring-1 ring-black/5 bg-[#0A0D0A] text-white">
@@ -74,30 +80,48 @@ export function HeroSection({
           {/* Kicker Pill Badge in Brand Volt Lime */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#CEF23E]/30 bg-[#CEF23E]/10 backdrop-blur-md text-[#CEF23E] text-xs sm:text-sm font-medium mb-5 shadow-[0_0_20px_rgba(206,242,62,0.15)]">
             <Sparkles className="w-4 h-4 text-[#CEF23E] shrink-0" />
-            <span>Professional Ac & Solar Services</span>
+            <span>{isBn ? "প্রফেশনাল সোলার ও এনার্জি সলিউশন" : "Professional Ac & Solar Services"}</span>
           </div>
 
           {/* Headline with Brand Volt Lime to Sky Cyan Gradient */}
           <h1 data-motion="hero-headline" className="text-3xl sm:text-5xl lg:text-[3.8rem] xl:text-[4.3rem] font-bold tracking-tight text-white leading-[1.08] mb-5 drop-shadow-sm text-center">
-            <span className="hero-word-inner">Keep Your Home Cool &</span>{" "}
-            <span className="block mt-1">
-              <span className="hero-word-inner">Comfortable</span>{" "}
-              <span className="whitespace-nowrap bg-gradient-to-r from-[#CEF23E] via-[#E4F972] to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(206,242,62,0.25)]">
-                <span className="hero-word-inner">Year-Round</span>
-              </span>
-            </span>
+            {headline ? (
+              <span className="hero-word-inner">{headline}</span>
+            ) : isBn ? (
+              <>
+                <span className="hero-word-inner">পরিচ্ছন্ন ও নির্ভরযোগ্য</span>{" "}
+                <span className="block mt-1">
+                  <span className="hero-word-inner">সোলার এনার্জি</span>{" "}
+                  <span className="whitespace-nowrap bg-gradient-to-r from-[#CEF23E] via-[#E4F972] to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(206,242,62,0.25)]">
+                    <span className="hero-word-inner">সারা বছর</span>
+                  </span>
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="hero-word-inner">Keep Your Home Cool &</span>{" "}
+                <span className="block mt-1">
+                  <span className="hero-word-inner">Comfortable</span>{" "}
+                  <span className="whitespace-nowrap bg-gradient-to-r from-[#CEF23E] via-[#E4F972] to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(206,242,62,0.25)]">
+                    <span className="hero-word-inner">Year-Round</span>
+                  </span>
+                </span>
+              </>
+            )}
           </h1>
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base lg:text-[1.08rem] text-slate-300/90 leading-relaxed max-w-2xl mb-8 font-normal drop-shadow-xs text-center">
-            Expert AC repair, installation, and maintenance services delivered by certified technicians to keep your home cool, efficient, and comfortable all year long.
+            {subheadline || (isBn
+              ? "উচ্চ-দক্ষতার সোলার প্যানেল, লিথিয়াম ব্যাটারি ও ইনভার্টার দিয়ে আপনার বিদ্যুৎ খরচ কমান এবং নিরবচ্ছিন্ন বিদ্যুৎ নিশ্চিত করুন।"
+              : "Expert AC repair, installation, and maintenance services delivered by certified technicians to keep your home cool, efficient, and comfortable all year long.")}
           </p>
 
           {/* Brand Volt Lime Pill CTA Button */}
           <div className="flex items-center justify-center gap-4">
             <MagneticButton>
               <Link
-                href="/contact"
+                href={isBn ? "/bn/contact" : "/contact"}
                 data-motion="button-slide"
                 className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] font-bold text-sm sm:text-base shadow-[0_8px_25px_rgba(206,242,62,0.35)] transition-all hover:scale-[1.03] active:scale-[0.98] w-fit"
               >
@@ -121,7 +145,7 @@ export function HeroSection({
                 <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
-                Same-Day Service
+                {isBn ? "একই দিনে ডেলিভারি" : "Same-Day Service"}
               </span>
             </div>
 
@@ -131,7 +155,7 @@ export function HeroSection({
                 <Headset className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
-                24/7 Support
+                {isBn ? "২৪/৭ সাপোর্ট" : "24/7 Support"}
               </span>
             </div>
 
@@ -141,7 +165,7 @@ export function HeroSection({
                 <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
-                Satisfaction Guaranteed
+                {isBn ? "শতভাগ নিশ্চয়তা" : "Satisfaction Guaranteed"}
               </span>
             </div>
           </div>
@@ -152,7 +176,7 @@ export function HeroSection({
             <div className="relative w-32 h-24 sm:w-36 sm:h-28 rounded-xl overflow-hidden shrink-0 bg-slate-800 border border-white/10">
               <Image
                 src="/Inverter/hvac-technician-performing-air-conditioner-maintenance-inspection.jpg"
-                alt="Professional Certified Technician"
+                alt={isBn ? "প্রফেশনাল সার্টিফাইড টেকনিশিয়ান" : "Professional Certified Technician"}
                 fill
                 sizes="(max-width: 640px) 128px, 144px"
                 className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
@@ -166,7 +190,7 @@ export function HeroSection({
                   <ShieldCheck className="w-3.5 h-3.5 fill-[#111311] text-[#CEF23E]" />
                 </div>
                 <span className="text-xs sm:text-sm font-bold text-white leading-tight">
-                  Professional AC Care You Can Trust
+                  {isBn ? "নির্ভরযোগ্য প্রফেশনাল সোলার সেবা" : "Professional AC Care You Can Trust"}
                 </span>
               </div>
 
@@ -206,8 +230,8 @@ export function HeroSection({
                   </div>
                 </div>
                 <div className="flex flex-col text-[11px] leading-tight">
-                  <span className="text-slate-400">Trusted By</span>
-                  <span className="font-bold text-[#CEF23E]">10,000+ Customers</span>
+                  <span className="text-slate-400">{isBn ? "আস্থাভাজন" : "Trusted By"}</span>
+                  <span className="font-bold text-[#CEF23E]">{isBn ? "১০,০০০+ গ্রাহক" : "10,000+ Customers"}</span>
                 </div>
               </div>
             </div>

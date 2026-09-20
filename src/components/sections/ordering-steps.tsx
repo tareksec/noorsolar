@@ -22,9 +22,10 @@ interface OrderingStepsProps {
     title: string;
     desc: string;
   }>;
+  locale?: string;
 }
 
-const DEFAULT_STEPS: StepItem[] = [
+const DEFAULT_STEPS_EN: StepItem[] = [
   {
     num: "01",
     title: "Request a quote",
@@ -59,16 +60,54 @@ const DEFAULT_STEPS: StepItem[] = [
   },
 ];
 
+const DEFAULT_STEPS_BN: StepItem[] = [
+  {
+    num: "01",
+    title: "কোটেশন রিকোয়েস্ট পাঠান",
+    desc: "আপনার পছন্দের পণ্য ও পরিমাণ জানান। ওয়েবসাইটের ফর্ম, সরাসরি কল বা হোয়াটসঅ্যাপে আমাদের সাথে যোগাযোগ করুন।",
+    image: "/photos/process-1-request.webp",
+    alt: "সোলার কোটেশন ও পণ্য পরামর্শের অনুরোধ",
+    icon: FileText,
+  },
+  {
+    num: "02",
+    title: "স্পেসিফিকেশন যাচাই",
+    desc: "আমাদের অভিজ্ঞ ইঞ্জিনিয়াররা আপনার প্রকল্পের জন্য সঠিক মডেল, ক্ষমতা ও টেকনিক্যাল ডেটাশিট মিলিয়ে নিশ্চিত করবেন।",
+    image: "/photos/process-2-specs.webp",
+    alt: "সোলার ব্লুপ্রিন্ট ও টেকনিক্যাল স্পেসিফিকেশন যাচাই",
+    icon: SlidersHorizontal,
+  },
+  {
+    num: "03",
+    title: "অফিশিয়াল কোটেশন গ্রহণ",
+    desc: "পাইকারি মূল্য, পেমেন্ট শর্তাবলী এবং ওয়ারেন্টির বিস্তারিত উল্লেখসহ পূর্ণাঙ্গ আনুষ্ঠানিক কোটেশন বুঝে নিন।",
+    image: "/photos/process-3-quotation.webp",
+    alt: "বাণিজ্যিক সোলার কোটেশন ও পাইকারি মূল্য পর্যালোচনা",
+    icon: CheckSquare,
+  },
+  {
+    num: "04",
+    title: "অর্ডার নিশ্চিত ও ডেলিভারি",
+    desc: "অর্ডার নিশ্চিত করার পর আমাদের নিজস্ব লজিস্টিকসের মাধ্যমে দ্রুত ও নিরাপদে আপনার সাইটে মালামাল পৌঁছে দেওয়া হবে।",
+    image: "/photos/process-4-delivery.webp",
+    alt: "সোলার সরঞ্জাম ডেলিভারি ও কন্টেইনার সরবরাহ",
+    icon: Truck,
+  },
+];
+
 export function OrderingSteps({
   headline = "Order in four simple steps",
   subheadline = "A straightforward procurement workflow engineered for commercial contractors, installers, and B2B buyers across Bangladesh.",
   steps,
+  locale,
 }: OrderingStepsProps) {
   const containerRef = useRef<HTMLElement>(null);
   const [activeStepIdx, setActiveStepIdx] = useState<number>(0);
+  const isBn = locale === "bn" || (headline ? /[\u0980-\u09FF]/.test(headline) : false);
+  const defaultList = isBn ? DEFAULT_STEPS_BN : DEFAULT_STEPS_EN;
 
   // Merge custom titles/descriptions from site settings if provided
-  const displaySteps: StepItem[] = DEFAULT_STEPS.map((step, idx) => {
+  const displaySteps: StepItem[] = defaultList.map((step, idx) => {
     const custom = steps?.[idx];
     return {
       ...step,
@@ -354,7 +393,7 @@ export function OrderingSteps({
           <div className="process-title-reveal inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#DDE1DC] shadow-xs mb-4">
             <span className="w-2 h-2 rounded-full bg-[#CEF23E] ring-2 ring-[#CEF23E]/40" />
             <span className="text-xs font-mono uppercase tracking-wider text-[#111311] font-semibold">
-              Step-by-Step Process
+              {isBn ? "সহজ চার ধাপের প্রক্রিয়া" : "Step-by-Step Process"}
             </span>
           </div>
 
@@ -372,7 +411,7 @@ export function OrderingSteps({
           <div className="process-title-reveal inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#111311] text-white text-xs font-mono shadow-sm">
             <span className="w-2 h-2 rounded-full bg-[#CEF23E] animate-pulse" />
             <span className="font-bold text-[#CEF23E]">
-              STEP {displaySteps[activeStepIdx]?.num}:
+              {isBn ? `ধাপ ${displaySteps[activeStepIdx]?.num}:` : `STEP ${displaySteps[activeStepIdx]?.num}:`}
             </span>
             <span>{displaySteps[activeStepIdx]?.title}</span>
           </div>

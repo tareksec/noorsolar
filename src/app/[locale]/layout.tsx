@@ -127,7 +127,7 @@ export default async function LocaleLayout({
               <main className="flex-grow pb-10 sm:pb-0 flex flex-col">
                 <RouteTransition>{children}</RouteTransition>
               </main>
-              <Footer settings={settings} showBlog={showBlog} />
+              <Footer settings={settings} showBlog={showBlog} locale={locale} />
               <WhatsAppButton phone={settings.whatsapp} locale={locale} />
             </div>
           </SmoothScrollProvider>

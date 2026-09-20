@@ -269,13 +269,13 @@ export function ShopPageClient({
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#F5F8FB] via-[#EEF3F8] to-[#E9EFF6] pt-28 sm:pt-36 pb-20 px-3 sm:px-6 lg:px-8">
       {/* Outer App Window / Canvas matching mockup */}
-      <div className="max-w-[1380px] mx-auto bg-white rounded-[32px] sm:rounded-[40px] shadow-[0_20px_70px_rgba(0,0,0,0.06)] border border-slate-100/90 overflow-hidden p-5 sm:p-8 lg:p-10">
+      <div className="max-w-[1380px] mx-auto bg-white rounded-[32px] sm:rounded-[40px] shadow-[0_20px_70px_rgba(0,0,0,0.06)] border border-slate-100/90 relative p-5 sm:p-8 lg:p-10">
         
         {/* Main 2-Column Grid: Left Sidebar + Right Content */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           
           {/* ================= LEFT SIDEBAR (Frozen / Sticky on Desktop) ================= */}
-          <aside className="lg:col-span-3 xl:col-span-2 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-100 pb-6 lg:pb-0 lg:pr-6 lg:sticky lg:top-28 lg:self-start lg:max-h-[calc(100vh-8.5rem)] lg:overflow-y-auto">
+          <aside className="lg:col-span-3 xl:col-span-2 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-100 pb-6 lg:pb-0 lg:pr-6 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto no-scrollbar">
             <div>
               {/* Brand Logo & Dot Symbol */}
               <div className="flex items-center gap-3 mb-8">

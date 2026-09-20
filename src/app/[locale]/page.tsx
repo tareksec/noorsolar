@@ -141,41 +141,43 @@ export default async function HomePage({
         subheadline={settings.heroSubheadline}
         primaryCta={settings.heroPrimaryCta}
         secondaryCta={settings.heroSecondaryCta}
+        locale={locale}
       />
 
       {/* 2. Text Marquee Band */}
-      <TextMarquee />
+      <TextMarquee locale={locale} />
 
       {/* 3. Category Dock (Server Component - 3 Horizontal Cards) */}
-      <CategoryDock categories={categories} />
+      <CategoryDock categories={categories} locale={locale} />
 
       {/* 3. Business Statistics Band (Server Component - 4 Counters) */}
       <StatsBand stats={stats} />
 
       {/* 4. Complete Solar Solutions For Every Project (Design Match) */}
-      <ServicesSolutions />
+      <ServicesSolutions locale={locale} />
 
       {/* 5. Trusted Expertise & Key Metrics (Design Match) */}
-      <WhyChooseUs />
+      <WhyChooseUs locale={locale} />
 
       {/* 6. Built for Lower Impact & Cost Efficiency (Design Match) */}
-      <SustainabilityImpact />
+      <SustainabilityImpact locale={locale} />
 
       {/* 7. Video CTA: Container-Scale Solar Supply (Robotic Assembly Video) */}
-      <VideoCtaBanner />
+      <VideoCtaBanner locale={locale} />
 
       {/* 8. Certifications Grid (Server Component) */}
-      <CertificationsSection certifications={certifications} />
+      <CertificationsSection certifications={certifications} locale={locale} />
 
       {/* 7. How Ordering Works Sequence (Process Section) */}
       <OrderingSteps
         headline={settings.processHeadline}
         subheadline={settings.processSubheadline}
         steps={settings.processSteps}
+        locale={locale}
       />
 
       {/* 8. Partners and Clients Strip (Server Component) */}
-      <PartnersStrip partners={partners} />
+      <PartnersStrip partners={partners} locale={locale} />
 
       {/* Below-the-fold Animated Sections (Dynamic Client-Side Only to keep initial JS bundle small) */}
       <DynamicHomeSections
@@ -183,6 +185,7 @@ export default async function HomePage({
         featuredProducts={featuredProducts}
         testimonials={testimonials}
         faqItems={faqItems}
+        locale={locale}
       />
 
       {/* 11. Closing Call-To-Action Banner (Directs to separate Contact & Quote page) */}
@@ -191,6 +194,7 @@ export default async function HomePage({
         whatsappNumber={settings.whatsapp}
         headline={settings.closingCtaHeadline}
         subheadline={settings.closingCtaSubheadline}
+        locale={locale}
       />
     </>
   );

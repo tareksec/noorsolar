@@ -7,6 +7,7 @@ import { MessageCircle, CheckCircle, Send, AlertCircle, Phone } from "lucide-rea
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { PhotoReveal } from "@/components/ui/photo-reveal";
 import { prefersReducedMotion } from "@/lib/motion";
+import { useLocale } from "next-intl";
 
 interface ClosingCTAProps {
   phoneDisplay?: string;
@@ -24,9 +25,30 @@ export function ClosingCTA({
   phoneDisplay = "+880 1700-000000",
   whatsappNumber = "8801700000000",
   selectedProduct,
-  headline = "Ready to Order or Inquire About Container Pricing?",
-  subheadline = "Submit your project specifications or required equipment quantity below. Our commercial sales engineers respond with formal quotations within working hours.",
+  headline,
+  subheadline,
 }: ClosingCTAProps) {
+  let locale = "en";
+  try {
+    const l = useLocale();
+    if (l) locale = l;
+  } catch {
+    // fallback if outside NextIntlClientProvider
+  }
+  const isBn = locale === "bn";
+
+  const resolvedHeadline =
+    headline ||
+    (isBn
+      ? "অর্ডার দিতে অথবা কনটেইনার পাইকারি মূল্য জানতে চান?"
+      : "Ready to Order or Inquire About Container Pricing?");
+
+  const resolvedSubheadline =
+    subheadline ||
+    (isBn
+      ? "নিচে আপনার প্রকল্পের বিবরণ অথবা কাঙ্ক্ষিত পণ্যের সংখ্যা লিখে পাঠান। আমাদের সেলস ইঞ্জিনিয়াররা অফিস চলাকালীন দ্রুত আনুষ্ঠানিক কোটেশন পাঠাবেন।"
+      : "Submit your project specifications or required equipment quantity below. Our commercial sales engineers respond with formal quotations within working hours.");
+
   const [state, formAction, isPending] = useActionState(submitQuoteRequest, initialState);
   const [phoneVal, setPhoneVal] = useState("");
 
@@ -54,7 +76,9 @@ export function ClosingCTA({
   }, []);
 
   const whatsappFollowupUrl = `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-    `Hello Noor Solar Energy, I just submitted a quotation request through your website. My phone number is ${phoneVal}.`
+    isBn
+      ? `নূর সোলার এনার্জি, আমি আপনাদের ওয়েবসাইটে একটি কোটেশন রিকোয়েস্ট পাঠিয়েছি। আমার ফোন নম্বর: ${phoneVal}।`
+      : `Hello Noor Solar Energy, I just submitted a quotation request through your website. My phone number is ${phoneVal}.`
   )}`;
 
   return (
@@ -67,18 +91,18 @@ export function ClosingCTA({
           <div className="lg:col-span-5">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#DDE1DC] text-xs font-mono text-[#111311] mb-4">
               <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-              <span>Fast Wholesale Quotations</span>
+              <span>{isBn ? "দ্রুত পাইকারি কোটেশন" : "Fast Wholesale Quotations"}</span>
             </div>
 
             <h2
               className="closing-headline-anim text-3xl sm:text-4xl font-bold tracking-tight text-[#111311] leading-tight mb-4 will-change-transform"
               data-motion="closing-headline"
             >
-              {headline}
+              {resolvedHeadline}
             </h2>
 
             <p className="text-sm sm:text-base text-[#5C605C] leading-relaxed mb-8">
-              {subheadline}
+              {resolvedSubheadline}
             </p>
 
             <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC] space-y-4 shadow-sm">
@@ -88,7 +112,7 @@ export function ClosingCTA({
                 </div>
                 <div>
                   <span className="text-[11px] font-mono uppercase text-[#5C605C] block">
-                    Direct Sales Desk
+                    {isBn ? "সরাসরি সেলস ডেস্ক" : "Direct Sales Desk"}
                   </span>
                   <a href={`tel:${phoneDisplay}`} className="text-sm font-bold font-mono text-[#111311]">
                     {phoneDisplay}
@@ -102,7 +126,7 @@ export function ClosingCTA({
                 </div>
                 <div>
                   <span className="text-[11px] font-mono uppercase text-[#5C605C] block">
-                    Instant WhatsApp
+                    {isBn ? "তাৎক্ষণিক হোয়াটসঅ্যাপ" : "Instant WhatsApp"}
                   </span>
                   <a
                     href={`https://wa.me/${whatsappNumber}`}
@@ -110,7 +134,7 @@ export function ClosingCTA({
                     rel="noreferrer"
                     className="text-sm font-bold font-mono text-[#111311] hover:underline"
                   >
-                    Chat with an Engineer
+                    {isBn ? "ইঞ্জিনিয়ারের সাথে কথা বলুন" : "Chat with an Engineer"}
                   </a>
                 </div>
               </div>
@@ -119,15 +143,19 @@ export function ClosingCTA({
             <PhotoReveal className="relative aspect-16/9 w-full rounded-3xl overflow-hidden border border-[#DDE1DC] mt-6 shadow-sm bg-[#111311]">
               <Image
                 src="/photos/cta-sunset-panels.webp"
-                alt="Solar panel array against sunset sky"
+                alt={isBn ? "সূর্যাস্তের আলোয় সোলার প্যানেল অ্যারে" : "Solar panel array against sunset sky"}
                 fill
                 sizes="(max-width: 1024px) 100vw, 450px"
                 className="object-cover opacity-90"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/85 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-3.5 left-4 right-4 text-white pointer-events-none">
-                <span className="text-[11px] font-mono text-[#CEF23E] font-semibold block">Commercial Indents & Supply</span>
-                <span className="text-xs text-white/90 leading-tight block mt-0.5">Reliable dispatch across all 64 districts in Bangladesh</span>
+                <span className="text-[11px] font-mono text-[#CEF23E] font-semibold block">
+                  {isBn ? "বাণিজ্যিক আমদানি ও সরবরাহ" : "Commercial Indents & Supply"}
+                </span>
+                <span className="text-xs text-white/90 leading-tight block mt-0.5">
+                  {isBn ? "বাংলাদেশের ৬৪টি জেলায় নির্ভরযোগ্য ডেলিভারি" : "Reliable dispatch across all 64 districts in Bangladesh"}
+                </span>
               </div>
             </PhotoReveal>
           </div>
@@ -143,7 +171,7 @@ export function ClosingCTA({
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold text-[#111311] tracking-tight">
-                      Quotation Request Received!
+                      {isBn ? "কোটেশন রিকোয়েস্ট জমা হয়েছে!" : "Quotation Request Received!"}
                     </h3>
                     <p className="text-sm text-[#5C605C] max-w-md mt-2 leading-relaxed">
                       {state.message}
@@ -158,12 +186,13 @@ export function ClosingCTA({
                       className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#111311] text-[#CEF23E] text-xs font-semibold hover:bg-black transition-colors"
                     >
                       <MessageCircle className="w-4 h-4" />
-                      <span>Follow-up on WhatsApp</span>
+                      <span>{isBn ? "হোয়াটসঅ্যাপে যোগাযোগ করুন" : "Follow-up on WhatsApp"}</span>
                     </a>
                   </div>
                 </div>
               ) : (
                 <form action={formAction} className="space-y-4">
+                  <input type="hidden" name="locale" value={locale} />
                   {state.error && (
                     <div className="p-4 rounded-2xl bg-red-50 border border-red-200 flex items-start gap-3 text-xs text-red-800">
                       <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
@@ -188,20 +217,20 @@ export function ClosingCTA({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        Full Name / Contact Person *
+                        {isBn ? "পূর্ণ নাম / যোগাযোগকারীর নাম *" : "Full Name / Contact Person *"}
                       </label>
                       <input
                         type="text"
                         name="name"
                         required
-                        placeholder="e.g. Engr. Rafiqul Islam"
+                        placeholder={isBn ? "যেমন: প্রকৌশলী রফিকুল ইসলাম" : "e.g. Engr. Rafiqul Islam"}
                         className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        Phone / Mobile Number *
+                        {isBn ? "ফোন / মোবাইল নম্বর *" : "Phone / Mobile Number *"}
                       </label>
                       <input
                         type="tel"
@@ -209,7 +238,7 @@ export function ClosingCTA({
                         required
                         value={phoneVal}
                         onChange={(e) => setPhoneVal(e.target.value)}
-                        placeholder="+880 17... or 017..."
+                        placeholder={isBn ? "+880 17... অথবা 017..." : "+880 17... or 017..."}
                         className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors font-mono"
                       />
                     </div>
@@ -218,19 +247,19 @@ export function ClosingCTA({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        Company / Project Name
+                        {isBn ? "প্রতিষ্ঠান / প্রকল্পের নাম" : "Company / Project Name"}
                       </label>
                       <input
                         type="text"
                         name="company"
-                        placeholder="e.g. Dhaka Solar EPC Ltd."
+                        placeholder={isBn ? "যেমন: ঢাকা সোলার ইপিসি লিমিটেড" : "e.g. Dhaka Solar EPC Ltd."}
                         className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        Email Address
+                        {isBn ? "ইমেইল অ্যাড্রেস" : "Email Address"}
                       </label>
                       <input
                         type="email"
@@ -244,24 +273,24 @@ export function ClosingCTA({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        Estimated Volume / Quantity
+                        {isBn ? "আনুমানিক পরিমাণ বা ক্ষমতা" : "Estimated Volume / Quantity"}
                       </label>
                       <input
                         type="text"
                         name="quantity"
-                        placeholder="e.g. 500 pcs or 100 kW project"
+                        placeholder={isBn ? "যেমন: ৫০০ পিস বা ১০০ kW প্রজেক্ট" : "e.g. 500 pcs or 100 kW project"}
                         className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        Delivery Site / District
+                        {isBn ? "ডেলিভারি লোকেশন / জেলা" : "Delivery Site / District"}
                       </label>
                       <input
                         type="text"
                         name="location"
-                        placeholder="e.g. Gazipur, Chittagong, Dhaka"
+                        placeholder={isBn ? "যেমন: গাজীপুর, চট্টগ্রাম, ঢাকা" : "e.g. Gazipur, Chittagong, Dhaka"}
                         className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
                       />
                     </div>
@@ -269,12 +298,16 @@ export function ClosingCTA({
 
                   <div>
                     <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                      Technical Requirements or Message
+                      {isBn ? "প্রয়োজনীয় বিবরণ বা বিশেষ নোট" : "Technical Requirements or Message"}
                     </label>
                     <textarea
                       name="message"
                       rows={3}
-                      placeholder="Specify model numbers, target specs, or project timeline..."
+                      placeholder={
+                        isBn
+                          ? "মডেল নম্বর, কাঙ্ক্ষিত স্পেসিফিকেশন বা প্রকল্পের সময়সীমা উল্লেখ করুন..."
+                          : "Specify model numbers, target specs, or project timeline..."
+                      }
                       className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors resize-none"
                     />
                   </div>
@@ -288,18 +321,20 @@ export function ClosingCTA({
                       className="btn-slide-fill w-full flex items-center justify-center gap-2 py-4 rounded-full bg-[#111311] text-[#CEF23E] font-semibold text-sm tracking-tight transition-all duration-200 active:scale-[0.99] disabled:opacity-60 shadow-lg cursor-pointer"
                     >
                       {isPending ? (
-                        <span>Submitting Request...</span>
+                        <span>{isBn ? "কোটেশন পাঠানো হচ্ছে..." : "Submitting Request..."}</span>
                       ) : (
                         <>
                           <Send className="w-4 h-4" />
-                          <span>Submit Wholesale Quote Request</span>
+                          <span>{isBn ? "পাইকারি কোটেশন চান" : "Submit Wholesale Quote Request"}</span>
                         </>
                       )}
                     </button>
                   </MagneticButton>
 
                   <p className="text-center text-[11px] font-mono text-[#5C605C] pt-2">
-                    Direct B2B importer pricing with complete technical datasheets
+                    {isBn
+                      ? "সম্পূর্ণ কারিগরি ডেটাশিট সহ সরাসরি B2B আমদানিকারক মূল্য"
+                      : "Direct B2B importer pricing with complete technical datasheets"}
                   </p>
                 </form>
               )}

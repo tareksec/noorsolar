@@ -57,6 +57,8 @@ export default async function ContactPage({ params }: ContactPageProps) {
 
   const settings = await getSiteSettings(locale);
 
+  const isBn = locale === "bn";
+
   return (
     <div className="pt-28 sm:pt-36 pb-24 bg-[#E4E7E4] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,13 +67,15 @@ export default async function ContactPage({ params }: ContactPageProps) {
         <div className="mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white border border-[#DDE1DC] text-[11px] sm:text-xs font-mono text-[#111311] mb-3 max-w-full">
             <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-            <span className="truncate">Commercial Sales & Support</span>
+            <span className="truncate">{isBn ? "বাণিজ্যিক বিক্রয় ও সহায়তা" : "Commercial Sales & Support"}</span>
           </div>
           <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#111311] break-words">
-            Contact Our Sales Engineers .
+            {isBn ? "আমাদের সেলস ইঞ্জিনিয়ারদের সাথে কথা বলুন" : "Contact Our Sales Engineers"}
           </h1>
           <p className="text-sm sm:text-base text-[#5C605C] max-w-2xl mt-3">
-            Whether planning an industrial rooftop installation, telecom battery backup, or containerized solar panel order, we are ready to assist.
+            {isBn
+              ? "ইন্ডাস্ট্রিয়াল রুফটপ প্ল্যান্ট, টেলিকম ব্যাটারি ব্যাকআপ বা কন্টেইনার স্কেল সোলার প্যানেল অর্ডার—আপনার প্রকল্পের সঠিক সরঞ্জামে আমরা প্রস্তুত।"
+              : "Whether planning an industrial rooftop installation, telecom battery backup, or containerized solar panel order, we are ready to assist."}
           </p>
         </div>
 
@@ -81,18 +85,24 @@ export default async function ContactPage({ params }: ContactPageProps) {
             <div className="w-10 h-10 rounded-full bg-[#EDEDED] flex items-center justify-center text-[#111311] mb-4">
               <Phone className="w-4 h-4" />
             </div>
-            <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">Direct Sales Phone</span>
+            <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">
+              {isBn ? "সরাসরি ফোন" : "Direct Sales Phone"}
+            </span>
             <a href={`tel:${settings.phone}`} className="text-base font-bold font-mono text-[#111311] hover:underline">
               {settings.phoneDisplay}
             </a>
-            <span className="text-[11px] text-[#5C605C] block mt-1">Direct calls for wholesale orders</span>
+            <span className="text-[11px] text-[#5C605C] block mt-1">
+              {isBn ? "পাইকারি অর্ডারের জন্য সরাসরি কল করুন" : "Direct calls for wholesale orders"}
+            </span>
           </div>
 
           <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC]">
             <div className="w-10 h-10 rounded-full bg-[#CEF23E] flex items-center justify-center text-[#111311] mb-4">
               <MessageCircle className="w-4 h-4" />
             </div>
-            <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">WhatsApp Desk</span>
+            <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">
+              {isBn ? "হোয়াটসঅ্যাপ ডেস্ক" : "WhatsApp Desk"}
+            </span>
             <a
               href={`https://wa.me/${settings.whatsapp}`}
               target="_blank"
@@ -101,29 +111,39 @@ export default async function ContactPage({ params }: ContactPageProps) {
             >
               {settings.whatsappDisplay}
             </a>
-            <span className="text-[11px] text-[#5C605C] block mt-1">Instant datasheet & quote delivery</span>
+            <span className="text-[11px] text-[#5C605C] block mt-1">
+              {isBn ? "তাৎক্ষণিক ডেটাশিট ও কোটেশন সুবিধা" : "Instant datasheet & quote delivery"}
+            </span>
           </div>
 
           <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC]">
             <div className="w-10 h-10 rounded-full bg-[#EDEDED] flex items-center justify-center text-[#111311] mb-4">
               <Mail className="w-4 h-4" />
             </div>
-            <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">Commercial Email</span>
+            <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">
+              {isBn ? "অফিসিয়াল ইমেইল" : "Commercial Email"}
+            </span>
             <a href={`mailto:${settings.email}`} className="text-base font-bold text-[#111311] hover:underline truncate block">
               {settings.email}
             </a>
-            <span className="text-[11px] text-[#5C605C] block mt-1">Corporate RFPs & tenders</span>
+            <span className="text-[11px] text-[#5C605C] block mt-1">
+              {isBn ? "কর্পোরেট RFP ও টেন্ডার প্রস্তাব" : "Corporate RFPs & tenders"}
+            </span>
           </div>
 
           <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC]">
             <div className="w-10 h-10 rounded-full bg-[#EDEDED] flex items-center justify-center text-[#111311] mb-4">
               <Clock className="w-4 h-4" />
             </div>
-            <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">Warehouse & Office</span>
+            <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">
+              {isBn ? "অফিস ও ওয়্যারহাউস" : "Warehouse & Office"}
+            </span>
             <p className="text-xs font-bold text-[#111311]">
               {settings.hours}
             </p>
-            <span className="text-[11px] text-[#5C605C] block mt-1">Visits by appointment</span>
+            <span className="text-[11px] text-[#5C605C] block mt-1">
+              {isBn ? "অ্যাপয়েন্টমেন্ট নিয়ে দেখা করুন" : "Visits by appointment"}
+            </span>
           </div>
         </div>
 
@@ -131,8 +151,12 @@ export default async function ContactPage({ params }: ContactPageProps) {
         <div className="p-8 sm:p-10 rounded-[36px] bg-white border border-[#DDE1DC] mb-16">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
             <div>
-              <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">Logistics & Assistance</span>
-              <h2 className="text-2xl font-bold text-[#111311]">Central Commercial Depot & Technical Liaison</h2>
+              <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">
+                {isBn ? "লজিস্টিকস ও সহায়তা" : "Logistics & Assistance"}
+              </span>
+              <h2 className="text-2xl font-bold text-[#111311]">
+                {isBn ? "সেন্ট্রাল বাণিজ্যিক ডিপো ও টেকনিক্যাল অফিস" : "Central Commercial Depot & Technical Liaison"}
+              </h2>
             </div>
             <div className="flex items-center gap-2 text-xs font-mono text-[#111311] bg-[#EDEDED] px-4 py-2 rounded-full">
               <MapPin className="w-4 h-4 text-[#111311]" />
@@ -148,10 +172,12 @@ export default async function ContactPage({ params }: ContactPageProps) {
                 <div className="w-10 h-10 rounded-full bg-[#CEF23E] flex items-center justify-center text-[#111311] mb-2 font-bold shadow-xs">
                   <Sun className="w-5 h-5 text-[#111311]" />
                 </div>
-                <span className="font-bold text-sm text-[#111311]">Noor Solar Energy Central Office</span>
+                <span className="font-bold text-sm text-[#111311]">
+                  {isBn ? "নূর সোলার এনার্জি সেন্ট্রাল অফিস" : "Noor Solar Energy Central Office"}
+                </span>
                 <span className="text-xs text-[#5C605C] mt-1">{settings.address}</span>
                 <span className="text-[10px] font-mono text-[#111311] mt-3 px-2.5 py-1 rounded-full bg-[#EDEDED]">
-                  Warehouse Loading Bay Available
+                  {isBn ? "ওয়্যারহাউস লোডিং বে সুবিধা চালু" : "Warehouse Loading Bay Available"}
                 </span>
               </div>
             </div>
@@ -161,7 +187,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
               <div className="relative aspect-16/10 w-full rounded-xl overflow-hidden mb-4 bg-white">
                 <Image
                   src="/photos/contact-sales-desk.webp"
-                  alt="Noor Solar Energy technical sales engineer providing phone consultation"
+                  alt={isBn ? "নূর সোলার এনার্জির টেকনিক্যাল সেলস ইঞ্জিনিয়ার ফোনে সহায়তা দিচ্ছেন" : "Noor Solar Energy technical sales engineer providing phone consultation"}
                   fill
                   sizes="(max-width: 1024px) 100vw, 400px"
                   className="object-cover"
@@ -170,10 +196,12 @@ export default async function ContactPage({ params }: ContactPageProps) {
               <div>
                 <div className="flex items-center gap-2 text-xs font-mono text-[#111311] font-semibold mb-1">
                   <Headphones className="w-4 h-4 text-[#111311]" />
-                  <span>Direct Technical Desk</span>
+                  <span>{isBn ? "সরাসরি টেকনিক্যাল ডেস্ক" : "Direct Technical Desk"}</span>
                 </div>
                 <p className="text-xs text-[#5C605C] leading-relaxed">
-                  Connect with our qualified electrical engineers for string calculation, single-line diagram review, and inverter warranty documentation.
+                  {isBn
+                    ? "স্ট্রিং ক্যালকুলেশন, সিঙ্গেল লাইন ডায়াগ্রাম (SLD) রিভিউ এবং ইনভার্টার ওয়ারেন্টি নথির জন্য আমাদের অভিজ্ঞ ইঞ্জিনিয়ারদের সাথে যোগাযোগ করুন।"
+                    : "Connect with our qualified electrical engineers for string calculation, single-line diagram review, and inverter warranty documentation."}
                 </p>
               </div>
             </div>

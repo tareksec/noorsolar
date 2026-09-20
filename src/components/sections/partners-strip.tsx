@@ -1,14 +1,20 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 import type { Partner } from "@prisma/client";
 import { AppImage } from "@/components/ui/app-image";
 
+import { usePathname } from "next/navigation";
+
 interface PartnersStripProps {
   partners: Partner[];
+  locale?: string;
 }
 
-export function PartnersStrip({ partners }: PartnersStripProps) {
+export function PartnersStrip({ partners, locale }: PartnersStripProps) {
+  const pathname = usePathname() || "";
+  const isBn = locale === "bn" || pathname.startsWith("/bn/") || pathname === "/bn";
+
   if (!partners || partners.length === 0) {
     return null;
   }
@@ -20,7 +26,9 @@ export function PartnersStrip({ partners }: PartnersStripProps) {
     <section className="py-16 bg-[#EDEDED] border-y border-[#DDE1DC] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center">
         <p className="text-[11px] font-mono uppercase tracking-widest text-[#5C605C] font-semibold">
-          Supplying Commercial Contractors, Solar EPCs & Industrial Facilities
+          {isBn
+            ? "বাণিজ্যিক ঠিকাদার, সোলার ইপিসি ও শিল্পকারখানায় পাইকারি সরঞ্জাম সরবরাহকারী"
+            : "Supplying Commercial Contractors, Solar EPCs & Industrial Facilities"}
         </p>
       </div>
 

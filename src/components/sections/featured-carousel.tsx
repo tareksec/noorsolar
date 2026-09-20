@@ -27,6 +27,7 @@ interface CarouselProduct {
 
 interface FeaturedCarouselProps {
   products: CarouselProduct[];
+  locale?: string;
 }
 
 export function throttle<T extends (...args: unknown[]) => void>(fn: T, wait: number) {
@@ -41,10 +42,11 @@ export function throttle<T extends (...args: unknown[]) => void>(fn: T, wait: nu
   };
 }
 
-export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.ReactNode {
+export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): React.ReactNode {
   const mainRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const [carouselEndPosition, setCarouselEndPosition] = useState(0);
+  const isBn = locale === "bn";
 
   const displayProducts = products && products.length > 0 ? products.slice(0, 8) : [];
 
@@ -58,32 +60,32 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.Rea
 
   // 2. Slow, graceful, and smooth spring physics so the slide moves calmly and gently
   const x = useSpring(rawX, {
-    stiffness: 55,
-    damping: 28,
-    mass: 1.2,
-    restDelta: 0.001,
+    stiffness: 45,
+    damping: 24,
+    mass: 0.8,
   });
 
   useEffect(() => {
-    if (!carouselRef.current) return;
-
-    const resetCarouselEndPosition = () => {
+    const calculateBounds = () => {
       if (carouselRef.current) {
-        const totalWidth = carouselRef.current.scrollWidth;
+        const trackWidth = carouselRef.current.scrollWidth;
         const viewportWidth = window.innerWidth;
-        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-        const paddingOffset = window.innerWidth < 640 ? 24 : 48;
-        const newPosition = totalWidth - viewportWidth + scrollbarWidth + paddingOffset;
-
-        setCarouselEndPosition(-Math.max(0, newPosition));
+        const totalTravel = -(trackWidth - viewportWidth + 60);
+        setCarouselEndPosition(totalTravel < 0 ? totalTravel : 0);
       }
     };
 
-    resetCarouselEndPosition();
-    const handleResize = throttle(resetCarouselEndPosition, 30);
+    calculateBounds();
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const throttledResize = throttle(calculateBounds, 150);
+    window.addEventListener("resize", throttledResize);
+
+    const timer = setTimeout(calculateBounds, 600);
+
+    return () => {
+      window.removeEventListener("resize", throttledResize);
+      clearTimeout(timer);
+    };
   }, [displayProducts.length]);
 
   if (displayProducts.length === 0) return null;
@@ -96,18 +98,28 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.Rea
         {/* Amber Kicker Lines */}
         <div className="inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-semibold tracking-wider text-[#85580F] uppercase mb-3">
           <span className="w-8 sm:w-12 h-[1.5px] bg-[#85580F]/70 rounded-full" />
-          <span>Shop Solar</span>
+          <span>{isBn ? "সোলার সামগ্রী" : "Shop Solar"}</span>
           <span className="w-8 sm:w-12 h-[1.5px] bg-[#85580F]/70 rounded-full" />
         </div>
 
         {/* Heading */}
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#111311] leading-tight">
-          Featured <span className="text-[#485244] font-extrabold">Products</span>
+          {isBn ? (
+            <>
+              নির্বাচিত <span className="text-[#485244] font-extrabold">সোলার পণ্য</span>
+            </>
+          ) : (
+            <>
+              Featured <span className="text-[#485244] font-extrabold">Products</span>
+            </>
+          )}
         </h2>
 
         {/* Subtitle */}
         <p className="mt-3 text-sm sm:text-base text-[#5C605C] max-w-2xl mx-auto leading-relaxed">
-          Genuine panels, inverters, batteries and UPS systems — each with digital warranty and authenticity on every serial.
+          {isBn
+            ? "আসল প্যানেল, ইনভার্টার ও ব্যাটারি — প্রতিটি পণ্যে ডিজিটাল ওয়ারেন্টি ও বারকোড যাচাইকরণ।"
+            : "Genuine panels, inverters, batteries and UPS systems — each with digital warranty and authenticity on every serial."}
         </p>
 
         {/* Scroll Progress Bar indicator */}
@@ -133,7 +145,8 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.Rea
               const imageSrc =
                 product.images?.[0]?.url || "/photos/cat-solar-panels.webp";
               const categoryTitle =
-                product.category?.name?.toUpperCase() || "SOLAR EQUIPMENT";
+                product.category?.name?.toUpperCase() || (isBn ? "সোলার সরঞ্জাম" : "SOLAR EQUIPMENT");
+              const linkHref = isBn ? `/bn/product/${product.slug}` : `/product/${product.slug}`;
 
               return (
                 <div
@@ -142,7 +155,7 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.Rea
                   aria-roledescription="slide"
                   className="w-[280px] sm:w-[330px] md:w-[360px] h-[450px] sm:h-[470px] shrink-0 rounded-[28px] bg-white border border-[#DDE1DC] shadow-[0_6px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-500 overflow-hidden flex flex-col justify-between group"
                 >
-                  <Link href={`/product/${product.slug}`} className="flex flex-col h-full">
+                  <Link href={linkHref} className="flex flex-col h-full">
                     
                     {/* Top Studio Image Area with Light Neutral Display Canvas */}
                     <div className="relative w-full h-56 sm:h-60 bg-[#F5F7F3] border-b border-[#E8ECE5] overflow-hidden flex items-center justify-center p-6">
@@ -183,7 +196,7 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.Rea
                         {/* Model / Subtitle */}
                         {product.model && (
                           <p className="text-xs font-mono text-[#4F594A] mb-3">
-                            Model: {product.model}
+                            {isBn ? `মডেল: ${product.model}` : `Model: ${product.model}`}
                           </p>
                         )}
 
@@ -202,11 +215,11 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.Rea
                       <div className="pt-3.5 border-t border-[#F0F2EF] flex items-center justify-between mt-auto">
                         <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full font-semibold">
                           <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                          <span>In Stock</span>
+                          <span>{isBn ? "স্টকে আছে" : "In Stock"}</span>
                         </span>
 
                         <span className="inline-flex items-center gap-1 text-xs font-bold text-[#111311] group-hover:text-black group-hover:translate-x-1 transition-all">
-                          <span>View Details</span>
+                          <span>{isBn ? "বিস্তারিত দেখুন" : "View Details"}</span>
                           <ArrowUpRight className="w-3.5 h-3.5 text-[#111311]" />
                         </span>
                       </div>
@@ -226,14 +239,18 @@ export function FeaturedCarousel({ products }: FeaturedCarouselProps): React.Rea
       <div className="bg-[#111311] py-12 px-4 text-center text-white border-t border-[#252A25]">
         <div className="max-w-xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-left">
-            <span className="text-xs font-mono text-[#CEF23E] block">B2B Wholesale Catalog</span>
-            <p className="text-sm font-semibold text-white">Explore all equipment models & specs</p>
+            <span className="text-xs font-mono text-[#CEF23E] block">
+              {isBn ? "বি২বি পাইকারি ক্যাটালগ" : "B2B Wholesale Catalog"}
+            </span>
+            <p className="text-sm font-semibold text-white">
+              {isBn ? "সব মডেল ও টেকনিক্যাল স্পেসিফিকেশন দেখুন" : "Explore all equipment models & specs"}
+            </p>
           </div>
           <Link
-            href="/products"
+            href={isBn ? "/bn/products" : "/products"}
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#CEF23E] hover:bg-[#b8da35] text-[#111311] text-xs font-bold transition-all hover:scale-105 shrink-0"
           >
-            <span>View All {products.length} Products</span>
+            <span>{isBn ? "সব পণ্য দেখুন" : `View All ${products.length} Products`}</span>
             <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>
