@@ -43,7 +43,7 @@ export function throttle<T extends (...args: unknown[]) => void>(fn: T, wait: nu
 }
 
 export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): React.ReactNode {
-  const mainRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const [carouselEndPosition, setCarouselEndPosition] = useState(0);
   const isBn = locale === "bn";
@@ -51,18 +51,18 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
   const displayProducts = products && products.length > 0 ? products.slice(0, 8) : [];
 
   const { scrollYProgress } = useScroll({
-    target: mainRef,
+    target: containerRef,
     offset: ["start start", "end end"],
   });
 
   // 1. Map vertical scroll progress to full horizontal travel distance
   const rawX = useTransform(scrollYProgress, [0, 1], [0, carouselEndPosition]);
 
-  // 2. Faster, snappier, and butter-smooth spring physics
+  // 2. Fast, responsive, and butter-smooth spring physics
   const x = useSpring(rawX, {
-    stiffness: 120,
-    damping: 24,
-    mass: 0.35,
+    stiffness: 220,
+    damping: 28,
+    mass: 0.18,
   });
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
       if (carouselRef.current) {
         const trackWidth = carouselRef.current.scrollWidth;
         const viewportWidth = window.innerWidth;
-        const totalTravel = -(trackWidth - viewportWidth + 60);
+        const totalTravel = -(trackWidth - viewportWidth + 80);
         setCarouselEndPosition(totalTravel < 0 ? totalTravel : 0);
       }
     };
@@ -80,7 +80,7 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
     const throttledResize = throttle(calculateBounds, 150);
     window.addEventListener("resize", throttledResize);
 
-    const timer = setTimeout(calculateBounds, 600);
+    const timer = setTimeout(calculateBounds, 400);
 
     return () => {
       window.removeEventListener("resize", throttledResize);
@@ -91,56 +91,48 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
   if (displayProducts.length === 0) return null;
 
   return (
-    <section ref={mainRef} data-motion="featured-carousel" className="relative bg-[#E4E7E4]">
-      
-      {/* 1. Header: Shop Solar / Featured Products */}
-      <div className="pt-16 sm:pt-24 pb-6 text-center max-w-3xl mx-auto px-4">
-        {/* Amber Kicker Lines */}
-        <div className="inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-semibold tracking-wider text-[#85580F] uppercase mb-3">
-          <span className="w-8 sm:w-12 h-[1.5px] bg-[#85580F]/70 rounded-full" />
-          <span>{isBn ? "সোলার সামগ্রী" : "Shop Solar"}</span>
-          <span className="w-8 sm:w-12 h-[1.5px] bg-[#85580F]/70 rounded-full" />
-        </div>
-
-        {/* Heading */}
-        <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-[#111311] leading-tight">
-          {isBn ? (
-            <>
-              নির্বাচিত <span className="text-[#485244] font-extrabold">সোলার পণ্য</span>
-            </>
-          ) : (
-            <>
-              Featured <span className="text-[#485244] font-extrabold">Products</span>
-            </>
-          )}
-        </h2>
-
-        {/* Subtitle */}
-        <p className="mt-3 text-sm sm:text-base text-[#5C605C] max-w-2xl mx-auto leading-relaxed">
-          {isBn
-            ? "আসল প্যানেল, ইনভার্টার ও ব্যাটারি — প্রতিটি পণ্যে ডিজিটাল ওয়ারেন্টি ও বারকোড যাচাইকরণ।"
-            : "Genuine panels, inverters, batteries and UPS systems — each with digital warranty and authenticity on every serial."}
-        </p>
-
-        {/* Scroll Progress Bar indicator */}
-        <div className="max-w-xs mx-auto mt-4 h-1 bg-[#D8E1D5] rounded-full overflow-hidden">
-          <motion.div
-            className="h-full bg-[#111311] rounded-full"
-            style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
-          />
-        </div>
-      </div>
-
-      {/* 2. Fast & Smooth Sticky Scroll Container (240vh allows brisk, effortless glide) */}
-      <div className="w-full relative" style={{ height: "240vh" }}>
-        <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
+    <section data-motion="featured-carousel" className="relative bg-[#E4E7E4]">
+      {/* Fast & Smooth Sticky Scroll Container (175vh provides swift, responsive glide) */}
+      <div ref={containerRef} className="w-full relative" style={{ height: "175vh" }}>
+        <div className="sticky top-0 h-screen w-full flex flex-col justify-between py-6 sm:py-8 overflow-hidden">
           
+          {/* 1. Header: Shop Solar / Featured Products */}
+          <div className="text-center max-w-3xl mx-auto px-4 shrink-0">
+            {/* Amber Kicker Lines */}
+            <div className="inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-semibold tracking-wider text-[#85580F] uppercase mb-2">
+              <span className="w-8 sm:w-12 h-[1.5px] bg-[#85580F]/70 rounded-full" />
+              <span>{isBn ? "সোলার সামগ্রী" : "Shop Solar"}</span>
+              <span className="w-8 sm:w-12 h-[1.5px] bg-[#85580F]/70 rounded-full" />
+            </div>
+
+            {/* Heading */}
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#111311] leading-tight">
+              {isBn ? (
+                <>
+                  নির্বাচিত <span className="text-[#485244] font-extrabold">সোলার পণ্য</span>
+                </>
+              ) : (
+                <>
+                  Featured <span className="text-[#485244] font-extrabold">Products</span>
+                </>
+              )}
+            </h2>
+
+            {/* Subtitle */}
+            <p className="mt-1.5 text-xs sm:text-sm text-[#5C605C] max-w-2xl mx-auto leading-relaxed">
+              {isBn
+                ? "আসল প্যানেল, ইনভার্টার ও ব্যাটারি — প্রতিটি পণ্যে ডিজিটাল ওয়ারেন্টি ও বারকোড যাচাইকরণ।"
+                : "Genuine panels, inverters, batteries and UPS systems — each with digital warranty and authenticity on every serial."}
+            </p>
+          </div>
+
           {/* Moving Horizontal Track */}
-          <motion.div
-            ref={carouselRef}
-            className="featured-carousel-scroll flex gap-6 sm:gap-8 px-6 sm:px-12 items-center will-change-transform"
-            style={{ x }}
-          >
+          <div className="w-full overflow-hidden flex items-center my-auto">
+            <motion.div
+              ref={carouselRef}
+              className="featured-carousel-scroll flex gap-6 sm:gap-8 px-6 sm:px-12 items-center will-change-transform"
+              style={{ x }}
+            >
             {displayProducts.map((product, index) => {
               const imageSrc =
                 product.images?.[0]?.url || "/photos/cat-solar-panels.webp";
@@ -231,7 +223,21 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
                 </div>
               );
             })}
-          </motion.div>
+            </motion.div>
+          </div>
+
+          {/* 3. Bottom Progress Bar */}
+          <div className="max-w-xs mx-auto w-full px-4 shrink-0 flex flex-col items-center gap-1.5 pb-2">
+            <div className="w-full h-1 bg-[#D8E1D5] rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-[#111311] rounded-full"
+                style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
+              />
+            </div>
+            <span className="text-[10px] font-mono text-[#5C605C] uppercase tracking-wider">
+              {isBn ? "স্ক্রোল করে দেখুন" : "Scroll to explore"}
+            </span>
+          </div>
 
         </div>
       </div>
