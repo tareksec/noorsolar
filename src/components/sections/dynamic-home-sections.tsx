@@ -4,7 +4,6 @@ import React from "react";
 import type { Testimonial } from "@prisma/client";
 
 import { CategoryStory } from "@/components/sections/category-story";
-import { FeaturedCarousel } from "@/components/sections/featured-carousel";
 import { TestimonialsSection } from "@/components/sections/testimonials-section";
 import { FAQSection } from "@/components/sections/faq-section";
 
@@ -49,9 +48,6 @@ export function DynamicHomeSections({
     <>
       {/* 4. Scroll-Linked Category Story */}
       <CategoryStory categories={categories} locale={locale} />
-
-      {/* 5. Featured Products Carousel */}
-      <FeaturedCarousel products={featuredProducts} locale={locale} />
 
       {/* 9. Testimonials */}
       <TestimonialsSection testimonials={testimonials} locale={locale} />

@@ -25,6 +25,7 @@ import { WhyChooseUs } from "@/components/sections/why-choose-us";
 import { SustainabilityImpact } from "@/components/sections/sustainability-impact";
 import { VideoCtaBanner } from "@/components/sections/video-cta-banner";
 import { DynamicHomeSections } from "@/components/sections/dynamic-home-sections";
+import { FeaturedCarousel } from "@/components/sections/featured-carousel";
 import { SitePreloader } from "@/components/ui/site-preloader";
 import { HomeContactBanner } from "@/components/sections/home-contact-banner";
 
@@ -148,10 +149,13 @@ export default async function HomePage({
       {/* 2. Text Marquee Band */}
       <TextMarquee locale={locale} />
 
-      {/* 3. Category Dock (Server Component - 3 Horizontal Cards) */}
+      {/* 3. Category Dock ("What We Offer") */}
       <CategoryDock categories={categories} locale={locale} />
 
-      {/* 3. Business Statistics Band (Server Component - 4 Counters) */}
+      {/* 4. Shop Solar (Featured Products Carousel) */}
+      <FeaturedCarousel products={featuredProducts} locale={locale} />
+
+      {/* 5. Business Statistics Band (Server Component - 4 Counters) */}
       <StatsBand stats={stats} />
 
       {/* 4. Complete Solar Solutions For Every Project (Design Match) */}
