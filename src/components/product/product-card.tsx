@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
-import { Link } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, ArrowRight, MessageSquare, Clock, CheckCircle2 } from "lucide-react";
 import { isPointerFine, prefersReducedMotion as checkReducedMotion } from "@/lib/motion";
@@ -25,6 +25,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, priority = false }: ProductCardProps) {
+  const router = useRouter();
   const pathname = usePathname() || "";
   const isBn = pathname.startsWith("/bn/") || pathname === "/bn";
 
@@ -73,14 +74,14 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
       case "INCOMING":
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-amber-100 text-amber-900 border border-amber-300">
-            <Clock className="w-3 h-3 text-amber-700" />
+            <Clock className="w-3.5 h-3.5 text-amber-700" />
             {isBn ? "আসছে" : "Incoming"}
           </span>
         );
       default:
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-[#EDEDED] text-[#5C605C] border border-[#DDE1DC]">
-            <CheckCircle2 className="w-3 h-3 text-[#5C605C]" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#5C605C]" />
             {isBn ? "অনুরোধে প্রাপ্য" : "On Request"}
           </span>
         );
@@ -99,24 +100,46 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
       data-motion="product-card"
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
-      className="group relative flex flex-col justify-between p-5 rounded-[28px] bg-white border border-[#DDE1DC] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] transition-all duration-300 hover:shadow-[0_16px_36px_-10px_rgba(0,0,0,0.08)] hover:border-[#111311]/25 hover:-translate-y-1 h-full"
+      onClick={(e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest("button") || target.closest("a[href*='/contact']")) return;
+        router.push(`/product/${product.slug}`);
+      }}
+      className="group relative flex flex-col justify-between p-5 rounded-[28px] bg-white border border-[#DDE1DC] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] transition-all duration-300 hover:shadow-[0_16px_36px_-10px_rgba(0,0,0,0.08)] hover:border-[#111311]/25 hover:-translate-y-1 h-full cursor-pointer"
     >
       {/* Top Image Container with 3D Tilt on Pointer Devices */}
       <div
         ref={imageContainerRef}
         onPointerMove={handlePointerMove}
-        className="relative w-full aspect-[16/11] rounded-2xl overflow-hidden bg-[#EDEDED] flex items-center justify-center p-3 border border-[#E4E7E4]"
+        onClick={(e) => {
+          const target = e.target as HTMLElement;
+          if (target.closest("button") || target.closest("a[href*='/contact']")) return;
+          e.stopPropagation();
+          router.push(`/product/${product.slug}`);
+        }}
+        className="relative w-full aspect-[16/11] rounded-2xl overflow-hidden bg-[#EDEDED] flex items-center justify-center p-3 border border-[#E4E7E4] cursor-pointer group/img"
       >
-        <div style={imageTransform} className="relative w-full h-full will-change-transform">
-          <Image
-            src={primaryImage}
-            alt={primaryAlt}
-            fill
-            priority={priority}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover"
-          />
-        </div>
+        <Link
+          href={`/product/${product.slug}`}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            router.push(`/product/${product.slug}`);
+          }}
+          className="absolute inset-0 z-0 block cursor-pointer"
+          aria-label={product.name}
+        >
+          <div style={imageTransform} className="relative w-full h-full will-change-transform pointer-events-none">
+            <Image
+              src={primaryImage}
+              alt={primaryAlt}
+              fill
+              priority={priority}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-transform duration-300 group-hover/img:scale-105 pointer-events-auto cursor-pointer"
+            />
+          </div>
+        </Link>
 
         {/* Stock Status Badge */}
         <div className="absolute top-3 left-3 z-10 pointer-events-none">
@@ -139,6 +162,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           >
             <Link
               href={`/contact?product=${product.slug}`}
+              onClick={(e) => e.stopPropagation()}
               className="w-full py-2.5 px-4 rounded-full bg-[#111311] hover:bg-black text-[#CEF23E] font-semibold text-xs tracking-tight flex items-center justify-center gap-2 shadow-lg transition-colors"
             >
               <MessageSquare className="w-3.5 h-3.5" />
@@ -159,7 +183,12 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         <h2 className="text-base font-bold leading-snug">
           <Link
             href={`/product/${product.slug}`}
-            className="text-[#111311] group-hover:text-black line-clamp-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-xs"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              router.push(`/product/${product.slug}`);
+            }}
+            className="text-[#111311] group-hover:text-black line-clamp-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-xs cursor-pointer"
           >
             {product.name}
           </Link>
@@ -202,7 +231,12 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         <div className="flex items-center gap-1.5">
           <Link
             href={`/product/${product.slug}`}
-            className="p-2 rounded-full text-[#5C605C] hover:text-[#111311] hover:bg-[#EDEDED] transition-colors flex items-center justify-center"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              router.push(`/product/${product.slug}`);
+            }}
+            className="p-2 rounded-full text-[#5C605C] hover:text-[#111311] hover:bg-[#EDEDED] transition-colors flex items-center justify-center cursor-pointer"
             title={isBn ? "প্রযুক্তিগত বিবরণ দেখুন" : "View Technical Details"}
             aria-label={isBn ? `${product.name}-এর বিবরণ দেখুন` : `View details for ${product.name}`}
           >
@@ -214,6 +248,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
           <Link
             href={`/contact?product=${product.slug}`}
+            onClick={(e) => e.stopPropagation()}
             className="px-3.5 py-1.5 rounded-full bg-[#111311] text-white text-xs font-medium tracking-tight transition-all duration-200 hover:bg-[#CEF23E] hover:text-[#111311] active:scale-95"
           >
             {isBn ? "কোটেশন চান" : "Request Quote"}

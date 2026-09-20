@@ -7,10 +7,11 @@ const PORT = 3006;
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 
 const ROUTES = [
-  { name: "Home", path: "/" },
-  { name: "Products", path: "/products" },
-  { name: "Product Detail", path: "/product/n-type-topcon-bifacial-module-620w" },
-  { name: "Blog", path: "/blog" },
+  { name: "Home (EN)", path: "/" },
+  { name: "Home (BN)", path: "/bn" },
+  { name: "Products (BN)", path: "/bn/products" },
+  { name: "Product (BN)", path: "/bn/product/n-type-topcon-bifacial-module-620w" },
+  { name: "Blog (BN)", path: "/bn/blog" },
 ];
 
 async function waitForServer(url, timeoutMs = 30000) {

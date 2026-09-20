@@ -605,6 +605,12 @@ export function ShopPageClient({
               {/* 4 Cards Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
                 {popularCategoryCards.map((card) => {
+                  const matchProduct = products.find(
+                    (p) =>
+                      p.category?.slug === card.slug ||
+                      p.slug.includes(card.slug.replace("solar-", ""))
+                  );
+
                   return (
                     <div
                       key={card.id}
@@ -620,13 +626,22 @@ export function ShopPageClient({
                         </span>
                       </div>
 
-                      {/* Center Cutout Product Image */}
-                      <div className="relative w-full h-24 sm:h-28 my-auto flex items-center justify-center">
+                      {/* Center Cutout Product Image - Clicking image opens details page */}
+                      <div
+                        onClick={(e) => {
+                          if (matchProduct) {
+                            e.stopPropagation();
+                            router.push(`/product/${matchProduct.slug}`);
+                          }
+                        }}
+                        className="relative w-full h-24 sm:h-28 my-auto flex items-center justify-center cursor-pointer"
+                        title={matchProduct ? (isBn ? `${matchProduct.name} বিস্তারিত দেখুন` : `View ${matchProduct.name}`) : card.title}
+                      >
                         <Image
                           src={card.image}
                           alt={card.alt}
                           fill
-                          className="object-contain p-2 group-hover:scale-110 transition-transform duration-500 ease-out"
+                          className="object-contain p-2 group-hover:scale-110 transition-transform duration-500 ease-out cursor-pointer"
                         />
                       </div>
 
@@ -712,6 +727,7 @@ export function ShopPageClient({
                     return (
                       <div
                         key={product.id}
+                        data-motion="product-card"
                         onClick={(e) => {
                           const target = e.target as HTMLElement;
                           if (target.closest("button") || target.closest("[data-quote-link]")) return;
