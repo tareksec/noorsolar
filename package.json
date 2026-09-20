@@ -4,8 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/hostinger-setup.js",
     "build": "next build",
     "start": "next start",
+    "db:setup": "prisma db push --skip-generate && tsx prisma/seed.ts",
     "lint": "eslint",
     "check:overflow": "node scripts/check-mobile-overflow.js",
     "check:images": "node scripts/check-images.js",
