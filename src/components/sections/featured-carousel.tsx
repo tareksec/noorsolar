@@ -58,11 +58,11 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
   // 1. Map vertical scroll progress to full horizontal travel distance
   const rawX = useTransform(scrollYProgress, [0, 1], [0, carouselEndPosition]);
 
-  // 2. Fast, responsive, and butter-smooth spring physics
+  // 2. Calm, balanced, and smooth spring physics for comfortable browsing
   const x = useSpring(rawX, {
-    stiffness: 220,
-    damping: 28,
-    mass: 0.18,
+    stiffness: 85,
+    damping: 22,
+    mass: 0.4,
   });
 
   useEffect(() => {
@@ -92,8 +92,8 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
 
   return (
     <section data-motion="featured-carousel" className="relative bg-[#E4E7E4]">
-      {/* Fast & Smooth Sticky Scroll Container (175vh provides swift, responsive glide) */}
-      <div ref={containerRef} className="w-full relative" style={{ height: "175vh" }}>
+      {/* Balanced & Smooth Sticky Scroll Container (320vh provides calm, controlled product browsing) */}
+      <div ref={containerRef} className="w-full relative" style={{ height: "320vh" }}>
         <div className="sticky top-0 h-screen w-full flex flex-col justify-between py-6 sm:py-8 overflow-hidden">
           
           {/* 1. Header: Shop Solar / Featured Products */}
