@@ -22,14 +22,10 @@ import { ServicesSolutions } from "@/components/sections/services-solutions";
 import { WhyChooseUs } from "@/components/sections/why-choose-us";
 import { SustainabilityImpact } from "@/components/sections/sustainability-impact";
 import { VideoCtaBanner } from "@/components/sections/video-cta-banner";
-import dynamic from "next/dynamic";
 import { DynamicHomeSections } from "@/components/sections/dynamic-home-sections";
 import { SitePreloader } from "@/components/ui/site-preloader";
 
-const ClosingCTA = dynamic(
-  () => import("@/components/sections/closing-cta").then((mod) => mod.ClosingCTA),
-  { ssr: true }
-);
+import { HomeContactBanner } from "@/components/sections/home-contact-banner";
 
 export const revalidate = 60; // On-demand or 60s cache revalidation
 
@@ -154,8 +150,8 @@ export default async function HomePage() {
         faqItems={faqItems}
       />
 
-      {/* 11. Closing Call-To-Action & Quote Form (Server Component) */}
-      <ClosingCTA
+      {/* 11. Closing Call-To-Action Banner (Directs to separate Contact & Quote page) */}
+      <HomeContactBanner
         phoneDisplay={settings.phoneDisplay}
         whatsappNumber={settings.whatsapp}
         headline={settings.closingCtaHeadline}

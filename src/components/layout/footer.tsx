@@ -189,7 +189,7 @@ export function Footer({ settings, showBlog = false }: FooterProps) {
               </li>
               <li>
                 <Link
-                  href="/#quote-section"
+                  href="/contact"
                   className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all"
                 >
                   <span>Request Container Procurement Quote</span>

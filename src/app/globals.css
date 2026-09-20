@@ -247,7 +247,7 @@ noscript + #preloader {
   background: #f3f5f2;
   color: #111311;
   isolation: isolate;
-  animation: preloader-failsafe 3s forwards;
+  animation: preloader-failsafe 4s forwards;
 }
 
 .preloader-root::before {

@@ -134,7 +134,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             }`}
           >
             <Link
-              href={`/#quote-section?product=${product.slug}`}
+              href={`/contact?product=${product.slug}`}
               className="w-full py-2.5 px-4 rounded-full bg-[#111311] hover:bg-black text-[#CEF23E] font-semibold text-xs tracking-tight flex items-center justify-center gap-2 shadow-lg transition-colors"
             >
               <MessageSquare className="w-3.5 h-3.5" />
@@ -207,7 +207,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           </Link>
 
           <Link
-            href={`/#quote-section?product=${product.slug}`}
+            href={`/contact?product=${product.slug}`}
             className="px-3.5 py-1.5 rounded-full bg-[#111311] text-white text-xs font-medium tracking-tight transition-all duration-200 hover:bg-[#CEF23E] hover:text-[#111311] active:scale-95"
           >
             Request Quote

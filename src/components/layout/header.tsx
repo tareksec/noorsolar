@@ -16,7 +16,7 @@ export function Header({
     <AnimatedNavFramer
       brandName="Noor Solar"
       ctaText="Book A Call"
-      ctaHref="/#quote-section"
+      ctaHref="/contact"
       showBlog={showBlog}
     />
   );

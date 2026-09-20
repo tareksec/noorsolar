@@ -383,7 +383,7 @@ export default async function CertificationsPage() {
             </Link>
 
             <Link
-              href="/#quote-section"
+              href="/contact"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 text-white text-xs font-semibold hover:bg-white/20 border border-white/10 transition-colors"
             >
               <span>Request Quote</span>

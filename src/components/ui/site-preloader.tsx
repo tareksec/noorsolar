@@ -102,7 +102,7 @@ export function SitePreloader() {
       }
       root.classList.add("preloader-hard-stop");
       window.setTimeout(remove, 120);
-    }, 2200);
+    }, 3800);
 
     if (reducedMotion) {
       const reducedTimer = window.setTimeout(() => {
@@ -129,10 +129,11 @@ export function SitePreloader() {
       const animation = gsap.timeline({ onComplete: finish });
       animation
         .to(icon, { scale: 1, opacity: 1, duration: 0.65, ease: "back.out(1.4)" }, 0.15)
-        .to(icon, { filter: "drop-shadow(0 0 18px rgba(205,243,0,0.7))", duration: 0.22, yoyo: true, repeat: 1 }, 1.35);
+        .to(icon, { filter: "drop-shadow(0 0 18px rgba(205,243,0,0.7))", duration: 0.22, yoyo: true, repeat: 1 }, 1.35)
+        .to({}, { duration: 1.2 });
       timeline = animation;
 
-      window.setTimeout(finish, 2800);
+      window.setTimeout(finish, 3000);
     });
 
     return () => {

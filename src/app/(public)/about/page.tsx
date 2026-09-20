@@ -49,7 +49,7 @@ export default async function AboutPage() {
                   <ArrowUpRight className="w-4 h-4 text-[#CEF23E]" />
                 </Link>
                 <Link
-                  href="/#quote-section"
+                  href="/contact"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#111311] text-xs font-semibold border border-[#DDE1DC] hover:border-[#111311] transition-colors"
                 >
                   <span>Request B2B Quote</span>

@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Navigation } from "lucide-react";
 
 export function HeroVisual() {
@@ -100,12 +101,12 @@ export function HeroVisual() {
             <span className="text-[11px] text-[#5C6358] leading-tight">
               Dhaka, Bangladesh
             </span>
-            <a
-              href="#quote-section"
+            <Link
+              href="/contact"
               className="text-[11px] font-medium text-[#111311] underline underline-offset-2 decoration-[#111311] hover:text-[#426B1F] transition-colors mt-0.5"
             >
               Closest station to you
-            </a>
+            </Link>
           </div>
         </div>
       </div>
