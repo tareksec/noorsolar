@@ -51,6 +51,82 @@ function localizeProduct<
   };
 }
 
+import { demoProducts } from "../../../prisma/seed-products";
+
+function getFallbackDemoProducts() {
+  return demoProducts.map((p, idx) => ({
+    id: `fallback-${idx}`,
+    slug: p.slug,
+    name: p.name,
+    nameBn: (p as unknown as Record<string, string>).nameBn || null,
+    shortDescription: p.shortDescription,
+    shortDescriptionBn: (p as unknown as Record<string, string>).shortDescriptionBn || null,
+    description: p.description,
+    descriptionBn: (p as unknown as Record<string, string>).descriptionBn || null,
+    brand: p.brand || null,
+    model: p.model || null,
+    stockStatus: p.stockStatus,
+    moq: p.moq || null,
+    moqBn: (p as unknown as Record<string, string>).moqBn || null,
+    leadTime: p.leadTime || null,
+    leadTimeBn: (p as unknown as Record<string, string>).leadTimeBn || null,
+    priceBdt: (p as unknown as Record<string, number>).priceBdt || null,
+    showPrice: (p as unknown as Record<string, boolean>).showPrice || false,
+    datasheetUrl: null,
+    isFeatured: true,
+    isActive: true,
+    isDemo: true,
+    sortOrder: p.sortOrder || idx,
+    metaTitle: null,
+    metaTitleBn: null,
+    metaDescription: null,
+    metaDescriptionBn: null,
+    categoryId: p.categorySlug,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    category: {
+      id: p.categorySlug,
+      slug: p.categorySlug,
+      name:
+        p.categorySlug === "solar-panels"
+          ? "Solar Panels"
+          : p.categorySlug === "lithium-batteries"
+          ? "Lithium Batteries"
+          : "Solar Inverters",
+      nameBn:
+        p.categorySlug === "solar-panels"
+          ? "সোলার প্যানেল"
+          : p.categorySlug === "lithium-batteries"
+          ? "লিথিয়াম ব্যাটারি"
+          : "সোলার ইনভার্টার",
+      description: null,
+      descriptionBn: null,
+      image: null,
+      sortOrder: 0,
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    images: (p.images || []).map((img, imgIdx) => ({
+      id: `fallback-img-${idx}-${imgIdx}`,
+      productId: `fallback-${idx}`,
+      url: img.url,
+      alt: img.alt,
+      altBn: (img as unknown as Record<string, string>).altBn || null,
+      sortOrder: (img as unknown as Record<string, number>).sortOrder || imgIdx,
+    })),
+    specs: (p.specs || []).map((s, sIdx) => ({
+      id: `fallback-spec-${idx}-${sIdx}`,
+      productId: `fallback-${idx}`,
+      label: s.label,
+      labelBn: (s as unknown as Record<string, string>).labelBn || null,
+      value: s.value,
+      valueBn: (s as unknown as Record<string, string>).valueBn || null,
+      sortOrder: (s as unknown as Record<string, number>).sortOrder || sIdx,
+    })),
+  }));
+}
+
 export async function getFeaturedProducts(locale?: string) {
   try {
     let products = await db.product.findMany({
@@ -81,10 +157,16 @@ export async function getFeaturedProducts(locale?: string) {
       products = [...products, ...additional];
     }
 
+    if (products.length === 0) {
+      const fallbackList = getFallbackDemoProducts();
+      return fallbackList.map((p) => localizeProduct(p, locale));
+    }
+
     return products.map((p) => localizeProduct(p, locale));
   } catch (error) {
-    console.warn("getFeaturedProducts: database not available, returning empty list", error);
-    return [];
+    console.warn("getFeaturedProducts: database not available, returning fallback list", error);
+    const fallbackList = getFallbackDemoProducts();
+    return fallbackList.map((p) => localizeProduct(p, locale));
   }
 }
 
@@ -123,10 +205,22 @@ export async function getAllProducts(options?: {
       },
     });
 
+    if (products.length === 0) {
+      let fallbackList = getFallbackDemoProducts();
+      if (options?.categorySlug && options.categorySlug !== "all") {
+        fallbackList = fallbackList.filter((p) => p.categoryId === options.categorySlug);
+      }
+      return fallbackList.map((p) => localizeProduct(p, options?.locale));
+    }
+
     return products.map((p) => localizeProduct(p, options?.locale));
   } catch (error) {
-    console.warn("getAllProducts: database not available, returning empty list", error);
-    return [];
+    console.warn("getAllProducts: database not available, returning fallback list", error);
+    let fallbackList = getFallbackDemoProducts();
+    if (options?.categorySlug && options.categorySlug !== "all") {
+      fallbackList = fallbackList.filter((p) => p.categoryId === options.categorySlug);
+    }
+    return fallbackList.map((p) => localizeProduct(p, options?.locale));
   }
 }
 
@@ -141,7 +235,19 @@ export async function getProductBySlug(slug: string, locale?: string) {
       },
     });
 
-    if (!product) return null;
+    if (!product) {
+      const fallback = getFallbackDemoProducts().find((p) => p.slug === slug);
+      if (fallback) {
+        const related = getFallbackDemoProducts()
+          .filter((p) => p.categoryId === fallback.categoryId && p.slug !== slug)
+          .slice(0, 3);
+        return {
+          product: localizeProduct(fallback, locale),
+          related: related.map((p) => localizeProduct(p, locale)),
+        };
+      }
+      return null;
+    }
 
     const related = await db.product.findMany({
       where: {
@@ -164,6 +270,16 @@ export async function getProductBySlug(slug: string, locale?: string) {
     };
   } catch (error) {
     console.warn(`getProductBySlug: failed to fetch slug ${slug}`, error);
+    const fallback = getFallbackDemoProducts().find((p) => p.slug === slug);
+    if (fallback) {
+      const related = getFallbackDemoProducts()
+        .filter((p) => p.categoryId === fallback.categoryId && p.slug !== slug)
+        .slice(0, 3);
+      return {
+        product: localizeProduct(fallback, locale),
+        related: related.map((p) => localizeProduct(p, locale)),
+      };
+    }
     return null;
   }
 }
@@ -183,12 +299,19 @@ export async function getProductsByCategory(categorySlug: string, locale?: strin
       },
     });
 
+    if (products.length === 0) {
+      const fallbackList = getFallbackDemoProducts().filter((p) => p.categoryId === categorySlug);
+      return fallbackList.map((p) => localizeProduct(p, locale));
+    }
+
     return products.map((p) => localizeProduct(p, locale));
   } catch (error) {
     console.warn(`getProductsByCategory: failed to fetch category ${categorySlug}`, error);
-    return [];
+    const fallbackList = getFallbackDemoProducts().filter((p) => p.categoryId === categorySlug);
+    return fallbackList.map((p) => localizeProduct(p, locale));
   }
 }
+
 
 export async function getSpecHighlights() {
   let maxPanelWatt = 700;
