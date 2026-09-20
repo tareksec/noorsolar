@@ -1,35 +1,54 @@
 "use client";
 
-import React, { useActionState, useEffect, Suspense } from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import { loginAdminAction, AuthActionResult } from "@/app/admin/actions/auth";
+import { useSearchParams } from "next/navigation";
 import { Lock, Mail, AlertCircle, ArrowRight } from "lucide-react";
 
-const initialState: AuthActionResult = {
-  success: false,
-};
-
 function LoginForm() {
-  const [state, formAction, isPending] = useActionState(loginAdminAction, initialState);
-  const router = useRouter();
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [error, setError] = React.useState<string | null>(null);
+  const [isPending, setIsPending] = React.useState(false);
   const searchParams = useSearchParams();
   const returnTo = searchParams.get("from") || "/admin";
 
-  useEffect(() => {
-    if (state.success) {
-      router.push(returnTo);
-      router.refresh();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setIsPending(true);
+
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setError(data.error || "Login failed. Please check your credentials.");
+        setIsPending(false);
+        return;
+      }
+
+      // Full navigation guarantees cookie state is immediately active
+      window.location.href = returnTo;
+    } catch (err) {
+      console.error("Login fetch error:", err);
+      setError("Network or server connection error. Please try again.");
+      setIsPending(false);
     }
-  }, [state.success, router, returnTo]);
+  };
 
   return (
-    <form action={formAction} className="space-y-4">
-      {state.error && (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {error && (
         <div className="p-4 rounded-2xl bg-red-50 border border-red-200 flex items-start gap-3 text-xs text-red-800">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-red-600" />
-          <span>{state.error}</span>
+          <span>{error}</span>
         </div>
       )}
 
@@ -42,7 +61,8 @@ function LoginForm() {
             type="email"
             name="email"
             required
-            defaultValue="owner@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="admin@noorsolaren.com"
             className="w-full pl-10 pr-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] outline-none transition-colors"
           />
@@ -59,6 +79,8 @@ function LoginForm() {
             type="password"
             name="password"
             required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
             className="w-full pl-10 pr-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] outline-none transition-colors"
           />
@@ -83,6 +105,7 @@ function LoginForm() {
     </form>
   );
 }
+
 
 export default function AdminLoginPage() {
   return (
