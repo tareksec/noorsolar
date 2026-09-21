@@ -116,16 +116,16 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
 
                 {/* WhatsApp Support */}
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-[#25D366]/15 border border-[#25D366]/40 flex items-center justify-center shrink-0 text-[#128C7E]">
-                    <MessageCircle className="w-3.5 h-3.5 text-[#128C7E] fill-current" />
+                  <div className="w-6 h-6 rounded-full bg-white border border-[#D5DAD0] flex items-center justify-center shrink-0 text-[#111311]">
+                    <MessageCircle className="w-3.5 h-3.5 text-[#111311]" />
                   </div>
                   <a
                     href={`https://wa.me/${whatsappNum}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-medium text-[#111311] hover:text-[#128C7E] transition-colors"
+                    className="font-medium text-[#111311] hover:text-[#426B1F] transition-colors"
                   >
-                    {whatsappDisplay} <span className="text-[11px] font-mono text-[#62705C]">{isBn ? "(হোয়াটসঅ্যাপ ডেস্ক)" : "(WhatsApp Desk)"}</span>
+                    {whatsappDisplay} <span className="text-xs font-mono text-[#62705C]">{isBn ? "(হোয়াটসঅ্যাপ ডেস্ক)" : "(WhatsApp Desk)"}</span>
                   </a>
                 </div>
 
@@ -147,7 +147,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
                   <div className="w-6 h-6 rounded-full bg-white border border-[#D5DAD0] flex items-center justify-center shrink-0 text-[#111311]">
                     <Clock className="w-3.5 h-3.5 text-[#111311]" />
                   </div>
-                  <span className="text-[11px] text-[#62705C] font-mono">{hours}</span>
+                  <span className="text-xs text-[#62705C] font-mono">{hours}</span>
                 </div>
 
               </div>
@@ -187,17 +187,17 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
               <li>
                 <Link
                   href="/products"
-                  className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all font-semibold text-[#111311]"
+                  className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all"
                 >
-                  <span>{isBn ? "সম্পূর্ণ পাইকারি ইনভেন্টরি দেখুন →" : "Browse Full Wholesale Inventory →"}</span>
+                  <span>{isBn ? "সম্পূর্ণ পাইকারি ইনভেন্টরি দেখুন" : "Browse Full Wholesale Inventory"}</span>
                 </Link>
               </li>
               <li>
                 <Link
                   href="/contact"
-                  className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all"
+                  className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all font-semibold text-[#111311]"
                 >
-                  <span>{isBn ? "কন্টেইনার ক্রয়ের কোটেশন চান" : "Request Container Procurement Quote"}</span>
+                  <span>{isBn ? "কন্টেইনার ক্রয়ের কোটেশন চান" : "Request Container Procurement Quote →"}</span>
                 </Link>
               </li>
             </ul>
@@ -242,7 +242,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
                 </li>
               )}
               <li>
-                <Link href="/admin/login" className="hover:text-[#111311] transition-colors text-[11px] font-mono text-[#4A5445]">
+                <Link href="/admin/login" className="hover:text-[#111311] transition-colors text-xs text-[#4F574A]">
                   {isBn ? "স্টাফ পোর্টাল" : "B2B Staff Portal"}
                 </Link>
               </li>
@@ -269,10 +269,10 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
                     />
                   </div>
                   <div>
-                    <span className="text-[11px] font-bold text-[#111311] block leading-tight">
+                    <span className="text-xs font-bold text-[#111311] block leading-tight">
                       {isBn ? "BSREA নিবন্ধিত সদস্য" : "BSREA Registered Member"}
                     </span>
-                    <span className="text-[10px] font-mono text-[#6A7465]">
+                    <span className="text-xs font-mono text-[#6A7465]">
                       No. 20260915GEN113
                     </span>
                   </div>
@@ -281,7 +281,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
                   href="https://drive.google.com/file/d/1GR4hILXnDjJblqNmrxRNnWH_M7It4Md2/view?usp=sharing"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#111311] hover:text-[#426B1F] transition-colors underline underline-offset-2"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#111311] hover:text-[#426B1F] transition-colors underline underline-offset-2"
                 >
                   <span>{isBn ? "অফিসিয়াল সনদ দেখুন" : "View Official Certificate"}</span>
                   <ExternalLink className="w-3 h-3" />

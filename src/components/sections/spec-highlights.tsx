@@ -73,7 +73,7 @@ export function SpecHighlights({ highlights }: SpecHighlightsProps) {
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#CEF23E]/10 blur-[100px] rounded-full pointer-events-none" />
 
           <div className="relative z-10 mb-12 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[11px] font-mono text-[#CEF23E] mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-mono text-[#CEF23E] mb-3">
               <span>Hardware Technical Specs</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">

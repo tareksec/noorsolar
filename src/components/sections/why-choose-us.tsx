@@ -47,7 +47,7 @@ export function WhyChooseUs({ locale }: WhyChooseUsProps = {}) {
               <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/40 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-5 left-5 right-5 p-4 rounded-xl bg-white/90 backdrop-blur-xs border border-white/80 flex items-center justify-between">
                 <div>
-                  <p className="text-[11px] font-mono uppercase tracking-wider text-[#5C605C] font-semibold">
+                  <p className="text-xs font-mono tracking-wider text-[#5C605C] font-semibold">
                     {isBn ? "সরাসরি আমদানিকারকের গুণমান" : "Direct Importer Quality"}
                   </p>
                   <p className="text-sm font-bold text-[#111311]">

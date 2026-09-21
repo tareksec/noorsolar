@@ -109,11 +109,11 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
             <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#111311] leading-tight">
               {isBn ? (
                 <>
-                  নির্বাচিত <span className="text-[#485244] font-extrabold">সোলার পণ্য</span>
+                  নির্বাচিত <span className="text-[#485244] font-extrabold">পাইকারি সরঞ্জাম</span>
                 </>
               ) : (
                 <>
-                  Featured <span className="text-[#485244] font-extrabold">Products</span>
+                  Featured <span className="text-[#485244] font-extrabold">Wholesale Equipment</span>
                 </>
               )}
             </h2>
@@ -162,13 +162,13 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
 
                       {/* Brand Pill */}
                       {product.brand && (
-                        <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-white/95 border border-[#DDE1DC] text-[10px] font-mono font-bold text-[#111311] shadow-2xs">
+                        <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-white/95 border border-[#DDE1DC] text-xs font-mono font-bold text-[#111311] shadow-2xs">
                           {product.brand}
                         </div>
                       )}
 
                       {/* Item Index Pill */}
-                      <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-[#111311] text-white text-[10px] font-mono font-bold">
+                      <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-[#111311] text-white text-xs font-mono font-bold">
                         0{index + 1}
                       </div>
                     </div>
@@ -177,7 +177,7 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
                     <div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
                       <div>
                         {/* Category Kicker */}
-                        <span className="text-[11px] font-mono uppercase tracking-wider text-[#6B7567] font-semibold block mb-1.5">
+                        <span className="text-xs font-mono uppercase tracking-wider text-[#6B7567] font-semibold block mb-1.5">
                           {categoryTitle}
                         </span>
 
@@ -195,7 +195,7 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
 
                         {/* Top Spec Chip if available */}
                         {product.specs && product.specs[0] && (
-                          <div className="inline-block px-2.5 py-1 rounded-md bg-[#F4F6F2] border border-[#E2E6DF] text-[11px] font-mono text-[#4C5447]">
+                          <div className="inline-block px-2.5 py-1 rounded-md bg-[#F4F6F2] border border-[#E2E6DF] text-xs font-mono text-[#4C5447]">
                             <span className="font-semibold text-[#111311]">
                               {product.specs[0].label}:
                             </span>{" "}
@@ -206,7 +206,7 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
 
                       {/* Bottom Footer Info */}
                       <div className="pt-3.5 border-t border-[#F0F2EF] flex items-center justify-between mt-auto">
-                        <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full font-semibold">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full font-semibold">
                           <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                           <span>{isBn ? "স্টকে আছে" : "In Stock"}</span>
                         </span>
@@ -234,7 +234,7 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
                 style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
               />
             </div>
-            <span className="text-[10px] font-mono text-[#5C605C] uppercase tracking-wider">
+            <span className="text-xs font-mono text-[#5C605C] tracking-wider">
               {isBn ? "স্ক্রোল করে দেখুন" : "Scroll to explore"}
             </span>
           </div>

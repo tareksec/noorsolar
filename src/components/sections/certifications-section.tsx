@@ -36,7 +36,7 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
         
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3.5 border border-[#D5DDD2] shadow-2xs">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-xs font-mono text-[#111311] mb-3.5 border border-[#D5DDD2] shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-[#CEF23E]" />
             <span>{isBn ? "অনুমোদন ও টেস্টিং" : "Compliance & Testing"}</span>
           </div>
@@ -68,12 +68,12 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
                 />
                 
                 {/* Subtle bottom badge over artwork */}
-                <div className="absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between px-3.5 py-2 rounded-xl bg-black/75 backdrop-blur-md text-white text-xs border border-white/10 shadow-md">
+                <div className="absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-black/85 backdrop-blur-md text-white text-xs border border-white/10 shadow-md">
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-[#CEF23E]" />
-                    <span className="font-semibold text-[11px]">Official BSREA Registered</span>
+                    <span className="font-semibold text-xs">Official BSREA Registered</span>
                   </div>
-                  <span className="font-mono text-[10px] text-[#CEF23E] font-bold">No. 20260915GEN113</span>
+                  <span className="font-mono text-xs text-[#CEF23E] font-bold">No. 20260915GEN113</span>
                 </div>
               </div>
             </div>
@@ -84,11 +84,17 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
               {/* Header inside details */}
               <div className="mb-6 pb-5 border-b border-[#E6ECE2]">
                 <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
-                  <span className="text-[11px] font-mono text-[#5C6658] uppercase tracking-wider font-semibold">
-                    National Association Accreditation
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#CEF23E]/30 text-[#111311] text-xs font-bold border border-[#CEF23E]">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#111311]" />
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-xs font-mono text-[#5C6658] uppercase tracking-wider font-semibold">
+                      National Association Accreditation
+                    </span>
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full" role="status">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+                      Active
+                    </span>
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-stone-100 text-stone-700 text-xs font-medium border border-stone-200 cursor-default" role="note">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-stone-500" />
                     <span>General Membership</span>
                   </span>
                 </div>
@@ -104,7 +110,7 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
               {/* 4 Metadata Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-6">
                 <div className="p-3.5 rounded-xl bg-[#F6F9F4] border border-[#DEE5DA]">
-                  <span className="text-[10px] font-mono text-[#636E5E] block uppercase font-medium">
+                  <span className="text-xs font-mono text-[#636E5E] block uppercase font-medium">
                     Member Enterprise
                   </span>
                   <span className="text-sm font-bold text-[#111311]">
@@ -113,7 +119,7 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#F6F9F4] border border-[#DEE5DA]">
-                  <span className="text-[10px] font-mono text-[#636E5E] block uppercase font-medium">
+                  <span className="text-xs font-mono text-[#636E5E] block uppercase font-medium">
                     Membership ID
                   </span>
                   <span className="text-sm font-bold font-mono text-[#111311]">
@@ -122,7 +128,7 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#F6F9F4] border border-[#DEE5DA]">
-                  <span className="text-[10px] font-mono text-[#636E5E] block uppercase font-medium">
+                  <span className="text-xs font-mono text-[#636E5E] block uppercase font-medium">
                     Date of Issue
                   </span>
                   <span className="text-sm font-semibold text-[#111311]">
@@ -131,14 +137,11 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#F6F9F4] border border-[#DEE5DA]">
-                  <span className="text-[10px] font-mono text-[#636E5E] block uppercase font-medium">
+                  <span className="text-xs font-mono text-[#636E5E] block uppercase font-medium">
                     Validity Period
                   </span>
-                  <span className="text-sm font-semibold text-[#111311] flex items-center gap-1.5">
-                    <span>December 31, 2026</span>
-                    <span className="text-[10px] text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full font-bold">
-                      Active
-                    </span>
+                  <span className="text-sm font-semibold text-[#111311]">
+                    December 31, 2026
                   </span>
                 </div>
               </div>
@@ -165,10 +168,10 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
                   href="https://bsreabd.org/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#F5F8F3] hover:bg-[#EAEFE6] text-[#111311] text-xs font-semibold border border-[#D5DDD2] transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-neutral-300 bg-white hover:bg-neutral-50 hover:border-neutral-900 text-[#111311] text-xs font-semibold transition-all shadow-2xs"
                 >
                   <Globe className="w-3.5 h-3.5 text-[#5C6658]" />
-                  <span>BSREA Portal</span>
+                  <span>Verify on BSREA Portal</span>
                 </a>
               </div>
 

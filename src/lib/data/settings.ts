@@ -63,7 +63,7 @@ export async function getSiteSettings(locale?: string): Promise<SiteConfig> {
 
     return localized;
   } catch (error) {
-    console.error("Failed to fetch site settings, using fallback defaults:", error);
+    console.warn("getSiteSettings: database not available, using fallback defaults");
     return defaultSiteConfig;
   }
 }

@@ -5,13 +5,13 @@ import { prefersReducedMotion } from "@/lib/motion";
 import { usePathname } from "next/navigation";
 
 const MARQUEE_ITEMS_EN = [
-  "TIER 1 SOLAR PANELS",
-  "LITHIUM LiFePO4 STORAGE",
-  "HYBRID & ON-GRID INVERTERS",
-  "BULK WHOLESALE BANGLADESH",
-  "CONTAINER-SCALE SUPPLY",
-  "ENGINEERING-GRADE QUALITY",
-  "DIRECT IMPORTER PRICING",
+  "Tier 1 Solar Panels",
+  "Lithium LiFePO4 Storage",
+  "Hybrid & On-Grid Inverters",
+  "Bulk Wholesale Bangladesh",
+  "Container-Scale Supply",
+  "Engineering-Grade Quality",
+  "Direct Importer Pricing",
 ];
 
 const MARQUEE_ITEMS_BN = [
@@ -93,7 +93,7 @@ export function TextMarquee({ locale }: TextMarqueeProps = {}) {
           <div key={loopIdx} className="flex items-center shrink-0">
             {items.map((item, idx) => (
               <div key={idx} className="flex items-center">
-                <span className="text-xs sm:text-sm font-mono font-bold tracking-widest text-white/95 px-6 sm:px-8 uppercase">
+                <span className="text-xs sm:text-sm font-mono font-bold tracking-widest text-white/95 px-6 sm:px-8">
                   {item}
                 </span>
                 <span className="w-2 h-2 rounded-full bg-[#CEF23E] shrink-0 shadow-[0_0_8px_#CEF23E]" />

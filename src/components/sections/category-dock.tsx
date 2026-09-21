@@ -118,7 +118,7 @@ export function CategoryDock({ locale }: CategoryDockProps) {
         
         {/* Section Header: Crisp, Executive, Professional */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          <p className="text-xs sm:text-[13px] font-mono font-medium tracking-[0.2em] text-[#556350] uppercase mb-3">
+          <p className="text-xs sm:text-sm font-mono font-semibold tracking-wider text-[#556350] mb-3">
             {isBn ? "কোর সোলার সলিউশন" : "Core Equipment Lineup"}
           </p>
 
@@ -192,7 +192,7 @@ export function CategoryDock({ locale }: CategoryDockProps) {
 
                     {/* Card Footer: Spec Tag & Text Link */}
                     <div className="pt-4 border-t border-[#EEF2EC] flex items-center justify-between text-xs">
-                      <span className="text-[11px] font-mono text-[#546050] font-medium truncate max-w-[65%]">
+                      <span className="text-xs font-mono text-[#546050] font-medium truncate max-w-[80%]">
                         {item.specSummary}
                       </span>
                       <span className="inline-flex items-center gap-1 font-semibold text-[#111311] group-hover:text-[#234224] group-hover:translate-x-0.5 transition-all duration-200 shrink-0">

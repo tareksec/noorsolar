@@ -250,7 +250,7 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
                     </span>
                   </div>
                   <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
-                    {isBn ? "উন্নত প্রযুক্তির পরিচ্ছন্ন শক্তি ব্যবস্থা" : "Engineered Clean Energy Systems"}
+                    {isBn ? story.title : `Engineered ${story.kicker} Systems`}
                   </h2>
                 </div>
 
@@ -302,7 +302,7 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
                   <div>
                     {/* Verified Specs Eyebrow */}
                     <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider opacity-70 mb-2">
-                      <span>{isBn ? "যাচাইকৃত স্পেসিফিকেশন" : "Verified Specification"}</span>
+                      <span>{isBn ? "টেকনিক্যাল বেঞ্চমার্ক" : "Technical Benchmarks"}</span>
                     </div>
 
                     {/* Headline */}
@@ -340,7 +340,7 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
                         key={cIdx}
                         className={`rounded-2xl p-3 sm:p-4 backdrop-blur-xs transition-all ${theme.counterBg}`}
                       >
-                        <span className={`text-[10px] font-mono uppercase block truncate mb-1 opacity-75`}>
+                        <span className={`text-xs font-mono uppercase block truncate mb-1 opacity-75`}>
                           {c.label}
                         </span>
                         <div className="text-xl sm:text-2xl lg:text-3xl font-black font-mono tracking-tight">
@@ -351,7 +351,7 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
                             decimals={c.decimals || 0}
                           />
                         </div>
-                        <span className={`text-[10px] font-mono mt-1 block truncate ${theme.counterSubtext}`}>
+                        <span className={`text-xs font-mono mt-1 block truncate ${theme.counterSubtext}`}>
                           {c.subtext}
                         </span>
                       </div>

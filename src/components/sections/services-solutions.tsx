@@ -82,8 +82,8 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
 
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12">
             {/* Main Headline */}
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#111311] max-w-xl leading-[1.08] uppercase">
-              {isBn ? "প্রতিটি প্রকল্পের জন্য পূর্ণাঙ্গ সোলার সমাধান" : "Complete Solar Solutions For Every Project"}
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#111311] max-w-xl leading-[1.08]">
+              {isBn ? "প্রতিটি প্রকল্পের জন্য পূর্ণাঙ্গ সোলার সমাধান" : "Complete Solar Solutions for Every Project"}
             </h2>
 
             {/* Accent Description Box */}
