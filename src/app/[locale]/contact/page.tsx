@@ -187,7 +187,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
             <div className="lg:col-span-5 flex flex-col justify-between p-6 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC]">
               <div className="relative aspect-16/10 w-full rounded-xl overflow-hidden mb-4 bg-white">
                 <Image
-                  src="/photos/contact-sales-desk.webp"
+                  src={settings.businessPhotos?.team || "/photos/contact-sales-desk.webp"}
                   alt={isBn ? "নূর সোলার এনার্জির টেকনিক্যাল সেলস ইঞ্জিনিয়ার ফোনে সহায়তা দিচ্ছেন" : "Noor Solar Energy technical sales engineer providing phone consultation"}
                   fill
                   sizes="(max-width: 1024px) 100vw, 400px"
@@ -205,6 +205,27 @@ export default async function ContactPage({ params }: ContactPageProps) {
                     : "Connect with our qualified electrical engineers for string calculation, single-line diagram review, and inverter warranty documentation."}
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* B2B Procurement Guidelines Notice */}
+        <div className="p-6 sm:p-8 rounded-[32px] bg-white border border-[#DDE1DC] mb-16">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <span className="text-xs font-mono text-[#5C605C] uppercase font-semibold">
+                {isBn ? "বাণিজ্যিক ক্রয় নির্দেশিকা ও সরবরাহ শর্তাবলি" : "Commercial Procurement Guidelines"}
+              </span>
+              <p className="text-xs sm:text-sm text-[#5C605C]">
+                {isBn
+                  ? "পাইকারি অর্ডার ন্যূনতম ১ প্যালেট থেকে শুরু হয়। ২০ ফুট ও ৪০HQ ফুল কনটেইনার চালানের জন্য বাণিজ্যিক কোটেশন ও এলসি শর্তাবলি প্রযোজ্য।"
+                  : "Wholesale consignments start at 1 pallet for local warehouse pickup. Container orders (20ft / 40HQ) are scheduled via formal proforma quotation and commercial indent."}
+              </p>
+            </div>
+            <div className="flex items-center gap-3 shrink-0">
+              <span className="text-xs font-mono text-[#111311] bg-[#EDEDED] px-3.5 py-1.5 rounded-full font-bold">
+                {isBn ? "৬৪ জেলায় ডেলিভারি" : "64 District Logistics"}
+              </span>
             </div>
           </div>
         </div>

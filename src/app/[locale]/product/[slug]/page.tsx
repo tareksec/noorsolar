@@ -8,9 +8,11 @@ import { getApprovedReviewsForProduct, isPublicReviewsEnabled } from "@/lib/data
 import { ProductCard } from "@/components/product/product-card";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductReviewsSection } from "@/components/product/product-reviews-section";
-import { ArrowUpRight, Box, Clock, Download, ShieldCheck, Award, FileText, FileCheck, Package } from "lucide-react";
+import { ArrowUpRight, Box, Clock, Download, ShieldCheck, Award, FileText, FileCheck, Package, Truck, Headphones } from "lucide-react";
 import { parseProductDocuments } from "@/lib/product-documents";
 import { extractProductIdentity } from "@/lib/product-identity";
+import { extractProductLogistics } from "@/lib/product-logistics";
+import { extractProductWarranty } from "@/lib/product-warranty";
 import { SITE_URL } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
@@ -76,6 +78,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { product, related } = data;
   const identity = extractProductIdentity(product);
   const docs = parseProductDocuments(product.datasheetUrl);
+  const logistics = extractProductLogistics(product, locale);
+  const warranty = extractProductWarranty(product, docs, locale);
   const hasDocs = Boolean(
     docs.datasheet || docs.warranty || docs.certificate || docs.manual || docs.testReport || docs.packingSheet
   );
@@ -507,9 +511,96 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </div>
               </div>
             )}
+
+            {/* Warranty & After-Sales Responsibility Card */}
+            {warranty.hasData && (
+              <div className="p-8 rounded-3xl bg-white border border-[#DDE1DC] space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold text-[#111311] tracking-tight">
+                    {isBn ? "ওয়ারেন্টি ও বিক্রয়োত্তর সহায়তা" : "Warranty & Support"}
+                  </h2>
+                  <span className="text-[11px] font-mono text-[#5C605C] bg-[#EDEDED] px-2.5 py-0.5 rounded-full">
+                    {isBn ? "ফ্যাক্টরি পলিসি" : "Factory Terms"}
+                  </span>
+                </div>
+
+                <div className="space-y-3 text-xs">
+                  {warranty.productWarranty && (
+                    <div className="p-3.5 rounded-2xl bg-[#EDEDED] flex items-center justify-between">
+                      <span className="text-[#5C605C] font-medium">
+                        {isBn ? "প্রোডাক্ট ওয়ারেন্টি:" : "Product Warranty:"}
+                      </span>
+                      <span className="font-mono font-bold text-[#111311]">
+                        {warranty.productWarranty}
+                      </span>
+                    </div>
+                  )}
+
+                  {warranty.performanceWarranty && (
+                    <div className="p-3.5 rounded-2xl bg-[#EDEDED] flex items-center justify-between">
+                      <span className="text-[#5C605C] font-medium">
+                        {isBn ? "পারফরম্যান্স ওয়ারেন্টি:" : "Performance Warranty:"}
+                      </span>
+                      <span className="font-mono font-bold text-[#111311]">
+                        {warranty.performanceWarranty}
+                      </span>
+                    </div>
+                  )}
+
+                  {warranty.manufacturerWarranty && (
+                    <div className="p-4 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC] space-y-1.5">
+                      <div className="flex items-center gap-2 font-bold text-[#111311]">
+                        <ShieldCheck className="w-4 h-4 text-[#111311]" />
+                        <span>{isBn ? "প্রস্তুতকারকের অফিসিয়াল দায়িত্ব" : "Manufacturer Warranty Backing"}</span>
+                      </div>
+                      <p className="text-[#5C605C] leading-relaxed">
+                        {warranty.manufacturerWarranty}
+                      </p>
+                    </div>
+                  )}
+
+                  {warranty.localSupportResponsibility && (
+                    <div className="p-4 rounded-2xl bg-white border border-[#DDE1DC] space-y-1.5">
+                      <div className="flex items-center gap-2 font-bold text-[#111311]">
+                        <Award className="w-4 h-4 text-[#111311]" />
+                        <span>{isBn ? "নূর সোলারের স্থানীয় আরএমএ সহায়তা" : "Local Supplier RMA Coordination"}</span>
+                      </div>
+                      <p className="text-[#5C605C] leading-relaxed">
+                        {warranty.localSupportResponsibility}
+                      </p>
+                    </div>
+                  )}
+
+                  {warranty.claimProcess && (
+                    <div className="text-[11px] text-[#5C605C] leading-relaxed pt-1">
+                      <strong className="text-[#111311] block mb-1 font-mono">
+                        {isBn ? "আরএমএ দাবি প্রক্রিয়া:" : "RMA Claim Submission:"}
+                      </strong>
+                      {warranty.claimProcess}
+                    </div>
+                  )}
+
+                  {warranty.warrantyDocumentUrl && (
+                    <a
+                      href={warranty.warrantyDocumentUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-between p-3 rounded-xl bg-[#EDEDED] hover:bg-[#DDE1DC] transition-colors font-medium text-[#111311]"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-[#111311]" />
+                        <span>{isBn ? "ওয়ারেন্টি পলিসি ফাইল (PDF)" : "Warranty Policy (PDF)"}</span>
+                      </div>
+                      <Download className="w-4 h-4 text-[#5C605C]" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 flex flex-col gap-6">
+            {/* Technical Specifications Table */}
             <div className="p-8 rounded-3xl bg-white border border-[#DDE1DC]">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-[#111311] tracking-tight">
@@ -540,6 +631,114 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </p>
               )}
             </div>
+
+            {/* B2B Packaging & Pallet Logistics Card */}
+            {logistics.hasData && (
+              <div className="p-8 rounded-3xl bg-white border border-[#DDE1DC]">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <span className="text-[11px] font-mono text-[#5C605C] uppercase block mb-1">
+                      {isBn ? "পাইকারি ও কনটেইনার লোডিং" : "B2B Logistics & Packaging"}
+                    </span>
+                    <h2 className="text-xl font-bold text-[#111311] tracking-tight">
+                      {isBn ? "প্যাকেজিং ও পরিবহন বিবরণ" : "Pallet & Container Logistics"}
+                    </h2>
+                  </div>
+                  <span className="text-xs font-mono text-[#5C605C] bg-[#EDEDED] px-3 py-1 rounded-full">
+                    {isBn ? "লজিস্টিকস মানদণ্ড" : "Logistics Standards"}
+                  </span>
+                </div>
+
+                <div className="divide-y divide-[#EDEDED] border-t border-b border-[#EDEDED] mb-4">
+                  {logistics.unitsPerPallet && (
+                    <div className="py-3 flex items-center justify-between text-xs sm:text-sm">
+                      <span className="text-[#5C605C] font-medium flex items-center gap-2">
+                        <Package className="w-4 h-4 text-[#111311]" />
+                        {isBn ? "প্যালেট প্রতি সংখ্যা:" : "Units Per Pallet:"}
+                      </span>
+                      <span className="font-mono font-bold text-[#111311]">
+                        {logistics.unitsPerPallet}
+                      </span>
+                    </div>
+                  )}
+
+                  {logistics.palletDimensions && (
+                    <div className="py-3 flex items-center justify-between text-xs sm:text-sm">
+                      <span className="text-[#5C605C] font-medium">
+                        {isBn ? "প্যালেট পরিমাপ:" : "Pallet Dimensions:"}
+                      </span>
+                      <span className="font-mono font-bold text-[#111311]">
+                        {logistics.palletDimensions}
+                      </span>
+                    </div>
+                  )}
+
+                  {logistics.palletWeight && (
+                    <div className="py-3 flex items-center justify-between text-xs sm:text-sm">
+                      <span className="text-[#5C605C] font-medium">
+                        {isBn ? "প্যালেট মোট ওজন:" : "Pallet Gross Weight:"}
+                      </span>
+                      <span className="font-mono font-bold text-[#111311]">
+                        {logistics.palletWeight}
+                      </span>
+                    </div>
+                  )}
+
+                  {logistics.container20ft && (
+                    <div className="py-3 flex items-center justify-between text-xs sm:text-sm">
+                      <span className="text-[#5C605C] font-medium flex items-center gap-1.5">
+                        <Truck className="w-4 h-4 text-[#111311]" />
+                        {isBn ? "২০ ফুট কনটেইনার লোডিং:" : "20ft Container Quantity:"}
+                      </span>
+                      <span className="font-mono font-bold text-[#111311]">
+                        {logistics.container20ft}
+                      </span>
+                    </div>
+                  )}
+
+                  {logistics.container40ft && (
+                    <div className="py-3 flex items-center justify-between text-xs sm:text-sm">
+                      <span className="text-[#5C605C] font-medium flex items-center gap-1.5">
+                        <Truck className="w-4 h-4 text-[#111311]" />
+                        {isBn ? "৪০ ফুট / ৪০HQ কনটেইনার লোডিং:" : "40ft / 40HQ Container Quantity:"}
+                      </span>
+                      <span className="font-mono font-bold text-[#111311]">
+                        {logistics.container40ft}
+                      </span>
+                    </div>
+                  )}
+
+                  {logistics.warehouseAvailability && (
+                    <div className="py-3 flex items-center justify-between text-xs sm:text-sm">
+                      <span className="text-[#5C605C] font-medium">
+                        {isBn ? "ওয়্যারহাউস প্রাপ্যতা:" : "Warehouse Availability:"}
+                      </span>
+                      <span className="font-mono font-bold text-[#111311] bg-[#EDEDED] px-2.5 py-0.5 rounded-full">
+                        {logistics.warehouseAvailability}
+                      </span>
+                    </div>
+                  )}
+
+                  {logistics.leadTime && (
+                    <div className="py-3 flex items-center justify-between text-xs sm:text-sm">
+                      <span className="text-[#5C605C] font-medium flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-[#111311]" />
+                        {isBn ? "ডেলিভারি সময়সীমা:" : "Dispatch & Delivery Time:"}
+                      </span>
+                      <span className="font-mono font-medium text-[#111311]">
+                        {logistics.leadTime}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-4 rounded-2xl bg-[#EDEDED] text-[11px] font-mono text-[#5C605C] leading-relaxed">
+                  {isBn
+                    ? "চট্টগ্রাম/মংলা বন্দর থেকে সরাসরি ফুল কনটেইনার ডেলিভারি এবং ঢাকা সেন্ট্রাল ওয়্যারহাউস থেকে প্যালেট ডেলিভারি সুবিধা।"
+                    : "Direct port-to-site full container delivery and warehouse pallet dispatch across Bangladesh."}
+                </div>
+              </div>
+            )}
           </div>
 
         </div>

@@ -12,6 +12,8 @@ import {
   getTestimonials,
   getFaqItems,
 } from "@/lib/data/content";
+import { getPublishedProjects } from "@/lib/data/projects";
+import { ProjectsShowcase } from "@/components/sections/projects-showcase";
 
 import { HeroSection } from "@/components/sections/hero-section";
 import { CategoryDock } from "@/components/sections/category-dock";
@@ -93,6 +95,7 @@ export default async function HomePage({
     partners,
     testimonials,
     faqItems,
+    projects,
   ] = await Promise.all([
     getCategories(locale),
     getFeaturedProducts(locale),
@@ -102,6 +105,7 @@ export default async function HomePage({
     getPartners(),
     getTestimonials(locale),
     getFaqItems(locale),
+    getPublishedProjects(locale),
   ]);
 
   const siteUrl = SITE_URL;
@@ -186,6 +190,9 @@ export default async function HomePage({
 
       {/* 8. Partners and Clients Strip (Server Component) */}
       <PartnersStrip partners={partners} locale={locale} />
+
+      {/* 9. Verified Project Supply References (cleanly hidden if database has no published projects) */}
+      <ProjectsShowcase projects={projects} locale={locale} />
 
       {/* Below-the-fold Animated Sections (Dynamic Client-Side Only to keep initial JS bundle small) */}
       <DynamicHomeSections

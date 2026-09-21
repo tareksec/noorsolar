@@ -20,6 +20,18 @@ export function getSiteUrl(): string {
 
 export const SITE_URL = getSiteUrl();
 
+export interface BusinessPhotos {
+  warehouse?: string;
+  palletStock?: string;
+  containerUnloading?: string;
+  delivery?: string;
+  inverterInventory?: string;
+  batteryRacks?: string;
+  productInspection?: string;
+  team?: string;
+  completedProjects?: string;
+}
+
 export interface SiteConfig {
   companyName: string;
   tagline: string;
@@ -61,6 +73,7 @@ export interface SiteConfig {
   aboutHeadlineBn?: string;
   aboutBody: string;
   aboutBodyBn?: string;
+  businessPhotos?: BusinessPhotos;
   socials: {
     facebook?: string;
     linkedin?: string;
@@ -142,6 +155,17 @@ export const defaultSiteConfig: SiteConfig = {
     "Supplying Solar Panels, High-Capacity Lithium-ion Batteries, and Industrial/Commercial Inverters across Bangladesh.",
   aboutBodyBn:
     "সারা দেশে বাণিজ্যিক ছাদ, শিল্প কারখানা ও সৌর বিদ্যুৎ প্রকল্পের জন্য উন্নত প্রযুক্তির সোলার প্যানেল, লিথিয়াম ব্যাটারি ও ইনভার্টার পাইকারি সরবরাহ করছি।",
+  businessPhotos: {
+    warehouse: "/photos/step-3-logistics.webp",
+    palletStock: "/photos/cat-solar-panels.webp",
+    containerUnloading: "/photos/step-3-logistics.webp",
+    delivery: "/photos/step-4-delivery.webp",
+    inverterInventory: "/photos/cat-solar-inverters.webp",
+    batteryRacks: "/photos/cat-lithium-batteries.webp",
+    productInspection: "/photos/about-inspection.webp",
+    team: "/photos/contact-sales-desk.webp",
+    completedProjects: "/photos/about-commercial-plant.webp",
+  },
   socials: {},
   faq: [
     {

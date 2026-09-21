@@ -95,8 +95,8 @@ export default async function AboutPage({ params }: AboutPageProps) {
             <div className="lg:col-span-5 relative">
               <div className="relative aspect-4/3 w-full rounded-3xl overflow-hidden border border-[#DDE1DC] shadow-md bg-white">
                 <Image
-                  src="/photos/about-inspection.webp"
-                  alt={isBn ? "নূর সোলার এনার্জির প্রকৌশলী দ্বারা সাইট পরিদর্শন ও মান নিয়ন্ত্রণ" : "Noor Solar Energy field engineers conducting on-site QA inspection"}
+                  src={settings.businessPhotos?.productInspection || "/photos/about-inspection.webp"}
+                  alt={isBn ? "নূর সোলার এনার্জির প্রকৌশলী দ্বারা মান নিয়ন্ত্রণ ও স্পেক যাচাই" : "Noor Solar Energy engineering team conducting QA inspection"}
                   fill
                   sizes="(max-width: 1024px) 100vw, 480px"
                   className="object-cover"
@@ -106,7 +106,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
                     <Award className="w-4 h-4 text-[#CEF23E]" />
                     <span className="text-[11px] font-mono">{isBn ? "কারখানার গুণগত মান নিশ্চয়তা" : "Factory Quality Assurance"}</span>
                   </div>
-                  <span className="text-[10px] font-mono text-[#CEF23E]">{isBn ? "IEC ও UL স্বীকৃত" : "IEC & UL Verified"}</span>
+                  <span className="text-[10px] font-mono text-[#CEF23E]">{isBn ? "IEC ও FAT যাচাইকৃত" : "IEC & FAT Verified"}</span>
                 </div>
               </div>
             </div>
@@ -120,12 +120,12 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <ShieldCheck className="w-5 h-5 text-[#111311]" />
             </div>
             <h3 className="text-lg font-bold text-[#111311] mb-2">
-              {isBn ? "সরাসরি প্রস্তুতকারকদের থেকে আমদানি" : "Direct Factory Sourcing"}
+              {isBn ? "সরাসরি প্রস্তুতকারক লাইন থেকে আমদানি" : "Direct Factory Sourcing"}
             </h3>
             <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed">
               {isBn
-                ? "আমরা সরাসরি আন্তর্জাতিক শীর্ষ প্রস্তুতকারকদের থেকে পূর্ণাঙ্গ টেকনিক্যাল ডেটাশিট সহ আসল সোলার প্যানেল, ব্যাটারি ও ইনভার্টার আমদানি করি।"
-                : "We source directly from international manufacturers, supplying authentic solar modules, battery units, and inverters with complete technical specifications."}
+                ? "আমরা সরাসরি আন্তর্জাতিক শীর্ষ প্রস্তুতকারক লাইন থেকে পূর্ণাঙ্গ টেকনিক্যাল ডেটাশিট ও ফ্যাক্টরি টেস্ট রিপোর্ট সহ আসল সোলার প্যানেল, ব্যাটারি ও ইনভার্টার আমদানি করি।"
+                : "We source directly from recognized manufacturing facilities, supplying authentic solar modules, battery units, and inverters with complete technical specifications and factory acceptance test reports."}
             </p>
           </div>
 
@@ -138,8 +138,8 @@ export default async function AboutPage({ params }: AboutPageProps) {
             </h3>
             <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed">
               {isBn
-                ? "শিল্প কারখানা, ইপিসি ঠিকাদার এবং স্থানীয় ডিলারদের জন্য কেন্দ্রীয় ওয়্যারহাউস থেকে রেডি স্টক ও কনটেইনার চালানের মাধ্যমে পাইকারি সরবরাহ করি।"
-                : "Serving industrial factories, EPC contractors, and regional solar dealers with bulk consignments, container shipments, and ready inventory at our central warehouse."}
+                ? "শিল্প কারখানা, ইপিসি ঠিকাদার এবং স্থানীয় ডিলারদের জন্য ঢাকা সেন্ট্রাল ওয়্যারহাউস থেকে রেডি স্টক এবং সরাসরি বন্দর থেকে কনটেইনার চালানের মাধ্যমে পাইকারি সরবরাহ করি।"
+                : "Serving industrial factories, EPC contractors, and regional solar dealers with bulk container shipments and buffer stock inventory at our central Dhaka warehouse."}
             </p>
           </div>
 
@@ -148,12 +148,12 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <Zap className="w-5 h-5 text-[#111311]" />
             </div>
             <h3 className="text-lg font-bold text-[#111311] mb-2">
-              {isBn ? "কারিগরি যাচাই ও টেস্টিং" : "Technical Verification"}
+              {isBn ? "কারিগরি কমপ্লায়েন্স ও টেস্টিং" : "Technical Verification & Compliance"}
             </h3>
             <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed">
               {isBn
-                ? "প্রতিটি চালানের বৈদ্যুতিক প্যারামিটার, ফ্ল্যাশ টেস্ট এবং ব্যাটারির অভ্যন্তরীণ রোধ পরীক্ষা করা হয় যেন বাংলাদেশের গ্রিডে তা সেরা পারফরম্যান্স দেয়।"
-                : "Every shipment is inspected for electrical parameters, flash test results, and battery internal resistance to ensure flawless integration into Bangladesh solar grids."}
+                ? "প্রতিটি চালানের বৈদ্যুতিক প্যারামিটার, ফ্ল্যাশ টেস্ট কার্ভ এবং ব্যাটারির অভ্যন্তরীণ রোধ পরীক্ষা করা হয় যেন বাংলাদেশের জলবায়ু ও গ্রিডে তা সেরা পারফরম্যান্স নিশ্চিত করে।"
+                : "Every consignment is verified against factory flash test curves, insulation metrics, and battery internal resistance to ensure long-term durability in Bangladesh solar installations."}
             </p>
           </div>
         </div>
@@ -163,8 +163,8 @@ export default async function AboutPage({ params }: AboutPageProps) {
           <div className="rounded-[36px] bg-white border border-[#DDE1DC] p-6 sm:p-8 flex flex-col justify-between">
             <div className="relative aspect-16/10 w-full rounded-2xl overflow-hidden mb-6 bg-[#EDEDED]">
               <Image
-                src="/photos/about-commercial-plant.webp"
-                alt={isBn ? "বাংলাদেশে বাণিজ্যিক সোলার বিদ্যুৎ প্রকল্প" : "Utility-scale commercial solar plant in Bangladesh"}
+                src={settings.businessPhotos?.completedProjects || "/photos/about-commercial-plant.webp"}
+                alt={isBn ? "বাংলাদেশে বাণিজ্যিক সোলার বিদ্যুৎ প্রকল্প সরঞ্জাম সরবরাহ" : "Utility-scale commercial solar plant in Bangladesh"}
                 fill
                 sizes="(max-width: 1024px) 100vw, 600px"
                 className="object-cover"
@@ -172,15 +172,15 @@ export default async function AboutPage({ params }: AboutPageProps) {
             </div>
             <div>
               <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1 font-semibold">
-                {isBn ? "ক্ষমতা ও নির্ভরযোগ্যতা" : "Scale & Reliability"}
+                {isBn ? "সরঞ্জাম সরবরাহ ও ক্ষমতা" : "Scale & Reliability"}
               </span>
               <h3 className="text-xl font-bold text-[#111311] mb-2">
                 {isBn ? "শিল্প ও বাণিজ্যিক মেগাওয়াট প্রকল্প" : "Utility & Commercial Megawatt Deployments"}
               </h3>
               <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed">
                 {isBn
-                  ? "দেশের বিভিন্ন তৈরি পোশাক কারখানা, শিল্প প্রতিষ্ঠান ও টেলিকম হাবের জন্য উচ্চ দক্ষতাসম্পন্ন সোলার সরঞ্জাম সরবরাহ করা হয়েছে।"
-                  : "Supplying verified high-efficiency PV arrays and balance-of-system equipment for industrial garment rooftops, manufacturing facilities, and off-grid telecom hubs across the country."}
+                  ? "দেশের বিভিন্ন তৈরি পোশাক কারখানা, শিল্প প্রতিষ্ঠান ও বাণিজ্যিক রুফটপ প্ল্যান্টের জন্য যাচাইকৃত উচ্চ দক্ষতাসম্পন্ন সোলার প্যানেল, ব্যাটারি ও ইনভার্টার সরবরাহ।"
+                  : "Supplying verified high-efficiency PV arrays and balance-of-system equipment for industrial garment rooftops, manufacturing facilities, and commercial solar projects across Bangladesh."}
               </p>
             </div>
           </div>
@@ -188,8 +188,8 @@ export default async function AboutPage({ params }: AboutPageProps) {
           <div className="rounded-[36px] bg-white border border-[#DDE1DC] p-6 sm:p-8 flex flex-col justify-between">
             <div className="relative aspect-16/10 w-full rounded-2xl overflow-hidden mb-6 bg-[#EDEDED]">
               <Image
-                src="/photos/about-operations.webp"
-                alt={isBn ? "ছাদে সোলার প্যানেল ইনস্টলেশন কাজ" : "Solar technicians mounting solar modules on rooftop"}
+                src={settings.businessPhotos?.warehouse || "/photos/about-operations.webp"}
+                alt={isBn ? "সেন্ট্রাল ওয়্যারহাউস ও ডিপো লজিস্টিকস" : "Central warehouse inventory and depot logistics"}
                 fill
                 sizes="(max-width: 1024px) 100vw, 600px"
                 className="object-cover"
@@ -197,15 +197,78 @@ export default async function AboutPage({ params }: AboutPageProps) {
             </div>
             <div>
               <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1 font-semibold">
-                {isBn ? "মাঠপর্যায়ের সহায়তা" : "Field Support"}
+                {isBn ? "ডিপো লজিস্টিকস" : "Depot Logistics & Dispatch"}
               </span>
               <h3 className="text-xl font-bold text-[#111311] mb-2">
-                {isBn ? "প্রকৌশল পরামর্শ ও ডিপো ডেলিভারি" : "Engineering Guidance & Depot Handover"}
+                {isBn ? "সেন্ট্রাল ওয়্যারহাউস ও দেশব্যাপী পরিবহন" : "Central Warehouse & Nationwide Transport"}
               </h3>
               <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed">
                 {isBn
-                  ? "যান্ত্রিক সামঞ্জস্য, সঠিক স্ট্রিং সাইজিং এবং নির্বিঘ্ন ডেলিভারি নিশ্চিত করতে আমাদের বিশেষজ্ঞ দল আপনার প্রকৌশলীদের সাথে ঘনিষ্ঠভাবে কাজ করে।"
-                  : "Direct coordination between our equipment specialists and your engineering contractors to ensure mechanical compatibility, correct string sizing, and seamless depot dispatch."}
+                  ? "ঢাকার সেন্ট্রাল ওয়্যারহাউসে প্যালেট বাফার স্টক এবং চট্টগ্রাম/মংলা বন্দর থেকে সরাসরি প্রজেক্ট সাইটে কনটেইনার ইন্ডেন্ট ডেলিভারি সুবিধা।"
+                  : "Central warehouse buffer stock in Dhaka with scheduled dispatch across all 64 districts, plus port-to-site container indenting directly to project installations."}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* B2B Credibility & Operations Factsheet */}
+        <div className="p-8 sm:p-12 rounded-[36px] bg-white border border-[#DDE1DC] mb-16">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            <div>
+              <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">
+                {isBn ? "পাইকারি তথ্য ও অপারেশনাল কাঠামো" : "B2B Wholesale Operational Factsheet"}
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#111311] tracking-tight">
+                {isBn ? "নূর সোলার এনার্জির বাণিজ্যিক তথ্য ও সক্ষমতা" : "Commercial Operations & Supply Capabilities"}
+              </h2>
+            </div>
+            <span className="text-xs font-mono text-[#111311] bg-[#EDEDED] px-3.5 py-1.5 rounded-full self-start sm:self-auto">
+              {isBn ? "বিটুবি সরবরাহকারী" : "B2B Equipment Importer"}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-xs">
+            <div className="p-5 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC] space-y-2">
+              <span className="font-mono font-bold text-[#111311] uppercase block">
+                {isBn ? "সরবরাহকৃত প্রধান সরঞ্জাম" : "Core Equipment Lineup"}
+              </span>
+              <p className="text-[#5C605C] leading-relaxed">
+                {isBn
+                  ? "এন-টাইপ TOPCon সোলার প্যানেল (৫৫০W–৬২০W+), LiFePO4 লিথিয়াম ব্যাটারি র্যাক (৫.১২kWh–উচ্চ ভোল্টেজ), ও বাণিজ্যিক ইনভার্টার (৫kW–৫০kW+)।"
+                  : "N-Type TOPCon PV Modules (550W–620W+), LiFePO4 Rack Batteries (5.12 kWh to HV cabinets), and Commercial Inverters (5kW–50kW+)."}
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC] space-y-2">
+              <span className="font-mono font-bold text-[#111311] uppercase block">
+                {isBn ? "লক্ষ্য বাণিজ্যিক ক্রেতা" : "Target Buyer Network"}
+              </span>
+              <p className="text-[#5C605C] leading-relaxed">
+                {isBn
+                  ? "সোলার EPC ঠিকাদার, শিল্প কারখানা (আরএমজি ও টেক্সটাইল), বাণিজ্যিক রুফটপ ডেভেলপার, এবং নিবন্ধিত আঞ্চলিক সোলার পরিবেশক।"
+                  : "Solar EPC Contractors, Industrial RMG & Textile Factories, Commercial Rooftop Developers, and Certified Regional Solar Dealers."}
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC] space-y-2">
+              <span className="font-mono font-bold text-[#111311] uppercase block">
+                {isBn ? "সরবরাহ ব্যবস্থা ও MOQ" : "Procurement Tiers & MOQ"}
+              </span>
+              <p className="text-[#5C605C] leading-relaxed">
+                {isBn
+                  ? "ঢাকা ওয়্যারহাউস থেকে ন্যূনতম ১ প্যালেট পিকআপ এবং বড় মেগাওয়াট প্রকল্পের জন্য সরাসরি ২০ ফুট ও ৪০HQ ফুল কনটেইনার ইন্ডেন্ট।"
+                  : "Minimum Order Quantity starts at 1 pallet for warehouse pickup; container-scale 20ft/40HQ orders delivered direct from port."}
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC] space-y-2">
+              <span className="font-mono font-bold text-[#111311] uppercase block">
+                {isBn ? "লজিস্টিকস ও কভারেজ" : "Warehouse & Logistics Coverage"}
+              </span>
+              <p className="text-[#5C605C] leading-relaxed">
+                {isBn
+                  ? "মতিঝিল বাণিজ্যিক অফিসে সেলস ডেস্ক এবং সেন্ট্রাল ওয়্যারহাউস হাব থেকে বাংলাদেশের ৬৪টি জেলায় বীমাকৃত নিরাপদ পরিবহন সুবিধা।"
+                  : "Commercial sales desk at Motijheel, Dhaka, with central warehouse depot coordinating insured dispatch across all 64 districts."}
               </p>
             </div>
           </div>
@@ -222,7 +285,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <span>
                 {isBn
                   ? "বাণিজ্যিক EPC অনুমোদনের জন্য পূর্ণাঙ্গ কমপ্লায়েন্স ডকুমেন্টেশন ও ফ্যাক্টরি ফ্ল্যাশ টেস্ট ডেটাশিট প্রদান।"
-                  : "Full compliance documentation and factory flash test datasheets for commercial EPC approvals."}
+                  : "Full compliance documentation, factory flash test curves, and manufacturer warranty certificates for commercial EPC approvals."}
               </span>
             </div>
             <div className="flex items-start gap-3">

@@ -116,6 +116,48 @@ export const demoProducts = [
         "sortOrder": 12,
         "labelBn": "কানেক্টর টাইপ",
         "valueBn": "MC4-EVO2 কম্প্যাটিবল (1500V DC)"
+      },
+      {
+        "label": "Units Per Pallet",
+        "value": "31 pcs / Pallet",
+        "sortOrder": 13,
+        "labelBn": "প্যালেট প্রতি সংখ্যা",
+        "valueBn": "৩১ টি / প্যালেট"
+      },
+      {
+        "label": "Pallet Dimensions",
+        "value": "2410 x 1150 x 1280 mm",
+        "sortOrder": 14,
+        "labelBn": "প্যালেট পরিমাপ",
+        "valueBn": "২৪১০ x ১১৫০ x ১২৮০ মিমি"
+      },
+      {
+        "label": "Pallet Weight",
+        "value": "1,080 kg (Gross Pallet)",
+        "sortOrder": 15,
+        "labelBn": "প্যালেট মোট ওজন",
+        "valueBn": "১০৮০ কেজি (মোট ওজন)"
+      },
+      {
+        "label": "40ft HQ Container",
+        "value": "558 pcs (18 Pallets / 40HQ)",
+        "sortOrder": 16,
+        "labelBn": "৪০HQ কনটেইনার লোডিং",
+        "valueBn": "৫৫৮ টি (১৮ প্যালেট / ৪০HQ)"
+      },
+      {
+        "label": "Product Warranty",
+        "value": "12 Years Manufacturer Workmanship Warranty",
+        "sortOrder": 17,
+        "labelBn": "প্রোডাক্ট ওয়ারেন্টি",
+        "valueBn": "১২ বছর প্রস্তুতকারক ওয়ারেন্টি"
+      },
+      {
+        "label": "Performance Warranty",
+        "value": "30 Years Linear Power Output Guarantee (87.4%)",
+        "sortOrder": 18,
+        "labelBn": "লিনিয়ার পারফরম্যান্স ওয়ারেন্টি",
+        "valueBn": "৩০ বছর লিনিয়ার পাওয়ার গ্যারান্টি (৮৭.৪%)"
       }
     ],
     "nameBn": "এন-টাইপ TOPCon বাইফেসিয়াল সোলার প্যানেল 620W",

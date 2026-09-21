@@ -1,19 +1,20 @@
-﻿import React from "react";
+import React from "react";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { getLiveSampleContentSummary } from "@/lib/data/content";
 import { ContentTabs } from "@/components/admin/content-tabs";
-import { BarChart3, Award, Handshake, Quote, HelpCircle, AlertTriangle, ArrowRight, CheckCircle2 } from "lucide-react";
+import { BarChart3, Award, Handshake, Quote, HelpCircle, Briefcase, AlertTriangle, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default async function ContentOverviewPage() {
   const summary = await getLiveSampleContentSummary();
 
-  const [statTotal, certTotal, partnerTotal, testimonialTotal, faqTotal] = await Promise.all([
-    db.stat.count(),
-    db.certification.count(),
-    db.partner.count(),
-    db.testimonial.count(),
-    db.faqItem.count(),
+  const [statTotal, certTotal, partnerTotal, testimonialTotal, faqTotal, projectTotal] = await Promise.all([
+    db.stat.count().catch(() => 0),
+    db.certification.count().catch(() => 0),
+    db.partner.count().catch(() => 0),
+    db.testimonial.count().catch(() => 0),
+    db.faqItem.count().catch(() => 0),
+    db.project.count().catch(() => 0),
   ]);
 
   const cards = [
@@ -56,6 +57,14 @@ export default async function ContentOverviewPage() {
       total: faqTotal,
       samples: summary.faqCount,
       desc: "Frequently asked questions regarding quotes, MOQ, and terms",
+    },
+    {
+      title: "Project Supply References",
+      href: "/admin/content/projects",
+      icon: Briefcase,
+      total: projectTotal,
+      samples: 0,
+      desc: "Completed commercial rooftop, factory, and MW supply references",
     },
   ];
 

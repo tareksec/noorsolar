@@ -15,6 +15,10 @@ export async function getSiteSettings(locale?: string): Promise<SiteConfig> {
     const base: SiteConfig = {
       ...defaultSiteConfig,
       ...parsed,
+      businessPhotos: {
+        ...defaultSiteConfig.businessPhotos,
+        ...(parsed.businessPhotos || {}),
+      },
       socials: {
         ...defaultSiteConfig.socials,
         ...(parsed.socials || {}),
@@ -80,6 +84,10 @@ export async function updateSiteSettings(
   const updated = {
     ...parsedCurrent,
     ...config,
+    businessPhotos: {
+      ...(parsedCurrent.businessPhotos || {}),
+      ...((config.businessPhotos as Record<string, string>) || {}),
+    },
     socials: {
       ...(parsedCurrent.socials || {}),
       ...(config.socials || {}),
