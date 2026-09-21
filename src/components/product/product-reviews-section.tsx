@@ -206,8 +206,9 @@ export function ProductReviewsSection({
                   type="text"
                   name="authorName"
                   required
+                  autoComplete="name"
                   placeholder={isBn ? "যেমন: প্রকৌশলী তানভীর আহমেদ" : "e.g. Engr. Tanvir Ahmed"}
-                  className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white text-base text-[#111311] outline-none"
                 />
               </div>
 
@@ -219,7 +220,7 @@ export function ProductReviewsSection({
                   type="text"
                   name="authorRole"
                   placeholder={isBn ? "প্রকল্প পরিচালক / লিড ইঞ্জিনিয়ার" : "Project Director / EPC Engineer"}
-                  className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white text-base text-[#111311] outline-none"
                 />
               </div>
 
@@ -230,8 +231,9 @@ export function ProductReviewsSection({
                 <input
                   type="text"
                   name="company"
+                  autoComplete="organization"
                   placeholder={isBn ? "সোলার ইপিসি বাংলাদেশ লি." : "Solar EPC Bangladesh Ltd."}
-                  className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white text-base text-[#111311] outline-none"
                 />
               </div>
             </div>
@@ -244,7 +246,7 @@ export function ProductReviewsSection({
                 type="text"
                 name="title"
                 placeholder={isBn ? "উন্নত বিদ্যুৎ ফলন ও টেকসই মডিউল ফ্রেম" : "High generation yield and sturdy module frames"}
-                className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
+                className="w-full px-4 py-2.5 rounded-2xl bg-white text-base text-[#111311] outline-none"
               />
             </div>
 
@@ -263,11 +265,11 @@ export function ProductReviewsSection({
                     ? "পণ্যের কর্মক্ষমতা, বিল্ড কোয়ালিটি ও ইনস্টলেশনের অভিজ্ঞতা শেয়ার করুন..."
                     : "Share your experience with product efficiency, build quality, and installation performance..."
                 }
-                className="w-full px-4 py-3 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
+                className="w-full px-4 py-3 rounded-2xl bg-white text-base text-[#111311] outline-none"
               />
             </div>
 
-            <div className="flex items-center justify-between pt-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2">
               <span className="text-[11px] text-[#5C605C]">
                 {isBn
                   ? "সব রিভিউ প্রকাশের আগে প্রকৌশলী দ্বারা যাচাই করা হয়। কেবল আসল প্রকল্পের মতামত গ্রহণযোগ্য।"
@@ -277,7 +279,7 @@ export function ProductReviewsSection({
                 type="submit"
                 id="btn-submit-public-review"
                 disabled={isPending}
-                className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-semibold text-xs tracking-tight transition-all disabled:opacity-60 shadow-sm shrink-0"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 min-h-[44px] rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-semibold text-xs tracking-tight transition-all disabled:opacity-60 shadow-sm shrink-0"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{isPending ? (isBn ? "জমা হচ্ছে..." : "Submitting...") : (isBn ? "রিভিউ জমা দিন" : "Submit Review")}</span>

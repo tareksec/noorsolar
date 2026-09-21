@@ -22,31 +22,31 @@ export function SustainabilityImpact({ locale }: SustainabilityImpactProps = {})
 
   const impactItems: ImpactItem[] = [
     {
-      badge: isBn ? "ভবিষ্যতের জন্য প্রস্তুত" : "Future ready",
+      badge: isBn ? "পরিবেশ ও রপ্তানি কমপ্লায়েন্স" : "ESG & Export Compliance",
       title: isBn
-        ? "আপনার ব্যবসার দীর্ঘমেয়াদী সমৃদ্ধির উপযোগী"
-        : "Built for a lower impact on your business future",
+        ? "পোশাক ও রপ্তানিমুখী শিল্পের জন্য টেকসই শক্তি"
+        : "Lowering Industrial Carbon Footprints for Global Compliance",
       description: isBn
-        ? "টেকসই নবায়নযোগ্য জ্বালানি এখন ব্যবসায়িক মানদণ্ড। আপনার বাণিজ্যিক পরিচালন ক্ষমতাকে সরকারি নীতিমালা এবং পরিবেশগত দায়িত্বের সাথে সামঞ্জস্যপূর্ণ করুন।"
-        : "Sustainability is becoming a business standard, not a trend. Align your operations with regulations, market expectations, and environmental responsibility.",
+        ? "আন্তর্জাতিক বায়ারদের ESG কমপ্লায়েন্স মানদণ্ড পূরণ করতে শিল্প কারখানার রুফটপ সোলার এখন অপরিহার্য। অন-সাইট গ্রিন এনার্জি ব্যবহার করে কারখানার কার্বন ফুটপ্রিন্ট কমান এবং বৈশ্বিক বাজারে এগিয়ে থাকুন।"
+        : "Meeting international export standards and buyer ESG audits requires documented clean energy adoption. Industrial rooftop PV directly cuts factory Scope 2 emissions while satisfying global supply chain sustainability mandates.",
       buttonText: isBn ? "বিশেষজ্ঞের সাথে কথা বলুন" : "Talk to an expert",
       buttonHref: "/contact",
       imageSrc: "/photos/impact-future-ready.webp",
-      imageAlt: isBn ? "বায়ুকল সহ পরিবেশবান্ধব সবুজ পাহাড়" : "Green hillside landscape with clean energy wind turbines",
+      imageAlt: isBn ? "পরিবেশবান্ধব নবায়নযোগ্য বিদ্যুৎ প্রকল্প" : "Industrial clean energy solar and wind installations",
       reverse: false,
     },
     {
-      badge: isBn ? "ব্যয় সাশ্রয়ী" : "Cost efficiency",
+      badge: isBn ? "দীর্ঘমেয়াদী LCOE সাশ্রয়" : "Levelized Cost of Energy",
       title: isBn
-        ? "বিদ্যুৎ অপচয় কমান, অপারেশনাল ও এনার্জি খরচ সাশ্রয় করুন"
-        : "Reduce waste, lower hidden operational and energy costs",
+        ? "পিক আওয়ার ট্যারিফ হ্রাস ও অপারেশনাল খরচ নিয়ন্ত্রণ"
+        : "Mitigate Grid Tariff Spikes & Unpredictable Generator Costs",
       description: isBn
-        ? "বিদ্যুৎ অপচয় এবং জ্বালানি ঘাটতি ব্যবসায়িক মুনাফায় প্রভাব ফেলে। আধুনিক সোলার সিস্টেম বিদ্যুৎ খরচ উল্লেখযোগ্যভাবে কমিয়ে উৎপাদনের স্থিতিশীলতা নিশ্চিত করে।"
-        : "Energy loss, emissions, and resource inefficiencies create real financial impact. Optimising systems helps cut costs while improving performance and stability.",
+        ? "গ্রিড বিদ্যুতের মূল্যবৃদ্ধি এবং ডিজেল জেনারেটরের জ্বালানি খরচ কমাতে অন-সাইট সোলার বিদ্যুৎ সবচেয়ে কার্যকরী সমাধান। দ্রুত পে-ব্যাক পিরিয়ডে দীর্ঘ ২৫ বছর পর্যন্ত কারখানার বিদ্যুৎ খরচ কমিয়ে রাখুন।"
+        : "High peak commercial utility tariffs and volatile diesel fuel expenses directly impact operating margins. High-yield commercial solar arrays stabilize manufacturing kilowatt-hour costs with predictable 3 to 4 year capital payback timelines.",
       buttonText: isBn ? "পরামর্শ নিন" : "Talk to an expert",
       buttonHref: "/contact",
       imageSrc: "/photos/impact-cost-efficiency.webp",
-      imageAlt: isBn ? "সবুজ মাঠে সোলার ফটোভোলটাইক প্যানেল ইনস্টলেশন" : "Solar photovoltaic panels installed across a green field",
+      imageAlt: isBn ? "বাণিজ্যিক সোলার প্যানেল ইনস্টলেশন" : "Solar photovoltaic panels installed for cost efficiency",
       reverse: true,
     },
   ];

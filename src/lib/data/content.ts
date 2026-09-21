@@ -12,22 +12,37 @@ function shouldHideSample(): boolean {
   return process.env.HIDE_SAMPLE_CONTENT === "true";
 }
 
+function isUnverifiedExperienceClaim(label: string, description?: string | null): boolean {
+  const text = `${label} ${description || ""}`.toLowerCase();
+  return (
+    text.includes("years in business") ||
+    text.includes("years of experience") ||
+    text.includes("year in business") ||
+    text.includes("established since") ||
+    text.includes("founding year") ||
+    text.includes("ব্যবসার অভিজ্ঞতা") ||
+    text.includes("প্রতিষ্ঠিত")
+  );
+}
+
 function getFallbackStats(locale?: string): Stat[] {
-  const stats: Stat[] = sampleStats.map((s, idx) => ({
-    id: `fallback-stat-${idx}`,
-    label: s.label,
-    labelBn: s.labelBn ?? null,
-    value: s.value,
-    prefix: s.prefix ?? null,
-    suffix: s.suffix ?? null,
-    description: s.description ?? null,
-    descriptionBn: s.descriptionBn ?? null,
-    sortOrder: s.sortOrder ?? idx + 1,
-    isActive: s.isActive ?? true,
-    isSample: s.isSample ?? true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }));
+  const stats: Stat[] = sampleStats
+    .filter((s) => s.isActive && !isUnverifiedExperienceClaim(s.label, s.description))
+    .map((s, idx) => ({
+      id: `fallback-stat-${idx}`,
+      label: s.label,
+      labelBn: s.labelBn ?? null,
+      value: s.value,
+      prefix: s.prefix ?? null,
+      suffix: s.suffix ?? null,
+      description: s.description ?? null,
+      descriptionBn: s.descriptionBn ?? null,
+      sortOrder: s.sortOrder ?? idx + 1,
+      isActive: s.isActive ?? true,
+      isSample: s.isSample ?? true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
 
   if (locale !== "bn") return stats;
 
@@ -39,21 +54,23 @@ function getFallbackStats(locale?: string): Stat[] {
 }
 
 function getFallbackCertifications(locale?: string): Certification[] {
-  const certs: Certification[] = sampleCertifications.map((c, idx) => ({
-    id: `fallback-cert-${idx}`,
-    name: c.name,
-    nameBn: c.nameBn ?? null,
-    issuer: c.issuer ?? null,
-    issuerBn: c.issuerBn ?? null,
-    description: c.description ?? null,
-    descriptionBn: c.descriptionBn ?? null,
-    image: c.image ?? null,
-    sortOrder: c.sortOrder ?? idx + 1,
-    isActive: c.isActive ?? true,
-    isSample: c.isSample ?? true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }));
+  const certs: Certification[] = sampleCertifications
+    .filter((c) => c.isActive)
+    .map((c, idx) => ({
+      id: `fallback-cert-${idx}`,
+      name: c.name,
+      nameBn: c.nameBn ?? null,
+      issuer: c.issuer ?? null,
+      issuerBn: c.issuerBn ?? null,
+      description: c.description ?? null,
+      descriptionBn: c.descriptionBn ?? null,
+      image: c.image ?? null,
+      sortOrder: c.sortOrder ?? idx + 1,
+      isActive: c.isActive ?? true,
+      isSample: c.isSample ?? true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
 
   if (locale !== "bn") return certs;
 
@@ -80,23 +97,25 @@ function getFallbackPartners(): Partner[] {
 }
 
 function getFallbackTestimonials(locale?: string): Testimonial[] {
-  const testimonials: Testimonial[] = sampleTestimonials.map((t, idx) => ({
-    id: `fallback-testimonial-${idx}`,
-    quote: t.quote,
-    quoteBn: t.quoteBn ?? null,
-    authorName: t.authorName,
-    authorNameBn: t.authorNameBn ?? null,
-    authorRole: t.authorRole ?? null,
-    authorRoleBn: t.authorRoleBn ?? null,
-    company: t.company ?? null,
-    companyBn: t.companyBn ?? null,
-    photo: t.photo ?? null,
-    sortOrder: t.sortOrder ?? idx + 1,
-    isActive: t.isActive ?? true,
-    isSample: t.isSample ?? true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }));
+  const testimonials: Testimonial[] = sampleTestimonials
+    .filter((t) => t.isActive)
+    .map((t, idx) => ({
+      id: `fallback-testimonial-${idx}`,
+      quote: t.quote,
+      quoteBn: t.quoteBn ?? null,
+      authorName: t.authorName,
+      authorNameBn: t.authorNameBn ?? null,
+      authorRole: t.authorRole ?? null,
+      authorRoleBn: t.authorRoleBn ?? null,
+      company: t.company ?? null,
+      companyBn: t.companyBn ?? null,
+      photo: t.photo ?? null,
+      sortOrder: t.sortOrder ?? idx + 1,
+      isActive: t.isActive ?? true,
+      isSample: t.isSample ?? true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
 
   if (locale !== "bn") return testimonials;
 
@@ -143,13 +162,17 @@ export async function getStats(locale?: string): Promise<Stat[]> {
       orderBy: { sortOrder: "asc" },
     });
 
-    if (stats.length === 0 && !shouldHideSample()) {
+    const validStats = stats.filter(
+      (s) => !isUnverifiedExperienceClaim(s.label, s.description)
+    );
+
+    if (validStats.length === 0 && !shouldHideSample()) {
       return getFallbackStats(locale);
     }
 
-    if (locale !== "bn") return stats;
+    if (locale !== "bn") return validStats;
 
-    return stats.map((s) => ({
+    return validStats.map((s) => ({
       ...s,
       label: s.labelBn?.trim() || s.label,
       description: s.descriptionBn?.trim() || s.description,

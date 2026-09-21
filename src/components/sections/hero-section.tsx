@@ -21,10 +21,27 @@ interface HeroSectionProps {
 export function HeroSection({
   headline,
   subheadline,
-  primaryCta = "Book Service",
+  primaryCta,
+  secondaryCta,
   locale,
 }: HeroSectionProps) {
   const isBn = locale === "bn" || (headline ? /[\u0980-\u09FF]/.test(headline) : false);
+
+  const defaultHeadline = isBn
+    ? "সরাসরি আমদানিকৃত সোলার ইকুইপমেন্ট। সরবরাহ প্রকল্প পর্যায়ে।"
+    : "Solar Equipment. Imported Direct. Supplied at Project Scale.";
+
+  const defaultSubheadline = isBn
+    ? "ইপিসি (EPC), শিল্প কারখানা এবং সোলার ডিলারদের জন্য এন-টাইপ পিভি মডিউল, LiFePO4 স্টোরেজ ও কমার্শিয়াল ইনভার্টার।"
+    : "N-Type PV modules, LiFePO4 storage and commercial inverters for EPCs, industrial facilities and solar dealers across Bangladesh.";
+
+  const defaultPrimaryCta = isBn ? "হোলসেল কোটেশন চান" : "Request Wholesale Quote";
+  const defaultSecondaryCta = isBn ? "মজুদ পণ্য দেখুন" : "View Available Stock";
+
+  const resolvedHeadline = headline || defaultHeadline;
+  const resolvedSubheadline = subheadline || defaultSubheadline;
+  const resolvedPrimaryCta = primaryCta || defaultPrimaryCta;
+  const resolvedSecondaryCta = secondaryCta || defaultSecondaryCta;
 
   return (
     <section className="relative w-full px-2.5 sm:px-4 lg:px-6 pb-2.5 sm:pb-4 lg:pb-6 pt-0 bg-white">
@@ -62,7 +79,7 @@ export function HeroSection({
             loop
             muted
             playsInline
-            preload="auto"
+            preload="none"
             className="hero-photo-img absolute inset-0 w-full h-full object-cover pointer-events-none"
           >
             <source
@@ -80,7 +97,7 @@ export function HeroSection({
           {/* Kicker Pill Badge in Brand Volt Lime */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#CEF23E]/30 bg-[#CEF23E]/10 backdrop-blur-md text-[#CEF23E] text-xs sm:text-sm font-medium mb-5 shadow-[0_0_20px_rgba(206,242,62,0.15)]">
             <Sparkles className="w-4 h-4 text-[#CEF23E] shrink-0" />
-            <span>{isBn ? "প্রফেশনাল সোলার ও এনার্জি সলিউশন" : "Professional Ac & Solar Services"}</span>
+            <span>{isBn ? "সরাসরি B2B সোলার ইকুইপমেন্ট আমদানিকারক" : "Direct B2B Solar Equipment Importer"}</span>
           </div>
 
           {/* Headline with Brand Volt Lime to Sky Cyan Gradient */}
@@ -88,52 +105,37 @@ export function HeroSection({
             data-motion="hero-headline"
             className="text-3xl sm:text-5xl lg:text-[3.8rem] xl:text-[4.3rem] font-bold tracking-tight text-white leading-[1.08] mb-5 text-center [text-shadow:_0_2px_12px_rgba(0,0,0,0.9),_0_4px_24px_rgba(0,0,0,0.85)]"
           >
-            {headline ? (
-              <span className="hero-word-inner">{headline}</span>
-            ) : isBn ? (
-              <>
-                <span className="hero-word-inner">পরিচ্ছন্ন ও নির্ভরযোগ্য</span>{" "}
-                <span className="block mt-1">
-                  <span className="hero-word-inner">সোলার এনার্জি</span>{" "}
-                  <span className="whitespace-nowrap bg-gradient-to-r from-[#CEF23E] via-[#E4F972] to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(206,242,62,0.25)]">
-                    <span className="hero-word-inner">সারা বছর</span>
-                  </span>
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="hero-word-inner">Keep Your Home Cool &</span>{" "}
-                <span className="block mt-1">
-                  <span className="hero-word-inner">Comfortable</span>{" "}
-                  <span className="whitespace-nowrap bg-gradient-to-r from-[#CEF23E] via-[#E4F972] to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(206,242,62,0.25)]">
-                    <span className="hero-word-inner">Year-Round</span>
-                  </span>
-                </span>
-              </>
-            )}
+            <span className="hero-word-inner">{resolvedHeadline}</span>
           </h1>
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base lg:text-[1.12rem] text-slate-100 leading-relaxed max-w-2xl mb-8 font-medium text-center [text-shadow:_0_2px_8px_rgba(0,0,0,0.95),_0_3px_16px_rgba(0,0,0,0.85)]">
-            {subheadline || (isBn
-              ? "উচ্চ-দক্ষতার সোলার প্যানেল, লিথিয়াম ব্যাটারি ও ইনভার্টার দিয়ে আপনার বিদ্যুৎ খরচ কমান এবং নিরবচ্ছিন্ন বিদ্যুৎ নিশ্চিত করুন।"
-              : "Expert AC repair, installation, and maintenance services delivered by certified technicians to keep your home cool, efficient, and comfortable all year long.")}
+            {resolvedSubheadline}
           </p>
 
-          {/* Brand Volt Lime Pill CTA Button */}
-          <div className="flex items-center justify-center gap-4">
+          {/* Brand Volt Lime Pill CTA Button + Secondary CTA */}
+          <div className="flex flex-wrap items-center justify-center gap-4">
             <MagneticButton>
               <Link
                 href={isBn ? "/bn/contact" : "/contact"}
                 data-motion="button-slide"
                 className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] font-bold text-sm sm:text-base shadow-[0_8px_25px_rgba(206,242,62,0.35)] transition-all hover:scale-[1.03] active:scale-[0.98] w-fit"
               >
-                <span>{primaryCta}</span>
+                <span>{resolvedPrimaryCta}</span>
                 <span className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#111311] flex items-center justify-center text-[#CEF23E] group-hover:translate-x-0.5 transition-transform shadow-xs">
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
                 </span>
               </Link>
             </MagneticButton>
+
+            {resolvedSecondaryCta && (
+              <Link
+                href={isBn ? "/bn/products" : "/products"}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-white font-semibold text-sm sm:text-base backdrop-blur-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <span>{resolvedSecondaryCta}</span>
+              </Link>
+            )}
           </div>
         </div>
 
@@ -142,44 +144,44 @@ export function HeroSection({
           
           {/* Bottom-Left: 3-Item Frosted Capsule Dock with Volt Lime Accents */}
           <div className="inline-flex flex-wrap sm:flex-nowrap items-center gap-4 sm:gap-6 p-2.5 sm:p-3 px-5 sm:px-6 rounded-2xl bg-slate-950/70 backdrop-blur-xl border border-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
-            {/* Item 1: Same-Day Service */}
+            {/* Item 1: Container & Bulk Wholesale */}
             <div data-motion="hero-glass" className="flex items-center gap-3 pr-4 sm:pr-6 sm:border-r border-white/10">
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#CEF23E]/40 bg-[#CEF23E]/10 flex items-center justify-center text-[#CEF23E] shrink-0">
                 <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
-                {isBn ? "একই দিনে ডেলিভারি" : "Same-Day Service"}
+                {isBn ? "কন্টেইনার ও বাল্ক সরবরাহ" : "Container & Bulk Wholesale"}
               </span>
             </div>
 
-            {/* Item 2: 24/7 Support */}
+            {/* Item 2: Certified Solar Equipment */}
             <div data-motion="hero-glass" className="flex items-center gap-3 pr-4 sm:pr-6 sm:border-r border-white/10">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#CEF23E]/40 bg-[#CEF23E]/10 flex items-center justify-center text-[#CEF23E] shrink-0">
-                <Headset className="w-4 h-4 sm:w-5 sm:h-5" />
-              </div>
-              <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
-                {isBn ? "২৪/৭ সাপোর্ট" : "24/7 Support"}
-              </span>
-            </div>
-
-            {/* Item 3: Satisfaction Guaranteed */}
-            <div data-motion="hero-glass" className="flex items-center gap-3">
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#CEF23E]/40 bg-[#CEF23E]/10 flex items-center justify-center text-[#CEF23E] shrink-0">
                 <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
-                {isBn ? "শতভাগ নিশ্চয়তা" : "Satisfaction Guaranteed"}
+                {isBn ? "ইঞ্জিনিয়ারিং-গ্রেড পরীক্ষিত সরঞ্জাম" : "Certified Solar Equipment"}
+              </span>
+            </div>
+
+            {/* Item 3: Nationwide Project Supply */}
+            <div data-motion="hero-glass" className="flex items-center gap-3">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#CEF23E]/40 bg-[#CEF23E]/10 flex items-center justify-center text-[#CEF23E] shrink-0">
+                <Headset className="w-4 h-4 sm:w-5 sm:h-5" />
+              </div>
+              <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
+                {isBn ? "সারাদেশে প্রজেক্ট ডেলিভারি" : "Nationwide Project Supply"}
               </span>
             </div>
           </div>
 
           {/* Bottom-Right: Floating Proof & Verified Rating Card with Volt Lime Checked Badge */}
           <div data-motion="hero-glass" className="relative group p-3 sm:p-4 rounded-2xl bg-slate-950/75 backdrop-blur-xl border border-white/15 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex items-center gap-4 max-w-md">
-            {/* Left: Thumbnail of Technician */}
+            {/* Left: Thumbnail of Solar Inverter / Storage System */}
             <div className="relative w-32 h-24 sm:w-36 sm:h-28 rounded-xl overflow-hidden shrink-0 bg-slate-800 border border-white/10">
               <Image
-                src="/Inverter/hvac-technician-performing-air-conditioner-maintenance-inspection.jpg"
-                alt={isBn ? "প্রফেশনাল সার্টিফাইড টেকনিশিয়ান" : "Professional Certified Technician"}
+                src="/Inverter/solar-inverter-with-battery-storage.jpg"
+                alt={isBn ? "বাণিজ্যিক সোলার ইনভার্টার ও স্টোরেজ" : "Commercial Solar Inverter & Battery Storage"}
                 fill
                 sizes="(max-width: 640px) 128px, 144px"
                 className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
@@ -193,7 +195,7 @@ export function HeroSection({
                   <ShieldCheck className="w-3.5 h-3.5 fill-[#111311] text-[#CEF23E]" />
                 </div>
                 <span className="text-xs sm:text-sm font-bold text-white leading-tight">
-                  {isBn ? "নির্ভরযোগ্য প্রফেশনাল সোলার সেবা" : "Professional AC Care You Can Trust"}
+                  {isBn ? "প্রকল্প-স্কেল সোলার সরঞ্জাম" : "Project-Scale Solar Equipment"}
                 </span>
               </div>
 
@@ -204,7 +206,7 @@ export function HeroSection({
                 ))}
               </div>
 
-              {/* Avatar Stack + Customer Count */}
+              {/* Avatar Stack + B2B Trust Label */}
               <div className="flex items-center gap-2.5 pt-0.5">
                 <div className="flex -space-x-2 overflow-hidden">
                   <div className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-900 overflow-hidden relative">
@@ -233,8 +235,8 @@ export function HeroSection({
                   </div>
                 </div>
                 <div className="flex flex-col text-[11px] leading-tight">
-                  <span className="text-slate-400">{isBn ? "আস্থাভাজন" : "Trusted By"}</span>
-                  <span className="font-bold text-[#CEF23E]">{isBn ? "১০,০০০+ গ্রাহক" : "10,000+ Customers"}</span>
+                  <span className="text-slate-400">{isBn ? "বিশ্বস্ত সরবরাহ" : "Trusted Supply"}</span>
+                  <span className="font-bold text-[#CEF23E]">{isBn ? "বাণিজ্যিক ও প্রকল্প ক্লায়েন্ট" : "Commercial & Project Scale"}</span>
                 </div>
               </div>
             </div>

@@ -64,20 +64,20 @@ function LanguageSwitcherInner({
     <nav
       data-motion="lang-switch"
       aria-label="Language selector"
-      className={`relative inline-flex items-center p-1 rounded-full bg-[#111311]/5 border border-[#111311]/10 text-xs font-mono select-none ${className}`}
+      className={`relative inline-flex items-center gap-2 p-1 rounded-full bg-[#111311]/5 border border-[#111311]/10 text-xs font-mono select-none ${className}`}
     >
       {/* English Pill */}
       <a
         href={enHref}
         hrefLang="en"
         lang="en"
-        aria-label="Switch to English language"
+        aria-label="EN - Switch to English"
         aria-current={activeLocale === "en" ? "true" : undefined}
         onClick={() => setLocaleCookie("en")}
-        className={`relative z-10 px-2.5 sm:px-3 py-1 rounded-full font-bold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] ${
+        className={`relative z-10 min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-3.5 py-2 rounded-full font-bold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] ${
           activeLocale === "en"
             ? "text-[#111311]"
-            : "text-[#5C605C] hover:text-[#111311]"
+            : "text-[#1B1F1B] hover:text-[#111311]"
         }`}
       >
         {activeLocale === "en" && (
@@ -103,13 +103,13 @@ function LanguageSwitcherInner({
         href={bnHref}
         hrefLang="bn"
         lang="bn"
-        aria-label="Switch to Bangla language"
+        aria-label="বাংলা - বাংলায় দেখুন (BN)"
         aria-current={activeLocale === "bn" ? "true" : undefined}
         onClick={() => setLocaleCookie("bn")}
-        className={`relative z-10 px-2.5 sm:px-3 py-1 rounded-full font-bold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] ${
+        className={`relative z-10 min-h-[44px] min-w-[44px] inline-flex items-center justify-center px-3.5 py-2 rounded-full font-bold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] ${
           activeLocale === "bn"
             ? "text-[#111311]"
-            : "text-[#5C605C] hover:text-[#111311]"
+            : "text-[#1B1F1B] hover:text-[#111311]"
         }`}
       >
         {activeLocale === "bn" && (

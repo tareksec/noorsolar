@@ -128,6 +128,26 @@ export function AnimatedNavFramer({
     return () => window.removeEventListener("pointerdown", handlePointerDown);
   }, [isExpanded, isManuallyOpen]);
 
+  // Mobile menu: body scroll lock and Escape key listener
+  React.useEffect(() => {
+    if (!mobileOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobileOpen]);
+
   useMotionValueEvent(scrollY, "change", (latest) => {
     // If user clicked to expand while scrolled down, keep open until scrolled > 120px away
     if (userExpandedManually.current) {
@@ -160,7 +180,7 @@ export function AnimatedNavFramer({
 
   return (
     <>
-      <div data-motion="header-scroll" className="fixed top-3 sm:top-5 inset-x-0 z-50 flex justify-center pointer-events-none px-2 sm:px-4">
+      <div data-motion="header-scroll" className="fixed top-[calc(0.75rem+env(safe-area-inset-top,0px))] sm:top-[calc(1.25rem+env(safe-area-inset-top,0px))] inset-x-0 z-50 flex justify-center pointer-events-none px-2 sm:px-4">
         <motion.nav
           ref={navRef}
           initial={false}
@@ -203,20 +223,20 @@ export function AnimatedNavFramer({
               >
                 {/* Brand Logo in Header Navbar */}
                 <div className="flex-shrink-0 flex items-center pl-1 sm:pl-2 pr-1.5 sm:pr-2.5">
-                  <Link href={brandHref} className="flex items-center gap-2 group">
+                  <Link href={brandHref} className="flex items-center gap-2 group min-w-[44px] min-h-[44px]">
                     {/* Mobile: compact brand icon */}
-                    <div className="flex min-[480px]:hidden items-center justify-center w-8 h-8">
+                    <div className="flex min-[480px]:hidden items-center justify-center w-11 h-11 min-w-[44px] min-h-[44px]">
                       <Image
                         src="/brand/logo-icon.png"
                         alt={brandName}
-                        width={32}
-                        height={32}
-                        className="w-7 h-7 object-contain group-hover:scale-105 transition-transform"
+                        width={36}
+                        height={36}
+                        className="w-8 h-8 object-contain group-hover:scale-105 transition-transform"
                         priority
                       />
                     </div>
                     {/* Desktop / Tablet: full horizontal brand logo */}
-                    <div className="hidden min-[480px]:flex items-center">
+                    <div className="hidden min-[480px]:flex items-center min-h-[44px]">
                       <Image
                         src="/brand/logo-white.png"
                         alt="Noor Solar Energy"
@@ -229,7 +249,7 @@ export function AnimatedNavFramer({
                   </Link>
                 </div>
 
-                {/* Navigation Links (Desktop) */}
+                {/* Navigation Links (Desktop & Landscape) */}
                 <div className="flex items-center gap-0.5 sm:gap-1 lg:gap-1.5 pr-1 sm:pr-2">
                   {navItems.map((item) => {
                     const isActive = pathname === item.href;
@@ -239,7 +259,7 @@ export function AnimatedNavFramer({
                         href={item.href}
                         onClick={(e) => e.stopPropagation()}
                         className={cn(
-                          "hidden md:inline-flex text-xs lg:text-sm font-medium transition-colors px-2 lg:px-3 py-1.5 rounded-full whitespace-nowrap",
+                          "hidden md:inline-flex items-center min-h-[44px] text-xs lg:text-sm font-medium transition-colors px-2.5 lg:px-3.5 py-2 rounded-full whitespace-nowrap",
                           isActive
                             ? "text-[#CEF23E] font-semibold bg-white/10"
                             : "text-slate-300 hover:text-white hover:bg-white/5"
@@ -260,7 +280,7 @@ export function AnimatedNavFramer({
                     <Link
                       href={finalCtaHref}
                       onClick={(e) => e.stopPropagation()}
-                      className="group inline-flex items-center gap-1.5 sm:gap-2 pl-3 sm:pl-4 pr-1.5 py-1.5 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] text-xs font-bold tracking-tight shadow-[0_4px_14px_rgba(206,242,62,0.35)] transition-all hover:scale-105 active:scale-95 whitespace-nowrap shrink-0"
+                      className="group inline-flex items-center min-h-[44px] gap-1.5 sm:gap-2 pl-3 sm:pl-4 pr-1.5 py-1.5 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] text-xs font-bold tracking-tight shadow-[0_4px_14px_rgba(206,242,62,0.35)] transition-all hover:scale-105 active:scale-95 whitespace-nowrap shrink-0"
                     >
                       <span>{displayCtaText}</span>
                       <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#111311] flex items-center justify-center text-[#CEF23E] group-hover:translate-x-0.5 transition-transform shadow-2xs shrink-0">
@@ -279,23 +299,24 @@ export function AnimatedNavFramer({
                           setIsManuallyOpen(false);
                           userExpandedManually.current = false;
                         }}
-                        className="p-1 sm:p-1.5 rounded-full text-slate-300 hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-none"
+                        className="w-11 h-11 flex items-center justify-center rounded-full text-slate-300 hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-none"
                         title={isBn ? "মেনু বন্ধ করুন" : "Close menu"}
                       >
-                        <X className="w-4 h-4" />
+                        <X className="w-5 h-5" />
                       </button>
                     )}
                   </div>
 
-                  {/* Mobile Hamburger Toggle Button */}
+                  {/* Mobile Hamburger Toggle Button - min 44x44px tap target */}
                   <button
                     type="button"
                     aria-label="Toggle mobile menu"
+                    aria-expanded={mobileOpen}
                     onClick={(e) => {
                       e.stopPropagation();
                       setMobileOpen((prev) => !prev);
                     }}
-                    className="md:hidden ml-1.5 p-1.5 rounded-full text-white hover:text-[#CEF23E] hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
+                    className="md:hidden ml-1 w-11 h-11 flex items-center justify-center rounded-full text-white hover:text-[#CEF23E] hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
                   >
                     {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                   </button>
@@ -334,6 +355,22 @@ export function AnimatedNavFramer({
         </motion.nav>
       </div>
 
+      {/* Mobile Menu Backdrop for Tap Outside */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            key="mobile-menu-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setMobileOpen(false)}
+            aria-hidden="true"
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs md:hidden"
+          />
+        )}
+      </AnimatePresence>
+
       {/* Mobile Menu Overlay with data-motion="mobile-menu" */}
       <AnimatePresence>
         {mobileOpen && (
@@ -343,7 +380,7 @@ export function AnimatedNavFramer({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-x-3 top-20 z-40 md:hidden p-5 rounded-3xl bg-slate-950/95 backdrop-blur-2xl border border-white/15 shadow-2xl text-white"
+            className="fixed inset-x-3 top-[calc(4.5rem+env(safe-area-inset-top,0px))] z-50 md:hidden p-5 rounded-3xl bg-slate-950/95 backdrop-blur-2xl border border-white/15 shadow-2xl text-white"
           >
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
               <span className="text-xs font-mono uppercase tracking-widest text-[#CEF23E]">
@@ -352,7 +389,7 @@ export function AnimatedNavFramer({
               <LanguageSwitcher idPrefix="mob" currentLocale={currentLocale} />
             </div>
 
-            <div className="flex flex-col gap-2 pt-4">
+            <div className="flex flex-col gap-1.5 pt-4">
               {navItems.map((item, idx) => (
                 <motion.div
                   key={item.name}
@@ -364,7 +401,7 @@ export function AnimatedNavFramer({
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "block px-3 py-2.5 rounded-2xl text-sm font-semibold transition-colors",
+                      "flex items-center min-h-[44px] px-3.5 py-2.5 rounded-2xl text-sm font-semibold transition-colors",
                       pathname === item.href
                         ? "bg-white/10 text-[#CEF23E]"
                         : "text-slate-200 hover:bg-white/5 hover:text-white"
@@ -380,7 +417,7 @@ export function AnimatedNavFramer({
               <Link
                 href={finalCtaHref}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] font-bold text-sm shadow-md"
+                className="flex items-center justify-center gap-2 w-full min-h-[48px] py-3 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] text-[#111311] font-bold text-sm shadow-md"
               >
                 <span>{displayCtaText}</span>
                 <ArrowRight className="w-4 h-4 stroke-[2.5]" />

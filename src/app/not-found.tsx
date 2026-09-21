@@ -53,7 +53,7 @@ export default function NotFound() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#111311] text-white text-xs font-semibold hover:bg-black transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-[#111311] text-white text-xs font-semibold hover:bg-black transition-colors"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Return to Home</span>
@@ -61,7 +61,7 @@ export default function NotFound() {
 
               <Link
                 href="/products"
-                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-full bg-[#EDEDED] text-[#111311] text-xs font-semibold hover:bg-[#DDE1DC] transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 min-h-[44px] rounded-full bg-[#EDEDED] text-[#111311] text-xs font-semibold hover:bg-[#DDE1DC] transition-colors"
               >
                 Browse Catalog
               </Link>

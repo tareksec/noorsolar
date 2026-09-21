@@ -418,4 +418,42 @@ noscript + #preloader {
     animation: none !important;
     transform: none !important;
   }
-}
+}
+
+/* ==========================================================================
+   MOBILE QA & ACCESSIBILITY LAYER
+   Safe area insets, 16px input minimum for iOS zoom prevention, touch targets
+   ========================================================================== */
+
+/* Safe area insets on viewport edges */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+}
+
+/* Guarantee inputs are at least 16px to prevent iOS auto-zoom */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+select,
+textarea {
+  font-size: 16px !important;
+}
+
+/* Ensure focused fields have adequate scroll margin below sticky header */
+input, select, textarea, [tabindex="0"] {
+  scroll-margin-top: 80px;
+  scroll-margin-bottom: 80px;
+}
+
+/* Prevent text overflow on narrow viewports (320px) */
+p, h1, h2, h3, h4, h5, h6, span, a, li {
+  overflow-wrap: break-word;
+}
+

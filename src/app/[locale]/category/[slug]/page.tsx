@@ -9,6 +9,7 @@ import { getCategoryBySlug } from "@/lib/data/categories";
 import { ProductCard } from "@/components/product/product-card";
 import { ArrowLeft } from "lucide-react";
 import { EmptyCatalogIllustration } from "@/components/illustrations/empty-catalog-illustration";
+import { SITE_URL } from "@/lib/site-config";
 
 interface CategoryPageProps {
   params: Promise<{
@@ -34,7 +35,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
   const category = await getCategoryBySlug(slug, locale);
 
   if (!category) {
@@ -93,7 +94,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <div className="mb-6">
           <Link
             href="/products"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#5C605C] hover:text-[#111311] transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#5C605C] hover:text-[#111311] transition-colors min-h-[44px]"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>{isBn ? "সকল পণ্যে ফিরে যান" : "Back to All Equipment"}</span>
@@ -145,7 +146,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </p>
             <Link
               href="/products"
-              className="inline-flex items-center px-5 py-2.5 rounded-full bg-[#111311] text-white text-xs font-medium hover:bg-black transition-colors"
+              className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] rounded-full bg-[#111311] text-white text-xs font-medium hover:bg-black transition-colors"
             >
               {isBn ? "পূর্ণাঙ্গ ক্যাটালগ দেখুন" : "View Full Catalog"}
             </Link>

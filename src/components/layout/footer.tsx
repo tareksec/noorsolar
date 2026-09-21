@@ -112,8 +112,8 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
               </div>
               <p className="text-xs sm:text-[13px] text-[#5C6457] leading-relaxed mb-6 max-w-sm">
                 {isBn
-                  ? "সরাসরি কন্টেইনার স্কেল আমদানিকারক এবং বাংলাদেশে টায়ার-১ সোলার প্যানেল, LiFePO4 ব্যাটারি ও হাইব্রিড ইনভার্টারের পাইকারি B2B সরবরাহকারী।"
-                  : "Direct container-scale importer and bulk B2B wholesale distributor of Tier-1 solar panels, LiFePO4 batteries, and hybrid inverters across Bangladesh."}
+                  ? "সরাসরি কন্টেইনার স্কেল আমদানিকারক এবং বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল, LiFePO4 ব্যাটারি ও হাইব্রিড ইনভার্টারের পাইকারি B2B সরবরাহকারী।"
+                  : "Direct container-scale importer and bulk B2B wholesale distributor of high-performance solar panels, LiFePO4 batteries, and hybrid inverters across Bangladesh."}
               </p>
 
               {/* Contact Information List with Icons */}

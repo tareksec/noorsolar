@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import { getCategories } from "@/lib/data/categories";
 import { getAllProducts } from "@/lib/data/products";
 import { ShopPageClient } from "@/components/shop/shop-page-client";
+import { SITE_URL } from "@/lib/site-config";
 
 interface ProductsPageProps {
   params: Promise<{
@@ -27,7 +28,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
 
   return {
     title: isBn
@@ -50,8 +51,8 @@ export async function generateMetadata({
         : "Solar Equipment Catalog — Noor Solar Energy",
       description: isBn
         ? "বাংলাদেশে পাইকারি আমদানিকৃত সোলার প্যানেল, LiFePO4 ব্যাটারি এবং ইন্ডাস্ট্রিয়াল ইনভার্টার।"
-        : "Explore bulk wholesale inventory of Tier-1 solar panels, LiFePO4 batteries, and industrial inverters in Bangladesh.",
-      url: isBn ? "/bn/products" : "/products",
+        : "Explore bulk wholesale inventory of high-efficiency solar panels, LiFePO4 batteries, and industrial inverters in Bangladesh.",
+      url: isBn ? `${siteUrl}/bn/products` : `${siteUrl}/products`,
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
     },

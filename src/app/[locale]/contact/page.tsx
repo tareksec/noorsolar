@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import { getSiteSettings } from "@/lib/data/settings";
 import { ClosingCTA } from "@/components/sections/closing-cta";
 import { MapPin, Phone, Mail, Clock, MessageCircle, Sun, Headphones } from "lucide-react";
+import { SITE_URL } from "@/lib/site-config";
 
 interface ContactPageProps {
   params: Promise<{
@@ -20,7 +21,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: ContactPageProps): Promise<Metadata> {
   const { locale } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
 
   return {
     title: isBn
@@ -82,13 +83,13 @@ export default async function ContactPage({ params }: ContactPageProps) {
         {/* Contact Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC]">
-            <div className="w-10 h-10 rounded-full bg-[#EDEDED] flex items-center justify-center text-[#111311] mb-4">
+            <div className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#EDEDED] flex items-center justify-center text-[#111311] mb-4">
               <Phone className="w-4 h-4" />
             </div>
             <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">
               {isBn ? "সরাসরি ফোন" : "Direct Sales Phone"}
             </span>
-            <a href={`tel:${settings.phone}`} className="text-base font-bold font-mono text-[#111311] hover:underline">
+            <a href={`tel:${settings.phone}`} className="inline-flex items-center min-h-[44px] text-base font-bold font-mono text-[#111311] hover:underline">
               {settings.phoneDisplay}
             </a>
             <span className="text-[11px] text-[#5C605C] block mt-1">
@@ -97,7 +98,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
           </div>
 
           <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC]">
-            <div className="w-10 h-10 rounded-full bg-[#CEF23E] flex items-center justify-center text-[#111311] mb-4">
+            <div className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#CEF23E] flex items-center justify-center text-[#111311] mb-4">
               <MessageCircle className="w-4 h-4" />
             </div>
             <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">
@@ -107,7 +108,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
               href={`https://wa.me/${settings.whatsapp}`}
               target="_blank"
               rel="noreferrer"
-              className="text-base font-bold font-mono text-[#111311] hover:underline"
+              className="inline-flex items-center min-h-[44px] text-base font-bold font-mono text-[#111311] hover:underline"
             >
               {settings.whatsappDisplay}
             </a>
@@ -117,13 +118,13 @@ export default async function ContactPage({ params }: ContactPageProps) {
           </div>
 
           <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC]">
-            <div className="w-10 h-10 rounded-full bg-[#EDEDED] flex items-center justify-center text-[#111311] mb-4">
+            <div className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#EDEDED] flex items-center justify-center text-[#111311] mb-4">
               <Mail className="w-4 h-4" />
             </div>
             <span className="text-xs font-mono text-[#5C605C] uppercase block mb-1">
               {isBn ? "অফিসিয়াল ইমেইল" : "Commercial Email"}
             </span>
-            <a href={`mailto:${settings.email}`} className="text-base font-bold text-[#111311] hover:underline truncate block">
+            <a href={`mailto:${settings.email}`} className="inline-flex items-center min-h-[44px] text-base font-bold text-[#111311] hover:underline truncate">
               {settings.email}
             </a>
             <span className="text-[11px] text-[#5C605C] block mt-1">

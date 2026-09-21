@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import { Prisma } from "@prisma/client";
+import { sampleBlogPosts } from "../../../prisma/seed-blog";
 
 export function calculateReadingTime(text: string, locale?: string): string {
   if (!text) return locale === "bn" ? "1 মিনিট পাঠ" : "1 min read";
@@ -17,10 +18,11 @@ export async function hasVisibleBlogPosts(): Promise<boolean> {
         ...(hideSample ? { isSample: false } : {}),
       },
     });
-    return count > 0;
+    if (count > 0) return true;
+    return !hideSample && sampleBlogPosts.some((p) => p.status === "PUBLISHED");
   } catch (error) {
-    console.warn("hasVisibleBlogPosts: database not available, returning false", error);
-    return false;
+    const hideSample = process.env.HIDE_SAMPLE_CONTENT === "true";
+    return !hideSample && sampleBlogPosts.some((p) => p.status === "PUBLISHED");
   }
 }
 
@@ -52,6 +54,67 @@ function localizeBlogPost<
     coverAlt: post.coverAltBn?.trim() || post.coverAlt,
     metaTitle: post.metaTitleBn?.trim() || post.metaTitle,
     metaDescription: post.metaDescriptionBn?.trim() || post.metaDescription,
+  };
+}
+
+function getFallbackBlogPosts(options?: {
+  page?: number;
+  pageSize?: number;
+  tag?: string;
+  query?: string;
+  locale?: string;
+}) {
+  const page = Math.max(1, options?.page || 1);
+  const pageSize = options?.pageSize || 9;
+  let list = sampleBlogPosts.filter((p) => p.status === "PUBLISHED");
+
+  if (options?.tag) {
+    const t = options.tag.toLowerCase();
+    list = list.filter(
+      (p) =>
+        (p.tags && p.tags.toLowerCase().includes(t)) ||
+        (p.tagsBn && p.tagsBn.toLowerCase().includes(t))
+    );
+  }
+
+  if (options?.query && options.query.trim()) {
+    const q = options.query.trim().toLowerCase();
+    list = list.filter(
+      (p) =>
+        p.title.toLowerCase().includes(q) ||
+        (p.titleBn && p.titleBn.toLowerCase().includes(q)) ||
+        p.excerpt.toLowerCase().includes(q) ||
+        (p.excerptBn && p.excerptBn.toLowerCase().includes(q))
+    );
+  }
+
+  const totalCount = list.length;
+  const paged = list.slice((page - 1) * pageSize, page * pageSize);
+
+  const posts = paged.map((p, idx) => {
+    const loc = localizeBlogPost(
+      {
+        ...p,
+        id: `fallback-blog-${idx}`,
+        authorRole: null,
+        authorRoleBn: null,
+        isSample: true,
+        createdAt: p.publishedAt,
+        updatedAt: p.publishedAt,
+      },
+      options?.locale
+    );
+    return {
+      ...loc,
+      readingTime: calculateReadingTime(loc.content, options?.locale),
+    };
+  });
+
+  return {
+    posts,
+    totalCount,
+    totalPages: Math.ceil(totalCount / pageSize) || 1,
+    currentPage: page,
   };
 }
 
@@ -103,6 +166,10 @@ export async function getPublishedBlogPosts(options?: {
       }),
     ]);
 
+    if (totalCount === 0 && !hideSample) {
+      return getFallbackBlogPosts(options);
+    }
+
     return {
       posts: posts.map((p) => {
         const loc = localizeBlogPost(p, options?.locale);
@@ -112,11 +179,13 @@ export async function getPublishedBlogPosts(options?: {
         };
       }),
       totalCount,
-      totalPages: Math.ceil(totalCount / pageSize),
+      totalPages: Math.ceil(totalCount / pageSize) || 1,
       currentPage: page,
     };
   } catch (error) {
-    console.warn("getPublishedBlogPosts: database not available, returning empty list", error);
+    if (!hideSample) {
+      return getFallbackBlogPosts(options);
+    }
     return {
       posts: [],
       totalCount: 0,
@@ -133,7 +202,54 @@ export async function getBlogPostBySlug(slug: string, locale?: string) {
       where: { slug, status: "PUBLISHED" },
     });
 
-    if (!post) return null;
+    if (!post) {
+      if (!hideSample) {
+        const sample = sampleBlogPosts.find((p) => p.slug === slug && p.status === "PUBLISHED");
+        if (sample) {
+          const locPost = localizeBlogPost(
+            {
+              ...sample,
+              id: `fallback-${slug}`,
+              authorRole: null,
+              authorRoleBn: null,
+              isSample: true,
+              createdAt: sample.publishedAt,
+              updatedAt: sample.publishedAt,
+            },
+            locale
+          );
+          const related = sampleBlogPosts
+            .filter((p) => p.slug !== slug && p.status === "PUBLISHED")
+            .slice(0, 3)
+            .map((r, idx) => {
+              const locR = localizeBlogPost(
+                {
+                  ...r,
+                  id: `fallback-rel-${idx}`,
+                  authorRole: null,
+                  authorRoleBn: null,
+                  isSample: true,
+                  createdAt: r.publishedAt,
+                  updatedAt: r.publishedAt,
+                },
+                locale
+              );
+              return {
+                ...locR,
+                readingTime: calculateReadingTime(locR.content, locale),
+              };
+            });
+          return {
+            post: {
+              ...locPost,
+              readingTime: calculateReadingTime(locPost.content, locale),
+            },
+            related,
+          };
+        }
+      }
+      return null;
+    }
     if (hideSample && post.isSample) return null;
 
     const locPost = localizeBlogPost(post, locale);
@@ -162,7 +278,51 @@ export async function getBlogPostBySlug(slug: string, locale?: string) {
       }),
     };
   } catch (error) {
-    console.warn(`getBlogPostBySlug: failed to fetch slug ${slug}`, error);
+    if (!hideSample) {
+      const sample = sampleBlogPosts.find((p) => p.slug === slug && p.status === "PUBLISHED");
+      if (sample) {
+        const locPost = localizeBlogPost(
+          {
+            ...sample,
+            id: `fallback-${slug}`,
+            authorRole: null,
+            authorRoleBn: null,
+            isSample: true,
+            createdAt: sample.publishedAt,
+            updatedAt: sample.publishedAt,
+          },
+          locale
+        );
+        const related = sampleBlogPosts
+          .filter((p) => p.slug !== slug && p.status === "PUBLISHED")
+          .slice(0, 3)
+          .map((r, idx) => {
+            const locR = localizeBlogPost(
+              {
+                ...r,
+                id: `fallback-rel-${idx}`,
+                authorRole: null,
+                authorRoleBn: null,
+                isSample: true,
+                createdAt: r.publishedAt,
+                updatedAt: r.publishedAt,
+              },
+              locale
+            );
+            return {
+              ...locR,
+              readingTime: calculateReadingTime(locR.content, locale),
+            };
+          });
+        return {
+          post: {
+            ...locPost,
+            readingTime: calculateReadingTime(locPost.content, locale),
+          },
+          related,
+        };
+      }
+    }
     return null;
   }
 }

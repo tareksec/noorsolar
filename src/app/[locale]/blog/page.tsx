@@ -5,6 +5,7 @@ import { Link } from "@/i18n/routing";
 import { AppImage as Image } from "@/components/ui/app-image";
 import { getPublishedBlogPosts } from "@/lib/data/blog";
 import { Clock, Calendar, ArrowRight, BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
+import { SITE_URL } from "@/lib/site-config";
 
 interface BlogIndexPageProps {
   params: Promise<{
@@ -24,15 +25,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
 
   return {
     title: isBn
-      ? "সোলার ইঞ্জিনিয়ারিং ব্লগ ও কারিগরি দিকনির্দেশনা — নূর সোলার এনার্জি"
-      : "Solar Engineering Blog & Technical Insights — Noor Solar Energy",
+      ? "বাণিজ্যিক সোলার প্রকিউরমেন্ট ও কারিগরি গাইড — নূর সোলার এনার্জি"
+      : "Commercial Solar Knowledge & Procurement Insights — Noor Solar Energy",
     description: isBn
-      ? "বাংলাদেশে বাণিজ্যিক রুফটপ সোলার প্যানেল ইনস্টলেশন এবং সরঞ্জাম নির্বাচনের বিশদ কারিগরি গাইড।"
-      : "Expert technical articles, equipment selection guides, and commercial rooftop solar installation best practices in Bangladesh.",
+      ? "বাংলাদেশে বাণিজ্যিক ও শিল্প সোলার প্রকল্প, ইনভার্টার সাইজিং এবং প্রকিউরমেন্ট গাইড।"
+      : "Technical guides, equipment selection benchmarks, and procurement insights for commercial solar EPCs and industrial developers in Bangladesh.",
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/blog` : `${siteUrl}/blog`,
       languages: {
@@ -43,11 +44,11 @@ export async function generateMetadata({
     },
     openGraph: {
       title: isBn
-        ? "সোলার ইঞ্জিনিয়ারিং ব্লগ — নূর সোলার এনার্জি"
-        : "Solar Engineering Blog & Technical Insights — Noor Solar Energy",
+        ? "বাণিজ্যিক সোলার প্রকিউরমেন্ট ও কারিগরি গাইড — নূর সোলার এনার্জি"
+        : "Commercial Solar Knowledge & Procurement Insights — Noor Solar Energy",
       description: isBn
-        ? "বাংলাদেশে বাণিজ্যিক সোলার প্রজেক্টের কারিগরি প্রকাশনা ও দিকনির্দেশনা।"
-        : "Expert technical articles, equipment selection guides, and commercial rooftop solar installation best practices in Bangladesh.",
+        ? "বাংলাদেশে বাণিজ্যিক সোলার প্রজেক্টের কারিগরি প্রকাশনা ও প্রকিউরমেন্ট দিকনির্দেশনা।"
+        : "Technical guides, equipment selection benchmarks, and procurement insights for commercial solar EPCs and industrial developers in Bangladesh.",
       url: isBn ? "/bn/blog" : "/blog",
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
@@ -70,9 +71,10 @@ export default async function BlogIndexPage({ params, searchParams }: BlogIndexP
     locale,
   });
 
-  function buildPageUrl(p: number) {
+  function buildPageUrl(p: number, newTag?: string) {
     const searchParamObj = new URLSearchParams();
-    if (tag) searchParamObj.set("tag", tag);
+    const activeTag = newTag !== undefined ? newTag : tag;
+    if (activeTag) searchParamObj.set("tag", activeTag);
     if (q) searchParamObj.set("q", q);
     if (p > 1) searchParamObj.set("page", String(p));
     const qs = searchParamObj.toString();
@@ -81,23 +83,51 @@ export default async function BlogIndexPage({ params, searchParams }: BlogIndexP
 
   const isBn = locale === "bn";
 
+  const b2bCategories = [
+    { label: isBn ? "সব বিষয়" : "All Knowledge", tagValue: "" },
+    { label: isBn ? "টেকনিক্যাল গাইড" : "Technical Guides", tagValue: "Engineering" },
+    { label: isBn ? "প্রকিউরমেন্ট ইনসাইট" : "Procurement Insights", tagValue: "Procurement" },
+    { label: isBn ? "সোলার ইকুইপমেন্ট গাইড" : "Solar Equipment Guides", tagValue: "Inverters" },
+    { label: isBn ? "কমার্শিয়াল সোলার জ্ঞান" : "Commercial Solar Knowledge", tagValue: "B2B" },
+  ];
+
   return (
     <div className="pt-24 pb-20 sm:pb-32 bg-[#E4E7E4] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3.5 border border-[#D5DDD2] shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-[#CEF23E]" />
-            <span>{isBn ? "প্রযুক্তিগত জ্ঞানভাণ্ডার" : "Technical Knowledge Base"}</span>
+            <span>{isBn ? "বাণিজ্যিক প্রকিউরমেন্ট ও ইঞ্জিনিয়ারিং জ্ঞান" : "B2B Procurement & Engineering Intelligence"}</span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#111311]">
-            {isBn ? "ইঞ্জিনিয়ারিং ও শিল্প বিশ্লেষণ" : "Engineering & Industry Insights"}
+            {isBn ? "বাণিজ্যিক সোলার প্রকিউরমেন্ট ও কারিগরি গাইড" : "Commercial Solar Knowledge & Procurement Insights"}
           </h1>
           <p className="mt-4 text-sm sm:text-base text-[#525C4F] max-w-2xl mx-auto leading-relaxed">
             {isBn
-              ? "বাংলাদেশের বাণিজ্যিক প্রকল্পের জন্য সোলার প্যানেল, এনার্জি স্টোরেজ, ইনভার্টার সিলেকশন এবং কমপ্লায়েন্সের বিশদ কারিগরি গাইড।"
-              : "In-depth guides on industrial solar modules, high-capacity energy storage, inverter sizing, and compliance standards for commercial installations in Bangladesh."}
+              ? "বাণিজ্যিক ইপিসি, শিল্প কারখানা ও সৌর ডিলারদের জন্য সোলার প্যানেল নির্বাচন, হাই-ভোল্টেজ ব্যাটারি স্টোরেজ ও ইনভার্টার সাইজিংয়ের বিশদ কারিগরি দিকনির্দেশনা।"
+              : "Technical guides, equipment selection benchmarks, and wholesale procurement insights for commercial solar EPCs, factory engineers, and solar equipment dealers in Bangladesh."}
           </p>
+
+          {/* B2B Category Filter Pills */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+            {b2bCategories.map((cat) => {
+              const isActive = (tag || "") === cat.tagValue;
+              return (
+                <Link
+                  key={cat.label}
+                  href={buildPageUrl(1, cat.tagValue)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all ${
+                    isActive
+                      ? "bg-[#111311] text-[#CEF23E] shadow-xs"
+                      : "bg-white text-[#525C4F] hover:text-[#111311] border border-[#D5DDD2] hover:border-[#111311]/30"
+                  }`}
+                >
+                  {cat.label}
+                </Link>
+              );
+            })}
+          </div>
         </div>
 
         {/* Blog Post Grid */}
@@ -114,7 +144,7 @@ export default async function BlogIndexPage({ params, searchParams }: BlogIndexP
             </p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#111311] text-[#CEF23E] text-xs font-semibold"
+              className="inline-flex items-center justify-center min-h-[44px] gap-2 px-5 py-2.5 rounded-full bg-[#111311] text-[#CEF23E] text-xs font-semibold"
             >
               <span>{isBn ? "হোমে ফিরুন" : "Back to Home"}</span>
             </Link>

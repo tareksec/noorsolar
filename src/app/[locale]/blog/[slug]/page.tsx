@@ -7,6 +7,7 @@ import { AppImage as Image } from "@/components/ui/app-image";
 import { getBlogPostBySlug } from "@/lib/data/blog";
 import { MarkdownRenderer } from "@/components/blog/markdown-renderer";
 import { ArrowLeft, Calendar, Clock, User, ArrowUpRight, ArrowRight } from "lucide-react";
+import { SITE_URL } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,7 @@ interface BlogPostPageProps {
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const { slug, locale } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
   const data = await getBlogPostBySlug(slug, locale);
 
   if (!data || !data.post) {
@@ -84,7 +85,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
     publisher: {
       "@type": "Organization",
       name: "Noor Solar Energy",
-      url: "https://noorsolarbd.com",
+      url: SITE_URL,
     },
   };
 
@@ -195,8 +196,8 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
               </h2>
               <p className="text-xs sm:text-sm text-white/70 max-w-xl">
                 {isBn
-                  ? "টায়ার-১ প্রস্তুতকারকদের সরাসরি পাইকারি মূল্য, সম্পূর্ণ কমপ্লায়েন্স নথি এবং ঢাকা গুদাম থেকে দ্রুত ডেলিভারি সুবিধা নিন।"
-                  : "Get Tier-1 manufacturer direct wholesale pricing, complete compliance documentation, and Dhaka warehouse delivery lead times."}
+                  ? "সরাসরি প্রস্তুতকারক পাইকারি মূল্য, সম্পূর্ণ কমপ্লায়েন্স নথি এবং ঢাকা গুদাম থেকে দ্রুত ডেলিভারি সুবিধা নিন।"
+                  : "Get manufacturer-direct wholesale pricing, complete compliance documentation, and Dhaka warehouse delivery lead times."}
               </p>
             </div>
 

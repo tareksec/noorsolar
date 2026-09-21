@@ -7,80 +7,6 @@ import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { prefersReducedMotion } from "@/lib/motion";
 
-const DEMO_TESTIMONIALS: Array<{
-  id: string;
-  authorName: string;
-  authorRole: string | null;
-  company: string | null;
-  photo: string | null;
-  quote: string;
-}> = [
-  {
-    id: "demo-1",
-    authorName: "Arif Hossain",
-    authorRole: "Business Owner",
-    company: "EcoPower BD",
-    photo: "/photos/testimonial-arif.jpg",
-    quote:
-      "Noor Solar helped us seamlessly transition to industrial-grade solar and storage. Our operating costs dropped significantly, and our rooftop plant has performed flawlessly through two monsoon seasons.",
-  },
-  {
-    id: "demo-2",
-    authorName: "Mahmud Karim",
-    authorRole: "Property Developer",
-    company: "Apex Developments",
-    photo: "/photos/testimonial-mahmud.jpg",
-    quote:
-      "The 51.2V LiFePO4 rack batteries and hybrid string inverters installed across our commercial properties cut grid reliance by 65%. Deliveries were on schedule with all manufacturer datasheets.",
-  },
-  {
-    id: "demo-3",
-    authorName: "Farhana Ahmed",
-    authorRole: "Industrial Plant Director",
-    company: "Delta Manufacturing",
-    photo: "/photos/testimonial-farhana.jpg",
-    quote:
-      "From initial engineering assessment through container dispatch, the experience was flawless. Our production plant achieved ROI faster than projected with their high-yield TOPCon modules.",
-  },
-];
-
-const DEMO_TESTIMONIALS_BN: Array<{
-  id: string;
-  authorName: string;
-  authorRole: string | null;
-  company: string | null;
-  photo: string | null;
-  quote: string;
-}> = [
-  {
-    id: "demo-1",
-    authorName: "আরিফ হোসেন",
-    authorRole: "স্বত্বাধিকারী",
-    company: "ইকোপাওয়ার বিডি",
-    photo: "/photos/testimonial-arif.jpg",
-    quote:
-      "নূর সোলার আমাদের কারখানায় ইন্ডাস্ট্রিয়াল গ্রেডের সোলার ও ব্যাটারি সিস্টেম স্থাপন করেছে। আমাদের বিদ্যুৎ খরচ উল্লেখযোগ্য হারে কমেছে এবং বর্ষাকালেও প্যানেলগুলো দারুণ পারফর্ম করেছে।",
-  },
-  {
-    id: "demo-2",
-    authorName: "মাহমুদ করিম",
-    authorRole: "প্রজেক্ট ডিরেক্টর",
-    company: "অ্যাপেক্স ডেভেলপমেন্টস",
-    photo: "/photos/testimonial-mahmud.jpg",
-    quote:
-      "আমাদের বাণিজ্যিক ভবনে স্থাপিত 51.2V LiFePO4 র্যাক ব্যাটারি ও হাইব্রিড স্ট্রিং ইনভার্টার গ্রিডের ওপর নির্ভরতা ৬৫% কমিয়েছে। সময়মতো ডেলিভারি ও প্রতিটি পণ্যের টেকনিক্যাল ডেটাশিট পেয়েছি।",
-  },
-  {
-    id: "demo-3",
-    authorName: "ফারহানা আহমেদ",
-    authorRole: "প্ল্যান্ট ডিরেক্টর",
-    company: "ডেল্টা ম্যানুফ্যাকচারিং",
-    photo: "/photos/testimonial-farhana.jpg",
-    quote:
-      "প্রাথমিক ইঞ্জিনিয়ারিং অ্যাসেসমেন্ট থেকে শুরু করে কন্টেইনার ডেলিভারি পর্যন্ত তাদের সেবা ছিল অসাধারণ। তাদের উচ্চ-দক্ষতার TOPCon মডিউল আমাদের কারখানায় দ্রুত বিনিয়োগের সুফল এনে দিয়েছে।",
-  },
-];
-
 export function TestimonialsSection({
   testimonials,
   locale,
@@ -89,15 +15,14 @@ export function TestimonialsSection({
   locale?: string;
 }) {
   const isBn = locale === "bn";
-  const fallbackList = isBn ? DEMO_TESTIMONIALS_BN : DEMO_TESTIMONIALS;
-  const displayItems = testimonials && testimonials.length > 0 ? testimonials : fallbackList;
+  const displayItems = testimonials && testimonials.length > 0 ? testimonials : [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Autoplay loop that pauses on hover or focus
   useEffect(() => {
-    if (typeof window === "undefined" || prefersReducedMotion() || isPaused) return;
+    if (typeof window === "undefined" || prefersReducedMotion() || isPaused || displayItems.length <= 1) return;
 
     timerRef.current = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % displayItems.length);
@@ -108,6 +33,10 @@ export function TestimonialsSection({
     };
   }, [displayItems.length, isPaused]);
 
+  if (!displayItems || displayItems.length === 0) {
+    return null;
+  }
+
   const prevSlide = () => {
     setCurrentIndex((prev) => (prev - 1 + displayItems.length) % displayItems.length);
   };
@@ -117,20 +46,13 @@ export function TestimonialsSection({
   };
 
   const currentItem = displayItems[currentIndex] || displayItems[0];
-  const photoSrc =
-    currentItem.photo ||
-    (currentIndex === 0
-      ? "/photos/testimonial-arif.jpg"
-      : currentIndex === 1
-      ? "/photos/testimonial-mahmud.jpg"
-      : "/photos/testimonial-farhana.jpg");
-
-  const roleText = [currentItem.authorRole, currentItem.company].filter(Boolean).join(" · ");
+  const photoSrc = currentItem?.photo || "/photos/testimonial-arif.jpg";
+  const roleText = [currentItem?.authorRole, currentItem?.company].filter(Boolean).join(" · ");
 
   return (
     <section
       className="py-20 lg:py-28 bg-[#EDEDED] border-y border-[#DDE1DC]"
-      aria-label={isBn ? "গ্রাহক মতামত" : "Client testimonials"}
+      aria-label={isBn ? "গ্রাহক মতামত" : "Client feedback"}
       data-motion="testimonials-slider"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -140,18 +62,18 @@ export function TestimonialsSection({
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E]" />
               <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C]">
-                {isBn ? "যাচাইকৃত গ্রাহক অভিজ্ঞতা" : "Verified Testimonials"}
+                {isBn ? "গ্রাহক মতামত" : "Client Feedback"}
               </span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#111311] leading-[1.12] mb-6">
               {isBn
-                ? "শীর্ষস্থানীয় ইপিসি ও শিল্পপ্রতিষ্ঠানসমূহের আস্থা"
-                : "Trusted by Leading EPCs & Commercial Plants"}
+                ? "শীর্ষস্থানীয় ইপিসি ও শিল্পপ্রতিষ্ঠানসমূহের অভিজ্ঞতা"
+                : "Trusted by Leading EPCs & Commercial Facilities"}
             </h2>
             <p className="text-[#5C605C] text-sm sm:text-base leading-relaxed mb-8">
               {isBn
-                ? "সারাদেশে ২৫০+ সফল কমার্শিয়াল সোলার প্রকল্প ও পাইকারি কন্টেইনার সরবরাহ সম্পন্ন।"
-                : "Over 250 completed commercial installations and wholesale container dispatches across Bangladesh."}
+                ? "বাণিজ্যিক ক্রেতা ও প্রকল্প পরিচালকদের বাস্তব প্রতিক্রিয়া ও অভিজ্ঞতা।"
+                : "Direct feedback from commercial procurement and project engineering partners across Bangladesh."}
             </p>
 
             {/* Navigation Arrows & Dot Indicators */}
@@ -180,7 +102,7 @@ export function TestimonialsSection({
                     key={idx}
                     onClick={() => setCurrentIndex(idx)}
                     aria-label={isBn ? `মন্তব্য ${idx + 1} দেখুন` : `Go to testimonial ${idx + 1}`}
-                    className="p-2 flex items-center justify-center min-w-[28px] min-h-[32px] cursor-pointer rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
+                    className="p-2 flex items-center justify-center min-w-[44px] min-h-[44px] cursor-pointer rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
                   >
                     <span
                       className={`h-2.5 rounded-full transition-all duration-300 block ${

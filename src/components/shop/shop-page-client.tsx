@@ -21,7 +21,6 @@ import {
   Check,
   ShoppingBasket,
 } from "lucide-react";
-import { LanguageSwitcher } from "@/components/ui/language-switcher";
 
 export interface ShopProduct {
   id: string;
@@ -30,6 +29,7 @@ export interface ShopProduct {
   brand?: string | null;
   model?: string | null;
   stockStatus: string;
+  moq?: string | null;
   priceBdt?: number | null;
   showPrice: boolean;
   images: Array<{ url: string; alt: string }>;
@@ -259,7 +259,7 @@ export function ShopPageClient({
     {
       id: "accessories",
       slug: "solar-inverters",
-      badge: "Tier-1",
+      badge: "TOPCon",
       badgeColor: "bg-amber-600 text-white",
       title: isBn ? "কন্ট্রোলার ও সরঞ্জাম" : "Controllers & Accessories",
       image: "/demo/inverter-30kw-ongrid-front.svg",
@@ -307,7 +307,7 @@ export function ShopPageClient({
                     setSelectedCategory("all");
                     setShowSavedOnly(false);
                   }}
-                  className={`text-left whitespace-nowrap transition-all duration-200 flex items-center justify-between text-xs sm:text-[14px] ${
+                  className={`text-left whitespace-nowrap transition-all duration-200 flex items-center justify-between text-xs sm:text-[14px] min-h-[44px] ${
                     selectedCategory === "all" && !showSavedOnly
                       ? "px-3 py-2 rounded-xl bg-[#111311] lg:bg-transparent text-white lg:text-[#111311] font-bold lg:font-extrabold lg:translate-x-1"
                       : "px-3 py-2 rounded-xl bg-slate-100 lg:bg-transparent text-slate-600 hover:text-[#111311] hover:bg-slate-100/60 lg:hover:bg-transparent font-medium lg:hover:translate-x-1"
@@ -339,7 +339,7 @@ export function ShopPageClient({
                         setSelectedCategory(cat.slug);
                         setShowSavedOnly(false);
                       }}
-                      className={`text-left whitespace-nowrap transition-all duration-200 flex items-center justify-between text-xs sm:text-[14px] ${
+                      className={`text-left whitespace-nowrap transition-all duration-200 flex items-center justify-between text-xs sm:text-[14px] min-h-[44px] ${
                         isSelected
                           ? "px-3 py-2 rounded-xl bg-[#111311] lg:bg-transparent text-white lg:text-[#111311] font-bold lg:font-extrabold lg:translate-x-1"
                           : "px-3 py-2 rounded-xl bg-slate-100 lg:bg-transparent text-slate-600 hover:text-[#111311] hover:bg-slate-100/60 lg:hover:bg-transparent font-medium lg:hover:translate-x-1"
@@ -399,12 +399,12 @@ export function ShopPageClient({
                         ? "পণ্য বা মডেল খুঁজুন..."
                         : "Search equipment, solar panels, inverters..."
                     }
-                    className="w-full bg-transparent border-none text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                    className="w-full h-11 min-h-[44px] py-2 bg-transparent border-none text-base text-slate-900 placeholder:text-slate-400 focus:outline-none"
                   />
                   <button
                     type="button"
                     aria-label="Filter"
-                    className="p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors"
+                    className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors"
                   >
                     <SlidersHorizontal className="w-4 h-4" />
                   </button>
@@ -418,8 +418,9 @@ export function ShopPageClient({
                 <button
                   type="button"
                   onClick={() => setIsCartOpen(true)}
-                  className="relative p-2.5 rounded-full hover:bg-slate-100 text-slate-700 transition-colors"
+                  className="relative w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-700 transition-colors"
                   title={isBn ? "কোটেশন ব্যাগ" : "Quote Bag"}
+                  aria-label={isBn ? "কোটেশন ব্যাগ" : "Quote Bag"}
                 >
                   <ShoppingBag className="w-5 h-5 stroke-[1.8]" />
                   {isMounted && totalCartCount > 0 && (
@@ -433,12 +434,21 @@ export function ShopPageClient({
                 <button
                   type="button"
                   onClick={() => setShowSavedOnly((prev) => !prev)}
-                  className={`relative p-2.5 rounded-full transition-all ${
+                  className={`relative w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-all ${
                     showSavedOnly
                       ? "bg-rose-50 text-rose-600 ring-2 ring-rose-200"
                       : "hover:bg-slate-100 text-slate-700"
                   }`}
                   title={
+                    showSavedOnly
+                      ? isBn
+                        ? "সকল পণ্য দেখুন"
+                        : "Show all products"
+                      : isBn
+                      ? "সংরক্ষিত পণ্য দেখুন"
+                      : "View saved items"
+                  }
+                  aria-label={
                     showSavedOnly
                       ? isBn
                         ? "সকল পণ্য দেখুন"
@@ -460,8 +470,11 @@ export function ShopPageClient({
                   )}
                 </button>
 
-                {/* Language Switcher */}
-                <LanguageSwitcher currentLocale={currentLocale} idPrefix="shop" />
+                {/* B2B Wholesale Indicator */}
+                <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200/80 text-[11px] font-mono text-slate-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#111311]"></span>
+                  <span>{isBn ? "১ প্যালেট থেকে পাইকারি অর্ডার" : "Wholesale from 1 Pallet"}</span>
+                </div>
               </div>
             </div>
 
@@ -485,13 +498,13 @@ export function ShopPageClient({
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-6 font-medium">
                     {isBn
                       ? "উচ্চ-দক্ষতাসম্পন্ন এন-টাইপ টপকন সোলার প্যানেল সরাসরি কন্টেইনার রেটে।"
-                      : "Tier-1 N-Type TOPCon bifacial modules with genuine factory warranty."}
+                      : "N-Type TOPCon bifacial modules with genuine factory warranty."}
                   </p>
 
                   <button
                     type="button"
                     onClick={() => setSelectedCategory("solar-panels")}
-                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#FF5500] hover:bg-[#E04B00] text-white font-bold text-xs sm:text-sm shadow-md transition-all hover:scale-[1.03] active:scale-[0.98]"
+                    className="inline-flex items-center justify-center min-h-[44px] gap-2 px-6 py-2.5 rounded-full bg-[#FF5500] hover:bg-[#E04B00] text-white font-bold text-xs sm:text-sm shadow-md transition-all hover:scale-[1.03] active:scale-[0.98]"
                   >
                     <span>{isBn ? "প্যানেল দেখুন" : "Solar Panels"}</span>
                     <ArrowRight className="w-4 h-4" />
@@ -559,7 +572,7 @@ export function ShopPageClient({
                             e.preventDefault();
                             router.push(`/product/${inverterSlug}`);
                           }}
-                          className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#1E232A] hover:bg-black text-white text-xs font-bold transition-transform hover:scale-105"
+                          className="inline-flex items-center justify-center min-h-[44px] gap-1.5 px-4 py-2 rounded-full bg-[#1E232A] hover:bg-black text-white text-xs font-bold transition-transform hover:scale-105"
                         >
                           <span>{isBn ? "পণ্য দেখুন" : "View specs"}</span>
                         </Link>
@@ -595,7 +608,7 @@ export function ShopPageClient({
                 </h3>
                 <Link
                   href="/products"
-                  className="text-xs sm:text-sm font-semibold text-slate-600 hover:text-[#111311] flex items-center gap-1 transition-colors"
+                  className="inline-flex items-center min-h-[44px] px-2 text-xs sm:text-sm font-semibold text-slate-600 hover:text-[#111311] gap-1 transition-colors"
                 >
                   <span>{isBn ? "সব দেখুন" : "See all"}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -790,8 +803,17 @@ export function ShopPageClient({
                                 e.stopPropagation();
                                 toggleSaveProduct(product.id);
                               }}
-                              className="absolute top-2.5 right-2.5 z-10 p-2 rounded-full bg-white/95 shadow-sm hover:bg-white text-slate-400 hover:text-rose-500 transition-all hover:scale-110 active:scale-95"
+                              className="absolute top-2.5 right-2.5 z-10 w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/95 shadow-sm hover:bg-white text-slate-400 hover:text-rose-500 transition-all hover:scale-110 active:scale-95"
                               title={
+                                isSaved
+                                ? isBn
+                                  ? "সংরক্ষণ থেকে সরান"
+                                  : "Remove from saved"
+                                : isBn
+                                ? "পণ্যটি সংরক্ষণ করুন"
+                                : "Save product"
+                              }
+                              aria-label={
                                 isSaved
                                 ? isBn
                                   ? "সংরক্ষণ থেকে সরান"
@@ -819,7 +841,7 @@ export function ShopPageClient({
                               e.stopPropagation();
                               router.push(`/product/${product.slug}`);
                             }}
-                            className="block cursor-pointer"
+                            className="cursor-pointer min-h-[44px] flex items-center"
                           >
                             <h4 className="text-sm sm:text-base font-bold text-[#111311] group-hover:text-[#FF5500] transition-colors line-clamp-2 mb-2">
                               {product.name}
@@ -839,19 +861,37 @@ export function ShopPageClient({
                               ))}
                             </div>
                           )}
+
+                          {/* MOQ / Wholesale Visibility */}
+                          <div className="flex items-center justify-between text-[11px] font-mono mb-2 text-slate-500">
+                            <span>{product.moq ? (isBn ? "ন্যূনতম অর্ডার:" : "MOQ:") : (isBn ? "সরবরাহ:" : "Supply:")}</span>
+                            <span className="font-semibold text-slate-800 truncate max-w-[150px]">
+                              {product.moq || (isBn ? "১ প্যালেট থেকে" : "From 1 Pallet")}
+                            </span>
+                          </div>
                         </div>
 
                         {/* Bottom Actions */}
                         <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 mt-3">
                           <div>
                             {product.showPrice && product.priceBdt ? (
-                              <span className="text-sm font-extrabold text-[#111311]">
-                                ৳{product.priceBdt.toLocaleString()}
-                              </span>
+                              <div className="flex flex-col">
+                                <span className="text-sm font-extrabold text-[#111311]">
+                                  ৳{product.priceBdt.toLocaleString()}
+                                </span>
+                                <span className="text-[10px] font-mono text-slate-500">
+                                  {isBn ? "অনুরোধে কনটেইনার মূল্য" : "Container pricing on request"}
+                                </span>
+                              </div>
                             ) : (
-                              <span className="text-xs font-mono text-slate-500">
-                                {isBn ? "কন্টেইনার রেট" : "Wholesale"}
-                              </span>
+                              <div className="flex flex-col">
+                                <span className="text-xs font-mono font-bold text-slate-700">
+                                  {isBn ? "কন্টেইনার / বাল্ক রেট" : "Bulk Wholesale Rate"}
+                                </span>
+                                <span className="text-[10px] font-mono text-slate-500">
+                                  {isBn ? "অনুরোধে কনটেইনার মূল্য" : "Container pricing on request"}
+                                </span>
+                              </div>
                             )}
                           </div>
 
@@ -864,12 +904,13 @@ export function ShopPageClient({
                                 e.stopPropagation();
                                 addToCart(product);
                               }}
-                              className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95 ${
+                              className={`inline-flex items-center justify-center min-h-[44px] gap-1 px-3.5 py-2 rounded-full text-xs font-semibold transition-all active:scale-95 ${
                                 inCartItem
                                   ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
                                   : "bg-slate-100 hover:bg-slate-200 text-slate-700"
                               }`}
                               title={isBn ? "কোটেশন ব্যাগে যোগ করুন" : "Add to quote bag"}
+                              aria-label={isBn ? "কোটেশন ব্যাগে যোগ করুন" : "Add to quote bag"}
                             >
                               {inCartItem ? (
                                 <>
@@ -889,7 +930,7 @@ export function ShopPageClient({
                               href={`/contact?product=${encodeURIComponent(product.slug)}`}
                               data-quote-link="true"
                               onClick={(e) => e.stopPropagation()}
-                              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-bold text-xs shadow-xs transition-transform hover:scale-105"
+                              className="inline-flex items-center justify-center min-h-[44px] gap-1.5 px-3.5 py-2 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-bold text-xs shadow-xs transition-transform hover:scale-105"
                             >
                               <span>{isBn ? "কোটেশন" : "Quote"}</span>
                               <Send className="w-3 h-3" />
@@ -939,7 +980,8 @@ export function ShopPageClient({
                 <button
                   type="button"
                   onClick={() => setIsCartOpen(false)}
-                  className="p-2 rounded-full hover:bg-slate-200 text-slate-500 hover:text-slate-900 transition-colors"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-500 hover:text-slate-900 transition-colors"
+                  aria-label={isBn ? "কোটেশন ব্যাগ বন্ধ করুন" : "Close quote bag"}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -998,9 +1040,10 @@ export function ShopPageClient({
                           <button
                             type="button"
                             onClick={() => updateCartQuantity(item.id, -1)}
-                            className="w-6 h-6 rounded-md bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center justify-center text-xs"
+                            className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center justify-center text-xs"
+                            aria-label={isBn ? "পরিমাণ কমান" : "Decrease quantity"}
                           >
-                            <Minus className="w-3 h-3" />
+                            <Minus className="w-3.5 h-3.5" />
                           </button>
                           <span className="text-xs font-mono font-bold w-6 text-center text-slate-800">
                             {item.quantity}
@@ -1008,9 +1051,10 @@ export function ShopPageClient({
                           <button
                             type="button"
                             onClick={() => updateCartQuantity(item.id, 1)}
-                            className="w-6 h-6 rounded-md bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center justify-center text-xs"
+                            className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 flex items-center justify-center text-xs"
+                            aria-label={isBn ? "পরিমাণ বাড়ান" : "Increase quantity"}
                           >
-                            <Plus className="w-3 h-3" />
+                            <Plus className="w-3.5 h-3.5" />
                           </button>
                         </div>
                       </div>
@@ -1019,8 +1063,9 @@ export function ShopPageClient({
                       <button
                         type="button"
                         onClick={() => removeFromCart(item.id)}
-                        className="p-2 text-slate-400 hover:text-rose-600 transition-colors"
+                        className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-slate-400 hover:text-rose-600 transition-colors"
                         title="Remove item"
+                        aria-label={isBn ? "ব্যাগ থেকে সরান" : "Remove item"}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -1047,7 +1092,7 @@ export function ShopPageClient({
                         .join(", ")
                     )}`}
                     onClick={() => setIsCartOpen(false)}
-                    className="w-full py-3 px-4 rounded-full bg-[#111311] hover:bg-black text-[#CEF23E] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-transform hover:scale-[1.02]"
+                    className="w-full min-h-[48px] py-3 px-4 rounded-full bg-[#111311] hover:bg-black text-[#CEF23E] text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-transform hover:scale-[1.02]"
                   >
                     <span>{isBn ? "কোটেশনের অনুরোধ পাঠান" : "Proceed to Commercial Quote"}</span>
                     <ArrowRight className="w-4 h-4" />
@@ -1056,7 +1101,7 @@ export function ShopPageClient({
                   <button
                     type="button"
                     onClick={clearCart}
-                    className="w-full text-center text-[11px] font-semibold text-slate-400 hover:text-rose-600 transition-colors"
+                    className="w-full min-h-[44px] flex items-center justify-center text-center text-[11px] font-semibold text-slate-400 hover:text-rose-600 transition-colors"
                   >
                     {isBn ? "ব্যাগ খালি করুন" : "Clear all items"}
                   </button>

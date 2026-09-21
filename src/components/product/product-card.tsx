@@ -15,6 +15,7 @@ interface ProductCardProps {
     brand?: string | null;
     model?: string | null;
     stockStatus: string;
+    moq?: string | null;
     priceBdt?: number | null;
     showPrice: boolean;
     images: Array<{ url: string; alt: string }>;
@@ -188,7 +189,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               e.stopPropagation();
               router.push(`/product/${product.slug}`);
             }}
-            className="text-[#111311] group-hover:text-black line-clamp-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-xs cursor-pointer"
+            className="text-[#111311] group-hover:text-black line-clamp-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] rounded-xs cursor-pointer min-h-[44px] flex items-center"
           >
             {product.name}
           </Link>
@@ -207,6 +208,16 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             ))}
           </div>
         )}
+
+        {/* Wholesale / MOQ Visibility */}
+        <div className="mt-2.5 pt-2.5 border-t border-[#EDEDED] flex items-center justify-between text-[11px] font-mono">
+          <span className="text-[#5C605C]">
+            {product.moq ? (isBn ? "ন্যূনতম অর্ডার:" : "MOQ:") : (isBn ? "পাইকারি সরবরাহ:" : "Wholesale:")}
+          </span>
+          <span className="font-semibold text-[#111311] truncate max-w-[170px]">
+            {product.moq || (isBn ? "১ প্যালেট থেকে" : "From 1 Pallet")}
+          </span>
+        </div>
       </div>
 
       {/* Card Action Footer */}
@@ -220,11 +231,19 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               <span className="text-sm font-mono font-bold text-[#111311]">
                 BDT {product.priceBdt.toLocaleString()}
               </span>
+              <span className="text-[9px] font-mono text-[#5C605C]">
+                {isBn ? "অনুরোধে কনটেইনার মূল্য" : "Container pricing on request"}
+              </span>
             </div>
           ) : (
-            <span className="text-xs font-mono font-medium text-[#5C605C]">
-              {isBn ? "কোটেশনে পাইকারি মূল্য" : "Bulk Pricing on Quote"}
-            </span>
+            <div className="flex flex-col">
+              <span className="text-xs font-mono font-medium text-[#5C605C]">
+                {isBn ? "কোটেশনে পাইকারি মূল্য" : "Bulk Pricing on Quote"}
+              </span>
+              <span className="text-[9px] font-mono text-[#5C605C]">
+                {isBn ? "অনুরোধে কনটেইনার মূল্য" : "Container pricing on request"}
+              </span>
+            </div>
           )}
         </div>
 
@@ -236,7 +255,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               e.stopPropagation();
               router.push(`/product/${product.slug}`);
             }}
-            className="p-2 rounded-full text-[#5C605C] hover:text-[#111311] hover:bg-[#EDEDED] transition-colors flex items-center justify-center cursor-pointer"
+            className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full text-[#5C605C] hover:text-[#111311] hover:bg-[#EDEDED] transition-colors flex items-center justify-center cursor-pointer"
             title={isBn ? "প্রযুক্তিগত বিবরণ দেখুন" : "View Technical Details"}
             aria-label={isBn ? `${product.name}-এর বিবরণ দেখুন` : `View details for ${product.name}`}
           >
@@ -249,7 +268,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           <Link
             href={`/contact?product=${product.slug}`}
             onClick={(e) => e.stopPropagation()}
-            className="px-3.5 py-1.5 rounded-full bg-[#111311] text-white text-xs font-medium tracking-tight transition-all duration-200 hover:bg-[#CEF23E] hover:text-[#111311] active:scale-95"
+            className="px-3.5 py-1.5 min-h-[44px] inline-flex items-center justify-center rounded-full bg-[#111311] text-white text-xs font-medium tracking-tight transition-all duration-200 hover:bg-[#CEF23E] hover:text-[#111311] active:scale-95"
           >
             {isBn ? "কোটেশন চান" : "Request Quote"}
           </Link>

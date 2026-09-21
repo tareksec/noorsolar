@@ -26,8 +26,8 @@ export function VideoCtaBanner({
     : "Need Container-Scale Solar Supply Today?";
 
   const defaultSubheadline = isBn
-    ? "রোবোটিক প্রযুক্তিতে প্রস্তুত টায়ার-১ সোলার প্যানেল, ইন্ডাস্ট্রিয়াল LiFePO4 ব্যাটারি ব্যাংক এবং হাইব্রিড ইনভার্টারের সরাসরি আমদানিকারক। দ্রুত কন্টেইনার ডেলিভারি ও পাইকারি মূল্য।"
-    : "Direct importer of automated Tier-1 solar panels, industrial LiFePO4 battery banks, and hybrid inverters. Fast container dispatch, certified engineering, and wholesale pricing across Bangladesh.";
+    ? "উন্নত স্বয়ংক্রিয় প্রযুক্তিতে প্রস্তুত সোলার প্যানেল, ইন্ডাস্ট্রিয়াল LiFePO4 ব্যাটারি ব্যাংক এবং হাইব্রিড ইনভার্টারের সরাসরি আমদানিকারক। দ্রুত কন্টেইনার ডেলিভারি ও পাইকারি মূল্য।"
+    : "Direct importer of factory-tested solar panels, industrial LiFePO4 battery banks, and hybrid inverters. Fast container dispatch, certified engineering, and wholesale pricing across Bangladesh.";
 
   const defaultCtaText = isBn ? "পাইকারি কোটেশন চান" : "Request Wholesale Quote";
 
@@ -41,7 +41,7 @@ export function VideoCtaBanner({
             loop
             muted
             playsInline
-            preload="auto"
+            preload="none"
             poster="/photos/hero-solar-field.webp"
             className="absolute inset-0 w-full h-full object-cover object-center scale-100 group-hover:scale-103 transition-transform duration-1000 ease-out"
           >
@@ -53,7 +53,7 @@ export function VideoCtaBanner({
             {/* Live Indicator / Eyebrow */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111311]/60 backdrop-blur-md border border-white/20 text-white text-xs font-mono uppercase tracking-wider mb-6 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#CEF23E] animate-pulse" />
-              <span>{isBn ? "স্বয়ংক্রিয় টায়ার-১ উৎপাদন" : "Automated Tier-1 Production"}</span>
+              <span>{isBn ? "স্বয়ংক্রিয় রোবোটিক অ্যাসেম্বলি" : "Automated Robotic Assembly"}</span>
             </div>
 
             {/* Main Headline */}
@@ -70,7 +70,7 @@ export function VideoCtaBanner({
             <div className="flex flex-wrap items-center gap-4">
               <Link
                 href={ctaHref}
-                className="inline-flex items-center gap-3.5 pl-6 pr-2.5 py-2.5 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] active:scale-[0.98] text-[#111311] font-bold text-sm sm:text-base shadow-[0_8px_24px_-4px_rgba(206,242,62,0.45)] transition-all duration-200 group/btn"
+                className="inline-flex items-center min-h-[44px] gap-3.5 pl-6 pr-2.5 py-2.5 rounded-full bg-[#CEF23E] hover:bg-[#D4F842] active:scale-[0.98] text-[#111311] font-bold text-sm sm:text-base shadow-[0_8px_24px_-4px_rgba(206,242,62,0.45)] transition-all duration-200 group/btn"
               >
                 <span>{ctaText || defaultCtaText}</span>
                 <span className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#111311] text-[#CEF23E] flex items-center justify-center group-hover/btn:translate-x-1 transition-all duration-200 shadow-xs">

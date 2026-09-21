@@ -3,15 +3,18 @@
 import React from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import type { Stat } from "@prisma/client";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 
 interface WhyChooseUsProps {
   locale?: string;
+  stats?: Stat[];
 }
 
-export function WhyChooseUs({ locale }: WhyChooseUsProps = {}) {
+export function WhyChooseUs({ locale, stats }: WhyChooseUsProps = {}) {
   const pathname = usePathname() || "";
   const isBn = locale === "bn" || pathname.startsWith("/bn/") || pathname === "/bn";
+  const displayStats = stats && stats.length > 0 ? stats.slice(0, 3) : null;
 
   return (
     <section id="why-choose-us" className="pt-6 sm:pt-8 pb-20 lg:pb-28 bg-[#EDEDED] border-b border-[#DDE1DC]">
@@ -51,7 +54,7 @@ export function WhyChooseUs({ locale }: WhyChooseUsProps = {}) {
                     {isBn ? "সরাসরি আমদানিকারকের গুণমান" : "Direct Importer Quality"}
                   </p>
                   <p className="text-sm font-bold text-[#111311]">
-                    {isBn ? "কন্টেইনার স্কেল টায়ার-১ সংগ্রহ" : "Container-Scale Tier-1 Procurement"}
+                    {isBn ? "কন্টেইনার স্কেল সরাসরি ফ্যাক্টরি সংগ্রহ" : "Container-Scale Direct Factory Sourcing"}
                   </p>
                 </div>
                 <span className="w-3 h-3 rounded-full bg-[#CEF23E] ring-4 ring-[#CEF23E]/30" />
@@ -88,52 +91,36 @@ export function WhyChooseUs({ locale }: WhyChooseUsProps = {}) {
             <div className="border-l-2 border-[#111311] pl-5 sm:pl-6 mb-10 max-w-xl">
               <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed">
                 {isBn
-                  ? "যাচাইকৃত টেকনিক্যাল ডেটাশিট, প্রত্যয়িত টায়ার-১ ইঞ্জিনিয়ারিং সরঞ্জাম এবং দীর্ঘমেয়াদী নির্ভরযোগ্যতা ও গ্রাহক সন্তুষ্টির সাথে সারা বাংলাদেশে সরাসরি ফ্যাক্টরি সংগ্রহ সরবরাহ।"
-                  : "Direct factory procurement delivered with verified technical datasheets, certified Tier-1 engineering components, and an uncompromising commitment to long-term reliability, efficiency, and customer satisfaction across Bangladesh."}
+                  ? "যাচাইকৃত টেকনিক্যাল ডেটাশিট, প্রত্যয়িত ইঞ্জিনিয়ারিং সরঞ্জাম এবং দীর্ঘমেয়াদী নির্ভরযোগ্যতার প্রতিশ্রুতির সাথে সারা বাংলাদেশে সরাসরি ফ্যাক্টরি সংগ্রহ সরবরাহ।"
+                  : "Direct factory procurement delivered with verified technical datasheets, certified engineering components, and transparent bill of lading documentation across Bangladesh."}
               </p>
             </div>
 
-            {/* Bottom: 3 Big Bold Statistics */}
-            <div className="grid grid-cols-3 gap-4 sm:gap-6 pt-6 border-t border-[#DDE1DC]">
-              {/* Stat 1 */}
-              <div>
-                <div className="text-3xl sm:text-4xl lg:text-[42px] font-black tracking-tight text-[#111311] font-mono leading-none mb-2">
-                  <AnimatedCounter value={8} suffix="+" />
-                </div>
-                <div className="text-xs sm:text-[13px] font-semibold text-[#111311] leading-tight mb-0.5">
-                  {isBn ? "বছরের অভিজ্ঞতা" : "Years in Business"}
-                </div>
-                <div className="text-[11px] text-[#5C605C] leading-tight">
-                  {isBn ? "প্রতিষ্ঠিত অবস্থান" : "Established presence"}
-                </div>
+            {/* Bottom: Centralized Key Metrics */}
+            {displayStats && displayStats.length > 0 && (
+              <div className="grid grid-cols-3 gap-4 sm:gap-6 pt-6 border-t border-[#DDE1DC]">
+                {displayStats.map((item) => (
+                  <div key={item.id}>
+                    <div className="text-3xl sm:text-4xl lg:text-[42px] font-black tracking-tight text-[#111311] font-mono leading-none mb-2">
+                      <AnimatedCounter
+                        value={item.value}
+                        prefix={item.prefix}
+                        suffix={item.suffix}
+                        decimals={Number.isInteger(item.value) ? 0 : 1}
+                      />
+                    </div>
+                    <div className="text-xs sm:text-[13px] font-semibold text-[#111311] leading-tight mb-0.5">
+                      {item.label}
+                    </div>
+                    {item.description && (
+                      <div className="text-[11px] text-[#5C605C] leading-tight">
+                        {item.description}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
-
-              {/* Stat 2 */}
-              <div>
-                <div className="text-3xl sm:text-4xl lg:text-[42px] font-black tracking-tight text-[#111311] font-mono leading-none mb-2">
-                  <AnimatedCounter value={250} suffix="+" />
-                </div>
-                <div className="text-xs sm:text-[13px] font-semibold text-[#111311] leading-tight mb-0.5">
-                  {isBn ? "প্রকল্পে সরঞ্জাম সরবরাহ" : "Projects Supplied"}
-                </div>
-                <div className="text-[11px] text-[#5C605C] leading-tight">
-                  {isBn ? "শিল্প প্রতিষ্ঠান" : "Industrial facilities"}
-                </div>
-              </div>
-
-              {/* Stat 3 */}
-              <div>
-                <div className="text-3xl sm:text-4xl lg:text-[42px] font-black tracking-tight text-[#111311] font-mono leading-none mb-2">
-                  <AnimatedCounter value={180} suffix="+" />
-                </div>
-                <div className="text-xs sm:text-[13px] font-semibold text-[#111311] leading-tight mb-0.5">
-                  {isBn ? "সন্তুষ্ট গ্রাহক" : "Happy Clients"}
-                </div>
-                <div className="text-[11px] text-[#5C605C] leading-tight">
-                  {isBn ? "বাণিজ্যিক ক্রেতা" : "Commercial buyers"}
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

@@ -26,8 +26,9 @@ import { SustainabilityImpact } from "@/components/sections/sustainability-impac
 import { VideoCtaBanner } from "@/components/sections/video-cta-banner";
 import { DynamicHomeSections } from "@/components/sections/dynamic-home-sections";
 import { FeaturedCarousel } from "@/components/sections/featured-carousel";
-import { SitePreloader } from "@/components/ui/site-preloader";
+import { BuyerSegmentation } from "@/components/sections/buyer-segmentation";
 import { HomeContactBanner } from "@/components/sections/home-contact-banner";
+import { SITE_URL } from "@/lib/site-config";
 
 export const revalidate = 60; // On-demand or 60s cache revalidation
 
@@ -42,7 +43,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
 
   return {
     title: isBn
@@ -103,7 +104,7 @@ export default async function HomePage({
     getFaqItems(locale),
   ]);
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
 
   const orgJsonLd = {
     "@context": "https://schema.org",
@@ -130,7 +131,6 @@ export default async function HomePage({
 
   return (
     <>
-      <SitePreloader />
       {/* Schema.org Organization Structured Data */}
       <script
         type="application/ld+json"
@@ -158,11 +158,14 @@ export default async function HomePage({
       {/* 5. Business Statistics Band (Server Component - 4 Counters) */}
       <StatsBand stats={stats} />
 
-      {/* 4. Complete Solar Solutions For Every Project (Design Match) */}
+      {/* 6. B2B Buyer Segmentation (EPCs, Industrial & Commercial, Dealers) */}
+      <BuyerSegmentation locale={locale} />
+
+      {/* 7. Complete Solar Solutions For Every Project (Design Match) */}
       <ServicesSolutions locale={locale} />
 
       {/* 5. Trusted Expertise & Key Metrics (Design Match) */}
-      <WhyChooseUs locale={locale} />
+      <WhyChooseUs locale={locale} stats={stats} />
 
       {/* 6. Built for Lower Impact & Cost Efficiency (Design Match) */}
       <SustainabilityImpact locale={locale} />

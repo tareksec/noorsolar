@@ -5,7 +5,7 @@ import { prefersReducedMotion } from "@/lib/motion";
 import { usePathname } from "next/navigation";
 
 const MARQUEE_ITEMS_EN = [
-  "Tier 1 Solar Panels",
+  "High-Yield Solar Panels",
   "Lithium LiFePO4 Storage",
   "Hybrid & On-Grid Inverters",
   "Bulk Wholesale Bangladesh",
@@ -15,7 +15,7 @@ const MARQUEE_ITEMS_EN = [
 ];
 
 const MARQUEE_ITEMS_BN = [
-  "টায়ার-১ সোলার প্যানেল",
+  "উচ্চ-ফলনশীল সোলার প্যানেল",
   "লিথিয়াম LiFePO4 স্টোরেজ",
   "হাইব্রিড ও অন-গ্রিড ইনভার্টার",
   "সরাসরি কন্টেইনার সরবরাহ",

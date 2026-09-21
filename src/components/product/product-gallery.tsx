@@ -226,7 +226,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 e.stopPropagation();
                 handlePrev();
               }}
-              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 backdrop-blur-md border border-[#DDE1DC] flex items-center justify-center text-[#111311] opacity-80 sm:opacity-0 group-hover:opacity-100 hover:bg-[#CEF23E] transition-all shadow-md focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white/90 backdrop-blur-md border border-[#DDE1DC] flex items-center justify-center text-[#111311] opacity-80 sm:opacity-0 group-hover:opacity-100 hover:bg-[#CEF23E] transition-all shadow-md focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -237,7 +237,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 e.stopPropagation();
                 handleNext();
               }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 backdrop-blur-md border border-[#DDE1DC] flex items-center justify-center text-[#111311] opacity-80 sm:opacity-0 group-hover:opacity-100 hover:bg-[#CEF23E] transition-all shadow-md focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white/90 backdrop-blur-md border border-[#DDE1DC] flex items-center justify-center text-[#111311] opacity-80 sm:opacity-0 group-hover:opacity-100 hover:bg-[#CEF23E] transition-all shadow-md focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
               aria-label="Next image"
             >
               <ChevronRight className="w-5 h-5" />
@@ -309,7 +309,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 <button
                   type="button"
                   onClick={toggleZoom}
-                  className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
                   aria-label={zoomed ? "Zoom out" : "Zoom in"}
                 >
                   {zoomed ? (
@@ -325,7 +325,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                     setZoomed(false);
                     setZoomScale(1);
                   }}
-                  className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
                   aria-label="Close lightbox"
                 >
                   <X className="w-5 h-5" />

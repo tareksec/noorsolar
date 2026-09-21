@@ -31,25 +31,33 @@ export async function getPendingReviewsCount(): Promise<number> {
 }
 
 export async function getApprovedReviewsForProduct(productId: string) {
-  const reviews = await db.productReview.findMany({
-    where: {
-      productId,
-      status: "APPROVED",
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    const reviews = await db.productReview.findMany({
+      where: {
+        productId,
+        status: "APPROVED",
+      },
+      orderBy: { createdAt: "desc" },
+    });
 
-  const totalReviews = reviews.length;
-  const averageRating =
-    totalReviews > 0
-      ? Number((reviews.reduce((acc, r) => acc + r.rating, 0) / totalReviews).toFixed(1))
-      : 0;
+    const totalReviews = reviews.length;
+    const averageRating =
+      totalReviews > 0
+        ? Number((reviews.reduce((acc, r) => acc + r.rating, 0) / totalReviews).toFixed(1))
+        : 0;
 
-  return {
-    reviews,
-    totalReviews,
-    averageRating,
-  };
+    return {
+      reviews,
+      totalReviews,
+      averageRating,
+    };
+  } catch {
+    return {
+      reviews: [],
+      totalReviews: 0,
+      averageRating: 0,
+    };
+  }
 }
 
 export async function getAdminReviews(options?: {

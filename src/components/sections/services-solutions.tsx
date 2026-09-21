@@ -26,34 +26,34 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
 
   const services: ServiceCard[] = [
     {
-      id: "solar-supply",
-      title: isBn ? "বাণিজ্যিক সোলার সরবরাহ" : "Commercial Solar Supply",
+      id: "container-indent",
+      title: isBn ? "কনটেইনার সরাসরি ইনডেন্ট" : "Direct Container Indent",
       description: isBn
-        ? "শিল্প কারখানা ও বাণিজ্যিক EPC প্রকল্পের জন্য টায়ার-১ এন-টাইপ TOPCon বাইফেসিয়াল মডিউলের সরাসরি কন্টেইনার আমদানি ও পাইকারি সংগ্রহ।"
-        : "Direct container-scale imports and bulk procurement of Tier-1 N-Type TOPCon bifacial modules sized for industrial factories and commercial EPC projects.",
+        ? "লার্জ-স্কেল ইউটিলিটি ও ফ্যাক্টরি রুফটপ প্রকল্পের জন্য সরাসরি প্রস্তুতকারক থেকে কনটেইনার আমদানির সম্পূর্ণ লজিস্টিক ও ক্লিয়ারেন্স সুবিধা।"
+        : "Factory-direct container shipments for large EPC developers and industrial plants, with complete bill of lading and customs clearance support.",
       image: "/solar-images/solar-panels-arranged-in-a-grid-pattern-on-a-clean-surface-under-bright-lighting-photo.jpeg",
-      alt: isBn ? "বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল ইনস্টলেশন" : "High-efficiency monocrystalline solar panels installation in Bangladesh",
-      link: "/category/solar-panels",
+      alt: isBn ? "বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল কন্টেইনার আমদানি" : "Direct container solar module imports in Bangladesh",
+      link: "/contact",
     },
     {
-      id: "storage-systems",
-      title: isBn ? "লিথিয়াম এনার্জি স্টোরেজ" : "Lithium Storage Systems",
+      id: "warehouse-stock",
+      title: isBn ? "ঢাকা ওয়্যারহাউস বাফার স্টক" : "Dhaka Buffer Warehouse Stock",
       description: isBn
-        ? "কারখানার ব্যাকআপ বিদ্যুৎ, পিক শেভিং এবং নিরবচ্ছিন্ন উৎপাদনের জন্য নির্মিত হাই-ভোল্টেজ LiFePO4 বাণিজ্যিক এনার্জি স্টোরেজ ব্যাংক।"
-        : "High-voltage LiFePO4 commercial energy storage banks engineered for factory backup power, peak shaving, and zero-downtime industrial reliability.",
+        ? "জরুরি প্রকল্পের জন্য আমাদের ঢাকা ওয়্যারহাউসে প্যালেট-রেডি সোলার প্যানেল, লিথিয়াম ব্যাটারি ও ইনভার্টারের রেডি স্টক থেকে তাৎক্ষণিক সরবরাহ।"
+        : "Immediate dispatch from ready pallet inventory in our Dhaka distribution depot, avoiding project downtime and overseas shipping lead times.",
       image: "/bettry/500_F_2090872523_bLZOG1F2Gbz4TsCdhboiXNUezn7dTZZI.jpg",
-      alt: isBn ? "স্মার্ট BMS সহ ইন্ডাস্ট্রিয়াল LiFePO4 ব্যাটারি রেক" : "Industrial LiFePO4 battery rack installations with smart BMS",
-      link: "/category/lithium-batteries",
+      alt: isBn ? "ঢাকায় বাফার স্টক লিথিয়াম ব্যাটারি ও ইনভার্টার ডিপো" : "Warehouse buffer stock of lithium batteries and solar equipment in Dhaka",
+      link: "/products",
     },
     {
-      id: "inverter-solutions",
-      title: isBn ? "হাইব্রিড ও ইউটিলিটি ইনভার্টার" : "Hybrid & Utility Inverters",
+      id: "compliance-verification",
+      title: isBn ? "প্রকৌশল যাচাই ও কমপ্লায়েন্স" : "Engineering & Compliance Files",
       description: isBn
-        ? "ইন্টেলিজেন্ট গ্রিড সিনক্রোনাইজেশন, উচ্চ সার্জ ক্ষমতা এবং দূরবর্তী টেলিমেট্রি মনিটরিং সুবিধাসহ থ্রি-ফেজ কমার্শিয়াল স্ট্রিং ও হাইব্রিড ইনভার্টার।"
-        : "Three-phase commercial string and hybrid solar inverters with intelligent grid synchronization, high surge capacity, and remote telemetry monitoring.",
+        ? "ব্যাংক-ফাইন্যান্সড ও কমপ্লায়েন্স প্রকল্পের জন্য ফ্যাক্টরি ফ্ল্যাশ টেস্ট রিপোর্ট, সান-সিমুলেটর ডেটাশিট ও অফিশিয়াল ওয়ারেন্টি ডকুমেন্টেশন।"
+        : "Complete compliance dossiers including original factory flash test reports, EL inspection data, and manufacturer warranty certificates for bankable installations.",
       image: "/Inverter/white-inverter-of-solar-cell-power-generation-system.jpg",
-      alt: isBn ? "বাণিজ্যিক সোলার হাইব্রিড ইনভার্টার ইনস্টলেশন ও পরীক্ষা" : "Commercial solar hybrid inverter installation and testing",
-      link: "/category/solar-inverters",
+      alt: isBn ? "বাণিজ্যিক সোলার ইঞ্জিনিয়ারিং ও কমপ্লায়েন্স যাচাই" : "Solar engineering compliance testing and certification",
+      link: "/certifications",
     },
   ];
 
@@ -76,22 +76,22 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
           <div className="flex items-center gap-2 mb-3">
             <span className="w-2 h-2 rounded-full border-2 border-[#111311] inline-block" />
             <span className="text-xs font-mono uppercase tracking-wider text-[#111311] font-semibold">
-              {isBn ? "সেবা ও সমাধান" : "Services & Solutions"}
+              {isBn ? "সরবরাহ চ্যানেল ও লজিস্টিকস" : "B2B Supply Channels & Fulfillment"}
             </span>
           </div>
 
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12">
             {/* Main Headline */}
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#111311] max-w-xl leading-[1.08]">
-              {isBn ? "প্রতিটি প্রকল্পের জন্য পূর্ণাঙ্গ সোলার সমাধান" : "Complete Solar Solutions for Every Project"}
+              {isBn ? "ঠিকাদার ও ইপিসি প্রজেক্টের জন্য নির্ধারিত সরবরাহ ব্যবস্থা" : "Structured Supply Channels for EPCs & Contractors"}
             </h2>
 
             {/* Accent Description Box */}
             <div className="border-l-2 border-[#111311] pl-4 sm:pl-5 max-w-md">
               <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed">
                 {isBn
-                  ? "আপনার বাণিজ্যিক সোলার ইনস্টলেশন দক্ষ, নির্ভরযোগ্য এবং সর্বোচ্চ উৎপাদনে চালু রাখতে প্রয়োজনীয় সবকিছু।"
-                  : "Everything you need to keep your commercial solar installation running efficiently, reliably, and performing at its absolute peak."}
+                  ? "সরাসরি কনটেইনার আমদানি হোক কিংবা ঢাকা ওয়্যারহাউস থেকে জরুরি প্যালেট সংগ্রহ — আমাদের সরবরাহ ব্যবস্থা আপনার প্রকল্পকে রাখবে গতিশীল।"
+                  : "Whether importing container consignments directly or pulling urgent buffer pallets from our Dhaka warehouse, our procurement channels keep projects on schedule."}
               </p>
             </div>
           </div>
@@ -114,7 +114,7 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
                   </h3>
                   <Link
                     href={item.link}
-                    className="p-2 rounded-full bg-[#EDEDED] text-[#111311] group-hover:bg-[#CEF23E] transition-colors shrink-0"
+                    className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-[#EDEDED] text-[#111311] group-hover:bg-[#CEF23E] transition-colors shrink-0"
                     aria-label={isBn ? `${item.title} দেখুন` : `View ${item.title}`}
                   >
                     <ArrowUpRight className="w-4 h-4" />

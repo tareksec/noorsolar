@@ -88,6 +88,51 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
     };
   }, [displayProducts.length]);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    let startX = 0;
+    let startY = 0;
+    let isSwiping = false;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        isSwiping = true;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isSwiping || e.touches.length !== 1) return;
+      const currentX = e.touches[0].clientX;
+      const currentY = e.touches[0].clientY;
+      const deltaX = startX - currentX;
+      const deltaY = startY - currentY;
+
+      // If predominantly horizontal swipe
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+        window.scrollBy({ top: deltaX * 1.5, behavior: "auto" });
+        startX = currentX;
+        startY = currentY;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      isSwiping = false;
+    };
+
+    container.addEventListener("touchstart", handleTouchStart, { passive: true });
+    container.addEventListener("touchmove", handleTouchMove, { passive: true });
+    container.addEventListener("touchend", handleTouchEnd, { passive: true });
+
+    return () => {
+      container.removeEventListener("touchstart", handleTouchStart);
+      container.removeEventListener("touchmove", handleTouchMove);
+      container.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, []);
+
   if (displayProducts.length === 0) return null;
 
   return (
@@ -255,7 +300,7 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
           </div>
           <Link
             href={isBn ? "/bn/products" : "/products"}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#CEF23E] hover:bg-[#b8da35] text-[#111311] text-xs font-bold transition-all hover:scale-105 shrink-0"
+            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 min-h-[44px] rounded-full bg-[#CEF23E] hover:bg-[#b8da35] text-[#111311] text-xs font-bold transition-all hover:scale-105 shrink-0"
           >
             <span>{isBn ? "সব পণ্য দেখুন" : `View All ${products.length} Products`}</span>
             <ArrowUpRight className="w-4 h-4" />

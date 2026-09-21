@@ -36,7 +36,7 @@ const EQUIPMENT_ITEMS_EN: EquipmentCard[] = [
     slug: "solar-panels",
     title: "Solar Panels",
     categoryNumber: "01",
-    specSummary: "Tier-1 N-Type TOPCon & Bifacial",
+    specSummary: "N-Type TOPCon & Dual-Glass Bifacial",
     description:
       "High-efficiency monocrystalline and bifacial solar modules engineered for maximum irradiance capture, harsh weather resistance, and 25-year performance.",
     image: "/solar-images/solar-panel-3d-isolated.webp",
@@ -138,8 +138,8 @@ export function CategoryDock({ locale }: CategoryDockProps) {
 
           <p className="mt-4 text-sm sm:text-[15px] text-[#5A6355] leading-relaxed font-normal">
             {isBn
-              ? "বাসাবাড়ি থেকে শুরু করে শিল্পকারখানার জন্য আসল টায়ার-১ সরঞ্জাম, নির্ভরযোগ্য কারিগরি সাপোর্ট এবং সরাসরি পাইকারি ও খুচরা মূল্য।"
-              : "From single components to turnkey home and commercial systems — genuine Tier-1 equipment, dedicated engineering support, and transparent wholesale pricing."}
+              ? "বাসাবাড়ি থেকে শুরু করে শিল্পকারখানার জন্য আসল ইঞ্জিনিয়ারিং-গ্রেড সরঞ্জাম, নির্ভরযোগ্য কারিগরি সাপোর্ট এবং সরাসরি পাইকারি ও কনটেইনার মূল্য।"
+              : "From single pallets to container-scale project supply — genuine engineering-grade equipment, dedicated technical support, and transparent wholesale pricing."}
           </p>
         </div>
 

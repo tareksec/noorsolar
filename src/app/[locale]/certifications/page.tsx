@@ -20,6 +20,7 @@ import {
 import { routing } from "@/i18n/routing";
 import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/routing";
+import { SITE_URL } from "@/lib/site-config";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -34,15 +35,15 @@ interface CertificationsPageProps {
 export async function generateMetadata({ params }: CertificationsPageProps): Promise<Metadata> {
   const { locale } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
 
   return {
     title: isBn
-      ? "সার্টিফিকেশন ও কমপ্লায়েন্স মানদণ্ড | নূর সোলার এনার্জি"
-      : "Certifications & Compliance Standards | Noor Solar Energy",
+      ? "শিল্প সমিতি সদস্যপদ ও নথি | নূর সোলার এনার্জি"
+      : "Industry Membership & Compliance Documents | Noor Solar Energy",
     description: isBn
-      ? "নূর সোলার এনার্জির বাণিজ্যিক সরঞ্জামের অফিসিয়াল BSREA সদস্যপদ, ISO কোয়ালিটি ম্যানেজমেন্ট এবং ফ্যাক্টরি টেস্ট রিপোর্ট।"
-      : "Official BSREA membership, ISO quality management, factory electrical test reports, and municipal trade compliance for Noor Solar Energy commercial equipment.",
+      ? "বাংলাদেশ সাসটেইনেবল অ্যান্ড রিনিউয়েবল এনার্জি অ্যাসোসিয়েশন (BSREA) সদস্যপদ ও বাণিজ্যিক মানদণ্ড নথি।"
+      : "Official BSREA industry association membership and commercial compliance documentation for Noor Solar Energy.",
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/certifications` : `${siteUrl}/certifications`,
       languages: {
@@ -53,11 +54,11 @@ export async function generateMetadata({ params }: CertificationsPageProps): Pro
     },
     openGraph: {
       title: isBn
-        ? "সার্টিফিকেশন ও কমপ্লায়েন্স — নূর সোলার এনার্জি"
-        : "Certifications & Compliance Standards — Noor Solar Energy",
+        ? "শিল্প সমিতি সদস্যপদ ও নথি — নূর সোলার এনার্জি"
+        : "Industry Membership & Compliance Documents — Noor Solar Energy",
       description: isBn
-        ? "নূর সোলার এনার্জির ভেরিফাইড BSREA সদস্যপদ, ISO মানদণ্ড এবং ল্যাবরেটরি টেস্ট সার্টিফিকেট।"
-        : "Explore verified BSREA membership, ISO standards, laboratory electrical testing, and safety certifications for Noor Solar Energy.",
+        ? "BSREA সদস্যপদ ও বাণিজ্যিক সোলার সরঞ্জামের কোয়ালিটি কন্ট্রোল মানদণ্ড।"
+        : "Explore official BSREA membership and commercial solar quality benchmarks for Noor Solar Energy.",
       url: isBn ? "/bn/certifications" : "/certifications",
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
@@ -96,7 +97,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
         <div className="mb-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs font-mono text-[#5C605C] hover:text-[#111311] transition-colors"
+            className="inline-flex items-center min-h-[44px] gap-2 text-xs font-mono text-[#5C605C] hover:text-[#111311] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>{isBn ? "হোমে ফিরুন" : "Back to Home"}</span>
@@ -107,15 +108,15 @@ export default async function CertificationsPage({ params }: CertificationsPageP
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-xs font-mono text-[#111311] mb-4 border border-[#DDE1DC] shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-            <span>{isBn ? "কমপ্লায়েন্স ও টেস্ট রেজিস্ট্রি" : "Compliance & Testing Registry"}</span>
+            <span>{isBn ? "সদস্যপদ ও কমপ্লায়েন্স রেজিস্ট্রি" : "Membership & Compliance Registry"}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111311] leading-tight mb-4">
-            {isBn ? "টেকনিক্যাল সার্টিফিকেশন ও আন্তর্জাতিক মানদণ্ড" : "Technical Certifications & Standards"}
+            {isBn ? "শিল্প সমিতি সদস্যপদ ও কমপ্লায়েন্স" : "Industry Membership & Compliance Documents"}
           </h1>
           <p className="text-base text-[#5C605C] leading-relaxed">
             {isBn
-              ? "নূর সোলার এনার্জির সরবরাহকৃত প্রতিটি সোলার প্যানেল, হাইব্রিড ইনভার্টার এবং লিথিয়াম ব্যাটারি কঠোর ল্যাব টেস্ট, বিদ্যুৎ পরিদর্শন মানদণ্ড এবং জাতীয় অ্যাসোসিয়েশনের স্বীকৃতি প্রাপ্ত।"
-              : "All solar modules, hybrid inverters, and lithium energy storage banks distributed by Noor Solar Energy adhere to rigorous laboratory testing, electrical inspection benchmarks, and national association accreditations."}
+              ? "নবায়নযোগ্য জ্বালানি খাতের প্রাতিষ্ঠানিক সমিতি সদস্যপদ এবং প্রকল্প পর্যায়ে সরবরাহকৃত সরঞ্জামের কারিগরি মানদণ্ড সংক্রান্ত তথ্যাবলি।"
+              : "Official industry association membership records and technical quality standards for commercial solar equipment supplied across Bangladesh."}
           </p>
         </div>
 
@@ -124,15 +125,15 @@ export default async function CertificationsPage({ params }: CertificationsPageP
           <div className="flex items-center justify-between gap-4 mb-6">
             <div>
               <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C] block">
-                {isBn ? "প্রধান স্বীকৃতি" : "Primary Accreditation"}
+                {isBn ? "শিল্প সমিতি সদস্যপদ" : "Industry Membership"}
               </span>
               <h2 className="text-2xl font-bold text-[#111311]">
-                {isBn ? "জাতীয় অ্যাসোসিয়েশন সদস্যপদ" : "National Association Membership"}
+                {isBn ? "জাতীয় সমিতি সদস্যপদ" : "National Association Membership"}
               </h2>
             </div>
             <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#CEF23E] text-[#111311] text-xs font-bold">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>{isBn ? "অফিসিয়াল নিবন্ধিত প্রতিষ্ঠান" : "Official Registered Entity"}</span>
+              <span>{isBn ? "অফিসিয়াল নিবন্ধিত সদস্য" : "Official Registered Member"}</span>
             </span>
           </div>
 
@@ -162,7 +163,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
 
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#111311] text-[#CEF23E] text-xs font-mono mb-3">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#CEF23E]" />
-                  <span>{isBn ? "ভেরিফাইড সক্রিয় সদস্য" : "Verified Active Member"}</span>
+                  <span>{isBn ? "সক্রিয় সাধারণ সদস্য" : "Active General Member"}</span>
                 </div>
 
                 <h3 className="text-xl sm:text-2xl font-bold text-[#111311] leading-snug">
@@ -211,10 +212,10 @@ export default async function CertificationsPage({ params }: CertificationsPageP
 
                   <div className="p-4 rounded-xl bg-[#F5F7F3] border border-[#E0E5DC]">
                     <span className="text-[11px] font-mono text-[#5C605C] block mb-1">
-                      {isBn ? "ইস্যুর তারিখ" : "Date of Issue"}
+                      {isBn ? "ডকুমেন্ট টাইপ" : "Document Type"}
                     </span>
                     <span className="text-sm font-semibold text-[#111311]">
-                      {isBn ? "১৫ সেপ্টেম্বর, ২০২৬" : "September 15, 2026"}
+                      {isBn ? "সাধারণ সদস্যপদ সনদ" : "General Membership Certificate"}
                     </span>
                   </div>
 
@@ -233,8 +234,8 @@ export default async function CertificationsPage({ params }: CertificationsPageP
 
                 <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed mb-6">
                   {isBn
-                    ? "তাসনীম নিটিং ইন্ডাস্ট্রিজ বাংলাদেশ সাসটেইনেবল অ্যান্ড রিনিউয়েবল এনার্জি অ্যাসোসিয়েশনের (BSREA) সক্রিয় সাধারণ সদস্য (20260915GEN113)। এই সনদ নূর সোলার এনার্জির বাণিজ্যিক প্রাতিষ্ঠানিক কমপ্লায়েন্স, জাতীয় নবায়নযোগ্য জ্বালানি লক্ষ্যমাত্রা এবং দায়িত্বশীল ব্যবসায়িক অবস্থান নিশ্চিত করে।"
-                    : "Tasneem Knitting Industry holds an active General Membership (20260915GEN113) issued by the Bangladesh Sustainable & Renewable Energy Association (BSREA). This certification demonstrates compliant enterprise governance, alignment with national renewable energy targets, and authenticated trade standing in Bangladesh."}
+                    ? "তাসনিম নিটিং ইন্ডাস্ট্রি বাংলাদেশ সাসটেইনেবল অ্যান্ড রিনিউয়েবল এনার্জি অ্যাসোসিয়েশনের (BSREA) সক্রিয় সাধারণ সদস্য (20260915GEN113)। এটি বাংলাদেশের নবায়নযোগ্য শক্তি খাতের জাতীয় বাণিজ্য সমিতির সদস্যপদ সনদ।"
+                    : "Tasneem Knitting Industry holds an active General Membership (20260915GEN113) in the Bangladesh Sustainable & Renewable Energy Association (BSREA), the apex trade body for renewable energy in Bangladesh. This certificate confirms industry association membership."}
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3">
@@ -242,7 +243,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
                     href={bsreaDocUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#111311] text-white text-xs font-semibold hover:bg-black transition-all"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] rounded-full bg-[#111311] text-white text-xs font-semibold hover:bg-black transition-all"
                   >
                     <FileText className="w-4 h-4 text-[#CEF23E]" />
                     <span>{isBn ? "অফিসিয়াল সনদ দেখুন (Google Drive)" : "View Official Certificate (Google Drive)"}</span>
@@ -253,7 +254,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
                     href="https://bsreabd.org/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#EDEDED] hover:bg-[#DDE1DC] text-[#111311] text-xs font-semibold transition-colors"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] rounded-full bg-[#EDEDED] hover:bg-[#DDE1DC] text-[#111311] text-xs font-semibold transition-colors"
                   >
                     <Globe className="w-3.5 h-3.5 text-[#5C605C]" />
                     <span>{isBn ? "BSREA অফিসিয়াল পোর্টাল" : "BSREA Official Web Portal"}</span>
@@ -265,23 +266,24 @@ export default async function CertificationsPage({ params }: CertificationsPageP
           </div>
         </div>
 
-        {/* 2. Technical & Quality Management Standards Library */}
-        <div className="mb-16">
-          <div className="mb-8">
-            <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C] block">
-              {isBn ? "পরিদর্শন ও মানদণ্ড" : "Inspection & Standards"}
-            </span>
-            <h2 className="text-2xl font-bold text-[#111311]">
-              {isBn ? "প্রযুক্তিগত কমপ্লায়েন্স ও মান নিয়ন্ত্রণ পরীক্ষা" : "Technical Compliance & Quality Testing"}
-            </h2>
-            <p className="text-xs sm:text-sm text-[#5C605C] mt-1">
-              {isBn
-                ? "ফ্যাক্টরি অডিট যাচাই, বৈদ্যুতিক সক্ষমতা পরীক্ষা এবং বাণিজ্যিক পরিচালনা অনুমোদন।"
-                : "Factory audit verifications, electrical performance testing, and commercial operating licenses."}
-            </p>
-          </div>
+        {/* 2. Technical & Quality Management Standards Library (Rendered only when real verified documents exist) */}
+        {otherCerts.length > 0 && (
+          <div className="mb-16">
+            <div className="mb-8">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C] block">
+                {isBn ? "পরিদর্শন ও মানদণ্ড" : "Inspection & Standards"}
+              </span>
+              <h2 className="text-2xl font-bold text-[#111311]">
+                {isBn ? "প্রযুক্তিগত কমপ্লায়েন্স ও মান নিয়ন্ত্রণ পরীক্ষা" : "Technical Compliance & Quality Testing"}
+              </h2>
+              <p className="text-xs sm:text-sm text-[#5C605C] mt-1">
+                {isBn
+                  ? "ফ্যাক্টরি অডিট যাচাই, বৈদ্যুতিক সক্ষমতা পরীক্ষা এবং বাণিজ্যিক পরিচালনা অনুমোদন।"
+                  : "Factory audit verifications, electrical performance testing, and commercial operating licenses."}
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {otherCerts.map((cert) => {
               const urlMatch = cert.description?.match(/https?:\/\/[^\s]+/i);
               const docUrl = urlMatch ? urlMatch[0] : null;
@@ -333,7 +335,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
                         href={docUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#111311] hover:text-[#2E3B27] bg-[#EDEDED] hover:bg-[#CEF23E] px-3 py-1.5 rounded-full transition-colors"
+                        className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-[#111311] hover:text-[#2E3B27] bg-[#EDEDED] hover:bg-[#CEF23E] px-3.5 py-2 rounded-full min-h-[44px] transition-colors"
                       >
                         <span>{isBn ? "নথি দেখুন" : "View Document"}</span>
                         <ExternalLink className="w-3 h-3" />
@@ -350,6 +352,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
             })}
           </div>
         </div>
+      )}
 
         {/* 3. Engineering Quality Assurance Protocols */}
         <div className="rounded-[32px] bg-[#EDEDED] border border-[#DDE1DC] p-8 sm:p-12 mb-16">
@@ -431,7 +434,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#CEF23E] text-[#111311] text-xs font-bold hover:bg-[#b8da35] transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-[#CEF23E] text-[#111311] text-xs font-bold hover:bg-[#b8da35] transition-colors"
             >
               <span>{isBn ? "সেলস ডেস্কে যোগাযোগ করুন" : "Contact Sales Desk"}</span>
               <ArrowUpRight className="w-4 h-4" />
@@ -439,7 +442,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
 
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 text-white text-xs font-semibold hover:bg-white/20 border border-white/10 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-white/10 text-white text-xs font-semibold hover:bg-white/20 border border-white/10 transition-colors"
             >
               <span>{isBn ? "কোটেশন চান" : "Request Quote"}</span>
             </Link>
