@@ -63,8 +63,8 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
   const whatsappDisplay = settings.whatsappDisplay || "+880 1700-000000";
 
   return (
-    <footer className="w-full px-3 sm:px-6 lg:px-8 pb-6 sm:pb-8 pt-8">
-      <div className="max-w-7xl mx-auto rounded-[36px] sm:rounded-[44px] bg-[#F5F7F3] border border-[#DCE2D8] shadow-[0_10px_35px_rgba(0,0,0,0.04)] overflow-hidden pt-12 sm:pt-16 px-6 sm:px-12 lg:px-16 flex flex-col justify-between">
+    <footer className="w-full px-3 sm:px-6 lg:px-8 pb-4 sm:pb-6 pt-8 relative overflow-hidden">
+      <div className="relative z-10 max-w-7xl mx-auto rounded-[36px] sm:rounded-[44px] bg-[#F5F7F3] border border-[#DCE2D8] shadow-[0_10px_35px_rgba(0,0,0,0.04)] overflow-hidden pt-12 sm:pt-16 px-6 sm:px-12 lg:px-16 flex flex-col justify-between">
         
         {/* Top Navigation & Contact Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 sm:pb-16 text-left">
@@ -348,15 +348,8 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
 
         </div>
 
-        {/* Bottom Giant Brand Watermark */}
-        <div className="w-full select-none pointer-events-none pt-2 pb-0 overflow-hidden flex items-end justify-center border-t border-[#DCE2D8]">
-          <span className="font-extrabold tracking-[0.05em] text-center uppercase leading-[0.8] text-[clamp(3.8rem,15vw,14rem)] text-transparent bg-clip-text bg-gradient-to-b from-[#8FA89A]/45 via-[#8FA89A]/20 to-transparent">
-            NOOR SOLAR
-          </span>
-        </div>
-
         {/* Sub-Footer Copyright & Disclaimer */}
-        <div className="py-4 border-t border-[#DCE2D8] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-[#6A7365]">
+        <div className="py-4 sm:py-5 border-t border-[#DCE2D8] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-[#6A7365]">
           <div className="flex items-center gap-4 flex-wrap">
             <span>&copy; {currentYear} {isBn ? "নূর সোলার এনার্জি। সর্বস্বত্ব সংরক্ষিত।" : "Noor Solar Energy. All rights reserved."}</span>
             <LanguageSwitcher idPrefix="ftr" currentLocale={locale} />
@@ -374,6 +367,13 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
           </div>
         </div>
 
+      </div>
+
+      {/* Bottom Giant Brand Watermark (Compact Graphy Style) */}
+      <div className="relative z-0 w-full max-w-7xl mx-auto select-none pointer-events-none -mt-4 sm:-mt-8 lg:-mt-12 overflow-hidden flex items-end justify-center pt-2 pb-0">
+        <span className="font-extrabold tracking-tighter text-center uppercase whitespace-nowrap leading-[0.8] text-[clamp(2.8rem,10.8vw,11rem)] text-transparent bg-clip-text bg-gradient-to-b from-[#111311]/[0.12] via-[#111311]/[0.05] to-transparent">
+          NOOR SOLAR
+        </span>
       </div>
     </footer>
   );
