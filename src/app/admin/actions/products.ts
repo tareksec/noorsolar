@@ -5,6 +5,58 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { processAndSaveImage, processAndSavePdf, deleteUploadedFile } from "@/lib/uploads";
+import { parseProductDocuments, encodeProductDocuments, ProductDocuments } from "@/lib/product-documents";
+
+async function extractAndSaveProductDocuments(
+  formData: FormData,
+  existingDatasheetUrl?: string | null
+): Promise<string | null> {
+  const currentDocs = parseProductDocuments(existingDatasheetUrl);
+  const docTypes: Array<{ key: keyof ProductDocuments; fileField: string; urlField: string; prefix: string }> = [
+    { key: "datasheet", fileField: "doc_datasheet_file", urlField: "doc_datasheet_url", prefix: "datasheet" },
+    { key: "warranty", fileField: "doc_warranty_file", urlField: "doc_warranty_url", prefix: "warranty" },
+    { key: "certificate", fileField: "doc_certificate_file", urlField: "doc_certificate_url", prefix: "certificate" },
+    { key: "manual", fileField: "doc_manual_file", urlField: "doc_manual_url", prefix: "manual" },
+    { key: "testReport", fileField: "doc_test_report_file", urlField: "doc_test_report_url", prefix: "test_report" },
+    { key: "packingSheet", fileField: "doc_packing_sheet_file", urlField: "doc_packing_sheet_url", prefix: "packing_sheet" },
+  ];
+
+  const updatedDocs: ProductDocuments = { ...currentDocs };
+
+  for (const item of docTypes) {
+    const file = formData.get(item.fileField) as File | null;
+    let url = (formData.get(item.urlField) as string)?.trim();
+
+    // Fallback for legacy datasheet field names
+    if (item.key === "datasheet") {
+      const legacyFile = formData.get("datasheetFile") as File | null;
+      const legacyUrl = (formData.get("datasheetUrl") as string)?.trim();
+      if (!file && legacyFile && legacyFile.size > 0 && legacyFile.name) {
+        const saved = await processAndSavePdf(legacyFile, item.prefix);
+        if (saved) updatedDocs[item.key] = saved.url;
+        continue;
+      }
+      if (!url && legacyUrl !== undefined) {
+        url = legacyUrl;
+      }
+    }
+
+    if (file && file.size > 0 && file.name) {
+      const saved = await processAndSavePdf(file, item.prefix);
+      if (saved) {
+        const old = updatedDocs[item.key];
+        if (old && old.startsWith("/uploads/")) {
+          deleteUploadedFile(old);
+        }
+        updatedDocs[item.key] = saved.url;
+      }
+    } else if (url !== undefined) {
+      updatedDocs[item.key] = url || null;
+    }
+  }
+
+  return encodeProductDocuments(updatedDocs);
+}
 
 function slugify(text: string): string {
   return text
@@ -61,6 +113,9 @@ export async function createProductAction(
     const descriptionBn = (formData.get("descriptionBn") as string)?.trim() || null;
     const brand = (formData.get("brand") as string)?.trim() || null;
     const model = (formData.get("model") as string)?.trim() || null;
+    const series = (formData.get("series") as string)?.trim() || null;
+    const manufacturerModel = (formData.get("manufacturerModel") as string)?.trim() || null;
+    const originCountry = (formData.get("originCountry") as string)?.trim() || null;
     const stockStatus = (formData.get("stockStatus") as string) || "ON_REQUEST";
     const moq = (formData.get("moq") as string)?.trim() || null;
     const moqBn = (formData.get("moqBn") as string)?.trim() || null;
@@ -75,18 +130,15 @@ export async function createProductAction(
     const metaDescription = (formData.get("metaDescription") as string)?.trim() || null;
     const metaDescriptionBn = (formData.get("metaDescriptionBn") as string)?.trim() || null;
 
-    // Handle Datasheet: uploaded PDF file or text URL
-    let datasheetUrl = (formData.get("datasheetUrl") as string)?.trim() || null;
-    const datasheetFile = formData.get("datasheetFile") as File | null;
-    if (datasheetFile && datasheetFile.size > 0 && datasheetFile.name) {
-      const savedPdf = await processAndSavePdf(datasheetFile);
-      if (!savedPdf) {
-        return {
-          success: false,
-          error: "Invalid PDF datasheet. File must be a valid PDF document and under 10MB.",
-        };
-      }
-      datasheetUrl = savedPdf.url;
+    // Handle Documents (Datasheet, Warranty, Certificate, Manual, Test Report, Packing Sheet)
+    let datasheetUrl: string | null = null;
+    try {
+      datasheetUrl = await extractAndSaveProductDocuments(formData);
+    } catch (e: any) {
+      return {
+        success: false,
+        error: e?.message || "Failed to process attached technical documents.",
+      };
     }
 
     // Parse specs from parallel arrays
@@ -103,6 +155,29 @@ export async function createProductAction(
       if (label && value) {
         specsData.push({ label, labelBn, value, valueBn, sortOrder: i });
       }
+    }
+
+    // Merge identity fields into specs if provided
+    if (series && !specsData.some((s) => s.label.toLowerCase() === "series")) {
+      specsData.push({ label: "Series", labelBn: "সিরিজ", value: series, valueBn: series, sortOrder: 90 });
+    }
+    if (manufacturerModel && !specsData.some((s) => s.label.toLowerCase() === "manufacturer model")) {
+      specsData.push({
+        label: "Manufacturer Model",
+        labelBn: "প্রস্তুতকারক মডেল",
+        value: manufacturerModel,
+        valueBn: manufacturerModel,
+        sortOrder: 91,
+      });
+    }
+    if (originCountry && !specsData.some((s) => s.label.toLowerCase() === "country of origin")) {
+      specsData.push({
+        label: "Country of Origin",
+        labelBn: "উৎস দেশ",
+        value: originCountry,
+        valueBn: originCountry,
+        sortOrder: 92,
+      });
     }
 
     // Process image uploads
@@ -222,6 +297,9 @@ export async function updateProductAction(
     const descriptionBn = (formData.get("descriptionBn") as string)?.trim() || null;
     const brand = (formData.get("brand") as string)?.trim() || null;
     const model = (formData.get("model") as string)?.trim() || null;
+    const series = (formData.get("series") as string)?.trim() || null;
+    const manufacturerModel = (formData.get("manufacturerModel") as string)?.trim() || null;
+    const originCountry = (formData.get("originCountry") as string)?.trim() || null;
     const stockStatus = (formData.get("stockStatus") as string) || "ON_REQUEST";
     const moq = (formData.get("moq") as string)?.trim() || null;
     const moqBn = (formData.get("moqBn") as string)?.trim() || null;
@@ -236,26 +314,20 @@ export async function updateProductAction(
     const metaDescription = (formData.get("metaDescription") as string)?.trim() || null;
     const metaDescriptionBn = (formData.get("metaDescriptionBn") as string)?.trim() || null;
 
-    // Get current product to check old datasheet
+    // Get current product to check old documents
     const currentProduct = await db.product.findUnique({
       where: { id },
       include: { images: true },
     });
 
-    let datasheetUrl = (formData.get("datasheetUrl") as string)?.trim() || currentProduct?.datasheetUrl || null;
-    const datasheetFile = formData.get("datasheetFile") as File | null;
-    if (datasheetFile && datasheetFile.size > 0 && datasheetFile.name) {
-      const savedPdf = await processAndSavePdf(datasheetFile);
-      if (!savedPdf) {
-        return {
-          success: false,
-          error: "Invalid PDF datasheet. File must be a valid PDF document and under 10MB.",
-        };
-      }
-      if (currentProduct?.datasheetUrl?.startsWith("/uploads/")) {
-        deleteUploadedFile(currentProduct.datasheetUrl);
-      }
-      datasheetUrl = savedPdf.url;
+    let datasheetUrl: string | null = null;
+    try {
+      datasheetUrl = await extractAndSaveProductDocuments(formData, currentProduct?.datasheetUrl);
+    } catch (e: any) {
+      return {
+        success: false,
+        error: e?.message || "Failed to process attached technical documents.",
+      };
     }
 
     // Parse specs
@@ -272,6 +344,29 @@ export async function updateProductAction(
       if (label && value) {
         specsData.push({ label, labelBn, value, valueBn, sortOrder: i });
       }
+    }
+
+    // Merge identity fields into specs if provided
+    if (series && !specsData.some((s) => s.label.toLowerCase() === "series")) {
+      specsData.push({ label: "Series", labelBn: "সিরিজ", value: series, valueBn: series, sortOrder: 90 });
+    }
+    if (manufacturerModel && !specsData.some((s) => s.label.toLowerCase() === "manufacturer model")) {
+      specsData.push({
+        label: "Manufacturer Model",
+        labelBn: "প্রস্তুতকারক মডেল",
+        value: manufacturerModel,
+        valueBn: manufacturerModel,
+        sortOrder: 91,
+      });
+    }
+    if (originCountry && !specsData.some((s) => s.label.toLowerCase() === "country of origin")) {
+      specsData.push({
+        label: "Country of Origin",
+        labelBn: "উৎস দেশ",
+        value: originCountry,
+        valueBn: originCountry,
+        sortOrder: 92,
+      });
     }
 
     // Update existing images alt text

@@ -107,21 +107,21 @@ export function ClosingCTA({
 
             <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC] space-y-4 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#111311] text-[#CEF23E] flex items-center justify-center shrink-0">
+                <div className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#111311] text-[#CEF23E] flex items-center justify-center shrink-0">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
                   <span className="text-[11px] font-mono uppercase text-[#5C605C] block">
                     {isBn ? "সরাসরি সেলস ডেস্ক" : "Direct Sales Desk"}
                   </span>
-                  <a href={`tel:${phoneDisplay}`} className="text-sm font-bold font-mono text-[#111311]">
+                  <a href={`tel:${phoneDisplay}`} className="inline-flex items-center min-h-[44px] text-sm font-bold font-mono text-[#111311]">
                     {phoneDisplay}
                   </a>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 pt-3 border-t border-[#EDEDED]">
-                <div className="w-10 h-10 rounded-full bg-[#CEF23E] text-[#111311] flex items-center justify-center shrink-0 font-bold">
+                <div className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#CEF23E] text-[#111311] flex items-center justify-center shrink-0 font-bold">
                   <MessageCircle className="w-5 h-5" />
                 </div>
                 <div>
@@ -132,7 +132,7 @@ export function ClosingCTA({
                     href={`https://wa.me/${whatsappNumber}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm font-bold font-mono text-[#111311] hover:underline"
+                    className="inline-flex items-center min-h-[44px] text-sm font-bold font-mono text-[#111311] hover:underline"
                   >
                     {isBn ? "ইঞ্জিনিয়ারের সাথে কথা বলুন" : "Chat with an Engineer"}
                   </a>
@@ -223,8 +223,9 @@ export function ClosingCTA({
                         type="text"
                         name="name"
                         required
+                        autoComplete="name"
                         placeholder={isBn ? "যেমন: প্রকৌশলী রফিকুল ইসলাম" : "e.g. Engr. Rafiqul Islam"}
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
                       />
                     </div>
 
@@ -236,10 +237,12 @@ export function ClosingCTA({
                         type="tel"
                         name="phone"
                         required
+                        inputMode="tel"
+                        autoComplete="tel"
                         value={phoneVal}
                         onChange={(e) => setPhoneVal(e.target.value)}
                         placeholder={isBn ? "+880 17... অথবা 017..." : "+880 17... or 017..."}
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors font-mono"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors font-mono"
                       />
                     </div>
                   </div>
@@ -252,8 +255,9 @@ export function ClosingCTA({
                       <input
                         type="text"
                         name="company"
+                        autoComplete="organization"
                         placeholder={isBn ? "যেমন: ঢাকা সোলার ইপিসি লিমিটেড" : "e.g. Dhaka Solar EPC Ltd."}
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
                       />
                     </div>
 
@@ -264,9 +268,49 @@ export function ClosingCTA({
                       <input
                         type="email"
                         name="email"
+                        inputMode="email"
+                        autoComplete="email"
                         placeholder="procurement@company.com"
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
                       />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+                        {isBn ? "বায়ার / ক্রেতার ধরণ" : "Buyer Classification"}
+                      </label>
+                      <select
+                        name="buyerType"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] outline-none transition-colors"
+                        defaultValue=""
+                      >
+                        <option value="">{isBn ? "ধরণ নির্বাচন করুন..." : "Select buyer type..."}</option>
+                        <option value="Solar EPC Contractor">{isBn ? "সোলার ইপিসি ঠিকাদার (EPC Contractor)" : "Solar EPC Contractor"}</option>
+                        <option value="Commercial / Industrial Factory">{isBn ? "বাণিজ্যিক / শিল্প কারখানা (C&I Facility)" : "Commercial & Industrial (C&I)"}</option>
+                        <option value="Regional Solar Dealer">{isBn ? "স্থানীয় সোলার ডিলার / পাইকারি বিক্রেতা" : "Regional Solar Dealer / Wholesaler"}</option>
+                        <option value="Rooftop Project Developer">{isBn ? "রুফটপ প্রজেক্ট ডেভেলপার" : "Rooftop Project Developer"}</option>
+                        <option value="Government / NGO">{isBn ? "সরকারি / প্রাতিষ্ঠানিক প্রকল্প" : "Government / Institutional"}</option>
+                        <option value="Other">{isBn ? "অন্যান্য" : "Other"}</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+                        {isBn ? "কাঙ্ক্ষিত পণ্য বা ক্যাটাগরি" : "Required Equipment / Category"}
+                      </label>
+                      <select
+                        name="category"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] outline-none transition-colors"
+                        defaultValue=""
+                      >
+                        <option value="">{isBn ? "ক্যাটাগরি নির্বাচন করুন..." : "Select equipment category..."}</option>
+                        <option value="Solar Panels">{isBn ? "সোলার প্যানেল (N-Type TOPCon / Bifacial)" : "Solar Panels (TOPCon / Bifacial)"}</option>
+                        <option value="Lithium Batteries">{isBn ? "লিথিয়াম ব্যাটারি (LiFePO4 Server Rack / Wall)" : "Lithium Batteries (LiFePO4)"}</option>
+                        <option value="Solar Inverters">{isBn ? "সোলার ইনভার্টার (Hybrid / Commercial On-Grid)" : "Solar Inverters (Hybrid / On-Grid)"}</option>
+                        <option value="Full Container Consignment">{isBn ? "পূর্ণাঙ্গ কন্টেইনার প্যাকেজ (Multi-Item Consignment)" : "Full Container Consignment"}</option>
+                      </select>
                     </div>
                   </div>
 
@@ -279,21 +323,34 @@ export function ClosingCTA({
                         type="text"
                         name="quantity"
                         placeholder={isBn ? "যেমন: ৫০০ পিস বা ১০০ kW প্রজেক্ট" : "e.g. 500 pcs or 100 kW project"}
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
                       />
                     </div>
 
                     <div>
                       <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        {isBn ? "ডেলিভারি লোকেশন / জেলা" : "Delivery Site / District"}
+                        {isBn ? "ডেলিভারি জেলা / সাইট লোকেশন" : "Delivery District / Site"}
                       </label>
                       <input
                         type="text"
                         name="location"
-                        placeholder={isBn ? "যেমন: গাজীপুর, চট্টগ্রাম, ঢাকা" : "e.g. Gazipur, Chittagong, Dhaka"}
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
+                        autoComplete="street-address"
+                        placeholder={isBn ? "যেমন: গাজীপুর, চট্টগ্রাম, খুলনা" : "e.g. Gazipur, Chittagong, Dhaka"}
+                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
                       />
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+                      {isBn ? "কাঙ্ক্ষিত ডেলিভারি সময়সীমা" : "Target Delivery Date / Timeframe"}
+                    </label>
+                    <input
+                      type="text"
+                      name="requiredDate"
+                      placeholder={isBn ? "যেমন: অবিলম্বে (রেডি স্টক) অথবা আগামী ৩০ দিন" : "e.g. Immediate ready-stock, or within 30 days"}
+                      className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
+                    />
                   </div>
 
                   <div>
@@ -308,7 +365,7 @@ export function ClosingCTA({
                           ? "মডেল নম্বর, কাঙ্ক্ষিত স্পেসিফিকেশন বা প্রকল্পের সময়সীমা উল্লেখ করুন..."
                           : "Specify model numbers, target specs, or project timeline..."
                       }
-                      className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-xs sm:text-sm text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors resize-none"
+                      className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors resize-none"
                     />
                   </div>
 
@@ -318,7 +375,7 @@ export function ClosingCTA({
                       id="btn-submit-quote"
                       disabled={isPending}
                       data-motion="button-slide"
-                      className="btn-slide-fill w-full flex items-center justify-center gap-2 py-4 rounded-full bg-[#111311] text-[#CEF23E] font-semibold text-sm tracking-tight transition-all duration-200 active:scale-[0.99] disabled:opacity-60 shadow-lg cursor-pointer"
+                      className="btn-slide-fill w-full min-h-[48px] flex items-center justify-center gap-2 py-4 rounded-full bg-[#111311] text-[#CEF23E] font-semibold text-sm tracking-tight transition-all duration-200 active:scale-[0.99] disabled:opacity-60 shadow-lg cursor-pointer"
                     >
                       {isPending ? (
                         <span>{isBn ? "কোটেশন পাঠানো হচ্ছে..." : "Submitting Request..."}</span>

@@ -23,19 +23,19 @@
     "close": "Close"
   },
   "hero": {
-    "kicker": "Professional Ac & Solar Services",
-    "titlePrefix": "Keep Your Home Cool &",
-    "titleComfortable": "Comfortable",
-    "titleYearRound": "Year-Round",
-    "subtitle": "Expert AC repair, installation, and maintenance services delivered by certified technicians to keep your home cool, efficient, and comfortable all year long.",
-    "primaryCta": "Book Service",
-    "secondaryCta": "Browse Products",
-    "sameDay": "Same-Day Service",
-    "support247": "24/7 Support",
-    "satisfaction": "Satisfaction Guaranteed",
-    "trustedBy": "Trusted By",
-    "customers": "10,000+ Customers",
-    "closestStation": "Closest station to you"
+    "kicker": "Direct B2B Solar Equipment Importer",
+    "titlePrefix": "Solar Equipment. Imported Direct.",
+    "titleComfortable": "Supplied at",
+    "titleYearRound": "Project Scale.",
+    "subtitle": "N-Type PV modules, LiFePO4 storage and commercial inverters for EPCs, industrial facilities and solar dealers across Bangladesh.",
+    "primaryCta": "Request Wholesale Quote",
+    "secondaryCta": "View Available Stock",
+    "sameDay": "Container & Bulk Wholesale",
+    "support247": "Tier-1 Tested Equipment",
+    "satisfaction": "Nationwide Project Supply",
+    "trustedBy": "Supplied For",
+    "customers": "Commercial & Project Scale",
+    "closestStation": "Closest hub to you"
   },
   "marquee": {
     "solarPanels": "High Efficiency Mono & TOPCon Solar Panels",
@@ -148,8 +148,8 @@
     "titleLine2": "Brighter Tomorrow",
     "subtitle": "We provide high-quality solar solutions to power homes, businesses and a sustainable future.",
     "emailPlaceholder": "Enter your email here",
-    "joinNow": "Join Now",
-    "happyCustomers": "8,650+ happy customers",
+    "joinNow": "Request Wholesale Quote",
+    "happyCustomers": "Commercial Project Clients",
     "tier1Badge": "Authorized Tier-1 Direct Import",
     "quote24hBadge": "Formal Quotations within 24h"
   },

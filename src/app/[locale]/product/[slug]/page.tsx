@@ -8,7 +8,10 @@ import { getApprovedReviewsForProduct, isPublicReviewsEnabled } from "@/lib/data
 import { ProductCard } from "@/components/product/product-card";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductReviewsSection } from "@/components/product/product-reviews-section";
-import { ArrowUpRight, Box, Clock, Download, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, Box, Clock, Download, ShieldCheck, Award, FileText, FileCheck, Package } from "lucide-react";
+import { parseProductDocuments } from "@/lib/product-documents";
+import { extractProductIdentity } from "@/lib/product-identity";
+import { SITE_URL } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +25,7 @@ interface ProductPageProps {
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
   const data = await getProductBySlug(slug, locale);
 
   if (!data || !data.product) {
@@ -50,10 +53,12 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     openGraph: {
       title,
       description: desc,
-      url: isBn ? `/bn/product/${product.slug}` : `/product/${product.slug}`,
+      url: isBn ? `${siteUrl}/bn/product/${product.slug}` : `${siteUrl}/product/${product.slug}`,
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
-      images: product.images[0]?.url ? [{ url: product.images[0].url }] : [],
+      images: product.images[0]?.url
+        ? [{ url: product.images[0].url.startsWith("http") ? product.images[0].url : `${siteUrl}${product.images[0].url}` }]
+        : [],
     },
   };
 }
@@ -69,6 +74,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   }
 
   const { product, related } = data;
+  const identity = extractProductIdentity(product);
+  const docs = parseProductDocuments(product.datasheetUrl);
+  const hasDocs = Boolean(
+    docs.datasheet || docs.warranty || docs.certificate || docs.manual || docs.testReport || docs.packingSheet
+  );
 
   const [reviewsData, publicReviewsEnabled] = await Promise.all([
     getApprovedReviewsForProduct(product.id),
@@ -83,7 +93,9 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     name: product.name,
     description: product.description || product.shortDescription,
     image: product.images.map((img) => img.url),
-    sku: product.model || product.slug,
+    sku: identity.noorSku || product.model || product.slug,
+    ...(identity.manufacturer ? { brand: { "@type": "Brand", name: identity.manufacturer } } : {}),
+    ...(identity.manufacturerModel ? { mpn: identity.manufacturerModel } : {}),
     category: product.category.name,
     offers: {
       "@type": "Offer",
@@ -145,26 +157,26 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center gap-2 text-xs font-mono text-[#5C605C] mb-8 overflow-x-auto whitespace-nowrap pb-2">
-          <Link href="/" className="hover:text-[#111311] transition-colors">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-mono text-[#5C605C] mb-8 overflow-x-auto whitespace-nowrap pb-2">
+          <Link href="/" className="inline-flex items-center justify-center min-w-[44px] min-h-[44px] px-1.5 hover:text-[#111311] transition-colors">
             {isBn ? "হোম" : "Home"}
           </Link>
           <span>/</span>
-          <Link href="/products" className="hover:text-[#111311] transition-colors">
+          <Link href="/products" className="inline-flex items-center justify-center min-w-[44px] min-h-[44px] px-1.5 hover:text-[#111311] transition-colors">
             {isBn ? "পণ্যসমূহ" : "Products"}
           </Link>
           <span>/</span>
           <Link
             href={`/category/${product.category.slug}`}
-            className="hover:text-[#111311] transition-colors"
+            className="inline-flex items-center justify-center min-w-[44px] min-h-[44px] px-1.5 hover:text-[#111311] transition-colors"
           >
             {product.category.name}
           </Link>
           <span>/</span>
-          <span className="text-[#111311] font-medium truncate max-w-[200px]">
+          <span className="inline-flex items-center min-h-[44px] text-[#111311] font-medium truncate max-w-[200px]">
             {product.name}
           </span>
-        </div>
+        </nav>
 
         {/* Product Details Hero Card */}
         <div className="p-6 sm:p-10 lg:p-14 rounded-[36px] bg-white border border-[#DDE1DC] shadow-sm mb-12">
@@ -181,13 +193,38 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             {/* Right: Commercial Information & Quote CTA */}
             <div className="lg:col-span-6 flex flex-col justify-between min-w-0">
               <div>
-                <div className="flex items-center gap-2 mb-3">
+                <div className="flex flex-wrap items-center gap-2 mb-3">
                   <span className="px-3 py-1 rounded-full bg-[#EDEDED] text-[11px] font-mono text-[#111311]">
                     {product.category.name}
                   </span>
-                  {product.model && (
-                    <span className="text-xs font-mono text-[#5C605C]">
-                      {isBn ? "মডেল:" : "Model:"} {product.model}
+                  {identity.manufacturer && (
+                    <span className="px-3 py-1 rounded-full bg-white border border-[#DDE1DC] text-[11px] font-mono text-[#111311]">
+                      <span className="text-[#5C605C]">{isBn ? "প্রস্তুতকারক:" : "Manufacturer:"}</span>{" "}
+                      <strong className="font-semibold">{identity.manufacturer}</strong>
+                    </span>
+                  )}
+                  {identity.series && (
+                    <span className="px-3 py-1 rounded-full bg-white border border-[#DDE1DC] text-[11px] font-mono text-[#111311]">
+                      <span className="text-[#5C605C]">{isBn ? "সিরিজ:" : "Series:"}</span>{" "}
+                      <strong className="font-semibold">{identity.series}</strong>
+                    </span>
+                  )}
+                  {identity.manufacturerModel && (
+                    <span className="px-3 py-1 rounded-full bg-white border border-[#DDE1DC] text-[11px] font-mono text-[#111311]">
+                      <span className="text-[#5C605C]">{isBn ? "মডেল:" : "Model:"}</span>{" "}
+                      <span className="font-medium">{identity.manufacturerModel}</span>
+                    </span>
+                  )}
+                  {identity.noorSku && (
+                    <span className="px-3 py-1 rounded-full bg-[#EDEDED] text-[11px] font-mono text-[#111311]">
+                      <span className="text-[#5C605C]">{isBn ? "নূর এসকেইউ:" : "Noor SKU:"}</span>{" "}
+                      <span className="font-medium">{identity.noorSku}</span>
+                    </span>
+                  )}
+                  {identity.originCountry && (
+                    <span className="px-3 py-1 rounded-full bg-white border border-[#DDE1DC] text-[11px] font-mono text-[#111311]">
+                      <span className="text-[#5C605C]">{isBn ? "উৎস দেশ:" : "Origin:"}</span>{" "}
+                      <span className="font-medium">{identity.originCountry}</span>
                     </span>
                   )}
                 </div>
@@ -204,7 +241,40 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
                 {/* Status & MOQ Metadata */}
                 <div className="p-5 rounded-2xl bg-[#EDEDED] border border-[#DDE1DC] space-y-3 mb-8">
-                  <div className="flex items-center justify-between text-xs">
+                  {identity.manufacturer && (
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-[#5C605C] font-mono">
+                        {isBn ? "প্রস্তুতকারক ও ব্র্যান্ড:" : "Manufacturer / Brand:"}
+                      </span>
+                      <span className="font-mono font-bold text-[#111311] bg-white px-2.5 py-0.5 rounded-full">
+                        {identity.manufacturer} {identity.series ? `(${identity.series})` : ""}
+                      </span>
+                    </div>
+                  )}
+
+                  {identity.manufacturerModel && (
+                    <div className="flex items-center justify-between text-xs pt-2 border-t border-[#DDE1DC]">
+                      <span className="text-[#5C605C] font-mono">
+                        {isBn ? "প্রস্তুতকারক মডেল:" : "Manufacturer Model:"}
+                      </span>
+                      <span className="font-mono font-medium text-[#111311]">
+                        {identity.manufacturerModel}
+                      </span>
+                    </div>
+                  )}
+
+                  {identity.noorSku && (
+                    <div className="flex items-center justify-between text-xs pt-2 border-t border-[#DDE1DC]">
+                      <span className="text-[#5C605C] font-mono">
+                        {isBn ? "অভ্যন্তরীণ নূর এসকেইউ (SKU):" : "Internal Noor SKU:"}
+                      </span>
+                      <span className="font-mono font-bold text-[#111311]">
+                        {identity.noorSku}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between text-xs pt-2 border-t border-[#DDE1DC]">
                     <span className="text-[#5C605C] font-mono">
                       {isBn ? "স্টক প্রাপ্যতা:" : "Stock Availability:"}
                     </span>
@@ -217,17 +287,37 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                     </span>
                   </div>
 
-                  {product.moq && (
+                  {product.moq ? (
                     <div className="flex items-center justify-between text-xs pt-2 border-t border-[#DDE1DC]">
                       <span className="text-[#5C605C] font-mono flex items-center gap-1.5">
                         <Box className="w-3.5 h-3.5 text-[#111311]" />
-                        {isBn ? "ন্যূনতম অর্ডার পরিমাণ:" : "Minimum Order Quantity:"}
+                        {isBn ? "ন্যূনতম অর্ডার পরিমাণ (MOQ):" : "Minimum Order Quantity (MOQ):"}
                       </span>
-                      <span className="font-mono font-medium text-[#111311]">
+                      <span className="font-mono font-bold text-[#111311]">
                         {product.moq}
                       </span>
                     </div>
+                  ) : (
+                    <div className="flex items-center justify-between text-xs pt-2 border-t border-[#DDE1DC]">
+                      <span className="text-[#5C605C] font-mono flex items-center gap-1.5">
+                        <Box className="w-3.5 h-3.5 text-[#111311]" />
+                        {isBn ? "পাইকারি অর্ডার স্তর:" : "Wholesale Tier:"}
+                      </span>
+                      <span className="font-mono font-medium text-[#111311]">
+                        {isBn ? "১ প্যালেট থেকে পাইকারি অর্ডার" : "Wholesale orders from 1 pallet"}
+                      </span>
+                    </div>
                   )}
+
+                  {/* B2B Wholesale / Container Pricing Availability */}
+                  <div className="flex items-center justify-between text-xs pt-2 border-t border-[#DDE1DC]">
+                    <span className="text-[#5C605C] font-mono">
+                      {isBn ? "কনটেইনার ক্রয়:" : "Container Inquiries:"}
+                    </span>
+                    <span className="font-mono font-semibold text-[#111311] bg-white px-2.5 py-0.5 rounded-full">
+                      {isBn ? "অনুরোধে কনটেইনার পাইকারি মূল্য" : "Container pricing available on request"}
+                    </span>
+                  </div>
 
                   {product.leadTime && (
                     <div className="flex items-center justify-between text-xs pt-2 border-t border-[#DDE1DC]">
@@ -253,9 +343,9 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   <ArrowUpRight className="w-4 h-4" />
                 </Link>
 
-                {product.datasheetUrl && (
+                {docs.datasheet ? (
                   <a
-                    href={product.datasheetUrl}
+                    href={docs.datasheet}
                     target="_blank"
                     rel="noreferrer"
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#EDEDED] hover:bg-[#DDE1DC] text-[#111311] text-xs font-semibold font-mono transition-colors"
@@ -263,7 +353,29 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                     <Download className="w-4 h-4" />
                     <span>{isBn ? "ডেটাশিট ডাউনলোড করুন" : "Download Datasheet"}</span>
                   </a>
-                )}
+                ) : docs.warranty ? (
+                  <a
+                    href={docs.warranty}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-[#EDEDED] hover:bg-[#DDE1DC] text-[#111311] text-xs font-semibold font-mono transition-colors"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>{isBn ? "ওয়ারেন্টি ডাউনলোড" : "Download Warranty"}</span>
+                  </a>
+                ) : null}
+              </div>
+
+              {/* Wholesale Purchasing Reassurance Note */}
+              <div className="mt-4 pt-3 border-t border-[#EDEDED] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-[#5C605C]">
+                <span>
+                  {isBn
+                    ? "সরাসরি B2B পাইকারি সরবরাহ • ১ প্যালেট থেকে পাইকারি অর্ডার"
+                    : "Direct B2B wholesale supply • Wholesale orders from 1 pallet"}
+                </span>
+                <span className="text-[#111311] font-semibold">
+                  {isBn ? "অনুরোধে কনটেইনার মূল্য প্রযোজ্য" : "Container pricing available on request"}
+                </span>
               </div>
             </div>
 
@@ -291,6 +403,110 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </div>
               </div>
             </div>
+
+            {hasDocs && (
+              <div className="p-8 rounded-3xl bg-white border border-[#DDE1DC] space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold text-[#111311] tracking-tight">
+                    {isBn ? "কারিগরি ডকুমেন্টস ও ডাউনলোড" : "Technical Documents"}
+                  </h2>
+                  <span className="text-[11px] font-mono text-[#5C605C] bg-[#EDEDED] px-2 py-0.5 rounded-full">
+                    PDF / Docs
+                  </span>
+                </div>
+                <p className="text-xs text-[#5C605C]">
+                  {isBn
+                    ? "প্রকল্প যাচাই ও ইঞ্জিনিয়ারিং অনুমোদনের জন্য অফিসিয়াল কারিগরি ফাইল ডাউনলোড করুন।"
+                    : "Verified technical documents and compliance certificates for project engineering and approval."}
+                </p>
+                <div className="space-y-2 pt-2">
+                  {docs.datasheet && (
+                    <a
+                      href={docs.datasheet}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-between p-3.5 rounded-2xl bg-[#EDEDED] hover:bg-[#DDE1DC] transition-colors text-xs font-medium text-[#111311] group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-4 h-4 text-[#111311]" />
+                        <span>{isBn ? "প্রোডাক্ট ডেটাশিট (Datasheet PDF)" : "Product Datasheet (PDF)"}</span>
+                      </div>
+                      <Download className="w-4 h-4 text-[#5C605C] group-hover:text-[#111311] transition-colors" />
+                    </a>
+                  )}
+                  {docs.warranty && (
+                    <a
+                      href={docs.warranty}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-between p-3.5 rounded-2xl bg-[#EDEDED] hover:bg-[#DDE1DC] transition-colors text-xs font-medium text-[#111311] group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <ShieldCheck className="w-4 h-4 text-[#111311]" />
+                        <span>{isBn ? "ওয়ারেন্টি পলিসি ও শর্তাবলী" : "Warranty Document"}</span>
+                      </div>
+                      <Download className="w-4 h-4 text-[#5C605C] group-hover:text-[#111311] transition-colors" />
+                    </a>
+                  )}
+                  {docs.certificate && (
+                    <a
+                      href={docs.certificate}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-between p-3.5 rounded-2xl bg-[#EDEDED] hover:bg-[#DDE1DC] transition-colors text-xs font-medium text-[#111311] group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Award className="w-4 h-4 text-[#111311]" />
+                        <span>{isBn ? "আইইসি / কোয়ালিটি সার্টিফিকেট" : "IEC / Quality Certificate"}</span>
+                      </div>
+                      <ArrowUpRight className="w-4 h-4 text-[#5C605C] group-hover:text-[#111311] transition-colors" />
+                    </a>
+                  )}
+                  {docs.manual && (
+                    <a
+                      href={docs.manual}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-between p-3.5 rounded-2xl bg-[#EDEDED] hover:bg-[#DDE1DC] transition-colors text-xs font-medium text-[#111311] group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <FileCheck className="w-4 h-4 text-[#111311]" />
+                        <span>{isBn ? "ইনস্টলেশন ও ও&এম ম্যানুয়াল" : "Installation Manual"}</span>
+                      </div>
+                      <Download className="w-4 h-4 text-[#5C605C] group-hover:text-[#111311] transition-colors" />
+                    </a>
+                  )}
+                  {docs.testReport && (
+                    <a
+                      href={docs.testReport}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-between p-3.5 rounded-2xl bg-[#EDEDED] hover:bg-[#DDE1DC] transition-colors text-xs font-medium text-[#111311] group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-4 h-4 text-[#111311]" />
+                        <span>{isBn ? "ফ্যাক্টরি টেস্ট ও ফ্ল্যাশ রিপোর্ট" : "Factory Test Report"}</span>
+                      </div>
+                      <ArrowUpRight className="w-4 h-4 text-[#5C605C] group-hover:text-[#111311] transition-colors" />
+                    </a>
+                  )}
+                  {docs.packingSheet && (
+                    <a
+                      href={docs.packingSheet}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center justify-between p-3.5 rounded-2xl bg-[#EDEDED] hover:bg-[#DDE1DC] transition-colors text-xs font-medium text-[#111311] group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Package className="w-4 h-4 text-[#111311]" />
+                        <span>{isBn ? "প্যাকিং লিস্ট ও ওজনের বিবরণ" : "Packing Sheet / Dimensions"}</span>
+                      </div>
+                      <Download className="w-4 h-4 text-[#5C605C] group-hover:text-[#111311] transition-colors" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="lg:col-span-7">
@@ -352,7 +568,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               </div>
               <Link
                 href={`/category/${product.category.slug}`}
-                className="text-xs font-mono text-[#111311] hover:underline"
+                className="text-xs font-mono text-[#111311] hover:underline inline-flex items-center min-h-[44px] px-2"
               >
                 {isBn ? "ক্যাটাগরি দেখুন" : "View Category"}
               </Link>

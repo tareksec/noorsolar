@@ -1,3 +1,25 @@
+/**
+ * Centralized production site URL configuration.
+ * Guarantees public SEO metadata, canonicals, og:url, Open Graph images,
+ * sitemaps, robots, and structured data use the official production domain
+ * https://noorsolaren.com and ignores preview/staging domains.
+ */
+export function getSiteUrl(): string {
+  const envUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (
+    !envUrl ||
+    envUrl.includes("hostingersite.com") ||
+    envUrl.includes("preview-domain") ||
+    envUrl.includes("noorsolarbd.com") ||
+    envUrl.includes("localhost")
+  ) {
+    return "https://noorsolaren.com";
+  }
+  return envUrl.replace(/\/+$/, "");
+}
+
+export const SITE_URL = getSiteUrl();
+
 export interface SiteConfig {
   companyName: string;
   tagline: string;
@@ -42,6 +64,8 @@ export interface SiteConfig {
   socials: {
     facebook?: string;
     linkedin?: string;
+    youtube?: string;
+    twitter?: string;
   };
   faq: Array<
     { question: string; answer: string; questionBn?: string; answerBn?: string }
@@ -66,16 +90,16 @@ export const defaultSiteConfig: SiteConfig = {
   addressBn: "মতিঝিল বাণিজ্যিক এলাকা, ঢাকা-১০০০, বাংলাদেশ",
   hours: "Sat - Thu: 9:00 AM - 7:00 PM (Friday Closed)",
   hoursBn: "শনি - বৃহস্পতি: সকাল ৯:০০ - সন্ধ্যা ৭:০০ (শুক্রবার বন্ধ)",
-  heroHeadline: "Solar panels, lithium batteries and inverters, supplied in bulk.",
-  heroHeadlineBn: "সোলার প্যানেল, লিথিয়াম ব্যাটারি ও ইনভার্টার—পাইকারি সরবরাহ।",
+  heroHeadline: "Solar Equipment. Imported Direct. Supplied at Project Scale.",
+  heroHeadlineBn: "সরাসরি আমদানিকৃত সোলার ইকুইপমেন্ট। সরবরাহ প্রকল্প পর্যায়ে।",
   heroSubheadline:
-    "Direct B2B importer providing engineering-grade solar equipment and wholesale delivery across Bangladesh.",
+    "N-Type PV modules, LiFePO4 storage and commercial inverters for EPCs, industrial facilities and solar dealers across Bangladesh.",
   heroSubheadlineBn:
-    "সরাসরি B2B আমদানিকারক: বাংলাদেশে উন্নত প্রযুক্তির সোলার যন্ত্রপাতি ও দেশব্যাপী পাইকারি সরবরাহ।",
-  heroPrimaryCta: "Request Quote",
-  heroPrimaryCtaBn: "কোটেশন চান",
-  heroSecondaryCta: "Browse Products",
-  heroSecondaryCtaBn: "পণ্য দেখুন",
+    "ইপিসি (EPC), শিল্প কারখানা এবং সোলার ডিলারদের জন্য এন-টাইপ পিভি মডিউল, LiFePO4 স্টোরেজ ও কমার্শিয়াল ইনভার্টার।",
+  heroPrimaryCta: "Request Wholesale Quote",
+  heroPrimaryCtaBn: "হোলসেল কোটেশন চান",
+  heroSecondaryCta: "View Available Stock",
+  heroSecondaryCtaBn: "মজুদ পণ্য দেখুন",
   processHeadline: "Order in four simple steps",
   processHeadlineBn: "চারটি সহজ ধাপে অর্ডার করুন",
   processSubheadline: "A straightforward procurement workflow engineered for commercial contractors, installers, and B2B buyers across Bangladesh.",
@@ -118,10 +142,7 @@ export const defaultSiteConfig: SiteConfig = {
     "Supplying Solar Panels, High-Capacity Lithium-ion Batteries, and Industrial/Commercial Inverters across Bangladesh.",
   aboutBodyBn:
     "সারা দেশে বাণিজ্যিক ছাদ, শিল্প কারখানা ও সৌর বিদ্যুৎ প্রকল্পের জন্য উন্নত প্রযুক্তির সোলার প্যানেল, লিথিয়াম ব্যাটারি ও ইনভার্টার পাইকারি সরবরাহ করছি।",
-  socials: {
-    facebook: "https://facebook.com",
-    linkedin: "https://linkedin.com",
-  },
+  socials: {},
   faq: [
     {
       question: "How do I request a bulk quote?",

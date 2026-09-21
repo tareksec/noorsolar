@@ -10,6 +10,7 @@ import { WhatsAppButton } from "@/components/layout/whatsapp-button";
 import { BackToTop } from "@/components/layout/back-to-top";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { RouteTransition } from "@/components/providers/route-transition";
+import { SITE_URL } from "@/lib/site-config";
 import { getSiteSettings } from "@/lib/data/settings";
 import { hasVisibleBlogPosts } from "@/lib/data/blog";
 import "../globals.css";
@@ -32,7 +33,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = SITE_URL;
 
   return {
     title: {
@@ -105,16 +106,7 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={fontClasses}
     >
-      <head>
-        <noscript>
-          <style dangerouslySetInnerHTML={{ __html: "#preloader{display:none!important}" }} />
-        </noscript>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try { if (sessionStorage.getItem("noor-preloader-seen") === "1" || new URLSearchParams(location.search).get("preloader") === "off") document.documentElement.dataset.preloader = "skip"; } catch (_) {}`,
-          }}
-        />
-      </head>
+      <head />
       <body suppressHydrationWarning className="min-h-screen bg-[#E4E7E4] text-[#111311] antialiased selection:bg-[#CEF23E] selection:text-[#111311]">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SmoothScrollProvider>

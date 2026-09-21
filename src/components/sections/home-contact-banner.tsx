@@ -27,10 +27,12 @@ export function HomeContactBanner({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const contactBase = isBn ? "/bn/contact" : "/contact";
-    if (email.trim()) {
-      router.push(`${contactBase}?email=${encodeURIComponent(email.trim())}`);
+    const val = email.trim();
+    if (val) {
+      const param = val.includes("@") ? `email=${encodeURIComponent(val)}` : `phone=${encodeURIComponent(val)}`;
+      router.push(`${contactBase}?${param}#quote-section`);
     } else {
-      router.push(contactBase);
+      router.push(`${contactBase}#quote-section`);
     }
   };
 
@@ -43,7 +45,7 @@ export function HomeContactBanner({
           <div className="absolute inset-0 z-0">
             <Image
               src="/banners/clean-energy-banner.webp"
-              alt={isBn ? "পরিচ্ছন্ন জ্বালানি দিয়ে সুন্দর ভবিষ্যৎ" : "Clean Energy for a Brighter Tomorrow"}
+              alt={isBn ? "বাণিজ্যিক সোলার সরঞ্জাম পাইকারি সরবরাহ" : "Wholesale Commercial Solar Supply"}
               fill
               className="object-cover object-[75%_center] sm:object-center"
               sizes="(max-width: 1280px) 100vw, 1280px"
@@ -82,13 +84,13 @@ export function HomeContactBanner({
                 <span>{headline}</span>
               ) : isBn ? (
                 <>
-                  পরিচ্ছন্ন জ্বালানি দিয়ে <br />
-                  <span className="text-[#84CC16]">উজ্জ্বল ভবিষ্যৎ গড়ুন</span>
+                  বাণিজ্যিক প্রকল্পের জন্য <br />
+                  <span className="text-[#84CC16]">পাইকারি সোলার সরঞ্জাম</span>
                 </>
               ) : (
                 <>
-                  Clean Energy for a <br />
-                  <span className="text-[#84CC16]">Brighter Tomorrow</span>
+                  Procure High-Grade <br />
+                  <span className="text-[#84CC16]">Wholesale Solar Equipment</span>
                 </>
               )}
             </h2>
@@ -96,8 +98,8 @@ export function HomeContactBanner({
             {/* Subtitle */}
             <p className="text-xs sm:text-sm lg:text-base text-slate-700/90 leading-relaxed max-w-lg mb-6 sm:mb-8 font-medium">
               {subheadline || (isBn
-                ? "আমরা ঘরবাড়ি ও শিল্পপ্রতিষ্ঠানের জন্য উচ্চমানের সোলার সরঞ্জাম সরবরাহ করি, যা দীর্ঘমেয়াদে নিশ্চিত করে বিদ্যুৎ সাশ্রয়।"
-                : "We provide high-quality solar solutions to power homes, businesses and a sustainable future.")}
+                ? "সরাসরি আমদানি লাইনের সোলার প্যানেল, লিথিয়াম ব্যাটারি ও ইনভার্টারের পাইকারি সরবরাহ পেতে আপনার যোগাযোগের তথ্য দিন।"
+                : "Direct B2B importer providing containerized supply and wholesale pricing for EPC developers and commercial contractors.")}
             </p>
 
             {/* Interactive Email Pill Form */}
@@ -108,20 +110,25 @@ export function HomeContactBanner({
               <div className="flex items-center gap-2.5 pl-3 sm:pl-3.5 flex-grow min-w-0">
                 <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 shrink-0" />
                 <input
-                  type="email"
-                  placeholder={isBn ? "আপনার ইমেইল ঠিকানা দিন" : "Enter your email here"}
+                  type="text"
+                  name="contact"
+                  id="home-contact-email"
+                  autoComplete="email"
+                  inputMode="email"
+                  placeholder={isBn ? "আপনার ব্যবসায়িক ইমেইল বা ফোন নম্বর দিন" : "Enter business email or phone"}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-transparent border-none text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                  className="w-full h-11 min-h-[44px] bg-transparent border-none text-base text-slate-900 placeholder:text-slate-400 focus:outline-none"
+                  aria-label={isBn ? "ব্যবসায়িক ইমেইল বা ফোন নম্বর" : "Business email or phone"}
                 />
               </div>
               <MagneticButton dataMotion="magnetic-cta">
                 <button
                   type="submit"
                   data-motion="button-slide"
-                  className="rounded-full bg-[#CEF23E] hover:bg-[#D8FA45] text-[#111311] font-bold px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm flex items-center gap-1.5 sm:gap-2 shrink-0 shadow-sm transition-all hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
+                  className="rounded-full bg-[#CEF23E] hover:bg-[#D8FA45] text-[#111311] font-bold px-5 sm:px-6 py-2.5 sm:py-3 min-h-[44px] text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 shrink-0 shadow-sm transition-all hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
                 >
-                  <span>{isBn ? "যোগাযোগ করুন" : "Join Now"}</span>
+                  <span>{isBn ? "পাইকারি কোটেশন চান" : "Request Wholesale Quote"}</span>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
                 </button>
               </MagneticButton>
@@ -159,7 +166,7 @@ export function HomeContactBanner({
                 </div>
               </div>
               <span className="text-xs sm:text-sm font-semibold text-slate-700">
-                {isBn ? "৮,৬৫০+ সন্তুষ্ট গ্রাহক" : "8,650+ happy customers"}
+                {isBn ? "বাণিজ্যিক ও শিল্প প্রকল্প ক্লায়েন্ট" : "Commercial & Industrial Project Clients"}
               </span>
             </div>
 

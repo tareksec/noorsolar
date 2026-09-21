@@ -27,8 +27,8 @@ export function PartnersStrip({ partners, locale }: PartnersStripProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center">
         <p className="text-[11px] font-mono uppercase tracking-widest text-[#5C605C] font-semibold">
           {isBn
-            ? "বাণিজ্যিক ঠিকাদার, সোলার ইপিসি ও শিল্পকারখানায় পাইকারি সরঞ্জাম সরবরাহকারী"
-            : "Supplying Commercial Contractors, Solar EPCs & Industrial Facilities"}
+            ? "সরঞ্জাম ব্র্যান্ডসমূহ ও সরাসরি আমদানি লাইন | Brands We Source"
+            : "Brands We Source & Equipment Available"}
         </p>
       </div>
 

@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import { Link } from "@/i18n/routing";
 import { getSiteSettings } from "@/lib/data/settings";
 import { CheckCircle2, ArrowUpRight, ShieldCheck, Box, Zap, Award } from "lucide-react";
+import { SITE_URL } from "@/lib/site-config";
 
 interface AboutPageProps {
   params: Promise<{
@@ -20,7 +21,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: AboutPageProps): Promise<Metadata> {
   const { locale } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
 
   return {
     title: isBn ? "আমাদের সম্পর্কে — নূর সোলার এনার্জি" : "About Us — Noor Solar Energy",
@@ -77,14 +78,14 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <div className="flex flex-wrap items-center gap-4">
                 <Link
                   href="/products"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#111311] text-white text-xs font-semibold hover:bg-black transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-[#111311] text-white text-xs font-semibold hover:bg-black transition-colors"
                 >
                   <span>{isBn ? "ক্যাটালগ দেখুন" : "Explore Catalog"}</span>
                   <ArrowUpRight className="w-4 h-4 text-[#CEF23E]" />
                 </Link>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#111311] text-xs font-semibold border border-[#DDE1DC] hover:border-[#111311] transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-white text-[#111311] text-xs font-semibold border border-[#DDE1DC] hover:border-[#111311] transition-colors"
                 >
                   <span>{isBn ? "B2B কোটেশন চান" : "Request B2B Quote"}</span>
                 </Link>
@@ -119,7 +120,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <ShieldCheck className="w-5 h-5 text-[#111311]" />
             </div>
             <h3 className="text-lg font-bold text-[#111311] mb-2">
-              {isBn ? "সরাসরি প্রস্তুতকারক পার্টনারশিপ" : "Direct Factory Partnerships"}
+              {isBn ? "সরাসরি প্রস্তুতকারকদের থেকে আমদানি" : "Direct Factory Sourcing"}
             </h3>
             <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed">
               {isBn
