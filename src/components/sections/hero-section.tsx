@@ -70,21 +70,13 @@ export function HeroSection({
               type="video/mp4"
             />
           </video>
-          {/* Subtle dark gradient overlay over video for contrast */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60 pointer-events-none" />
         </div>
 
       {/* ================= MAIN HERO BODY ================= */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-grow flex flex-col justify-between pt-28 sm:pt-36 lg:pt-40 pb-8 sm:pb-10">
         
         {/* Centered Column: Kicker, Title, Subtitle, CTA Button */}
-        <div className="relative max-w-4xl mx-auto flex flex-col items-center text-center justify-center my-auto py-4 sm:py-6 px-4">
-          {/* Ambient soft shadow aura behind text block */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 -inset-x-6 sm:-inset-x-12 -inset-y-6 rounded-3xl bg-black/50 blur-2xl -z-10 pointer-events-none"
-          />
-
+        <div className="max-w-4xl mx-auto flex flex-col items-center text-center justify-center my-auto py-4 sm:py-6">
           {/* Kicker Pill Badge in Brand Volt Lime */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#CEF23E]/30 bg-[#CEF23E]/10 backdrop-blur-md text-[#CEF23E] text-xs sm:text-sm font-medium mb-5 shadow-[0_0_20px_rgba(206,242,62,0.15)]">
             <Sparkles className="w-4 h-4 text-[#CEF23E] shrink-0" />
@@ -94,7 +86,7 @@ export function HeroSection({
           {/* Headline with Brand Volt Lime to Sky Cyan Gradient */}
           <h1
             data-motion="hero-headline"
-            className="text-3xl sm:text-5xl lg:text-[3.8rem] xl:text-[4.3rem] font-bold tracking-tight text-white leading-[1.08] mb-5 text-center drop-shadow-[0_4px_16px_rgba(0,0,0,0.85)] [text-shadow:_0_2px_12px_rgba(0,0,0,0.9),_0_4px_24px_rgba(0,0,0,0.7)]"
+            className="text-3xl sm:text-5xl lg:text-[3.8rem] xl:text-[4.3rem] font-bold tracking-tight text-white leading-[1.08] mb-5 text-center [text-shadow:_0_2px_12px_rgba(0,0,0,0.9),_0_4px_24px_rgba(0,0,0,0.85)]"
           >
             {headline ? (
               <span className="hero-word-inner">{headline}</span>
@@ -122,7 +114,7 @@ export function HeroSection({
           </h1>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-base lg:text-[1.12rem] text-slate-100 leading-relaxed max-w-2xl mb-8 font-medium text-center drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] [text-shadow:_0_1px_8px_rgba(0,0,0,0.95),_0_2px_16px_rgba(0,0,0,0.8)]">
+          <p className="text-sm sm:text-base lg:text-[1.12rem] text-slate-100 leading-relaxed max-w-2xl mb-8 font-medium text-center [text-shadow:_0_2px_8px_rgba(0,0,0,0.95),_0_3px_16px_rgba(0,0,0,0.85)]">
             {subheadline || (isBn
               ? "উচ্চ-দক্ষতার সোলার প্যানেল, লিথিয়াম ব্যাটারি ও ইনভার্টার দিয়ে আপনার বিদ্যুৎ খরচ কমান এবং নিরবচ্ছিন্ন বিদ্যুৎ নিশ্চিত করুন।"
               : "Expert AC repair, installation, and maintenance services delivered by certified technicians to keep your home cool, efficient, and comfortable all year long.")}
