@@ -9,7 +9,7 @@ interface WhatsAppButtonProps {
   locale?: string;
 }
 
-export function WhatsAppButton({ phone = "8801700000000", locale: propLocale }: WhatsAppButtonProps) {
+export function WhatsAppButton({ phone = "8801884611888", locale: propLocale }: WhatsAppButtonProps) {
   let locale = propLocale;
   try {
     const nextIntlLocale = useLocale();

@@ -38,15 +38,15 @@ export async function generateMetadata({
   return {
     title: {
       default: isBn
-        ? "নূর সোলার এনার্জি — সোলার প্যানেল, ব্যাটারি ও ইনভার্টার"
-        : "Noor Solar Energy — Solar Panels, Batteries & Inverters",
+        ? "নূর সোলার এনার্জি — সোলার প্যানেল, ব্যাটারি ও ইনভার্টার পাইকারি সরবরাহকারী"
+        : "Noor Solar Energy — Solar Panels, Batteries & Inverters Wholesale",
       template: isBn
         ? "%s | নূর সোলার এনার্জি"
         : "%s | Noor Solar Energy",
     },
     description: isBn
-      ? "বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল, লিথিয়াম-আয়ন ব্যাটারি এবং সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
-      : "Direct importer and bulk supplier of solar panels, Lithium-ion Batteries, and Solar Inverters in Bangladesh.",
+      ? "বাংলাদেশে বাণিজ্যিক সোলার প্যানেল, LiFePO4 ব্যাটারি স্টোরেজ এবং সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
+      : "Direct importer and bulk B2B wholesale supplier of commercial solar panels, LiFePO4 battery storage, and solar inverters in Bangladesh.",
     metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? "/bn" : "/",
@@ -63,11 +63,11 @@ export async function generateMetadata({
     },
     openGraph: {
       title: isBn
-        ? "নূর সোলার এনার্জি — সোলার প্যানেল, ব্যাটারি ও ইনভার্টার"
-        : "Noor Solar Energy — Solar Panels, Batteries & Inverters",
+        ? "নূর সোলার এনার্জি — সোলার প্যানেল, ব্যাটারি ও ইনভার্টার পাইকারি সরবরাহকারী"
+        : "Noor Solar Energy — Solar Panels, Batteries & Inverters Wholesale",
       description: isBn
-        ? "বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল, লিথিয়াম-আয়ন ব্যাটারি এবং সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
-        : "Direct importer and bulk supplier of solar panels, Lithium-ion Batteries, and Solar Inverters in Bangladesh.",
+        ? "বাংলাদেশে বাণিজ্যিক সোলার প্যানেল, LiFePO4 ব্যাটারি স্টোরেজ এবং সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
+        : "Direct importer and bulk B2B wholesale supplier of commercial solar panels, LiFePO4 battery storage, and solar inverters in Bangladesh.",
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
       images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Noor Solar Energy" }],

@@ -45,8 +45,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const desc =
     category.description ||
     (isBn
-      ? `বাংলাদেশে পাইকারি আমদানিকৃত ${category.name}-এর সম্পূর্ণ তালিকা দেখুন।`
-      : `Explore bulk ${category.name} available for wholesale import in Bangladesh.`);
+      ? `বাংলাদেশে বাণিজ্যিক ও শিল্প প্রকল্পের জন্য সরাসরি আমদানিকৃত ${category.name}-এর স্পেসিফিকেশন ও পাইকারি সরবরাহ তালিকা।`
+      : `Direct-imported commercial ${category.name} available for wholesale and container supply in Bangladesh.`);
 
   const pageTitle = isBn
     ? `${category.name} পাইকারি সরবরাহ — নূর সোলার এনার্জি`

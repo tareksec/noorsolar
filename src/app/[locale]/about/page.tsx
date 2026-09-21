@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
     title: isBn ? "আমাদের সম্পর্কে — নূর সোলার এনার্জি" : "About Us — Noor Solar Energy",
     description: isBn
       ? "নূর সোলার এনার্জি সম্পর্কে জানুন — বাংলাদেশে সোলার প্যানেল, লিথিয়াম-আয়ন ব্যাটারি এবং ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
-      : "Learn about Noor Solar Energy, premier direct importer and bulk B2B supplier of solar panels, lithium-ion batteries, and inverters in Bangladesh.",
+      : "Learn about Noor Solar Energy, direct importer and bulk B2B supplier of solar panels, lithium-ion batteries, and inverters in Bangladesh.",
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/about` : `${siteUrl}/about`,
       languages: {

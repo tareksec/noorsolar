@@ -194,7 +194,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                   <div className="p-4 rounded-xl bg-[#F5F7F3] border border-[#E0E5DC]">
                     <span className="text-[11px] font-mono text-[#5C605C] block mb-1">
-                      {isBn ? "নিবন্ধিত সদস্য প্রতিষ্ঠান" : "Registered Member Enterprise"}
+                      {isBn ? "সনদধারী নিবন্ধিত প্রতিষ্ঠান" : "Certificate Holder / Registered Entity"}
                     </span>
                     <span className="text-sm font-bold text-[#111311]">
                       Tasneem Knitting Industry
@@ -234,8 +234,8 @@ export default async function CertificationsPage({ params }: CertificationsPageP
 
                 <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed mb-6">
                   {isBn
-                    ? "তাসনিম নিটিং ইন্ডাস্ট্রি বাংলাদেশ সাসটেইনেবল অ্যান্ড রিনিউয়েবল এনার্জি অ্যাসোসিয়েশনের (BSREA) সক্রিয় সাধারণ সদস্য (20260915GEN113)। এটি বাংলাদেশের নবায়নযোগ্য শক্তি খাতের জাতীয় বাণিজ্য সমিতির সদস্যপদ সনদ।"
-                    : "Tasneem Knitting Industry holds an active General Membership (20260915GEN113) in the Bangladesh Sustainable & Renewable Energy Association (BSREA), the apex trade body for renewable energy in Bangladesh. This certificate confirms industry association membership."}
+                    ? "বিএসআরইএ (BSREA) সাধারণ সদস্যপদ সনদপত্রটি (২০২৬০৯১৫GEN১১৩) সনদধারী নিবন্ধিত প্রতিষ্ঠান তাসনিম নিটিং ইন্ডাস্ট্রির অনুকূলে ইস্যুকৃত, যা বাংলাদেশে নূর সোলার এনার্জির বাণিজ্যিক নবায়নযোগ্য শক্তি কার্যক্রমের প্রাতিষ্ঠানিক সমিতি সদস্যপদ নিশ্চিত করে।"
+                    : "The official BSREA General Membership (20260915GEN113) is held under registered entity Tasneem Knitting Industry, serving as the trade association membership documentation for Noor Solar Energy operations in Bangladesh."}
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3">

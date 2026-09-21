@@ -285,10 +285,10 @@ export function ShopPageClient({
                 </div>
                 <div>
                   <span className="font-extrabold text-sm tracking-tight text-[#111311] block uppercase">
-                    {isBn ? "নূর সোলার" : "NOOR SOLAR"}
+                    {isBn ? "নূর সোলার এনার্জি" : "NOOR SOLAR ENERGY"}
                   </span>
                   <span className="text-[9px] font-mono text-[#5C605C] uppercase tracking-widest block">
-                    {isBn ? "সরঞ্জাম শপ" : "EQUIPMENT SHOP"}
+                    {isBn ? "সরঞ্জাম ক্যাটালগ" : "EQUIPMENT CATALOG"}
                   </span>
                 </div>
               </div>

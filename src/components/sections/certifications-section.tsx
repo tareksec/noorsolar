@@ -111,7 +111,7 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-6">
                 <div className="p-3.5 rounded-xl bg-[#F6F9F4] border border-[#DEE5DA]">
                   <span className="text-xs font-mono text-[#636E5E] block uppercase font-medium">
-                    Member Enterprise
+                    {isBn ? "সনদধারী নিবন্ধিত প্রতিষ্ঠান" : "Certificate Holder / Registered Entity"}
                   </span>
                   <span className="text-sm font-bold text-[#111311]">
                     Tasneem Knitting Industry
@@ -120,7 +120,7 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
 
                 <div className="p-3.5 rounded-xl bg-[#F6F9F4] border border-[#DEE5DA]">
                   <span className="text-xs font-mono text-[#636E5E] block uppercase font-medium">
-                    Membership ID
+                    {isBn ? "সদস্যপদ নম্বর" : "Membership ID"}
                   </span>
                   <span className="text-sm font-bold font-mono text-[#111311]">
                     20260915GEN113
@@ -129,19 +129,19 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
 
                 <div className="p-3.5 rounded-xl bg-[#F6F9F4] border border-[#DEE5DA]">
                   <span className="text-xs font-mono text-[#636E5E] block uppercase font-medium">
-                    Document Type
+                    {isBn ? "ডকুমেন্টের ধরন" : "Document Type"}
                   </span>
                   <span className="text-sm font-semibold text-[#111311]">
-                    General Membership Certificate
+                    {isBn ? "সাধারণ সদস্যপদ সনদ" : "General Membership Certificate"}
                   </span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#F6F9F4] border border-[#DEE5DA]">
                   <span className="text-xs font-mono text-[#636E5E] block uppercase font-medium">
-                    Validity Period
+                    {isBn ? "মেয়াদ" : "Validity Period"}
                   </span>
                   <span className="text-sm font-semibold text-[#111311]">
-                    December 31, 2026
+                    {isBn ? "৩১ ডিসেম্বর, ২০২৬" : "December 31, 2026"}
                   </span>
                 </div>
               </div>
@@ -149,8 +149,8 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
               {/* Brief Statement */}
               <p className="text-xs sm:text-sm text-[#525C4F] leading-relaxed mb-6">
                 {isBn
-                  ? "তাসনিম নিটিং ইন্ডাস্ট্রি বাংলাদেশ সাসটেইনেবল অ্যান্ড রিনিউয়েবল এনার্জি অ্যাসোসিয়েশনের (BSREA) সক্রিয় সাধারণ সদস্য (20260915GEN113)। এই সনদটি বাংলাদেশের নবায়নযোগ্য শক্তি খাতে স্বীকৃত শিল্প সমিতি সদস্যপদ প্রকাশ করে।"
-                  : "Tasneem Knitting Industry holds an active General Membership (20260915GEN113) in the Bangladesh Sustainable & Renewable Energy Association (BSREA). This document represents recognized trade association membership in Bangladesh's renewable energy sector."}
+                  ? "বিএসআরইএ (BSREA) সাধারণ সদস্যপদ সনদপত্রটি (২০২৬০৯১৫GEN১১৩) সনদধারী নিবন্ধিত প্রতিষ্ঠান তাসনিম নিটিং ইন্ডাস্ট্রির অনুকূলে ইস্যুকৃত, যা বাংলাদেশে নূর সোলার এনার্জির বাণিজ্যিক নবায়নযোগ্য শক্তি কার্যক্রমের প্রাতিষ্ঠানিক সমিতি সদস্যপদ নিশ্চিত করে।"
+                  : "The official BSREA General Membership (20260915GEN113) is held under registered entity Tasneem Knitting Industry, serving as the trade association membership documentation for Noor Solar Energy operations in Bangladesh."}
               </p>
 
               {/* Action Buttons */}
@@ -162,7 +162,7 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
                   className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] rounded-full bg-[#111311] text-white text-xs font-semibold hover:bg-black transition-all hover:gap-3 shadow-xs"
                 >
                   <FileText className="w-4 h-4 text-[#CEF23E]" />
-                  <span>View Official Certificate (PDF)</span>
+                  <span>{isBn ? "অফিসিয়াল সনদ দেখুন (PDF)" : "View Official Certificate (PDF)"}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
                 </a>
 

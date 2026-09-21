@@ -25,7 +25,7 @@ export function WhyChooseUs({ locale, stats }: WhyChooseUsProps = {}) {
           <div className="flex items-center gap-2.5 mb-3">
             <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E] ring-2 ring-[#111311]/20 inline-block" />
             <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C] font-semibold">
-              {isBn ? "কেন নূর সোলার বেছে নেবেন" : "Why Choose Noor Solar Energy"}
+              {isBn ? "কেন নূর সোলার এনার্জি বেছে নেবেন" : "Why Choose Noor Solar Energy"}
             </span>
           </div>
 

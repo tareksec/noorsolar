@@ -35,11 +35,16 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   }
 
   const { product } = data;
-  const title = product.metaTitle || `${product.name} — Noor Solar Energy`;
+  const fallbackTitle = isBn
+    ? `${product.name} — নূর সোলার এনার্জি`
+    : `${product.name} — Noor Solar Energy`;
+  const title = product.metaTitle || fallbackTitle;
   const desc =
     product.metaDescription ||
     product.shortDescription ||
-    `Direct importer wholesale specs for ${product.name}. Request quotation and technical datasheets.`;
+    (isBn
+      ? `${product.name}-এর কারিগরি স্পেসিফিকেশন ও পাইকারি সরবরাহ তথ্য। নূর সোলার এনার্জি থেকে সরাসরি আমদানি ও অফিসিয়াল ওয়ারেন্টি সহ ডেটাশিট সংগ্রহ করুন।`
+      : `Wholesale procurement specifications and technical details for ${product.name}. Direct import in Bangladesh by Noor Solar Energy.`);
 
   return {
     title,
@@ -90,19 +95,32 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   ]);
   const { reviews, totalReviews, averageRating } = reviewsData;
 
-  // Product JSON-LD structured data (price only if showPrice is true)
+  const siteUrl = SITE_URL;
+  const isBn = locale === "bn";
+  const productImages = product.images
+    .map((img) => (img.url.startsWith("http") ? img.url : `${siteUrl}${img.url}`))
+    .filter(Boolean);
+  const productUrl = `${siteUrl}${isBn ? "/bn" : ""}/product/${product.slug}`;
+
+  // Product JSON-LD structured data (strictly real data only, no fabricated price/validity/ratings)
   const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
+    url: productUrl,
     description: product.description || product.shortDescription,
-    image: product.images.map((img) => img.url),
+    ...(productImages.length > 0 ? { image: productImages } : {}),
     sku: identity.noorSku || product.model || product.slug,
     ...(identity.manufacturer ? { brand: { "@type": "Brand", name: identity.manufacturer } } : {}),
-    ...(identity.manufacturerModel ? { mpn: identity.manufacturerModel } : {}),
+    ...(identity.manufacturerModel
+      ? { model: identity.manufacturerModel, mpn: identity.manufacturerModel }
+      : product.model
+      ? { model: product.model }
+      : {}),
     category: product.category.name,
     offers: {
       "@type": "Offer",
+      url: productUrl,
       availability:
         product.stockStatus === "IN_STOCK"
           ? "https://schema.org/InStock"
@@ -113,12 +131,16 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         ? {
             priceCurrency: "BDT",
             price: product.priceBdt.toString(),
-            priceValidUntil: "2026-12-31",
           }
-        : {}),
+        : {
+            description: isBn
+              ? "বাণিজ্যিক ও পাইকারি কোটেশনের জন্য অনুরোধ করুন।"
+              : "Commercial and wholesale quotation available upon inquiry.",
+          }),
       seller: {
         "@type": "Organization",
         name: "Noor Solar Energy",
+        url: siteUrl,
       },
     },
     ...(totalReviews > 0
@@ -148,8 +170,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         }
       : {}),
   };
-
-  const isBn = locale === "bn";
 
   return (
     <div className="pt-24 pb-20 sm:pb-32 bg-[#E4E7E4] min-h-screen">

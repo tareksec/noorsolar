@@ -29,8 +29,13 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 
   const { post } = data;
-  const title = post.metaTitle || `${post.title} — Noor Solar Energy`;
-  const description = post.metaDescription || post.excerpt || `Technical article: ${post.title}`;
+  const title =
+    post.metaTitle ||
+    (isBn ? `${post.title} — নূর সোলার এনার্জি` : `${post.title} — Noor Solar Energy`);
+  const description =
+    post.metaDescription ||
+    post.excerpt ||
+    (isBn ? `${post.title} সম্পর্কে বিস্তারিত কারিগরি নিবন্ধ।` : `Technical article: ${post.title}`);
   const hasBn = !!post.contentBn?.trim();
 
   return {
@@ -86,6 +91,10 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
       "@type": "Organization",
       name: "Noor Solar Energy",
       url: SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/brand/logo-default.png`,
+      },
     },
   };
 

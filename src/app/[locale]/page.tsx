@@ -110,27 +110,43 @@ export default async function HomePage({
 
   const siteUrl = SITE_URL;
 
+  // Only include non-empty, verified social profile URLs
+  const verifiedSameAs = Object.values(settings.socials || {}).filter(
+    (url): url is string =>
+      typeof url === "string" &&
+      url.trim().length > 0 &&
+      !url.includes("example.com")
+  );
+
   const orgJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Noor Solar Energy",
+    alternateName: "নূর সোলার এনার্জি",
     url: siteUrl,
     logo: `${siteUrl}/brand/logo-default.png`,
+    image: `${siteUrl}/brand/logo-default.png`,
     description:
       settings.description ||
       "Direct importer and bulk wholesale supplier of solar equipment in Bangladesh.",
+    email: settings.email || "info@noorsolaren.com",
+    telephone: settings.phone || "+8801884611888",
     address: {
       "@type": "PostalAddress",
-      streetAddress: settings.address || "Dhaka, Bangladesh",
+      streetAddress: settings.address || "Motijheel Commercial Area, Dhaka-1000, Bangladesh",
       addressLocality: "Dhaka",
+      postalCode: "1000",
       addressCountry: "BD",
     },
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: settings.phone || "+8801700000000",
+      telephone: settings.phone || "+8801884611888",
       contactType: "customer service",
+      email: settings.email || "info@noorsolaren.com",
       areaServed: "BD",
+      availableLanguage: ["English", "Bengali"],
     },
+    ...(verifiedSameAs.length > 0 ? { sameAs: verifiedSameAs } : {}),
   };
 
   return (

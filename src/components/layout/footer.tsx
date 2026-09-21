@@ -80,13 +80,13 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
   const currentYear = new Date().getFullYear();
   const isBn = locale === "bn";
 
-  const phoneRaw = settings.phone || "+8801700000000";
-  const phoneDisplay = settings.phoneDisplay || "+880 1700-000000";
+  const phoneRaw = settings.phone || "+8801884611888";
+  const phoneDisplay = settings.phoneDisplay || "+880 1884-611888";
   const email = settings.email || "info@noorsolaren.com";
   const address = settings.address || "Motijheel Commercial Area, Dhaka-1000, Bangladesh";
   const hours = settings.hours || "Sat - Thu: 9:00 AM - 7:00 PM (Friday Closed)";
-  const whatsappNum = settings.whatsapp || "8801700000000";
-  const whatsappDisplay = settings.whatsappDisplay || "+880 1700-000000";
+  const whatsappNum = settings.whatsapp || "8801884611888";
+  const whatsappDisplay = settings.whatsappDisplay || "+880 1884-611888";
 
   return (
     <footer className="w-full px-3 sm:px-6 lg:px-8 pb-4 sm:pb-6 pt-8 relative overflow-hidden">
@@ -237,7 +237,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
             <ul className="space-y-1 text-xs sm:text-sm text-[#4F574A]">
               <li>
                 <Link href="/about" className="hover:text-[#111311] inline-flex items-center min-h-[44px] transition-colors">
-                  {isBn ? "নূর সোলার পরিচিতি" : "About Noor Solar"}
+                  {isBn ? "নূর সোলার এনার্জি পরিচিতি" : "About Noor Solar Energy"}
                 </Link>
               </li>
               <li>
@@ -319,7 +319,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
                     href={settings.socials!.facebook!}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={isBn ? "ফেসবুকে নূর সোলার অনুসরণ করুন" : "Follow Noor Solar on Facebook"}
+                    aria-label={isBn ? "ফেসবুকে নূর সোলার এনার্জি অনুসরণ করুন" : "Follow Noor Solar Energy on Facebook"}
                     className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
                   >
                     <FacebookIcon className="w-5 h-5" />
@@ -331,7 +331,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
                     href={settings.socials!.linkedin!}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={isBn ? "লিংকডইনে নূর সোলারের সাথে যুক্ত হন" : "Connect with Noor Solar on LinkedIn"}
+                    aria-label={isBn ? "লিংকডইনে নূর সোলার এনার্জির সাথে যুক্ত হন" : "Connect with Noor Solar Energy on LinkedIn"}
                     className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
                   >
                     <LinkedinIcon className="w-5 h-5" />
@@ -342,7 +342,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
                   href={`https://wa.me/${whatsappNum}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={isBn ? "হোয়াটসঅ্যাপে নূর সোলারের সাথে চ্যাট করুন" : "Chat with Noor Solar on WhatsApp"}
+                  aria-label={isBn ? "হোয়াটসঅ্যাপে নূর সোলার এনার্জির সাথে চ্যাট করুন" : "Chat with Noor Solar Energy on WhatsApp"}
                   className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
                 >
                   <MessageCircle className="w-5 h-5" />
@@ -353,7 +353,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
                     href={settings.socials!.youtube!}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={isBn ? "ইউটিউবে নূর সোলারের ভিডিও দেখুন" : "Watch Noor Solar on YouTube"}
+                    aria-label={isBn ? "ইউটিউবে নূর সোলার এনার্জির ভিডিও দেখুন" : "Watch Noor Solar Energy on YouTube"}
                     className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
                   >
                     <YoutubeIcon className="w-5 h-5" />
@@ -365,7 +365,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
                     href={settings.socials!.twitter!}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={isBn ? "এক্সে নূর সোলার অনুসরণ করুন" : "Follow Noor Solar on X"}
+                    aria-label={isBn ? "এক্সে নূর সোলার এনার্জি অনুসরণ করুন" : "Follow Noor Solar Energy on X"}
                     className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
                   >
                     <TwitterIcon className="w-5 h-5" />
@@ -373,8 +373,8 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
                 )}
               </div>
             </div>
-          </div>
 
+          </div>
         </div>
 
         {/* Sub-Footer Copyright & Disclaimer */}
@@ -400,7 +400,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
       {/* Bottom Giant Brand Watermark (Compact Graphy Style) */}
       <div className="relative z-0 w-full max-w-7xl mx-auto select-none pointer-events-none -mt-4 sm:-mt-8 lg:-mt-12 overflow-hidden flex items-end justify-center pt-2 pb-0">
         <span className="font-extrabold tracking-tighter text-center uppercase whitespace-nowrap leading-[0.8] text-[clamp(2.8rem,10.8vw,11rem)] text-transparent bg-clip-text bg-gradient-to-b from-[#111311]/[0.12] via-[#111311]/[0.05] to-transparent">
-          NOOR SOLAR
+          NOOR SOLAR ENERGY
         </span>
       </div>
     </footer>

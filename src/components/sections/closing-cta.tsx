@@ -22,8 +22,8 @@ const initialState: QuoteActionResult = {
 };
 
 export function ClosingCTA({
-  phoneDisplay = "+880 1700-000000",
-  whatsappNumber = "8801700000000",
+  phoneDisplay = "+880 1884-611888",
+  whatsappNumber = "8801884611888",
   selectedProduct,
   headline,
   subheadline,
