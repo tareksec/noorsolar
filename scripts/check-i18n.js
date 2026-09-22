@@ -60,7 +60,7 @@ const ALLOWLISTED_IDENTICAL_TERMS = new Set([
   "+8801711000000",
   "BSREA",
   "20260915GEN113",
-  "Tasneem Knitting Industry",
+  "Noor Solar Energy",
   "বাংলা",
   "English",
 ]);

@@ -10,7 +10,7 @@ async function main() {
   const certData = {
     name: 'BSREA Certificate of Membership',
     issuer: 'Bangladesh Sustainable & Renewable Energy Association (BSREA)',
-    description: 'Official General Membership (20260915GEN113) issued to Tasneem Knitting Industry. Valid through Dec 31, 2026. Document: https://drive.google.com/file/d/1GR4hILXnDjJblqNmrxRNnWH_M7It4Md2/view?usp=sharing',
+    description: 'Official General Membership (20260915GEN113) of the Bangladesh Sustainable & Renewable Energy Association (BSREA) for Noor Solar Energy. Valid through Dec 31, 2026. Document: https://drive.google.com/file/d/1GR4hILXnDjJblqNmrxRNnWH_M7It4Md2/view?usp=sharing',
     image: '/photos/bsrea-logo.png',
     sortOrder: 1,
     isActive: true,

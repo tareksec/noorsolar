@@ -165,10 +165,10 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
                     </div>
                     <div>
                       <span className="text-[11px] font-mono text-[#718073] block uppercase font-medium">
-                        Organization Name
+                        {isBn ? "প্রতিষ্ঠানের নাম" : "Organization Name"}
                       </span>
                       <span className="text-sm font-bold text-[#142019]">
-                        Tasneem Knitting Industry
+                        {isBn ? "নূর সোলার এনার্জি" : "Noor Solar Energy"}
                       </span>
                     </div>
                   </div>

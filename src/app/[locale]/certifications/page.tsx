@@ -198,7 +198,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
                       {isBn ? "সনদধারী নিবন্ধিত প্রতিষ্ঠান" : "Certificate Holder / Registered Entity"}
                     </span>
                     <span className="text-sm font-bold text-[#074031]">
-                      Tasneem Knitting Industry
+                      {isBn ? "নূর সোলার এনার্জি" : "Noor Solar Energy"}
                     </span>
                   </div>
 
@@ -235,8 +235,8 @@ export default async function CertificationsPage({ params }: CertificationsPageP
 
                 <p className="text-xs sm:text-sm text-[#62706A] leading-relaxed mb-6">
                   {isBn
-                    ? "বিএসআরইএ (BSREA) সাধারণ সদস্যপদ সনদপত্রটি (২০২৬০৯১৫GEN১১৩) নিবন্ধিত প্রতিষ্ঠান তাসনিম নিটিং ইন্ডাস্ট্রিজের অনুকূলে ইস্যুকৃত, যা বাংলাদেশে নূর সোলার এনার্জির বাণিজ্যিক কার্যক্রমের প্রাতিষ্ঠানিক সমিতি সদস্যপদ নির্দেশ করে।"
-                    : "The official BSREA General Membership (20260915GEN113) is held under registered entity Tasneem Knitting Industry, serving as the trade association membership documentation for Noor Solar Energy operations in Bangladesh."}
+                    ? "বিএসআরইএ (BSREA) সাধারণ সদস্যপদ সনদপত্রটি (২০২৬০৯১৫GEN১১৩) নূর সোলার এনার্জির প্রাতিষ্ঠানিক সমিতি সদস্যপদ নির্দেশ করে, যা বাংলাদেশে আমাদের আন্তর্জাতিক মানের বাণিজ্যিক সোলার ইকুইপমেন্ট আমদানির বৈধতার প্রমাণ।"
+                    : "The official BSREA General Membership (20260915GEN113) represents the trade association membership documentation for Noor Solar Energy operations and certified solar distribution in Bangladesh."}
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3">
