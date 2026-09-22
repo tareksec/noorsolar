@@ -29,6 +29,18 @@ export const quoteRequestSchema = z.object({
     .email("Please provide a valid email address")
     .optional()
     .or(z.literal("")),
+  buyerType: z
+    .string()
+    .trim()
+    .max(80, "Buyer type cannot exceed 80 characters")
+    .optional()
+    .or(z.literal("")),
+  category: z
+    .string()
+    .trim()
+    .max(100, "Category cannot exceed 100 characters")
+    .optional()
+    .or(z.literal("")),
   productId: z.string().optional().or(z.literal("")),
   quantity: z
     .string()
@@ -40,6 +52,12 @@ export const quoteRequestSchema = z.object({
     .string()
     .trim()
     .max(150, "Delivery location cannot exceed 150 characters")
+    .optional()
+    .or(z.literal("")),
+  requiredDate: z
+    .string()
+    .trim()
+    .max(100, "Required timeframe cannot exceed 100 characters")
     .optional()
     .or(z.literal("")),
   message: z

@@ -72,6 +72,16 @@ export async function submitQuoteRequest(
 
     const data = validation.data;
 
+    const extraDetails = [
+      data.buyerType ? `Buyer Type: ${data.buyerType}` : null,
+      data.category ? `Category: ${data.category}` : null,
+      data.requiredDate ? `Target Delivery: ${data.requiredDate}` : null,
+    ].filter(Boolean);
+
+    const compiledMessage = extraDetails.length > 0
+      ? `${extraDetails.join(" | ")}${data.message ? `\n\nNotes: ${data.message}` : ""}`.trim()
+      : (data.message || null);
+
     // Save to database
     await db.quoteRequest.create({
       data: {
@@ -82,7 +92,7 @@ export async function submitQuoteRequest(
         productId: data.productId || null,
         quantity: data.quantity || null,
         location: data.location || null,
-        message: data.message || null,
+        message: compiledMessage,
         status: "NEW",
       },
     });

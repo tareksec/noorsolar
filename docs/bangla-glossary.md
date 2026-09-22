@@ -26,9 +26,9 @@ This glossary defines standard terminology, technical preservation rules, and st
 | Energy Storage System (ESS) | এনার্জি স্টোরেজ সিস্টেম | Commercial battery banks and backup storage. |
 | Wholesale / Bulk Supply | পাইকারি সরবরাহ | B2B importing and container-scale distribution. |
 | Importer | আমদানিকারক | Direct sourcing from Tier 1 manufacturers. |
-| Request a Quote / Quote | কোটেশন চান / কোটেশন | Action CTA and pricing estimation. |
+| Request a Quote / Quote | কোটেশন নিন / কোটেশনের অনুরোধ পাঠান | Action CTA and pricing estimation. |
 | Datasheet / Specifications | ডেটাশিট / স্পেসিফিকেশন | Technical documentation download. |
-| In Stock | স্টকে আছে | Inventory status. |
+| In Stock | রেডি স্টক | Inventory status. |
 | Incoming Shipment | আসছে | Stock in transit / port customs. |
 | On Request / Custom Order | প্রি-অর্ডার / অনুরোধ সাপেক্ষে | Made-to-order or large project volume. |
 | Lead Time | সরবরাহের সময় | Estimated delivery schedule. |
@@ -60,7 +60,7 @@ These terms must remain in Latin script exactly as written, without phonetic tra
 | Context | English | Chosen Bangla |
 |---|---|---|
 | Primary Header Action | Book A Call | কল শিডিউল করুন / কথা বলুন |
-| Product Primary CTA | Request Quote | কোটেশন চান |
+| Product Primary CTA | Request Quote | কোটেশন নিন |
 | Product Secondary CTA | Download Datasheet | ডেটাশিট ডাউনলোড |
 | Catalog Filter | View Products / Browse | পণ্য দেখুন / ক্যাটালগ দেখুন |
 | Form Submit | Submit Request | অনুরোধ জমা দিন |

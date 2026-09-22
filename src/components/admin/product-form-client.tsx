@@ -25,7 +25,13 @@ import {
   FileText,
   Sparkles,
   ExternalLink,
+  ShieldCheck,
+  Award,
+  FileCheck,
+  Package,
 } from "lucide-react";
+import { extractProductIdentity } from "@/lib/product-identity";
+import { parseProductDocuments } from "@/lib/product-documents";
 
 interface CategoryOption {
   id: string;
@@ -86,8 +92,12 @@ const SPEC_SUGGESTIONS: Record<string, string[]> = {
     "Module Efficiency (%)",
     "Cell Technology",
     "Dimensions (mm)",
-    "Product Warranty (Years)",
-    "Performance Warranty (Years)",
+    "Units Per Pallet",
+    "Pallet Dimensions (mm)",
+    "Pallet Weight (kg)",
+    "40ft HQ Container",
+    "Product Warranty",
+    "Performance Warranty",
   ],
   "lithium-batteries": [
     "Nominal Capacity (kWh)",
@@ -96,6 +106,10 @@ const SPEC_SUGGESTIONS: Record<string, string[]> = {
     "Chemistry",
     "Cycle Life (@80% DoD)",
     "Max Discharge Rate (C)",
+    "Units Per Pallet",
+    "Pallet Weight (kg)",
+    "20ft Container Loading",
+    "Product Warranty",
   ],
   "solar-inverters": [
     "Rated AC Power (kW)",
@@ -104,6 +118,8 @@ const SPEC_SUGGESTIONS: Record<string, string[]> = {
     "Number of MPPT Trackers",
     "Max Efficiency (%)",
     "Grid Phase",
+    "Packaging Details",
+    "Product Warranty",
   ],
   mounting: [
     "Material & Grade",
@@ -124,6 +140,8 @@ export function ProductFormClient({
 }: ProductFormClientProps) {
   const router = useRouter();
   const isEditing = Boolean(initialProduct);
+  const initialIdentity = initialProduct ? extractProductIdentity(initialProduct) : null;
+  const initialDocs = initialProduct ? parseProductDocuments(initialProduct.datasheetUrl) : {};
   const [, startTransition] = useTransition();
 
   const actionFn = isEditing ? updateProductAction : createProductAction;
@@ -409,12 +427,12 @@ export function ProductFormClient({
 
           <div>
             <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-              Model Code / Number
+              Noor Internal SKU / Model Code
             </label>
             <input
               type="text"
               name="model"
-              defaultValue={initialProduct?.model || ""}
+              defaultValue={initialIdentity?.noorSku || initialProduct?.model || ""}
               placeholder="e.g. NS-620TOP-BF"
               className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] font-mono outline-none"
             />
@@ -422,14 +440,56 @@ export function ProductFormClient({
 
           <div>
             <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-              Brand / Specification Partner
+              Manufacturer / Brand (Verified Only)
             </label>
             <input
               type="text"
               name="brand"
-              defaultValue={initialProduct?.brand || ""}
-              placeholder="e.g. Partner Series"
+              defaultValue={initialIdentity?.manufacturer || initialProduct?.brand || ""}
+              placeholder="e.g. JinkoSolar, LONGi (leave blank if OEM)"
               className="w-full px-4 py-2.5 rounded-2xl bg-[#EDEDED] text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
+        </div>
+
+        {/* Product Identity Detail Sub-Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 rounded-2xl bg-[#EDEDED]/50 border border-[#DDE1DC]">
+          <div>
+            <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+              Manufacturer Series (Optional)
+            </label>
+            <input
+              type="text"
+              name="series"
+              defaultValue={initialIdentity?.series || ""}
+              placeholder="e.g. Tiger Neo, Hi-MO X6"
+              className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+              Manufacturer Model (Factory Code)
+            </label>
+            <input
+              type="text"
+              name="manufacturerModel"
+              defaultValue={initialIdentity?.manufacturerModel || ""}
+              placeholder="e.g. JKMxxxN-72HL4"
+              className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] font-mono outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+              Country of Origin (Optional)
+            </label>
+            <input
+              type="text"
+              name="originCountry"
+              defaultValue={initialIdentity?.originCountry || ""}
+              placeholder="e.g. China, Germany"
+              className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
             />
           </div>
         </div>
@@ -598,58 +658,257 @@ export function ProductFormClient({
         </div>
       </div>
 
-      {/* 3. Datasheet Management */}
+      {/* 3. Technical Documents & Downloads */}
       <div className="space-y-4">
-        <h2 className="text-sm font-mono font-bold uppercase text-[#111311] pb-2 border-b border-[#EDEDED]">
-          3. Technical Datasheet (PDF or URL)
-        </h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-[#EDEDED]">
+          <h2 className="text-sm font-mono font-bold uppercase text-[#111311]">
+            3. Technical Documents & Downloads
+          </h2>
+          <span className="text-[11px] font-mono text-[#5C605C]">
+            Datasheet, Warranty, IEC Certificate, Manual, Test Report, Packing Sheet
+          </span>
+        </div>
 
-        <div className="p-5 rounded-3xl bg-[#EDEDED]/60 border border-[#DDE1DC] space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                Upload PDF Datasheet (Max 10MB)
+        <div className="space-y-4">
+          {/* Document 1: Datasheet */}
+          <div className="p-5 rounded-3xl bg-[#EDEDED]/60 border border-[#DDE1DC] space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-mono font-bold text-[#111311] flex items-center gap-1.5">
+                <FileText className="w-3.5 h-3.5" />
+                <span>1. Product Datasheet (PDF Upload or URL)</span>
               </label>
-              <input
-                type="file"
-                name="datasheetFile"
-                accept="application/pdf,.pdf"
-                className="w-full text-xs font-mono file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#111311] file:text-[#CEF23E] hover:file:bg-[#222622] file:cursor-pointer"
-              />
-              <span className="text-[11px] text-[#5C605C] block mt-1">
-                Must be a valid PDF file. Safely stored with magic-byte validation.
-              </span>
+              {initialDocs.datasheet && (
+                <a
+                  href={initialDocs.datasheet}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs font-mono text-[#111311] underline inline-flex items-center gap-1 font-medium"
+                >
+                  <span>Current File</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              )}
             </div>
-
-            <div>
-              <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                Or External Datasheet URL
-              </label>
-              <input
-                type="text"
-                name="datasheetUrl"
-                defaultValue={initialProduct?.datasheetUrl || ""}
-                placeholder="https://example.com/datasheet.pdf"
-                className="w-full px-4 py-2.5 rounded-2xl bg-white text-xs sm:text-sm text-[#111311] outline-none"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <input
+                  type="file"
+                  name="doc_datasheet_file"
+                  accept="application/pdf,.pdf"
+                  className="w-full text-xs font-mono file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#111311] file:text-[#CEF23E] hover:file:bg-[#222622] file:cursor-pointer"
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  name="doc_datasheet_url"
+                  defaultValue={initialDocs.datasheet || ""}
+                  placeholder="Or enter external datasheet URL (https://...)"
+                  className="w-full px-4 py-2 rounded-2xl bg-white text-xs text-[#111311] outline-none"
+                />
+              </div>
             </div>
           </div>
 
-          {initialProduct?.datasheetUrl && (
-            <div className="flex items-center gap-2 pt-2 border-t border-[#DDE1DC] text-xs font-mono text-[#5C605C]">
-              <FileText className="w-3.5 h-3.5 text-[#111311]" />
-              <span>Current Datasheet:</span>
-              <a
-                href={initialProduct.datasheetUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="text-[#111311] underline hover:text-black inline-flex items-center gap-1 font-medium"
-              >
-                <span>View File</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
+          {/* Document 2: Warranty */}
+          <div className="p-5 rounded-3xl bg-[#EDEDED]/60 border border-[#DDE1DC] space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-mono font-bold text-[#111311] flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>2. Warranty Policy Document</span>
+              </label>
+              {initialDocs.warranty && (
+                <a
+                  href={initialDocs.warranty}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs font-mono text-[#111311] underline inline-flex items-center gap-1 font-medium"
+                >
+                  <span>Current File</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              )}
             </div>
-          )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <input
+                  type="file"
+                  name="doc_warranty_file"
+                  accept="application/pdf,.pdf"
+                  className="w-full text-xs font-mono file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#111311] file:text-[#CEF23E] hover:file:bg-[#222622] file:cursor-pointer"
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  name="doc_warranty_url"
+                  defaultValue={initialDocs.warranty || ""}
+                  placeholder="Or enter warranty document URL (https://...)"
+                  className="w-full px-4 py-2 rounded-2xl bg-white text-xs text-[#111311] outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Document 3: IEC / Quality Certificate */}
+          <div className="p-5 rounded-3xl bg-[#EDEDED]/60 border border-[#DDE1DC] space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-mono font-bold text-[#111311] flex items-center gap-1.5">
+                <Award className="w-3.5 h-3.5" />
+                <span>3. IEC / Product Quality Certificate</span>
+              </label>
+              {initialDocs.certificate && (
+                <a
+                  href={initialDocs.certificate}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs font-mono text-[#111311] underline inline-flex items-center gap-1 font-medium"
+                >
+                  <span>Current File</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              )}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <input
+                  type="file"
+                  name="doc_certificate_file"
+                  accept="application/pdf,.pdf"
+                  className="w-full text-xs font-mono file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#111311] file:text-[#CEF23E] hover:file:bg-[#222622] file:cursor-pointer"
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  name="doc_certificate_url"
+                  defaultValue={initialDocs.certificate || ""}
+                  placeholder="Or enter certificate URL (https://...)"
+                  className="w-full px-4 py-2 rounded-2xl bg-white text-xs text-[#111311] outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Document 4: Installation Manual */}
+          <div className="p-5 rounded-3xl bg-[#EDEDED]/60 border border-[#DDE1DC] space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-mono font-bold text-[#111311] flex items-center gap-1.5">
+                <FileCheck className="w-3.5 h-3.5" />
+                <span>4. Installation & O&M Manual</span>
+              </label>
+              {initialDocs.manual && (
+                <a
+                  href={initialDocs.manual}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs font-mono text-[#111311] underline inline-flex items-center gap-1 font-medium"
+                >
+                  <span>Current File</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              )}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <input
+                  type="file"
+                  name="doc_manual_file"
+                  accept="application/pdf,.pdf"
+                  className="w-full text-xs font-mono file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#111311] file:text-[#CEF23E] hover:file:bg-[#222622] file:cursor-pointer"
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  name="doc_manual_url"
+                  defaultValue={initialDocs.manual || ""}
+                  placeholder="Or enter installation manual URL (https://...)"
+                  className="w-full px-4 py-2 rounded-2xl bg-white text-xs text-[#111311] outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Document 5: Factory Test Report */}
+          <div className="p-5 rounded-3xl bg-[#EDEDED]/60 border border-[#DDE1DC] space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-mono font-bold text-[#111311] flex items-center gap-1.5">
+                <FileText className="w-3.5 h-3.5" />
+                <span>5. Factory Test / Flash Test Report</span>
+              </label>
+              {initialDocs.testReport && (
+                <a
+                  href={initialDocs.testReport}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs font-mono text-[#111311] underline inline-flex items-center gap-1 font-medium"
+                >
+                  <span>Current File</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              )}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <input
+                  type="file"
+                  name="doc_test_report_file"
+                  accept="application/pdf,.pdf"
+                  className="w-full text-xs font-mono file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#111311] file:text-[#CEF23E] hover:file:bg-[#222622] file:cursor-pointer"
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  name="doc_test_report_url"
+                  defaultValue={initialDocs.testReport || ""}
+                  placeholder="Or enter test report URL (https://...)"
+                  className="w-full px-4 py-2 rounded-2xl bg-white text-xs text-[#111311] outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Document 6: Packing Sheet */}
+          <div className="p-5 rounded-3xl bg-[#EDEDED]/60 border border-[#DDE1DC] space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-mono font-bold text-[#111311] flex items-center gap-1.5">
+                <Package className="w-3.5 h-3.5" />
+                <span>6. Packing Sheet / Dimension Details</span>
+              </label>
+              {initialDocs.packingSheet && (
+                <a
+                  href={initialDocs.packingSheet}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs font-mono text-[#111311] underline inline-flex items-center gap-1 font-medium"
+                >
+                  <span>Current File</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              )}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <input
+                  type="file"
+                  name="doc_packing_sheet_file"
+                  accept="application/pdf,.pdf"
+                  className="w-full text-xs font-mono file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#111311] file:text-[#CEF23E] hover:file:bg-[#222622] file:cursor-pointer"
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  name="doc_packing_sheet_url"
+                  defaultValue={initialDocs.packingSheet || ""}
+                  placeholder="Or enter packing sheet URL (https://...)"
+                  className="w-full px-4 py-2 rounded-2xl bg-white text-xs text-[#111311] outline-none"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

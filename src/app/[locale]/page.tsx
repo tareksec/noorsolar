@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { getCategories } from "@/lib/data/categories";
-import { getFeaturedProducts } from "@/lib/data/products";
+import { getFeaturedProducts, getAllProducts } from "@/lib/data/products";
 import { getSiteSettings } from "@/lib/data/settings";
 import {
   getStats,
@@ -12,6 +12,8 @@ import {
   getTestimonials,
   getFaqItems,
 } from "@/lib/data/content";
+import { getPublishedProjects } from "@/lib/data/projects";
+import { ProjectsShowcase } from "@/components/sections/projects-showcase";
 
 import { HeroSection } from "@/components/sections/hero-section";
 import { CategoryDock } from "@/components/sections/category-dock";
@@ -25,9 +27,10 @@ import { WhyChooseUs } from "@/components/sections/why-choose-us";
 import { SustainabilityImpact } from "@/components/sections/sustainability-impact";
 import { VideoCtaBanner } from "@/components/sections/video-cta-banner";
 import { DynamicHomeSections } from "@/components/sections/dynamic-home-sections";
-import { FeaturedCarousel } from "@/components/sections/featured-carousel";
-import { SitePreloader } from "@/components/ui/site-preloader";
+import { HomeProductsTabs } from "@/components/sections/home-products-tabs";
+import { BuyerSegmentation } from "@/components/sections/buyer-segmentation";
 import { HomeContactBanner } from "@/components/sections/home-contact-banner";
+import { SITE_URL } from "@/lib/site-config";
 
 export const revalidate = 60; // On-demand or 60s cache revalidation
 
@@ -42,7 +45,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
 
   return {
     title: isBn
@@ -86,51 +89,70 @@ export default async function HomePage({
   const [
     categories,
     featuredProducts,
+    allProducts,
     settings,
     stats,
     certifications,
     partners,
     testimonials,
     faqItems,
+    projects,
   ] = await Promise.all([
     getCategories(locale),
     getFeaturedProducts(locale),
+    getAllProducts({ locale }),
     getSiteSettings(locale),
     getStats(locale),
     getCertifications(locale),
     getPartners(),
     getTestimonials(locale),
     getFaqItems(locale),
+    getPublishedProjects(locale),
   ]);
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
+
+  // Only include non-empty, verified social profile URLs
+  const verifiedSameAs = Object.values(settings.socials || {}).filter(
+    (url): url is string =>
+      typeof url === "string" &&
+      url.trim().length > 0 &&
+      !url.includes("example.com")
+  );
 
   const orgJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Noor Solar Energy",
+    alternateName: "নূর সোলার এনার্জি",
     url: siteUrl,
     logo: `${siteUrl}/brand/logo-default.png`,
+    image: `${siteUrl}/brand/logo-default.png`,
     description:
       settings.description ||
       "Direct importer and bulk wholesale supplier of solar equipment in Bangladesh.",
+    email: settings.email || "info@noorsolaren.com",
+    telephone: settings.phone || "+8801884611888",
     address: {
       "@type": "PostalAddress",
-      streetAddress: settings.address || "Dhaka, Bangladesh",
-      addressLocality: "Dhaka",
+      streetAddress: settings.address || "House-38 (Flat-1A), Road-5/A, Sector-5, Uttara, Dhaka-1230, Bangladesh",
+      addressLocality: "Uttara, Dhaka",
+      postalCode: "1230",
       addressCountry: "BD",
     },
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: settings.phone || "+8801700000000",
+      telephone: settings.phone || "+8801884611888",
       contactType: "customer service",
+      email: settings.email || "info@noorsolaren.com",
       areaServed: "BD",
+      availableLanguage: ["English", "Bengali"],
     },
+    ...(verifiedSameAs.length > 0 ? { sameAs: verifiedSameAs } : {}),
   };
 
   return (
     <>
-      <SitePreloader />
       {/* Schema.org Organization Structured Data */}
       <script
         type="application/ld+json"
@@ -152,17 +174,20 @@ export default async function HomePage({
       {/* 3. Category Dock ("What We Offer") */}
       <CategoryDock categories={categories} locale={locale} />
 
-      {/* 4. Shop Solar (Featured Products Carousel) */}
-      <FeaturedCarousel products={featuredProducts} locale={locale} />
+      {/* 4. Products Tabbed Section (Solar, Battery, Inverter - 4x2 Grid) */}
+      <HomeProductsTabs products={allProducts} locale={locale} />
 
       {/* 5. Business Statistics Band (Server Component - 4 Counters) */}
       <StatsBand stats={stats} />
 
-      {/* 4. Complete Solar Solutions For Every Project (Design Match) */}
+      {/* 6. B2B Buyer Segmentation (EPCs, Industrial & Commercial, Dealers) */}
+      <BuyerSegmentation locale={locale} />
+
+      {/* 7. Complete Solar Solutions For Every Project (Design Match) */}
       <ServicesSolutions locale={locale} />
 
       {/* 5. Trusted Expertise & Key Metrics (Design Match) */}
-      <WhyChooseUs locale={locale} />
+      <WhyChooseUs locale={locale} stats={stats} />
 
       {/* 6. Built for Lower Impact & Cost Efficiency (Design Match) */}
       <SustainabilityImpact locale={locale} />
@@ -183,6 +208,9 @@ export default async function HomePage({
 
       {/* 8. Partners and Clients Strip (Server Component) */}
       <PartnersStrip partners={partners} locale={locale} />
+
+      {/* 9. Verified Project Supply References (cleanly hidden if database has no published projects) */}
+      <ProjectsShowcase projects={projects} locale={locale} />
 
       {/* Below-the-fold Animated Sections (Dynamic Client-Side Only to keep initial JS bundle small) */}
       <DynamicHomeSections

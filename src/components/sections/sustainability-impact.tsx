@@ -22,31 +22,35 @@ export function SustainabilityImpact({ locale }: SustainabilityImpactProps = {})
 
   const impactItems: ImpactItem[] = [
     {
-      badge: isBn ? "ভবিষ্যতের জন্য প্রস্তুত" : "Future ready",
+      badge: isBn ? "পরিবেশ ও ESG কমপ্লায়েন্স" : "ESG & Export Compliance",
       title: isBn
-        ? "আপনার ব্যবসার দীর্ঘমেয়াদী সমৃদ্ধির উপযোগী"
-        : "Built for a lower impact on your business future",
+        ? "পোশাক ও রপ্তানিমুখী শিল্পের জন্য টেকসই গ্রিন এনার্জি"
+        : "Lowering Industrial Carbon Footprints for Global Compliance",
       description: isBn
-        ? "টেকসই নবায়নযোগ্য জ্বালানি এখন ব্যবসায়িক মানদণ্ড। আপনার বাণিজ্যিক পরিচালন ক্ষমতাকে সরকারি নীতিমালা এবং পরিবেশগত দায়িত্বের সাথে সামঞ্জস্যপূর্ণ করুন।"
-        : "Sustainability is becoming a business standard, not a trend. Align your operations with regulations, market expectations, and environmental responsibility.",
-      buttonText: isBn ? "বিশেষজ্ঞের সাথে কথা বলুন" : "Talk to an expert",
+        ? "আন্তর্জাতিক বায়ারদের কঠোর ESG কমপ্লায়েন্স অডিট পূরণ করতে শিল্প কারখানার রুফটপ সোলার এখন অত্যন্ত কার্যকরী। অন-সাইট গ্রিন এনার্জি ব্যবহারে কারখানার কার্বন ফুটপ্রিন্ট সরাসরি কমে এবং রপ্তানি সক্ষমতা বৃদ্ধি পায়।"
+        : "Meeting international export standards and buyer ESG audits requires documented clean energy adoption. Industrial rooftop PV directly cuts factory Scope 2 emissions while satisfying global supply chain sustainability mandates.",
+      buttonText: isBn ? "সেলস টিমের সাথে কথা বলুন" : "Contact Commercial Sales",
       buttonHref: "/contact",
-      imageSrc: "/photos/impact-future-ready.webp",
-      imageAlt: isBn ? "বায়ুকল সহ পরিবেশবান্ধব সবুজ পাহাড়" : "Green hillside landscape with clean energy wind turbines",
+      imageSrc: "/photos/impact-esg-compliance.webp",
+      imageAlt: isBn
+        ? "রপ্তানিমুখী পোশাক কারখানায় আধুনিক রুফটপ সোলার প্যানেল ও পরিবেশবান্ধব ESG কমপ্লায়েন্স"
+        : "Modern industrial rooftop solar installation for ESG export compliance",
       reverse: false,
     },
     {
-      badge: isBn ? "ব্যয় সাশ্রয়ী" : "Cost efficiency",
+      badge: isBn ? "দীর্ঘমেয়াদী LCOE বিদ্যুৎ খরচ সাশ্রয়" : "Levelized Cost of Energy",
       title: isBn
-        ? "বিদ্যুৎ অপচয় কমান, অপারেশনাল ও এনার্জি খরচ সাশ্রয় করুন"
-        : "Reduce waste, lower hidden operational and energy costs",
+        ? "পিক আওয়ার গ্রিড ট্যারিফ ও জেনারেটরের জ্বালানি খরচ হ্রাস"
+        : "Mitigate Grid Tariff Spikes & Unpredictable Generator Costs",
       description: isBn
-        ? "বিদ্যুৎ অপচয় এবং জ্বালানি ঘাটতি ব্যবসায়িক মুনাফায় প্রভাব ফেলে। আধুনিক সোলার সিস্টেম বিদ্যুৎ খরচ উল্লেখযোগ্যভাবে কমিয়ে উৎপাদনের স্থিতিশীলতা নিশ্চিত করে।"
-        : "Energy loss, emissions, and resource inefficiencies create real financial impact. Optimising systems helps cut costs while improving performance and stability.",
-      buttonText: isBn ? "পরামর্শ নিন" : "Talk to an expert",
+        ? "গ্রিড বিদ্যুতের ক্রমাগত ট্যারিফ বৃদ্ধি এবং ডিজেল জেনারেটরের অতিরিক্ত খরচ কমাতে অন-সাইট সোলার বিদ্যুৎ সবচেয়ে নির্ভরযোগ্য সমাধান। ৩ থেকে ৪ বছরের পে-ব্যাক পিরিয়ডে দীর্ঘ ২৫ বছর পর্যন্ত কারখানার বিদ্যুৎ খরচ কমিয়ে রাখা সম্ভব।"
+        : "High peak commercial utility tariffs and volatile diesel fuel expenses directly impact operating margins. High-yield commercial solar arrays stabilize manufacturing kilowatt-hour costs with predictable 3 to 4 year capital payback timelines.",
+      buttonText: isBn ? "বাণিজ্যিক কোটেশন নিন" : "Request Commercial Quote",
       buttonHref: "/contact",
-      imageSrc: "/photos/impact-cost-efficiency.webp",
-      imageAlt: isBn ? "সবুজ মাঠে সোলার ফটোভোলটাইক প্যানেল ইনস্টলেশন" : "Solar photovoltaic panels installed across a green field",
+      imageSrc: "/photos/impact-lcoe-savings.webp",
+      imageAlt: isBn
+        ? "শিল্প কারখানার ছাদে সোলার বিদ্যুৎ উৎপাদন মনিটরিং ও LCOE খরচ সাশ্রয় বিশ্লেষণ"
+        : "Industrial solar engineer monitoring real-time power generation and LCOE cost savings on tablet",
       reverse: true,
     },
   ];

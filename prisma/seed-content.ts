@@ -5,10 +5,10 @@ export const sampleStats = [
     value: 8,
     prefix: null,
     suffix: "+",
-    description: "Established presence supplying commercial installations across Bangladesh",
-    descriptionBn: "সারা বাংলাদেশে বাণিজ্যিক প্রকল্পে সোলার ইকুইপমেন্ট সরবরাহের দীর্ঘ অভিজ্ঞতা",
+    description: "Commercial solar equipment supply and trade presence across Bangladesh",
+    descriptionBn: "সারা বাংলাদেশে বাণিজ্যিক সোলার ইকুইপমেন্ট সরবরাহের অভিজ্ঞতা",
     sortOrder: 1,
-    isActive: true,
+    isActive: false, // Disabled until business tenure is verified by owner
     isSample: true,
   },
   {
@@ -17,34 +17,22 @@ export const sampleStats = [
     value: 250,
     prefix: null,
     suffix: "+",
-    description: "Industrial rooftops, commercial facilities, and rural telecom setups",
-    descriptionBn: "শিল্প কারখানার ছাদ, বাণিজ্যিক প্রতিষ্ঠান ও টেলিকম টাওয়ার প্রকল্প",
+    description: "Industrial rooftops, commercial facilities, and EPC projects supplied",
+    descriptionBn: "শিল্প কারখানা, বাণিজ্যিক প্রতিষ্ঠান ও ইপিসি প্রকল্পে সরঞ্জাম সরবরাহ",
     sortOrder: 2,
-    isActive: true,
+    isActive: false, // Disabled until project count is verified by owner
     isSample: true,
   },
   {
-    label: "Happy clients",
-    labelBn: "সন্তুষ্ট গ্রাহক",
+    label: "Commercial clients",
+    labelBn: "বাণিজ্যিক ক্লায়েন্ট",
     value: 180,
     prefix: null,
     suffix: "+",
-    description: "Commercial buyers, solar contractors, and institutional facilities",
-    descriptionBn: "বাণিজ্যিক ক্রেতা, সোলার কন্ট্রাক্টর ও বিভিন্ন প্রতিষ্ঠান",
+    description: "Commercial buyers, solar dealers, and institutional procurement partners",
+    descriptionBn: "বাণিজ্যিক ক্রেতা, সোলার ডিলার ও প্রাতিষ্ঠানিক সরবরাহ পার্টনার",
     sortOrder: 3,
-    isActive: true,
-    isSample: true,
-  },
-  {
-    label: "Success rate",
-    labelBn: "সফলতার হার",
-    value: 98,
-    prefix: null,
-    suffix: "%",
-    description: "On-schedule equipment fulfillment and specification accuracy",
-    descriptionBn: "সঠিক সময়ে পণ্য সরবরাহ এবং নিখুঁত স্পেসিফিকেশন রক্ষা",
-    sortOrder: 4,
-    isActive: true,
+    isActive: false, // Disabled until client count is verified by owner
     isSample: true,
   },
 ];
@@ -60,55 +48,7 @@ export const sampleCertifications = [
     image: "/photos/bsrea-logo.png",
     sortOrder: 1,
     isActive: true,
-    isSample: true,
-  },
-  {
-    name: "Quality management certificate",
-    nameBn: "কোয়ালিটি ম্যানেজমেন্ট সনদ",
-    issuer: "Standard Inspection Board",
-    issuerBn: "স্ট্যান্ডার্ড ইন্সপেকশন বোর্ড",
-    description: "Verified quality management processes for commercial solar equipment distribution",
-    descriptionBn: "বাণিজ্যিক সোলার যন্ত্রপাতি আমদানিতে যাচাইকৃত মান নিয়ন্ত্রণ প্রক্রিয়া",
-    image: "/demo/cert-quality.svg",
-    sortOrder: 2,
-    isActive: true,
-    isSample: true,
-  },
-  {
-    name: "Product testing certificate",
-    nameBn: "পণ্য পরীক্ষণ ও টেস্টিং সনদ",
-    issuer: "Accredited Laboratory",
-    issuerBn: "স্বীকৃত আন্তর্জাতিক ল্যাবরেটরি",
-    description: "Factory electrical performance and laboratory testing verification",
-    descriptionBn: "কারখানা পর্যায়ে বৈদ্যুতিক কর্মক্ষমতা ও ল্যাবরেটরি টেস্ট যাচাইকরণ",
-    image: "/demo/cert-testing.svg",
-    sortOrder: 3,
-    isActive: true,
-    isSample: true,
-  },
-  {
-    name: "Safety compliance certificate",
-    nameBn: "নিরাপত্তা ও কমপ্লায়েন্স সনদ",
-    issuer: "Safety Standards Authority",
-    issuerBn: "সেফটি স্ট্যান্ডার্ডস অথরিটি",
-    description: "Electrical safety, insulation, and dielectric compliance standards",
-    descriptionBn: "বৈদ্যুতিক সুরক্ষা, ইনসুলেশন ও ডাই-ইলেকট্রিক মানদণ্ড পূরণ",
-    image: "/demo/cert-safety.svg",
-    sortOrder: 4,
-    isActive: true,
-    isSample: true,
-  },
-  {
-    name: "Trade license",
-    nameBn: "ট্রেড লাইসেন্স",
-    issuer: "Municipal Corporation",
-    issuerBn: "সিটি কর্পোরেশন",
-    description: "Registered commercial solar equipment import, trade, and supply operations",
-    descriptionBn: "সৌর বিদ্যুৎ সামগ্রী আমদানি ও পাইকারি বাণিজ্যের বৈধ নিবন্ধন",
-    image: "/demo/cert-license.svg",
-    sortOrder: 5,
-    isActive: true,
-    isSample: true,
+    isSample: false,
   },
 ];
 
@@ -122,50 +62,20 @@ export const samplePartners = [
   { name: "JA Solar", logo: "/demo/partners/jasolar.svg", url: "https://www.jasolar.com", sortOrder: 6, isActive: true, isSample: true },
 ];
 
-export const sampleTestimonials = [
-  {
-    quote: "“EcoPower helped us seamlessly transition to both solar and wind energy. Our costs have dropped significantly, and we’re now operating more sustainably than ever.”",
-    quoteBn: "“নূর সোলার এনার্জির প্যানেল ও ইনভার্টার ব্যবহার করে আমাদের কারখানার বিদ্যুৎ খরচ উল্লেখযোগ্যভাবে কমেছে। পণ্যগুলোর মান চমৎকার এবং ডেলিভারি ছিল একদম সময়মতো।”",
-    authorName: "Arif Hossain",
-    authorNameBn: "আরিফ হোসেন",
-    authorRole: "Business Owner",
-    authorRoleBn: "ব্যবস্থাপনা পরিচালক",
-    company: "EcoPower",
-    companyBn: "ইকোপাওয়ার সলিউশনস",
-    photo: "/photos/testimonial-arif.jpg",
-    sortOrder: 1,
-    isActive: true,
-    isSample: true,
-  },
-  {
-    quote: "“The hybrid wind and solar systems installed on our commercial properties cut grid reliance by 65%. Highly recommended team.”",
-    quoteBn: "“আমাদের বাণিজ্যিক স্থাপনার জন্য তাদের থেকে হাইব্রিড ইনভার্টার ও লিথিয়াম ব্যাটারি সংগ্রহ করি। গ্রিড বিদ্যুতের উপর নির্ভরতা প্রায় ৬৫% কমে গেছে। তাদের সাপোর্ট সত্যিই প্রশংসনীয়।”",
-    authorName: "Mahmud Karim",
-    authorNameBn: "মাহমুদ করিম",
-    authorRole: "Property Developer",
-    authorRoleBn: "প্রকল্প পরিচালক",
-    company: "Apex Developments",
-    companyBn: "অ্যাপেক্স ডেভেলপমেন্টস",
-    photo: "/photos/testimonial-mahmud.jpg",
-    sortOrder: 2,
-    isActive: true,
-    isSample: true,
-  },
-  {
-    quote: "“From initial engineering assessment through commissioning, the experience was flawless. Our production plant achieved ROI faster than projected.”",
-    quoteBn: "“ডেটাশিট ও স্পেসিফিকেশন মেলানো থেকে শুরু করে সাইটে ডেলিভারি—পুরো প্রক্রিয়াটি ছিল অত্যন্ত পেশাদার। আমাদের উৎপাদন ইউনিটের প্রত্যাশিত সময়ের আগেই চমৎকার রিটার্ন আসছে।”",
-    authorName: "Farhana Ahmed",
-    authorNameBn: "ফারহানা আহমেদ",
-    authorRole: "Industrial Plant Director",
-    authorRoleBn: "প্ল্যান্ট ডিরেক্টর",
-    company: "Delta Manufacturing",
-    companyBn: "ডেল্টা ম্যানুফ্যাকচারিং",
-    photo: "/photos/testimonial-farhana.jpg",
-    sortOrder: 3,
-    isActive: true,
-    isSample: true,
-  },
-];
+export const sampleTestimonials: Array<{
+  quote: string;
+  quoteBn?: string;
+  authorName: string;
+  authorNameBn?: string;
+  authorRole?: string;
+  authorRoleBn?: string;
+  company?: string;
+  companyBn?: string;
+  photo?: string;
+  sortOrder: number;
+  isActive: boolean;
+  isSample: boolean;
+}> = [];
 
 export const sampleFaqs = [
   {

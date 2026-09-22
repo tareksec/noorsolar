@@ -56,3 +56,4 @@ docs/bangla-review.md
 source-images/
 .audit/
 .cache/
+scratch-*.json

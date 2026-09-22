@@ -64,20 +64,20 @@ function LanguageSwitcherInner({
     <nav
       data-motion="lang-switch"
       aria-label="Language selector"
-      className={`relative inline-flex items-center p-1 rounded-full bg-[#111311]/5 border border-[#111311]/10 text-xs font-mono select-none ${className}`}
+      className={`relative inline-flex items-center gap-1.5 p-1 rounded-full bg-white/10 border border-white/15 text-xs font-mono select-none ${className}`}
     >
       {/* English Pill */}
       <a
         href={enHref}
         hrefLang="en"
         lang="en"
-        aria-label="Switch to English language"
+        aria-label="EN - Switch to English"
         aria-current={activeLocale === "en" ? "true" : undefined}
         onClick={() => setLocaleCookie("en")}
-        className={`relative z-10 px-2.5 sm:px-3 py-1 rounded-full font-bold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] ${
+        className={`relative z-10 min-h-[38px] min-w-[38px] inline-flex items-center justify-center px-3 py-1.5 rounded-full font-bold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FEBE16] ${
           activeLocale === "en"
-            ? "text-[#111311]"
-            : "text-[#5C605C] hover:text-[#111311]"
+            ? "text-[#052F25] font-extrabold"
+            : "text-white/80 hover:text-white"
         }`}
       >
         {activeLocale === "en" && (
@@ -92,7 +92,7 @@ function LanguageSwitcherInner({
                     damping: motionTokens.ease.springQuick.damping,
                   }
             }
-            className="absolute inset-0 z-[-1] rounded-full bg-[#CEF23E] shadow-xs"
+            className="absolute inset-0 z-[-1] rounded-full bg-[#FEBE16] shadow-xs"
           />
         )}
         <span>EN</span>
@@ -103,13 +103,13 @@ function LanguageSwitcherInner({
         href={bnHref}
         hrefLang="bn"
         lang="bn"
-        aria-label="Switch to Bangla language"
+        aria-label="বাংলা - বাংলায় দেখুন (BN)"
         aria-current={activeLocale === "bn" ? "true" : undefined}
         onClick={() => setLocaleCookie("bn")}
-        className={`relative z-10 px-2.5 sm:px-3 py-1 rounded-full font-bold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] ${
+        className={`relative z-10 min-h-[38px] min-w-[38px] inline-flex items-center justify-center px-3 py-1.5 rounded-full font-bold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FEBE16] ${
           activeLocale === "bn"
-            ? "text-[#111311]"
-            : "text-[#5C605C] hover:text-[#111311]"
+            ? "text-[#052F25] font-extrabold"
+            : "text-white/80 hover:text-white"
         }`}
       >
         {activeLocale === "bn" && (
@@ -124,7 +124,7 @@ function LanguageSwitcherInner({
                     damping: motionTokens.ease.springQuick.damping,
                   }
             }
-            className="absolute inset-0 z-[-1] rounded-full bg-[#CEF23E] shadow-xs"
+            className="absolute inset-0 z-[-1] rounded-full bg-[#FEBE16] shadow-xs"
           />
         )}
         {/* Adapts at narrow width (360px) to prevent any clipping */}

@@ -1,9 +1,9 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, Award, Handshake, Quote, HelpCircle } from "lucide-react";
+import { BarChart3, Award, Handshake, Quote, HelpCircle, Briefcase } from "lucide-react";
 import type { SampleContentSummary } from "@/lib/data/content";
 
 export function ContentTabs({
@@ -19,6 +19,7 @@ export function ContentTabs({
     { label: "Partners", href: "/admin/content/partners", icon: Handshake, key: "partners", countKey: "partnersCount" },
     { label: "Testimonials", href: "/admin/content/testimonials", icon: Quote, key: "testimonials", countKey: "testimonialsCount" },
     { label: "FAQ Items", href: "/admin/content/faq", icon: HelpCircle, key: "faq", countKey: "faqCount" },
+    { label: "Projects & Proof", href: "/admin/content/projects", icon: Briefcase, key: "projects", countKey: "projectsCount" },
   ];
 
   return (

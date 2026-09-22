@@ -29,7 +29,7 @@ export function BusinessImpact() {
               href="/contact#quote-section"
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#2D6A4F] hover:bg-[#23553E] text-white font-medium text-sm transition-all duration-300 shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0"
             >
-              <span>Talk to an expert</span>
+              <span>Contact Sales</span>
               <ArrowUpRight size={16} className="text-white/80" />
             </Link>
           </div>
@@ -78,7 +78,7 @@ export function BusinessImpact() {
                 href="/contact#quote-section"
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#2D6A4F] hover:bg-[#23553E] text-white font-medium text-sm transition-all duration-300 shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0"
               >
-                <span>Talk to an expert</span>
+                <span>Request Quote</span>
                 <ArrowUpRight size={16} className="text-white/80" />
               </Link>
               <Link

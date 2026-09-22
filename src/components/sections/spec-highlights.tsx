@@ -65,15 +65,15 @@ export function SpecHighlights({ highlights }: SpecHighlightsProps) {
   ];
 
   return (
-    <section ref={containerRef} className="py-20 bg-[#E4E7E4]">
+    <section ref={containerRef} className="py-20 bg-[#F1F4F1]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="p-8 sm:p-12 lg:p-16 rounded-[36px] bg-[#111311] text-white shadow-2xl relative overflow-hidden">
+        <div className="p-8 sm:p-12 lg:p-16 rounded-[36px] bg-[#074031] text-white shadow-2xl relative overflow-hidden">
           {/* Ambient Glow */}
-          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#CEF23E]/10 blur-[100px] rounded-full pointer-events-none" />
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#FEBE16]/10 blur-[100px] rounded-full pointer-events-none" />
 
           <div className="relative z-10 mb-12 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-mono text-[#CEF23E] mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-mono text-[#FEBE16] mb-3">
               <span>Hardware Technical Specs</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
@@ -90,20 +90,20 @@ export function SpecHighlights({ highlights }: SpecHighlightsProps) {
               return (
                 <div
                   key={idx}
-                  className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-[#CEF23E]/50 transition-colors"
+                  className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-[#FEBE16]/50 transition-colors"
                 >
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-xs font-mono text-[#A0A4A0] uppercase tracking-wider">
                       {m.label}
                     </span>
-                    <Icon className="w-5 h-5 text-[#CEF23E]" />
+                    <Icon className="w-5 h-5 text-[#FEBE16]" />
                   </div>
 
                   <div className="flex items-baseline gap-1 my-2">
                     <span className="text-4xl sm:text-5xl font-bold font-mono tracking-tight text-white">
                       {inView ? m.value : 0}
                     </span>
-                    <span className="text-xl font-bold font-mono text-[#CEF23E]">
+                    <span className="text-xl font-bold font-mono text-[#FEBE16]">
                       {m.suffix}
                     </span>
                   </div>

@@ -16,8 +16,8 @@ export function Header({
 }: HeaderProps) {
   return (
     <AnimatedNavFramer
-      brandName="Noor Solar"
-      ctaText={currentLocale === "bn" ? "যোগাযোগ করুন" : "Book A Call"}
+      brandName="Noor Solar Energy"
+      ctaText={currentLocale === "bn" ? "যোগাযোগ করুন" : "Contact Sales"}
       ctaHref="/contact"
       showBlog={showBlog}
       currentLocale={currentLocale}

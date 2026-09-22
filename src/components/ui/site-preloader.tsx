@@ -129,7 +129,7 @@ export function SitePreloader() {
       const animation = gsap.timeline({ onComplete: finish });
       animation
         .to(icons, { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(1.4)" }, 0.1)
-        .to(icons, { filter: "drop-shadow(0 0 18px rgba(205,243,0,0.7))", duration: 0.22, yoyo: true, repeat: 1 }, 0.85)
+        .to(icons, { filter: "drop-shadow(0 0 18px rgba(254,190,22,0.7))", duration: 0.22, yoyo: true, repeat: 1 }, 0.85)
         .to({}, { duration: 0.3 });
       timeline = animation;
 

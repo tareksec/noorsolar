@@ -222,6 +222,32 @@ model ProductReview {
   status     String   @default("PENDING") // "PENDING" | "APPROVED" | "REJECTED"
   source     String   @default("PUBLIC") // "ADMIN" | "PUBLIC"
   createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
 }
 
+model Project {
+  id                 String   @id @default(cuid())
+  slug               String   @unique
+  title              String
+  titleBn            String?
+  clientName         String?
+  clientNameBn       String?
+  location           String?
+  locationBn         String?
+  projectType        String?  // ROOFTOP, GROUND_MOUNT, FACTORY, COMMERCIAL, HYBRID
+  projectTypeBn      String?
+  productsSupplied   String?  // e.g. "620W N-Type TOPCon Panels, 30kW Inverters"
+  productsSuppliedBn String?
+  capacity           String?  // e.g. "500 kWp", "1.2 MWp"
+  capacityBn         String?
+  completionDate     String?  // e.g. "2024" or "Q3 2024"
+  summary            String?  @db.Text
+  summaryBn          String?  @db.Text
+  image              String?
+  gallery            String?  @db.Text // JSON array of image URLs
+  clientLogo         String?
+  sortOrder          Int      @default(0)
+  isPublished        Boolean  @default(false)
+  isSample           Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}

@@ -10,12 +10,38 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { SiteConfig } from "@/lib/site-config";
-import { LanguageSwitcher } from "@/components/ui/language-switcher";
 
 interface FooterProps {
   settings: SiteConfig;
   showBlog?: boolean;
   locale?: string;
+}
+
+function isValidSocialUrl(url?: string | null): boolean {
+  if (!url) return false;
+  const trimmed = url.trim().toLowerCase();
+  if (
+    trimmed === "" ||
+    trimmed === "https://facebook.com" ||
+    trimmed === "https://facebook.com/" ||
+    trimmed === "https://www.facebook.com" ||
+    trimmed === "https://www.facebook.com/" ||
+    trimmed === "https://linkedin.com" ||
+    trimmed === "https://linkedin.com/" ||
+    trimmed === "https://www.linkedin.com" ||
+    trimmed === "https://www.linkedin.com/" ||
+    trimmed === "https://youtube.com" ||
+    trimmed === "https://youtube.com/" ||
+    trimmed === "https://www.youtube.com" ||
+    trimmed === "https://www.youtube.com/" ||
+    trimmed === "https://twitter.com" ||
+    trimmed === "https://twitter.com/" ||
+    trimmed === "https://x.com" ||
+    trimmed === "https://x.com/"
+  ) {
+    return false;
+  }
+  return true;
 }
 
 function FacebookIcon({ className }: { className?: string }) {
@@ -54,17 +80,17 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
   const currentYear = new Date().getFullYear();
   const isBn = locale === "bn";
 
-  const phoneRaw = settings.phone || "+8801700000000";
-  const phoneDisplay = settings.phoneDisplay || "+880 1700-000000";
+  const phoneRaw = (settings.phone || "+8801884611888").replace(/[^0-9+]/g, "");
+  const phoneDisplay = settings.phoneDisplay || "+880 1884-611888";
   const email = settings.email || "info@noorsolaren.com";
-  const address = settings.address || "Motijheel Commercial Area, Dhaka-1000, Bangladesh";
-  const hours = settings.hours || "Sat - Thu: 9:00 AM - 7:00 PM (Friday Closed)";
-  const whatsappNum = settings.whatsapp || "8801700000000";
-  const whatsappDisplay = settings.whatsappDisplay || "+880 1700-000000";
+  const address = settings.address || (isBn ? "হাউস-৩৮ (ফ্ল্যাট-১এ), রোড-৫/এ, সেক্টর-৫, উত্তরা, ঢাকা-১২৩০, বাংলাদেশ" : "House-38 (Flat-1A), Road-5/A, Sector-5, Uttara, Dhaka-1230, Bangladesh");
+  const hours = settings.hours || (isBn ? "শনি - বৃহস্পতি: সকাল ৯:০০ - সন্ধ্যা ৭:০০ (শুক্রবার বন্ধ)" : "Sat - Thu: 9:00 AM - 7:00 PM (Friday Closed)");
+  const whatsappNum = (settings.whatsapp || "8801884611888").replace(/[^0-9]/g, "");
+  const whatsappDisplay = settings.whatsappDisplay || "+880 1884-611888";
 
   return (
     <footer className="w-full px-3 sm:px-6 lg:px-8 pb-4 sm:pb-6 pt-8 relative overflow-hidden">
-      <div className="relative z-10 max-w-7xl mx-auto rounded-[36px] sm:rounded-[44px] bg-[#F5F7F3] border border-[#DCE2D8] shadow-[0_10px_35px_rgba(0,0,0,0.04)] overflow-hidden pt-12 sm:pt-16 px-6 sm:px-12 lg:px-16 flex flex-col justify-between">
+      <div className="relative z-10 max-w-7xl mx-auto rounded-[36px] sm:rounded-[44px] bg-[#074031] border border-[#0B513E] shadow-[0_16px_40px_rgba(7,64,49,0.25)] overflow-hidden pt-12 sm:pt-16 px-6 sm:px-12 lg:px-16 flex flex-col justify-between text-white">
         
         {/* Top Navigation & Contact Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 sm:pb-16 text-left">
@@ -74,41 +100,41 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
             <div>
               {/* Brand Logo */}
               <div className="mb-5">
-                <Link href="/" className="inline-block group">
+                <Link href="/" className="inline-flex items-center min-h-[44px] group">
                   <Image
-                    src="/brand/logo-default.png"
+                    src="/brand/logo-white.png"
                     alt="Noor Solar Energy"
                     width={200}
                     height={50}
-                    className="h-10 sm:h-11 w-auto object-contain group-hover:opacity-90 transition-opacity"
+                    className="h-11 w-auto object-contain group-hover:opacity-95 transition-opacity"
                   />
                 </Link>
               </div>
-              <p className="text-xs sm:text-[13px] text-[#5C6457] leading-relaxed mb-6 max-w-sm">
+              <p className="text-xs sm:text-[13px] text-white/80 leading-relaxed mb-6 max-w-sm">
                 {isBn
-                  ? "সরাসরি কন্টেইনার স্কেল আমদানিকারক এবং বাংলাদেশে টায়ার-১ সোলার প্যানেল, LiFePO4 ব্যাটারি ও হাইব্রিড ইনভার্টারের পাইকারি B2B সরবরাহকারী।"
-                  : "Direct container-scale importer and bulk B2B wholesale distributor of Tier-1 solar panels, LiFePO4 batteries, and hybrid inverters across Bangladesh."}
+                  ? "সরাসরি কন্টেইনার স্কেল আমদানিকারক এবং বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল, LiFePO4 ব্যাটারি ও হাইব্রিড ইনভার্টারের পাইকারি B2B সরবরাহকারী।"
+                  : "Direct container-scale importer and bulk B2B wholesale distributor of high-performance solar panels, LiFePO4 batteries, and hybrid inverters across Bangladesh."}
               </p>
 
               {/* Contact Information List with Icons */}
-              <div className="space-y-3 text-xs sm:text-[13px] text-[#333C2F]">
+              <div className="space-y-3 text-xs sm:text-[13px] text-white/90">
                 
                 {/* Address */}
                 <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-white border border-[#D5DAD0] flex items-center justify-center shrink-0 mt-0.5 text-[#111311]">
-                    <MapPin className="w-3.5 h-3.5 text-[#111311]" />
+                  <div className="w-6 h-6 rounded-full bg-[#052F25] border border-white/15 flex items-center justify-center shrink-0 mt-0.5 text-[#FEBE16]">
+                    <MapPin className="w-3.5 h-3.5" />
                   </div>
-                  <span className="leading-tight text-[#4F574A]">{address}</span>
+                  <span className="leading-tight text-white/80">{address}</span>
                 </div>
 
                 {/* Direct Phone */}
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-white border border-[#D5DAD0] flex items-center justify-center shrink-0 text-[#111311]">
-                    <Phone className="w-3.5 h-3.5 text-[#111311]" />
+                  <div className="w-6 h-6 rounded-full bg-[#052F25] border border-white/15 flex items-center justify-center shrink-0 text-[#FEBE16]">
+                    <Phone className="w-3.5 h-3.5" />
                   </div>
                   <a
                     href={`tel:${phoneRaw}`}
-                    className="font-medium text-[#111311] hover:text-[#426B1F] transition-colors"
+                    className="inline-flex items-center min-h-[44px] font-medium text-white hover:text-[#FEBE16] transition-colors"
                   >
                     {phoneDisplay}
                   </a>
@@ -116,27 +142,27 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
 
                 {/* WhatsApp Support */}
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-white border border-[#D5DAD0] flex items-center justify-center shrink-0 text-[#111311]">
-                    <MessageCircle className="w-3.5 h-3.5 text-[#111311]" />
+                  <div className="w-6 h-6 rounded-full bg-[#052F25] border border-white/15 flex items-center justify-center shrink-0 text-[#FEBE16]">
+                    <MessageCircle className="w-3.5 h-3.5" />
                   </div>
                   <a
                     href={`https://wa.me/${whatsappNum}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-medium text-[#111311] hover:text-[#426B1F] transition-colors"
+                    className="inline-flex items-center min-h-[44px] font-medium text-white hover:text-[#FEBE16] transition-colors"
                   >
-                    {whatsappDisplay} <span className="text-xs font-mono text-[#62705C]">{isBn ? "(হোয়াটসঅ্যাপ ডেস্ক)" : "(WhatsApp Desk)"}</span>
+                    {whatsappDisplay} <span className="text-xs font-mono text-[#FEBE16]/80">{isBn ? "(হোয়াটসঅ্যাপ ডেস্ক)" : "(WhatsApp Desk)"}</span>
                   </a>
                 </div>
 
                 {/* Email */}
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-white border border-[#D5DAD0] flex items-center justify-center shrink-0 text-[#111311]">
-                    <Mail className="w-3.5 h-3.5 text-[#111311]" />
+                  <div className="w-6 h-6 rounded-full bg-[#052F25] border border-white/15 flex items-center justify-center shrink-0 text-[#FEBE16]">
+                    <Mail className="w-3.5 h-3.5" />
                   </div>
                   <a
                     href={`mailto:${email}`}
-                    className="font-medium text-[#111311] hover:text-[#426B1F] transition-colors"
+                    className="inline-flex items-center min-h-[44px] font-medium text-white hover:text-[#FEBE16] transition-colors"
                   >
                     {email}
                   </a>
@@ -144,10 +170,10 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
 
                 {/* Hours */}
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-white border border-[#D5DAD0] flex items-center justify-center shrink-0 text-[#111311]">
-                    <Clock className="w-3.5 h-3.5 text-[#111311]" />
+                  <div className="w-6 h-6 rounded-full bg-[#052F25] border border-white/15 flex items-center justify-center shrink-0 text-[#FEBE16]">
+                    <Clock className="w-3.5 h-3.5" />
                   </div>
-                  <span className="text-xs text-[#62705C] font-mono">{hours}</span>
+                  <span className="text-xs text-white/70 font-mono">{hours}</span>
                 </div>
 
               </div>
@@ -156,14 +182,14 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
 
           {/* Col 2: Products & Catalog (2.5 cols) */}
           <div className="lg:col-span-3">
-            <h2 className="font-bold text-sm text-[#111311] tracking-tight mb-4">
+            <h2 className="font-bold text-sm text-white tracking-tight mb-4">
               {isBn ? "সরঞ্জাম ক্যাটালগ" : "Equipment Catalog"}
             </h2>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-[#4F574A]">
+            <ul className="space-y-1 text-xs sm:text-sm text-white/75">
               <li>
                 <Link
                   href="/products?category=solar-panels"
-                  className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all"
+                  className="hover:text-[#FEBE16] hover:translate-x-1 inline-flex items-center gap-1.5 min-h-[44px] transition-all"
                 >
                   <span>{isBn ? "এন-টাইপ TOPCon প্যানেল (585W–620W)" : "N-Type TOPCon Panels (585W–620W)"}</span>
                 </Link>
@@ -171,7 +197,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
               <li>
                 <Link
                   href="/products?category=lithium-batteries"
-                  className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all"
+                  className="hover:text-[#FEBE16] hover:translate-x-1 inline-flex items-center gap-1.5 min-h-[44px] transition-all"
                 >
                   <span>{isBn ? "LiFePO4 স্টোরেজ ব্যাংক (48V / 51.2V)" : "LiFePO4 Storage Banks (48V / 51.2V)"}</span>
                 </Link>
@@ -179,7 +205,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
               <li>
                 <Link
                   href="/products?category=solar-inverters"
-                  className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all"
+                  className="hover:text-[#FEBE16] hover:translate-x-1 inline-flex items-center gap-1.5 min-h-[44px] transition-all"
                 >
                   <span>{isBn ? "হাইব্রিড ও থ্রি-ফেজ ইনভার্টার" : "Hybrid & Three-Phase Inverters"}</span>
                 </Link>
@@ -187,7 +213,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
               <li>
                 <Link
                   href="/products"
-                  className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all"
+                  className="hover:text-[#FEBE16] hover:translate-x-1 inline-flex items-center gap-1.5 min-h-[44px] transition-all"
                 >
                   <span>{isBn ? "সম্পূর্ণ পাইকারি ইনভেন্টরি দেখুন" : "Browse Full Wholesale Inventory"}</span>
                 </Link>
@@ -195,9 +221,9 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
               <li>
                 <Link
                   href="/contact"
-                  className="hover:text-[#111311] hover:translate-x-1 inline-flex items-center gap-1.5 transition-all font-semibold text-[#111311]"
+                  className="hover:text-[#E4A900] hover:translate-x-1 inline-flex items-center gap-1.5 min-h-[44px] transition-all font-semibold text-[#FEBE16]"
                 >
-                  <span>{isBn ? "কন্টেইনার ক্রয়ের কোটেশন চান" : "Request Container Procurement Quote →"}</span>
+                  <span>{isBn ? "কন্টেইনার ক্রয়ের কোটেশন নিন" : "Request Container Procurement Quote →"}</span>
                 </Link>
               </li>
             </ul>
@@ -205,175 +231,191 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
 
           {/* Col 3: Company & Information (2.5 cols) */}
           <div className="lg:col-span-2">
-            <h2 className="font-bold text-sm text-[#111311] tracking-tight mb-4">
+            <h2 className="font-bold text-sm text-white tracking-tight mb-4">
               {isBn ? "কোম্পানি" : "Company"}
             </h2>
-            <ul className="space-y-2.5 text-xs sm:text-sm text-[#4F574A]">
+            <ul className="space-y-1 text-xs sm:text-sm text-white/75">
               <li>
-                <Link href="/about" className="hover:text-[#111311] transition-colors">
-                  {isBn ? "নূর সোলার পরিচিতি" : "About Noor Solar"}
+                <Link href="/about" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors">
+                  {isBn ? "নূর সোলার এনার্জি পরিচিতি" : "About Noor Solar Energy"}
                 </Link>
               </li>
               <li>
-                <Link href="/#process" className="hover:text-[#111311] transition-colors">
+                <Link href="/#process" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors">
                   {isBn ? "অর্ডার প্রক্রিয়া" : "Ordering Process"}
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-[#111311] transition-colors">
+                <Link href="/contact" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors">
                   {isBn ? "সেলস ডেস্কে যোগাযোগ" : "Contact Sales Desk"}
                 </Link>
               </li>
               <li>
-                <Link href="/#faq" className="hover:text-[#111311] transition-colors">
+                <Link href="/#faq" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors">
                   {isBn ? "প্রশ্নোত্তর ও সহায়তা" : "FAQ & Support"}
                 </Link>
               </li>
               <li>
-                <Link href="/certifications" className="hover:text-[#111311] transition-colors font-medium">
+                <Link href="/certifications" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors font-medium">
                   {isBn ? "সার্টিফিকেশন ও মানদণ্ড" : "Certifications & Standards"}
                 </Link>
               </li>
               {showBlog && (
                 <li>
-                  <Link href="/blog" className="hover:text-[#111311] transition-colors font-medium">
+                  <Link href="/blog" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors font-medium">
                     {isBn ? "কারিগরি ব্লগ" : "Technical Blog"}
                   </Link>
                 </li>
               )}
-              <li>
-                <Link href="/admin/login" className="hover:text-[#111311] transition-colors text-xs text-[#4F574A]">
-                  {isBn ? "স্টাফ পোর্টাল" : "B2B Staff Portal"}
-                </Link>
-              </li>
             </ul>
           </div>
 
-          {/* Col 4: Affiliations & Social Icons (3 cols) */}
-          <div className="lg:col-span-3 flex flex-col justify-between">
-            <div>
-              <h2 className="font-bold text-sm text-[#111311] tracking-tight mb-4">
-                {isBn ? "স্বীকৃতি ও কমপ্লায়েন্স" : "Affiliation & Compliance"}
-              </h2>
+          {/* Col 4: Industry Certification & Membership (3 cols) */}
+          <div className="lg:col-span-3">
+            <h2 className="font-bold text-sm text-white tracking-tight mb-4">
+              {isBn ? "শিল্প সমিতি সদস্যপদ" : "Industry Membership"}
+            </h2>
 
-              {/* BSREA Membership Verified Badge Card */}
-              <div className="p-3.5 rounded-2xl bg-white border border-[#D5DAD0] shadow-2xs mb-5">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="relative w-8 h-8 rounded-lg overflow-hidden bg-white border border-[#E0E5DC] shrink-0 flex items-center justify-center p-0.5">
-                    <Image
-                      src="/photos/bsrea-logo.png"
-                      alt="BSREA Logo"
-                      width={32}
-                      height={32}
-                      className="object-contain w-full h-full"
-                    />
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-[#111311] block leading-tight">
-                      {isBn ? "BSREA নিবন্ধিত সদস্য" : "BSREA Registered Member"}
-                    </span>
-                    <span className="text-xs font-mono text-[#6A7465]">
-                      No. 20260915GEN113
-                    </span>
-                  </div>
+            {/* BSREA Member Badge Card */}
+            <div className="p-4 rounded-2xl bg-[#052F25] border border-white/15 mb-6 shadow-2xs">
+              <div className="flex items-center gap-3 mb-2.5">
+                <div className="w-10 h-10 rounded-xl bg-[#074031] border border-white/10 flex items-center justify-center shrink-0">
+                  <Image
+                    src="/photos/bsrea-logo.png"
+                    alt={isBn ? "বিএসআরইএ লোগো" : "BSREA Logo"}
+                    width={36}
+                    height={36}
+                    className="object-contain"
+                  />
                 </div>
-                <a
-                  href="https://drive.google.com/file/d/1GR4hILXnDjJblqNmrxRNnWH_M7It4Md2/view?usp=sharing"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#111311] hover:text-[#426B1F] transition-colors underline underline-offset-2"
-                >
-                  <span>{isBn ? "অফিসিয়াল সনদ দেখুন" : "View Official Certificate"}</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
+                <div>
+                  <span className="text-xs font-bold text-white block leading-tight">
+                    {isBn ? "BSREA নিবন্ধিত সদস্য" : "BSREA Registered Member"}
+                  </span>
+                  <span className="text-xs font-mono text-white/60">
+                    No. 20260915GEN113
+                  </span>
+                </div>
               </div>
 
-              {/* Social Channels with Modern Icon Buttons */}
-              <h3 className="text-xs font-mono font-semibold text-[#111311] mb-2.5">
+              <a
+                href="https://drive.google.com/file/d/1GR4hILXnDjJblqNmrxRNnWH_M7It4Md2/view?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#FEBE16] hover:text-[#E4A900] transition-colors underline underline-offset-2 min-h-[44px]"
+              >
+                <span>{isBn ? "অফিসিয়াল সনদ দেখুন" : "View Official Certificate"}</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+
+              {/* Social Channels with Verified Profile Icon Buttons */}
+              <h3 className="text-xs font-mono font-semibold text-white mb-2.5">
                 {isBn ? "যুক্ত থাকুন" : "Connect With Us"}
               </h3>
-              <div className="flex items-center gap-2">
-                <a
-                  href={settings.socials?.facebook || "https://facebook.com"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={isBn ? "ফেসবুকে নূর সোলার অনুসরণ করুন" : "Follow Noor Solar on Facebook"}
-                  className="w-8 h-8 rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-110 shadow-2xs"
-                >
-                  <FacebookIcon className="w-4 h-4" />
-                </a>
+              <div className="flex items-center gap-2.5 flex-wrap">
+                {isValidSocialUrl(settings.socials?.facebook) && (
+                  <a
+                    href={settings.socials!.facebook!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={isBn ? "ফেসবুকে নূর সোলার এনার্জি অনুসরণ করুন" : "Follow Noor Solar Energy on Facebook"}
+                    className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#052F25] hover:bg-[#FEBE16] hover:text-[#052F25] border border-white/15 text-white flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
+                  >
+                    <FacebookIcon className="w-5 h-5" />
+                  </a>
+                )}
 
-                <a
-                  href={settings.socials?.linkedin || "https://linkedin.com"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={isBn ? "লিংকডইনে নূর সোলারের সাথে যুক্ত হন" : "Connect with Noor Solar on LinkedIn"}
-                  className="w-8 h-8 rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-110 shadow-2xs"
-                >
-                  <LinkedinIcon className="w-4 h-4" />
-                </a>
+                {isValidSocialUrl(settings.socials?.linkedin) && (
+                  <a
+                    href={settings.socials!.linkedin!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={isBn ? "লিংকডইনে নূর সোলার এনার্জির সাথে যুক্ত হন" : "Connect with Noor Solar Energy on LinkedIn"}
+                    className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#052F25] hover:bg-[#FEBE16] hover:text-[#052F25] border border-white/15 text-white flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
+                  >
+                    <LinkedinIcon className="w-5 h-5" />
+                  </a>
+                )}
 
                 <a
                   href={`https://wa.me/${whatsappNum}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={isBn ? "হোয়াটসঅ্যাপে নূর সোলারের সাথে চ্যাট করুন" : "Chat with Noor Solar on WhatsApp"}
-                  className="w-8 h-8 rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-110 shadow-2xs"
+                  aria-label={isBn ? "হোয়াটসঅ্যাপে নূর সোলার এনার্জির সাথে চ্যাট করুন" : "Chat with Noor Solar Energy on WhatsApp"}
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#052F25] hover:bg-[#FEBE16] hover:text-[#052F25] border border-white/15 text-white flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
                 >
-                  <MessageCircle className="w-4 h-4" />
+                  <MessageCircle className="w-5 h-5" />
                 </a>
 
-                <a
-                  href="https://youtube.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={isBn ? "ইউটিউবে নূর সোলারের ভিডিও দেখুন" : "Watch Noor Solar on YouTube"}
-                  className="w-8 h-8 rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-110 shadow-2xs"
-                >
-                  <YoutubeIcon className="w-4 h-4" />
-                </a>
+                {isValidSocialUrl(settings.socials?.youtube) && (
+                  <a
+                    href={settings.socials!.youtube!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={isBn ? "ইউটিউবে নূর সোলার এনার্জির ভিডিও দেখুন" : "Watch Noor Solar Energy on YouTube"}
+                    className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#052F25] hover:bg-[#FEBE16] hover:text-[#052F25] border border-white/15 text-white flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
+                  >
+                    <YoutubeIcon className="w-5 h-5" />
+                  </a>
+                )}
 
-                <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={isBn ? "এক্সে নূর সোলার অনুসরণ করুন" : "Follow Noor Solar on X"}
-                  className="w-8 h-8 rounded-full bg-white hover:bg-[#CEF23E] border border-[#D5DAD0] text-[#111311] flex items-center justify-center transition-all hover:scale-110 shadow-2xs"
-                >
-                  <TwitterIcon className="w-4 h-4" />
-                </a>
+                {isValidSocialUrl(settings.socials?.twitter) && (
+                  <a
+                    href={settings.socials!.twitter!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={isBn ? "এক্সে নূর সোলার এনার্জি অনুসরণ করুন" : "Follow Noor Solar Energy on X"}
+                    className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#052F25] hover:bg-[#FEBE16] hover:text-[#052F25] border border-white/15 text-white flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
+                  >
+                    <TwitterIcon className="w-5 h-5" />
+                  </a>
+                )}
               </div>
             </div>
-          </div>
 
-        </div>
+          </div>
 
         {/* Sub-Footer Copyright & Disclaimer */}
-        <div className="py-4 sm:py-5 border-t border-[#DCE2D8] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-[#6A7365]">
+        <div className="py-4 sm:py-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-white/60">
           <div className="flex items-center gap-4 flex-wrap">
             <span>&copy; {currentYear} {isBn ? "নূর সোলার এনার্জি। সর্বস্বত্ব সংরক্ষিত।" : "Noor Solar Energy. All rights reserved."}</span>
-            <LanguageSwitcher idPrefix="ftr" currentLocale={locale} />
           </div>
-          <div className="flex items-center gap-4">
-            <Link href="/privacy" className="hover:text-[#111311] transition-colors">
-              {isBn ? "প্রাইভেসি পলিসি" : "Privacy Policy"}
-            </Link>
-            <span>&bull;</span>
-            <Link href="/contact" className="hover:text-[#111311] transition-colors">
+          <nav aria-label="Legal" className="flex items-center gap-4 flex-wrap">
+            <Link href="/contact" className="hover:text-[#FEBE16] inline-flex items-center justify-center px-1 min-w-[44px] min-h-[44px] transition-colors">
               {isBn ? "বাণিজ্যিক শর্তাবলী" : "Wholesale Terms"}
             </Link>
             <span>&bull;</span>
-            <span>{isBn ? "বাংলাদেশের B2B শিল্পের জন্য নিবেদিত" : "Made for B2B Bangladesh"}</span>
+            <span className="inline-flex items-center min-h-[44px]">{isBn ? "বাংলাদেশের B2B শিল্পের জন্য নিবেদিত" : "Made for B2B Bangladesh"}</span>
+          </nav>
+        </div>
+
+        {/* Bottom Brand Watermark — theme-matched to Noor Solar emerald green */}
+        <div className="relative w-[calc(100%+3rem)] sm:w-[calc(100%+6rem)] lg:w-[calc(100%+8rem)] -mx-6 sm:-mx-12 lg:-mx-16 bg-[#052F25] border-t border-[#0B513E]/40 select-none pointer-events-none pt-6 sm:pt-10 lg:pt-12 overflow-hidden">
+          <div className="flex items-center justify-start gap-2 sm:gap-4 lg:gap-5 px-6 sm:px-12 lg:px-16 translate-y-[28%] sm:translate-y-[30%]">
+            {/* 4-Point Star */}
+            <svg
+              viewBox="0 0 100 100"
+              fill="currentColor"
+              className="w-[0.65em] h-[0.65em] text-[#0A5E48] shrink-0"
+              style={{ fontSize: "clamp(4rem, 16vw, 14rem)" }}
+              aria-hidden="true"
+            >
+              <path d="M50 0C50 27.614 27.614 50 0 50C27.614 50 50 72.386 50 100C50 72.386 72.386 50 100 50C72.386 50 50 27.614 50 0Z" />
+            </svg>
+
+            {/* Brand Name */}
+            <span
+              className="font-semibold whitespace-nowrap select-none leading-none text-[clamp(4rem,16vw,14rem)] tracking-[-0.02em] text-[#0A5E48]"
+              style={{
+                fontFamily: "'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif",
+              }}
+            >
+              Noor Solar
+            </span>
           </div>
         </div>
 
-      </div>
-
-      {/* Bottom Giant Brand Watermark (Compact Graphy Style) */}
-      <div className="relative z-0 w-full max-w-7xl mx-auto select-none pointer-events-none -mt-4 sm:-mt-8 lg:-mt-12 overflow-hidden flex items-end justify-center pt-2 pb-0">
-        <span className="font-extrabold tracking-tighter text-center uppercase whitespace-nowrap leading-[0.8] text-[clamp(2.8rem,10.8vw,11rem)] text-transparent bg-clip-text bg-gradient-to-b from-[#111311]/[0.12] via-[#111311]/[0.05] to-transparent">
-          NOOR SOLAR
-        </span>
       </div>
     </footer>
   );

@@ -95,11 +95,11 @@ export function CertificationsClient({ items }: { items: CertItem[] }) {
           <form onSubmit={handleCreate} className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
             <div>
               <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Name (English) *</label>
-              <input name='name' required placeholder='e.g. Quality Management Certificate' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              <input name='name' required placeholder='e.g. BSREA Certificate of Membership' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
             </div>
             <div>
               <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Name (বাংলা)</label>
-              <input name='nameBn' lang='bn' placeholder='যেমন: কোয়ালিটি সার্টিফিকেট' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              <input name='nameBn' lang='bn' placeholder='যেমন: সদস্যপদ সনদ' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
             </div>
             <div>
               <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Upload Badge Image</label>
@@ -107,11 +107,11 @@ export function CertificationsClient({ items }: { items: CertItem[] }) {
             </div>
             <div>
               <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Issuer (English)</label>
-              <input name='issuer' placeholder='e.g. Standard Inspection Board' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              <input name='issuer' placeholder='e.g. Bangladesh Sustainable & Renewable Energy Association (BSREA)' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
             </div>
             <div>
               <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Issuer (বাংলা)</label>
-              <input name='issuerBn' lang='bn' placeholder='যেমন: মান নিয়ন্ত্রণ বোর্ড' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
+              <input name='issuerBn' lang='bn' placeholder='যেমন: বিএসআরইএ' className='w-full px-3 py-2 rounded-xl border border-[#DDE1DC] text-xs' />
             </div>
             <div className='sm:col-span-2 md:col-span-3'>
               <label className='block text-[11px] font-mono text-[#5C605C] mb-1'>Description (English)</label>

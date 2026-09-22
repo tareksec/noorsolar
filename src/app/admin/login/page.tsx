@@ -91,7 +91,7 @@ function LoginForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-semibold text-xs tracking-tight transition-all disabled:opacity-60 shadow-md mt-6"
+        className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-xs tracking-tight transition-all disabled:opacity-60 shadow-md mt-6 cursor-pointer"
       >
         {isPending ? (
           <span>Authenticating...</span>
@@ -109,8 +109,8 @@ function LoginForm() {
 
 export default function AdminLoginPage() {
   return (
-    <div className="min-h-screen bg-[#E4E7E4] flex items-center justify-center p-4">
-      <div className="w-full max-w-md p-5 sm:p-8 md:p-10 rounded-[28px] sm:rounded-[36px] bg-white border border-[#DDE1DC] shadow-xl">
+    <div className="min-h-screen bg-[#F7F8F5] flex items-center justify-center p-4">
+      <div className="w-full max-w-md p-5 sm:p-8 md:p-10 rounded-[28px] sm:rounded-[36px] bg-white border border-[#DCE4E0] shadow-xl">
         
         {/* Brand Header */}
         <div className="text-center mb-8">
@@ -124,17 +124,17 @@ export default function AdminLoginPage() {
               priority
             />
           </Link>
-          <h1 className="text-2xl font-bold text-[#111311] tracking-tight">
+          <h1 className="text-2xl font-bold text-[#074031] tracking-tight">
             Admin Management
           </h1>
-          <p className="text-xs text-[#5C605C] mt-1">
+          <p className="text-xs text-[#62706A] mt-1">
             Noor Solar Energy Portal
           </p>
         </div>
 
         <Suspense
           fallback={
-            <div className="py-8 text-center text-xs font-mono text-[#5C605C]">
+            <div className="py-8 text-center text-xs font-mono text-[#62706A]">
               Loading login portal...
             </div>
           }
@@ -142,7 +142,7 @@ export default function AdminLoginPage() {
           <LoginForm />
         </Suspense>
 
-        <p className="text-center text-[11px] font-mono text-[#5C605C] mt-8 break-words leading-relaxed px-2">
+        <p className="text-center text-[11px] font-mono text-[#62706A] mt-8 break-words leading-relaxed px-2">
           Authorized personnel only &bull; Protected by session auth
         </p>
 

@@ -48,14 +48,14 @@ export function FAQSection({ items, locale }: FAQSectionProps) {
   };
 
   return (
-    <section id="faq" className="py-20 bg-[#E4E7E4]">
+    <section id="faq" className="py-20 bg-[#F1F4F1]">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3 border border-[#DDE1DC]">
-            <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-[#17251F] mb-3 border border-[#DCE4E0]">
+            <span className="w-2 h-2 rounded-full bg-[#FEBE16]"></span>
             <span>{isBn ? "সাধারণ প্রশ্নোত্তর" : "Commercial Inquiries"}</span>
           </div>
-          <h2 className="text-3xl font-bold tracking-tight text-[#111311]">
+          <h2 className="text-3xl font-bold tracking-tight text-[#074031]">
             {isBn ? "সচরাচর জিজ্ঞাসিত প্রশ্ন" : "Frequently Asked Questions"}
           </h2>
         </div>
@@ -69,7 +69,7 @@ export function FAQSection({ items, locale }: FAQSectionProps) {
             return (
               <div
                 key={item.id || index}
-                className="rounded-2xl bg-white border border-[#DDE1DC] overflow-hidden transition-all duration-200 shadow-xs"
+                className="rounded-2xl bg-white border border-[#DCE4E0] overflow-hidden transition-all duration-200 shadow-xs"
               >
                 <button
                   ref={(el) => {
@@ -78,7 +78,7 @@ export function FAQSection({ items, locale }: FAQSectionProps) {
                   id={buttonId}
                   onClick={() => toggle(index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
-                  className="faq-item-button w-full flex items-center justify-between p-5 text-left text-sm sm:text-base font-bold text-[#111311] hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CEF23E] cursor-pointer"
+                  className="faq-item-button w-full flex items-center justify-between p-5 text-left text-sm sm:text-base font-bold text-[#17251F] hover:text-[#074031] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FEBE16] cursor-pointer"
                   aria-expanded={isOpen}
                   aria-controls={panelId}
                 >
@@ -87,7 +87,7 @@ export function FAQSection({ items, locale }: FAQSectionProps) {
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={{ duration: shouldReduceMotion ? 0 : 0.2 }}
                     className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-colors ${
-                      isOpen ? "bg-[#111311] text-white" : "bg-[#EDEDED] text-[#111311]"
+                      isOpen ? "bg-[#074031] text-white" : "bg-[#F1F4F1] text-[#074031]"
                     }`}
                   >
                     <ChevronDown className="w-4 h-4" />
@@ -109,7 +109,7 @@ export function FAQSection({ items, locale }: FAQSectionProps) {
                       }}
                       className="faq-item-panel overflow-hidden"
                     >
-                      <div className="px-5 pb-5 text-xs sm:text-sm text-[#5C605C] leading-relaxed border-t border-[#EDEDED] pt-3">
+                      <div className="px-5 pb-5 text-xs sm:text-sm text-[#62706A] leading-relaxed border-t border-[#DCE4E0] pt-3">
                         {item.answer}
                       </div>
                     </motion.div>

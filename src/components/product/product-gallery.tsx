@@ -180,7 +180,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
     >
       {/* Main Image Frame */}
       <div
-        className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-[#EDEDED] border border-[#DDE1DC] flex items-center justify-center p-4 group cursor-zoom-in select-none"
+        className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-[#F1F4F1] border border-[#DCE4E0] flex items-center justify-center p-4 group cursor-zoom-in select-none"
         onClick={() => setLightboxOpen(true)}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -206,7 +206,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
         </AnimatePresence>
 
         {/* Zoom Overlay Indicator */}
-        <div className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 backdrop-blur-md border border-white/60 text-[#111311] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none shadow-sm">
+        <div className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 backdrop-blur-md border border-white/60 text-[#17251F] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none shadow-sm">
           <Maximize2 className="w-4 h-4" />
         </div>
 
@@ -226,7 +226,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 e.stopPropagation();
                 handlePrev();
               }}
-              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 backdrop-blur-md border border-[#DDE1DC] flex items-center justify-center text-[#111311] opacity-80 sm:opacity-0 group-hover:opacity-100 hover:bg-[#CEF23E] transition-all shadow-md focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
+              className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white/90 backdrop-blur-md border border-[#DCE4E0] flex items-center justify-center text-[#17251F] opacity-80 sm:opacity-0 group-hover:opacity-100 hover:bg-[#FEBE16] hover:text-[#052F25] transition-all shadow-md focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#FEBE16]"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -237,7 +237,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 e.stopPropagation();
                 handleNext();
               }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/90 backdrop-blur-md border border-[#DDE1DC] flex items-center justify-center text-[#111311] opacity-80 sm:opacity-0 group-hover:opacity-100 hover:bg-[#CEF23E] transition-all shadow-md focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white/90 backdrop-blur-md border border-[#DCE4E0] flex items-center justify-center text-[#17251F] opacity-80 sm:opacity-0 group-hover:opacity-100 hover:bg-[#FEBE16] hover:text-[#052F25] transition-all shadow-md focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-[#FEBE16]"
               aria-label="Next image"
             >
               <ChevronRight className="w-5 h-5" />
@@ -263,10 +263,10 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 aria-selected={isSelected}
                 aria-label={`Show image ${idx + 1} of ${displayImages.length}`}
                 onClick={() => setActiveIndex(idx)}
-                className={`relative w-20 h-20 rounded-2xl overflow-hidden bg-[#EDEDED] border-2 shrink-0 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#CEF23E] ${
+                className={`relative w-20 h-20 rounded-2xl overflow-hidden bg-[#F1F4F1] border-2 shrink-0 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#FEBE16] ${
                   isSelected
-                    ? "border-[#111311] ring-2 ring-[#CEF23E] scale-[1.02] shadow-sm"
-                    : "border-transparent opacity-70 hover:opacity-100 hover:border-[#DDE1DC]"
+                    ? "border-[#074031] ring-2 ring-[#FEBE16] scale-[1.02] shadow-sm"
+                    : "border-transparent opacity-70 hover:opacity-100 hover:border-[#DCE4E0]"
                 }`}
               >
                 <Image
@@ -309,7 +309,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 <button
                   type="button"
                   onClick={toggleZoom}
-                  className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-[#FEBE16]"
                   aria-label={zoomed ? "Zoom out" : "Zoom in"}
                 >
                   {zoomed ? (
@@ -325,7 +325,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                     setZoomed(false);
                     setZoomScale(1);
                   }}
-                  className="p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
+                  className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-[#FEBE16]"
                   aria-label="Close lightbox"
                 >
                   <X className="w-5 h-5" />
@@ -339,7 +339,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
+                  className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-[#FEBE16]"
                   aria-label="Previous image"
                 >
                   <ChevronLeft className="w-6 h-6" />
@@ -347,7 +347,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-[#CEF23E]"
+                  className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center transition-all focus:outline-none focus:ring-2 focus:ring-[#FEBE16]"
                   aria-label="Next image"
                 >
                   <ChevronRight className="w-6 h-6" />

@@ -3,13 +3,14 @@ import { notFound } from "next/navigation";
 import { setRequestLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { routing, Locale } from "@/i18n/routing";
-import { inter, jetbrainsMono, hindSiliguri } from "@/lib/fonts";
+import { inter, jetbrainsMono, scoutieSans, tiroBangla } from "@/lib/fonts";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppButton } from "@/components/layout/whatsapp-button";
 import { BackToTop } from "@/components/layout/back-to-top";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll-provider";
 import { RouteTransition } from "@/components/providers/route-transition";
+import { SITE_URL } from "@/lib/site-config";
 import { getSiteSettings } from "@/lib/data/settings";
 import { hasVisibleBlogPosts } from "@/lib/data/blog";
 import "../globals.css";
@@ -32,20 +33,20 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = SITE_URL;
 
   return {
     title: {
       default: isBn
-        ? "নূর সোলার এনার্জি — সোলার প্যানেল, ব্যাটারি ও ইনভার্টার"
-        : "Noor Solar Energy — Solar Panels, Batteries & Inverters",
+        ? "নূর সোলার এনার্জি — সোলার প্যানেল, ব্যাটারি ও ইনভার্টার পাইকারি সরবরাহকারী"
+        : "Noor Solar Energy — Solar Panels, Batteries & Inverters Wholesale",
       template: isBn
         ? "%s | নূর সোলার এনার্জি"
         : "%s | Noor Solar Energy",
     },
     description: isBn
-      ? "বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল, লিথিয়াম-আয়ন ব্যাটারি এবং সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
-      : "Direct importer and bulk supplier of solar panels, Lithium-ion Batteries, and Solar Inverters in Bangladesh.",
+      ? "বাংলাদেশে বাণিজ্যিক সোলার প্যানেল, LiFePO4 ব্যাটারি স্টোরেজ এবং সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
+      : "Direct importer and bulk B2B wholesale supplier of commercial solar panels, LiFePO4 battery storage, and solar inverters in Bangladesh.",
     metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? "/bn" : "/",
@@ -56,20 +57,35 @@ export async function generateMetadata({
       },
     },
     icons: {
-      icon: "/icon.png",
+      icon: [
+        { url: "/icon.png", sizes: "512x512", type: "image/png" },
+        { url: "/icons/favicon.png", sizes: "32x32", type: "image/png" },
+      ],
       shortcut: "/icon.png",
-      apple: "/apple-icon.png",
+      apple: [
+        { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+      ],
     },
     openGraph: {
       title: isBn
-        ? "নূর সোলার এনার্জি — সোলার প্যানেল, ব্যাটারি ও ইনভার্টার"
-        : "Noor Solar Energy — Solar Panels, Batteries & Inverters",
+        ? "নূর সোলার এনার্জি — সোলার প্যানেল, ব্যাটারি ও ইনভার্টার পাইকারি সরবরাহকারী"
+        : "Noor Solar Energy — Solar Panels, Batteries & Inverters Wholesale",
       description: isBn
-        ? "বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল, লিথিয়াম-আয়ন ব্যাটারি এবং সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
-        : "Direct importer and bulk supplier of solar panels, Lithium-ion Batteries, and Solar Inverters in Bangladesh.",
+        ? "বাংলাদেশে বাণিজ্যিক সোলার প্যানেল, LiFePO4 ব্যাটারি স্টোরেজ এবং সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
+        : "Direct importer and bulk B2B wholesale supplier of commercial solar panels, LiFePO4 battery storage, and solar inverters in Bangladesh.",
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
       images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Noor Solar Energy" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: isBn
+        ? "নূর সোলার এনার্জি — সোলার প্যানেল, ব্যাটারি ও ইনভার্টার পাইকারি সরবরাহকারী"
+        : "Noor Solar Energy — Solar Panels, Batteries & Inverters Wholesale",
+      description: isBn
+        ? "বাংলাদেশে বাণিজ্যিক সোলার প্যানেল, LiFePO4 ব্যাটারি স্টোরেজ এবং সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
+        : "Direct importer and bulk B2B wholesale supplier of commercial solar panels, LiFePO4 battery storage, and solar inverters in Bangladesh.",
+      images: ["/opengraph-image.png"],
     },
   };
 }
@@ -97,7 +113,7 @@ export default async function LocaleLayout({
   ]);
 
   const isBn = locale === "bn";
-  const fontClasses = `${inter.variable} ${jetbrainsMono.variable} ${isBn ? hindSiliguri.variable : ""}`;
+  const fontClasses = `${scoutieSans.variable} ${tiroBangla.variable} ${inter.variable} ${jetbrainsMono.variable}`;
 
   return (
     <html
@@ -105,20 +121,11 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={fontClasses}
     >
-      <head>
-        <noscript>
-          <style dangerouslySetInnerHTML={{ __html: "#preloader{display:none!important}" }} />
-        </noscript>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try { if (sessionStorage.getItem("noor-preloader-seen") === "1" || new URLSearchParams(location.search).get("preloader") === "off") document.documentElement.dataset.preloader = "skip"; } catch (_) {}`,
-          }}
-        />
-      </head>
-      <body suppressHydrationWarning className="min-h-screen bg-[#E4E7E4] text-[#111311] antialiased selection:bg-[#CEF23E] selection:text-[#111311]">
+      <head />
+      <body suppressHydrationWarning className="min-h-screen bg-[#F7F8F5] text-[#17251F] antialiased selection:bg-[#FEBE16] selection:text-[#052F25]">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SmoothScrollProvider>
-            <div className="flex flex-col min-h-screen bg-[#E4E7E4]">
+            <div className="flex flex-col min-h-screen bg-[#F7F8F5]">
               <Header
                 phoneDisplay={settings.phoneDisplay}
                 phoneRaw={settings.phone}

@@ -18,7 +18,7 @@ const envSchema = z.object({
     .min(8, "ADMIN_PASSWORD must be at least 8 characters")
     .default("admin_default_pass_123"),
   UPLOAD_DIR: z.string().default("./storage/uploads"),
-  NEXT_PUBLIC_SITE_URL: z.string().default("http://localhost:3000"),
+  NEXT_PUBLIC_SITE_URL: z.string().default("https://noorsolaren.com"),
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   HIDE_SAMPLE_CONTENT: z.string().optional(),
   SEED_DEMO: z.string().optional(),

@@ -1,8 +1,9 @@
 import { MetadataRoute } from "next";
 import { db } from "@/lib/db";
+import { SITE_URL } from "@/lib/site-config";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolarbd.com";
+  const siteUrl = SITE_URL;
   const hideSample = process.env.HIDE_SAMPLE_CONTENT === "true";
 
   const staticPaths = [

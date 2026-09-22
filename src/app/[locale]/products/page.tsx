@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import { getCategories } from "@/lib/data/categories";
 import { getAllProducts } from "@/lib/data/products";
 import { ShopPageClient } from "@/components/shop/shop-page-client";
+import { SITE_URL } from "@/lib/site-config";
 
 interface ProductsPageProps {
   params: Promise<{
@@ -27,15 +28,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isBn = locale === "bn";
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://noorsolaren.com";
+  const siteUrl = SITE_URL;
 
   return {
     title: isBn
-      ? "সোলার ইকুইপমেন্ট ক্যাটালগ — প্যানেল, ব্যাটারি ও ইনভার্টার"
-      : "Equipment Catalog — Solar Panels, Batteries & Inverters",
+      ? "সোলার ইকুইপমেন্ট ক্যাটালগ — নূর সোলার এনার্জি"
+      : "Solar Equipment Catalog — Noor Solar Energy",
     description: isBn
-      ? "বাংলাদেশে পাইকারি আমদানিকৃত সোলার প্যানেল, লিথিয়াম-আয়ন স্টোরেজ ব্যাটারি এবং ইন্ডাস্ট্রিয়াল ইনভার্টারের সম্পূর্ণ ক্যাটালগ।"
-      : "Explore our complete inventory of Solar Panels, Lithium-ion Storage Batteries, and Industrial Inverters available for bulk wholesale in Bangladesh.",
+      ? "বাণিজ্যিক ও শিল্প প্রকল্পের জন্য সরাসরি আমদানিকৃত সোলার প্যানেল, LiFePO4 ব্যাটারি এবং ইনভার্টারের পাইকারি ক্যাটালগ।"
+      : "Bulk B2B catalog of direct-imported solar panels, LiFePO4 battery storage, and commercial inverters in Bangladesh.",
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/products` : `${siteUrl}/products`,
       languages: {
@@ -49,11 +50,12 @@ export async function generateMetadata({
         ? "সোলার ইকুইপমেন্ট ক্যাটালগ — নূর সোলার এনার্জি"
         : "Solar Equipment Catalog — Noor Solar Energy",
       description: isBn
-        ? "বাংলাদেশে পাইকারি আমদানিকৃত সোলার প্যানেল, LiFePO4 ব্যাটারি এবং ইন্ডাস্ট্রিয়াল ইনভার্টার।"
-        : "Explore bulk wholesale inventory of Tier-1 solar panels, LiFePO4 batteries, and industrial inverters in Bangladesh.",
-      url: isBn ? "/bn/products" : "/products",
+        ? "বাণিজ্যিক ও শিল্প প্রকল্পের জন্য সরাসরি আমদানিকৃত সোলার প্যানেল, LiFePO4 ব্যাটারি এবং ইনভার্টারের পাইকারি ক্যাটালগ।"
+        : "Bulk B2B catalog of direct-imported solar panels, LiFePO4 battery storage, and commercial inverters in Bangladesh.",
+      url: isBn ? `${siteUrl}/bn/products` : `${siteUrl}/products`,
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
+      images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Noor Solar Energy" }],
     },
   };
 }
