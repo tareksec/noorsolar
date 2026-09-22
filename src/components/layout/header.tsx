@@ -17,8 +17,8 @@ export function Header({
   return (
     <AnimatedNavFramer
       brandName="Noor Solar Energy"
-      ctaText={currentLocale === "bn" ? "যোগাযোগ করুন" : "Contact Sales"}
-      ctaHref="/contact"
+      ctaText={currentLocale === "bn" ? "কোটেশন নিন" : "Request a Quote"}
+      ctaHref="/quote"
       showBlog={showBlog}
       currentLocale={currentLocale}
     />

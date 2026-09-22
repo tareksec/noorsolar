@@ -75,7 +75,7 @@ export function BusinessImpact() {
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <Link
-                href="/contact#quote-section"
+                href="/quote"
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#2D6A4F] hover:bg-[#23553E] text-white font-medium text-sm transition-all duration-300 shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0"
               >
                 <span>Request Quote</span>

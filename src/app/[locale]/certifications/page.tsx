@@ -442,7 +442,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
             </Link>
 
             <Link
-              href="/contact"
+              href={isBn ? "/bn/quote" : "/quote"}
               className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-white/10 text-white text-xs font-semibold hover:bg-white/20 border border-white/15 transition-colors"
             >
               <span>{isBn ? "কোটেশনের অনুরোধ পাঠান" : "Request Quote"}</span>

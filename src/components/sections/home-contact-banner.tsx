@@ -26,13 +26,13 @@ export function HomeContactBanner({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const contactBase = isBn ? "/bn/contact" : "/contact";
+    const quoteBase = isBn ? "/bn/quote" : "/quote";
     const val = email.trim();
     if (val) {
       const param = val.includes("@") ? `email=${encodeURIComponent(val)}` : `phone=${encodeURIComponent(val)}`;
-      router.push(`${contactBase}?${param}#quote-section`);
+      router.push(`${quoteBase}?${param}#quote-form`);
     } else {
-      router.push(`${contactBase}#quote-section`);
+      router.push(`${quoteBase}#quote-form`);
     }
   };
 

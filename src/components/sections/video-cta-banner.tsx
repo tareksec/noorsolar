@@ -15,7 +15,7 @@ export function VideoCtaBanner({
   headline,
   subheadline,
   ctaText,
-  ctaHref = "/contact",
+  ctaHref = "/quote",
   videoSrc = "/video/Robots_assembling_solar_panels_20260920132147.mp4",
   locale,
 }: VideoCtaBannerProps) {

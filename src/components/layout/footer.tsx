@@ -220,10 +220,10 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  href="/quote"
                   className="hover:text-[#E4A900] hover:translate-x-1 inline-flex items-center gap-1.5 min-h-[44px] transition-all font-semibold text-[#FEBE16]"
                 >
-                  <span>{isBn ? "কন্টেইনার ক্রয়ের কোটেশন নিন" : "Request Container Procurement Quote →"}</span>
+                  <span>{isBn ? "অনলাইন কোটেশন নিন →" : "Request a Solar Quote →"}</span>
                 </Link>
               </li>
             </ul>
@@ -248,6 +248,11 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
               <li>
                 <Link href="/contact" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors">
                   {isBn ? "সেলস ডেস্কে যোগাযোগ" : "Contact Sales Desk"}
+                </Link>
+              </li>
+              <li>
+                <Link href="/quote" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors">
+                  {isBn ? "অনলাইন কোটেশন" : "Online Quotation"}
                 </Link>
               </li>
               <li>

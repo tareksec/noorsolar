@@ -162,7 +162,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             }`}
           >
             <Link
-              href={`/contact?product=${product.slug}`}
+              href={`/quote?product=${product.slug}`}
               onClick={(e) => e.stopPropagation()}
               className="w-full py-2.5 px-4 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-semibold text-xs tracking-tight flex items-center justify-center gap-2 shadow-lg transition-colors"
             >
@@ -266,7 +266,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           </Link>
 
           <Link
-            href={`/contact?product=${product.slug}`}
+            href={`/quote?product=${product.slug}`}
             onClick={(e) => e.stopPropagation()}
             className="px-3.5 py-1.5 min-h-[44px] inline-flex items-center justify-center rounded-full bg-[#074031] text-white text-xs font-medium tracking-tight transition-all duration-200 hover:bg-[#FEBE16] hover:text-[#052F25] active:scale-95"
           >

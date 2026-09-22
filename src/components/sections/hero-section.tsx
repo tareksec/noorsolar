@@ -117,7 +117,7 @@ export function HeroSection({
           <div className="flex flex-wrap items-center justify-center gap-4">
             <MagneticButton>
               <Link
-                href={isBn ? "/bn/contact" : "/contact"}
+                href={isBn ? "/bn/quote" : "/quote"}
                 data-motion="button-slide"
                 className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-sm sm:text-base shadow-[0_8px_25px_rgba(254,190,22,0.35)] transition-all hover:scale-[1.03] active:scale-[0.98] w-fit"
               >

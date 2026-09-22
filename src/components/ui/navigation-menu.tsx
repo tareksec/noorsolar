@@ -24,17 +24,15 @@ export interface NavItem {
   highlight?: boolean;
   badge?: string;
   badgeBn?: string;
+  isThreeIconMenu?: boolean;
   children?: NavSubItem[];
 }
 
 const DEFAULT_NAV_ITEMS: NavItem[] = [
   {
-    name: "Product",
+    name: "Products",
     nameBn: "পণ্য",
     href: "/products",
-    highlight: true,
-    badge: "Catalog",
-    badgeBn: "ক্যাটালগ",
     children: [
       {
         name: "All Products",
@@ -87,6 +85,49 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
       },
     ],
   },
+  {
+    name: "More",
+    nameBn: "অন্যান্য",
+    href: "#",
+    isThreeIconMenu: true,
+    children: [
+      {
+        name: "Blog",
+        nameBn: "কারিগরি ব্লগ",
+        href: "/blog",
+        description: "Latest solar technology updates, guides & B2B insights",
+        descriptionBn: "সোলার প্রযুক্তির আপডেট, গাইড ও পাইকারি বাজার বিশ্লেষণ",
+      },
+      {
+        name: "Certifications",
+        nameBn: "সার্টিফিকেশন ও অনুমোদন",
+        href: "/certifications",
+        description: "BSREA Member, IDCOL approved & ISO certified",
+        descriptionBn: "বিএসআরইএ সদস্য, ইডকল ও আন্তর্জাতিক টেস্ট সনদ",
+      },
+      {
+        name: "Ordering Process",
+        nameBn: "অর্ডার প্রক্রিয়া",
+        href: "/#process",
+        description: "From indent inquiry to safe site delivery",
+        descriptionBn: "কোটেশন থেকে ৬৪ জেলায় সরাসরি ডেলিভারি ধাপসমূহ",
+      },
+      {
+        name: "FAQ & Support",
+        nameBn: "প্রশ্নোত্তর ও সহায়তা",
+        href: "/#faq",
+        description: "Frequently asked questions & technical support",
+        descriptionBn: "ওয়ারেন্টি, পাইকারি MOQ ও পেমেন্ট সংক্রান্ত প্রশ্নোত্তর",
+      },
+      {
+        name: "Contact Sales Desk",
+        nameBn: "সেলস ডেস্কে যোগাযোগ",
+        href: "/contact",
+        description: "Dhaka headquarters, direct desk & warehouse visits",
+        descriptionBn: "উত্তরা হেড অফিস, সেলস ডেস্ক ও সরাসরি ইনভেন্টরি পরিদর্শন",
+      },
+    ],
+  },
 ];
 
 interface AnimatedNavFramerProps {
@@ -101,8 +142,8 @@ interface AnimatedNavFramerProps {
 export function AnimatedNavFramer({
   items,
   brandName = "Noor Solar Energy",
-  ctaText = "Contact Sales",
-  ctaHref = "/contact",
+  ctaText = "Request a Quote",
+  ctaHref = "/quote",
   showBlog = false,
   currentLocale,
 }: AnimatedNavFramerProps) {
@@ -110,7 +151,7 @@ export function AnimatedNavFramer({
   const pathname = usePathname() || "/";
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [activeDropdown, setActiveDropdown] = React.useState<string | null>(null);
-  const [mobileAccordion, setMobileAccordion] = React.useState<string | null>("Product");
+  const [mobileAccordion, setMobileAccordion] = React.useState<string | null>("Products");
   const dropdownTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = (name: string) => {
@@ -144,7 +185,6 @@ export function AnimatedNavFramer({
 
   const defaultItems = [
     ...DEFAULT_NAV_ITEMS,
-    ...(showBlog ? [{ name: "Blog", nameBn: "ব্লগ", href: "/blog" }] : []),
   ];
 
   const rawNavItems = items || defaultItems;
@@ -162,9 +202,15 @@ export function AnimatedNavFramer({
     "Certifications": "সার্টিফিকেশন",
     "About": "আমাদের সম্পর্কে",
     "About Us": "কোম্পানি পরিচিতি",
-    "Blog": "ব্লগ",
+    "More": "অন্যান্য",
+    "Blog": "কারিগরি ব্লগ",
+    "Ordering Process": "অর্ডার প্রক্রিয়া",
+    "FAQ & Support": "প্রশ্নোত্তর ও সহায়তা",
+    "Contact Sales Desk": "সেলস ডেস্কে যোগাযোগ",
     "Services": "সেবাসমূহ",
     "Contact": "যোগাযোগ",
+    "Quote": "কোটেশন",
+    "Quotation": "কোটেশন",
   };
 
   // Localize hrefs and names for current locale
@@ -201,7 +247,9 @@ export function AnimatedNavFramer({
     return { ...item, name, href, children };
   });
 
-  const displayCtaText = isBn && (ctaText === "Contact Sales" || ctaText === "Book A Call" || !ctaText) ? "যোগাযোগ করুন" : ctaText;
+  const displayCtaText = isBn
+    ? (ctaText === "Request a Quote" ? "কোটেশন নিন" : ctaText === "Contact Sales" || ctaText === "Book A Call" || !ctaText ? "যোগাযোগ করুন" : ctaText)
+    : ctaText;
   const finalCtaHref = isBn && !ctaHref.startsWith("/bn") ? `/bn${ctaHref}` : ctaHref;
   const brandHref = isBn ? "/bn" : "/";
 
@@ -374,42 +422,73 @@ export function AnimatedNavFramer({
                         onMouseEnter={() => hasChildren && handleMouseEnter(item.name)}
                         onMouseLeave={() => hasChildren && handleMouseLeave()}
                       >
-                        <Link
-                          href={item.href}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setActiveDropdown(null);
-                          }}
-                          className={cn(
-                            "hidden md:inline-flex items-center min-h-[40px] text-xs lg:text-[13px] font-medium transition-all px-3 lg:px-3.5 py-1.5 rounded-full whitespace-nowrap gap-1.5 cursor-pointer",
-                            item.highlight
-                              ? "font-bold text-[#FEBE16] bg-gradient-to-r from-[#FEBE16]/25 via-[#FEBE16]/15 to-[#FEBE16]/20 border border-[#FEBE16]/50 shadow-[0_0_14px_rgba(254,190,22,0.28)] hover:shadow-[0_0_22px_rgba(254,190,22,0.45)] hover:border-[#FEBE16] hover:scale-[1.02] active:scale-95"
-                              : isActive
-                              ? "text-[#FEBE16] font-semibold bg-white/10"
-                              : "text-slate-200 hover:text-white hover:bg-white/5"
-                          )}
-                        >
-                          {item.highlight && (
-                            <span className="relative flex h-2 w-2 shrink-0">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FEBE16] opacity-85" />
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FEBE16]" />
-                            </span>
-                          )}
-                          <span>{item.name}</span>
-                          {item.highlight && (
-                            <span className="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-[#FEBE16] text-[#052F25] leading-none shadow-xs">
-                              {isBn ? (item.badgeBn || "ক্যাটালগ") : (item.badge || "Catalog")}
-                            </span>
-                          )}
-                          {hasChildren && (
+                        {item.isThreeIconMenu ? (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveDropdown(activeDropdown === item.name ? null : item.name);
+                            }}
+                            className={cn(
+                              "hidden md:inline-flex items-center min-h-[40px] text-xs lg:text-[13px] font-medium transition-all px-2.5 lg:px-3 py-1.5 rounded-full whitespace-nowrap gap-1.5 cursor-pointer border",
+                              isActive || activeDropdown === item.name
+                                ? "text-[#FEBE16] font-semibold bg-white/15 border-[#FEBE16]/50 shadow-[0_0_12px_rgba(254,190,22,0.2)]"
+                                : "text-slate-200 hover:text-white hover:bg-white/10 border-white/10"
+                            )}
+                            title={isBn ? "অন্যান্য পেজসমূহ" : "Extra Pages"}
+                          >
+                            {/* 3-Icon Menu Symbol */}
+                            <div className="flex flex-col justify-center items-center gap-[3px] w-4 h-4 text-current">
+                              <span className="w-3.5 h-[1.8px] rounded-full bg-current transition-colors" />
+                              <span className="w-2.5 h-[1.8px] rounded-full bg-[#FEBE16] transition-colors" />
+                              <span className="w-3.5 h-[1.8px] rounded-full bg-current transition-colors" />
+                            </div>
+                            <span>{item.name}</span>
                             <ChevronDown
                               className={cn(
-                                "w-3.5 h-3.5 opacity-70 transition-transform duration-200",
+                                "w-3 h-3 opacity-70 transition-transform duration-200",
                                 activeDropdown === item.name && "rotate-180 opacity-100 text-[#FEBE16]"
                               )}
                             />
-                          )}
-                        </Link>
+                          </button>
+                        ) : (
+                          <Link
+                            href={item.href}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveDropdown(null);
+                            }}
+                            className={cn(
+                              "hidden md:inline-flex items-center min-h-[40px] text-xs lg:text-[13px] font-medium transition-all px-3 lg:px-3.5 py-1.5 rounded-full whitespace-nowrap gap-1.5 cursor-pointer",
+                              item.highlight
+                                ? "font-bold text-[#FEBE16] bg-gradient-to-r from-[#FEBE16]/25 via-[#FEBE16]/15 to-[#FEBE16]/20 border border-[#FEBE16]/50 shadow-[0_0_14px_rgba(254,190,22,0.28)] hover:shadow-[0_0_22px_rgba(254,190,22,0.45)] hover:border-[#FEBE16] hover:scale-[1.02] active:scale-95"
+                                : isActive
+                                ? "text-[#FEBE16] font-semibold bg-white/10"
+                                : "text-slate-200 hover:text-white hover:bg-white/5"
+                            )}
+                          >
+                            {item.highlight && (
+                              <span className="relative flex h-2 w-2 shrink-0">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FEBE16] opacity-85" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FEBE16]" />
+                              </span>
+                            )}
+                            <span>{item.name}</span>
+                            {item.highlight && (
+                              <span className="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-[#FEBE16] text-[#052F25] leading-none shadow-xs">
+                                {isBn ? (item.badgeBn || "ক্যাটালগ") : (item.badge || "Catalog")}
+                              </span>
+                            )}
+                            {hasChildren && (
+                              <ChevronDown
+                                className={cn(
+                                  "w-3.5 h-3.5 opacity-70 transition-transform duration-200",
+                                  activeDropdown === item.name && "rotate-180 opacity-100 text-[#FEBE16]"
+                                )}
+                              />
+                            )}
+                          </Link>
+                        )}
 
                         {/* Desktop Dropdown Flyout Card */}
                         {hasChildren && (
@@ -423,7 +502,7 @@ export function AnimatedNavFramer({
                                 onPointerDown={(e) => e.stopPropagation()}
                                 className={cn(
                                   "absolute top-[calc(100%+8px)] z-50 min-w-[290px] p-2 rounded-2xl bg-[#052F25]/95 backdrop-blur-2xl border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col gap-1",
-                                  item.highlight ? "left-0" : "left-1/2 -translate-x-1/2"
+                                  item.highlight ? "left-0" : item.isThreeIconMenu ? "right-0" : "left-1/2 -translate-x-1/2"
                                 )}
                               >
                                 {item.children!.map((child) => {
@@ -609,6 +688,13 @@ export function AnimatedNavFramer({
                           )}
                         >
                           <div className="flex items-center gap-2">
+                            {item.isThreeIconMenu && (
+                              <div className="flex flex-col justify-center items-center gap-[2.5px] w-3.5 h-3.5 text-current shrink-0">
+                                <span className="w-3.5 h-[1.6px] rounded-full bg-current" />
+                                <span className="w-2.5 h-[1.6px] rounded-full bg-[#FEBE16]" />
+                                <span className="w-3.5 h-[1.6px] rounded-full bg-current" />
+                              </div>
+                            )}
                             {item.highlight && (
                               <span className="relative flex h-2 w-2 shrink-0">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FEBE16] opacity-85" />

@@ -84,7 +84,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
                   <ArrowUpRight className="w-4 h-4 text-[#052F25]" />
                 </Link>
                 <Link
-                  href="/contact"
+                  href={isBn ? "/bn/quote" : "/quote"}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-white text-[#074031] text-xs font-semibold border border-[#DCE4E0] hover:border-[#074031] transition-colors"
                 >
                   <span>{isBn ? "পাইকারি কোটেশন নিন" : "Request B2B Quote"}</span>
