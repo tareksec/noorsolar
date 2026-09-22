@@ -59,11 +59,11 @@ export function extractProductLogistics(
 
   let warehouseAvailability: string | null = null;
   if (product.stockStatus === "IN_STOCK") {
-    warehouseAvailability = isBn ? "ঢাকা ওয়্যারহাউস রেডি স্টক" : "Dhaka Warehouse In-Stock";
+    warehouseAvailability = isBn ? "ঢাকা ডিপো রেডি স্টক" : "Dhaka Warehouse In-Stock";
   } else if (product.stockStatus === "INCOMING") {
-    warehouseAvailability = isBn ? "আসন্ন কনটেইনার চালান" : "Incoming Container Consignment";
+    warehouseAvailability = isBn ? "আসন্ন কন্টেইনার চালান" : "Incoming Container Consignment";
   } else if (product.stockStatus === "ON_REQUEST") {
-    warehouseAvailability = isBn ? "অনুরোধ সাপেক্ষে / কনটেইনার ইন্ডেন্ট" : "On Request / Factory Indent";
+    warehouseAvailability = isBn ? "অনুরোধ সাপেক্ষে / কন্টেইনার ইনডেন্ট" : "On Request / Factory Indent";
   }
 
   const leadTime = product.leadTime?.trim() || null;

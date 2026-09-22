@@ -22,31 +22,35 @@ export function SustainabilityImpact({ locale }: SustainabilityImpactProps = {})
 
   const impactItems: ImpactItem[] = [
     {
-      badge: isBn ? "পরিবেশ ও রপ্তানি কমপ্লায়েন্স" : "ESG & Export Compliance",
+      badge: isBn ? "পরিবেশ ও ESG কমপ্লায়েন্স" : "ESG & Export Compliance",
       title: isBn
-        ? "পোশাক ও রপ্তানিমুখী শিল্পের জন্য টেকসই শক্তি"
+        ? "পোশাক ও রপ্তানিমুখী শিল্পের জন্য টেকসই গ্রিন এনার্জি"
         : "Lowering Industrial Carbon Footprints for Global Compliance",
       description: isBn
-        ? "আন্তর্জাতিক বায়ারদের ESG কমপ্লায়েন্স মানদণ্ড পূরণ করতে শিল্প কারখানার রুফটপ সোলার এখন অপরিহার্য। অন-সাইট গ্রিন এনার্জি ব্যবহার করে কারখানার কার্বন ফুটপ্রিন্ট কমান এবং বৈশ্বিক বাজারে এগিয়ে থাকুন।"
+        ? "আন্তর্জাতিক বায়ারদের কঠোর ESG কমপ্লায়েন্স অডিট পূরণ করতে শিল্প কারখানার রুফটপ সোলার এখন অত্যন্ত কার্যকরী। অন-সাইট গ্রিন এনার্জি ব্যবহারে কারখানার কার্বন ফুটপ্রিন্ট সরাসরি কমে এবং রপ্তানি সক্ষমতা বৃদ্ধি পায়।"
         : "Meeting international export standards and buyer ESG audits requires documented clean energy adoption. Industrial rooftop PV directly cuts factory Scope 2 emissions while satisfying global supply chain sustainability mandates.",
-      buttonText: isBn ? "বিশেষজ্ঞের সাথে কথা বলুন" : "Talk to an expert",
+      buttonText: isBn ? "সেলস টিমের সাথে কথা বলুন" : "Contact Commercial Sales",
       buttonHref: "/contact",
-      imageSrc: "/photos/impact-future-ready.webp",
-      imageAlt: isBn ? "পরিবেশবান্ধব নবায়নযোগ্য বিদ্যুৎ প্রকল্প" : "Industrial clean energy solar and wind installations",
+      imageSrc: "/photos/impact-esg-compliance.webp",
+      imageAlt: isBn
+        ? "রপ্তানিমুখী পোশাক কারখানায় আধুনিক রুফটপ সোলার প্যানেল ও পরিবেশবান্ধব ESG কমপ্লায়েন্স"
+        : "Modern industrial rooftop solar installation for ESG export compliance",
       reverse: false,
     },
     {
-      badge: isBn ? "দীর্ঘমেয়াদী LCOE সাশ্রয়" : "Levelized Cost of Energy",
+      badge: isBn ? "দীর্ঘমেয়াদী LCOE বিদ্যুৎ খরচ সাশ্রয়" : "Levelized Cost of Energy",
       title: isBn
-        ? "পিক আওয়ার ট্যারিফ হ্রাস ও অপারেশনাল খরচ নিয়ন্ত্রণ"
+        ? "পিক আওয়ার গ্রিড ট্যারিফ ও জেনারেটরের জ্বালানি খরচ হ্রাস"
         : "Mitigate Grid Tariff Spikes & Unpredictable Generator Costs",
       description: isBn
-        ? "গ্রিড বিদ্যুতের মূল্যবৃদ্ধি এবং ডিজেল জেনারেটরের জ্বালানি খরচ কমাতে অন-সাইট সোলার বিদ্যুৎ সবচেয়ে কার্যকরী সমাধান। দ্রুত পে-ব্যাক পিরিয়ডে দীর্ঘ ২৫ বছর পর্যন্ত কারখানার বিদ্যুৎ খরচ কমিয়ে রাখুন।"
+        ? "গ্রিড বিদ্যুতের ক্রমাগত ট্যারিফ বৃদ্ধি এবং ডিজেল জেনারেটরের অতিরিক্ত খরচ কমাতে অন-সাইট সোলার বিদ্যুৎ সবচেয়ে নির্ভরযোগ্য সমাধান। ৩ থেকে ৪ বছরের পে-ব্যাক পিরিয়ডে দীর্ঘ ২৫ বছর পর্যন্ত কারখানার বিদ্যুৎ খরচ কমিয়ে রাখা সম্ভব।"
         : "High peak commercial utility tariffs and volatile diesel fuel expenses directly impact operating margins. High-yield commercial solar arrays stabilize manufacturing kilowatt-hour costs with predictable 3 to 4 year capital payback timelines.",
-      buttonText: isBn ? "পরামর্শ নিন" : "Talk to an expert",
+      buttonText: isBn ? "বাণিজ্যিক কোটেশন নিন" : "Request Commercial Quote",
       buttonHref: "/contact",
-      imageSrc: "/photos/impact-cost-efficiency.webp",
-      imageAlt: isBn ? "বাণিজ্যিক সোলার প্যানেল ইনস্টলেশন" : "Solar photovoltaic panels installed for cost efficiency",
+      imageSrc: "/photos/impact-lcoe-savings.webp",
+      imageAlt: isBn
+        ? "শিল্প কারখানার ছাদে সোলার বিদ্যুৎ উৎপাদন মনিটরিং ও LCOE খরচ সাশ্রয় বিশ্লেষণ"
+        : "Industrial solar engineer monitoring real-time power generation and LCOE cost savings on tablet",
       reverse: true,
     },
   ];

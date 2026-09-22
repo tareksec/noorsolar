@@ -49,11 +49,11 @@ export function extractProductWarranty(
       : "Standard warranty terms are provided and backed directly by the original equipment manufacturer.";
 
     localSupportResponsibility = isBn
-      ? "নূর সোলার এনার্জি বাংলাদেশে স্থানীয় টেকনিক্যাল ডায়াগনস্টিকস, প্রস্তুতকারকের নিকট আরএমএ (RMA) আবেদন এবং ত্রুটিপূর্ণ পণ্য প্রতিস্থাপন প্রক্রিয়ায় সমন্বয়কারী হিসেবে দায়িত্ব পালন করে।"
+      ? "নূর সোলার এনার্জি বাংলাদেশে স্থানীয় টেকনিক্যাল পরিদর্শন, ম্যানুফ্যাকচারারের সাথে RMA ক্লেইম সমন্বয় এবং প্রতিস্থাপন প্রক্রিয়ায় সরাসরি সহায়তা প্রদান করে।"
       : "Noor Solar Energy serves as the local technical liaison in Bangladesh, coordinating on-site diagnostics, factory RMA claims, and authorized component replacement with the manufacturer.";
 
     claimProcess = isBn
-      ? "আরএমএ দাবি দাখিল করতে ক্রয়ের ইনভয়েস, পণ্যের সিরিয়াল নম্বর এবং ত্রুটির বিস্তারিত বিবরণ info@noorsolaren.com অথবা হোয়াটসঅ্যাপ ডেস্কে (+880 1884-611888) প্রেরণ করুন।"
+      ? "ওয়ারেন্টি বা RMA ক্লেইমের জন্য ক্রয়ের ইনভয়েস, সরঞ্জামের সিরিয়াল নম্বর এবং সমস্যার বিবরণ info@noorsolaren.com বা আমাদের অফিসিয়াল হোয়াটসঅ্যাপে (+880 1884-611888) পাঠান।"
       : "To initiate an RMA support claim, submit the original commercial invoice, serial numbers, and diagnostic logs to info@noorsolaren.com or our WhatsApp desk (+880 1884-611888).";
   }
 

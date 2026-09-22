@@ -17,19 +17,19 @@ export function ProjectsShowcase({ projects, locale }: ProjectsShowcaseProps) {
   const isBn = locale === "bn";
 
   return (
-    <section className="py-20 sm:py-28 bg-[#E4E7E4] border-t border-[#DDE1DC]">
+    <section className="py-20 sm:py-28 bg-[#F1F4F1] border-t border-[#DCE4E0]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#DDE1DC] text-xs font-mono text-[#111311] mb-3">
-              <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#DCE4E0] text-xs font-mono text-[#17251F] mb-3">
+              <span className="w-2 h-2 rounded-full bg-[#FEBE16]"></span>
               <span>{isBn ? "প্রকল্প সরঞ্জাম সরবরাহ রেফারেন্স" : "Supply & Project References"}</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-[#111311]">
+            <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-[#074031]">
               {isBn ? "বাস্তবায়িত সৌর বিদ্যুৎ প্রকল্পসমূহ" : "Verified Project Supply References"}
             </h2>
-            <p className="text-sm sm:text-base text-[#5C605C] max-w-2xl mt-2">
+            <p className="text-sm sm:text-base text-[#62706A] max-w-2xl mt-2">
               {isBn
                 ? "বাংলাদেশে বিভিন্ন শিল্প কারখানা, বাণিজ্যিক ছাদ ও মেগাওয়াট প্রকল্পে সরবরাহকৃত আসল সরঞ্জামের রেফারেন্স।"
                 : "Real commercial rooftop, industrial facility, and utility arrays supplied with engineering-grade solar equipment."}
@@ -42,11 +42,11 @@ export function ProjectsShowcase({ projects, locale }: ProjectsShowcaseProps) {
           {projects.map((project) => (
             <div
               key={project.id}
-              className="rounded-[32px] bg-white border border-[#DDE1DC] overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow group"
+              className="rounded-[32px] bg-white border border-[#DCE4E0] overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow group"
             >
               {/* Image Container */}
               {project.image && (
-                <div className="relative aspect-16/10 w-full bg-[#EDEDED] overflow-hidden">
+                <div className="relative aspect-16/10 w-full bg-[#F7F8F5] overflow-hidden">
                   <Image
                     src={project.image}
                     alt={project.title}
@@ -55,8 +55,8 @@ export function ProjectsShowcase({ projects, locale }: ProjectsShowcaseProps) {
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   {project.capacity && (
-                    <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-[#111311]/90 backdrop-blur-xs text-white text-xs font-mono font-bold flex items-center gap-1.5 shadow-xs">
-                      <Zap className="w-3.5 h-3.5 text-[#CEF23E]" />
+                    <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-[#052F25]/90 backdrop-blur-xs text-white text-xs font-mono font-bold flex items-center gap-1.5 shadow-xs">
+                      <Zap className="w-3.5 h-3.5 text-[#FEBE16]" />
                       <span>{project.capacity}</span>
                     </div>
                   )}
@@ -68,48 +68,48 @@ export function ProjectsShowcase({ projects, locale }: ProjectsShowcaseProps) {
                 <div>
                   <div className="flex flex-wrap items-center gap-2 mb-3">
                     {project.projectType && (
-                      <span className="px-2.5 py-0.5 rounded-full bg-[#EDEDED] text-[11px] font-mono text-[#111311]">
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#F1F4F1] text-[11px] font-mono text-[#074031]">
                         {project.projectType}
                       </span>
                     )}
                     {project.location && (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-mono text-[#5C605C]">
-                        <MapPin className="w-3 h-3 text-[#111311]" />
+                      <span className="inline-flex items-center gap-1 text-[11px] font-mono text-[#62706A]">
+                        <MapPin className="w-3 h-3 text-[#074031]" />
                         <span>{project.location}</span>
                       </span>
                     )}
                   </div>
 
-                  <h3 className="text-lg sm:text-xl font-bold text-[#111311] mb-2 leading-snug">
+                  <h3 className="text-lg sm:text-xl font-bold text-[#17251F] mb-2 leading-snug">
                     {project.title}
                   </h3>
 
                   {project.clientName && (
-                    <div className="flex items-center gap-1.5 text-xs text-[#5C605C] mb-3">
-                      <Building2 className="w-3.5 h-3.5 text-[#111311]" />
+                    <div className="flex items-center gap-1.5 text-xs text-[#62706A] mb-3">
+                      <Building2 className="w-3.5 h-3.5 text-[#074031]" />
                       <span>{project.clientName}</span>
                     </div>
                   )}
 
                   {project.summary && (
-                    <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed line-clamp-3 mb-4">
+                    <p className="text-xs sm:text-sm text-[#62706A] leading-relaxed line-clamp-3 mb-4">
                       {project.summary}
                     </p>
                   )}
                 </div>
 
                 {/* Footer Metadata */}
-                <div className="pt-4 border-t border-[#EDEDED] flex items-center justify-between text-xs font-mono">
+                <div className="pt-4 border-t border-[#DCE4E0] flex items-center justify-between text-xs font-mono">
                   {project.productsSupplied ? (
-                    <div className="flex items-center gap-1.5 text-[#111311] truncate max-w-[70%]">
-                      <PackageCheck className="w-3.5 h-3.5 shrink-0 text-[#111311]" />
+                    <div className="flex items-center gap-1.5 text-[#17251F] truncate max-w-[70%]">
+                      <PackageCheck className="w-3.5 h-3.5 shrink-0 text-[#074031]" />
                       <span className="truncate">{project.productsSupplied}</span>
                     </div>
                   ) : (
                     <span />
                   )}
                   {project.completionDate && (
-                    <div className="flex items-center gap-1 text-[#5C605C] shrink-0">
+                    <div className="flex items-center gap-1 text-[#62706A] shrink-0">
                       <Calendar className="w-3 h-3" />
                       <span>{project.completionDate}</span>
                     </div>

@@ -55,6 +55,7 @@ export async function generateMetadata({
       url: isBn ? `${siteUrl}/bn/products` : `${siteUrl}/products`,
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
+      images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Noor Solar Energy" }],
     },
   };
 }

@@ -81,7 +81,7 @@ export function TextMarquee({ locale }: TextMarqueeProps = {}) {
   return (
     <div
       ref={marqueeRef}
-      className="relative z-10 my-6 sm:my-8 py-4 sm:py-5 border-y border-[#282E28] bg-[#111311] overflow-hidden select-none shadow-md"
+      className="relative z-10 my-6 sm:my-8 py-4 sm:py-5 border-y border-[#0B513E] bg-[#074031] overflow-hidden select-none shadow-md"
       data-motion="text-marquee"
     >
       <div
@@ -96,7 +96,7 @@ export function TextMarquee({ locale }: TextMarqueeProps = {}) {
                 <span className="text-xs sm:text-sm font-mono font-bold tracking-widest text-white/95 px-6 sm:px-8">
                   {item}
                 </span>
-                <span className="w-2 h-2 rounded-full bg-[#CEF23E] shrink-0 shadow-[0_0_8px_#CEF23E]" />
+                <span className="w-2 h-2 rounded-full bg-[#FEBE16] shrink-0 shadow-[0_0_8px_#FEBE16]" />
               </div>
             ))}
           </div>

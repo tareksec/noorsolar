@@ -8,6 +8,25 @@ export async function getSiteSettings(locale?: string): Promise<SiteConfig> {
     });
 
     if (!setting || !setting.value) {
+      if (locale === "bn") {
+        return {
+          ...defaultSiteConfig,
+          tagline: defaultSiteConfig.taglineBn || defaultSiteConfig.tagline,
+          description: defaultSiteConfig.descriptionBn || defaultSiteConfig.description,
+          address: defaultSiteConfig.addressBn || defaultSiteConfig.address,
+          hours: defaultSiteConfig.hoursBn || defaultSiteConfig.hours,
+          heroHeadline: defaultSiteConfig.heroHeadlineBn || defaultSiteConfig.heroHeadline,
+          heroSubheadline: defaultSiteConfig.heroSubheadlineBn || defaultSiteConfig.heroSubheadline,
+          heroPrimaryCta: defaultSiteConfig.heroPrimaryCtaBn || defaultSiteConfig.heroPrimaryCta,
+          heroSecondaryCta: defaultSiteConfig.heroSecondaryCtaBn || defaultSiteConfig.heroSecondaryCta,
+          processHeadline: defaultSiteConfig.processHeadlineBn || defaultSiteConfig.processHeadline,
+          processSubheadline: defaultSiteConfig.processSubheadlineBn || defaultSiteConfig.processSubheadline,
+          closingCtaHeadline: defaultSiteConfig.closingCtaHeadlineBn || defaultSiteConfig.closingCtaHeadline,
+          closingCtaSubheadline: defaultSiteConfig.closingCtaSubheadlineBn || defaultSiteConfig.closingCtaSubheadline,
+          aboutHeadline: defaultSiteConfig.aboutHeadlineBn || defaultSiteConfig.aboutHeadline,
+          aboutBody: defaultSiteConfig.aboutBodyBn || defaultSiteConfig.aboutBody,
+        };
+      }
       return defaultSiteConfig;
     }
 
@@ -50,7 +69,8 @@ export async function getSiteSettings(locale?: string): Promise<SiteConfig> {
     for (const key of textKeys) {
       const bnKeyDot = `${key}.bn`;
       const bnKeyCamel = `${key}Bn`;
-      const val = parsed[bnKeyDot]?.trim() || parsed[bnKeyCamel]?.trim();
+      const fallbackBn = (defaultSiteConfig as unknown as Record<string, string>)[bnKeyCamel];
+      const val = parsed[bnKeyDot]?.trim() || parsed[bnKeyCamel]?.trim() || fallbackBn;
       if (val) {
         (localized as unknown as Record<string, unknown>)[key] = val;
       }
@@ -68,6 +88,25 @@ export async function getSiteSettings(locale?: string): Promise<SiteConfig> {
     return localized;
   } catch (error) {
     console.warn("getSiteSettings: database not available, using fallback defaults");
+    if (locale === "bn") {
+      return {
+        ...defaultSiteConfig,
+        tagline: defaultSiteConfig.taglineBn || defaultSiteConfig.tagline,
+        description: defaultSiteConfig.descriptionBn || defaultSiteConfig.description,
+        address: defaultSiteConfig.addressBn || defaultSiteConfig.address,
+        hours: defaultSiteConfig.hoursBn || defaultSiteConfig.hours,
+        heroHeadline: defaultSiteConfig.heroHeadlineBn || defaultSiteConfig.heroHeadline,
+        heroSubheadline: defaultSiteConfig.heroSubheadlineBn || defaultSiteConfig.heroSubheadline,
+        heroPrimaryCta: defaultSiteConfig.heroPrimaryCtaBn || defaultSiteConfig.heroPrimaryCta,
+        heroSecondaryCta: defaultSiteConfig.heroSecondaryCtaBn || defaultSiteConfig.heroSecondaryCta,
+        processHeadline: defaultSiteConfig.processHeadlineBn || defaultSiteConfig.processHeadline,
+        processSubheadline: defaultSiteConfig.processSubheadlineBn || defaultSiteConfig.processSubheadline,
+        closingCtaHeadline: defaultSiteConfig.closingCtaHeadlineBn || defaultSiteConfig.closingCtaHeadline,
+        closingCtaSubheadline: defaultSiteConfig.closingCtaSubheadlineBn || defaultSiteConfig.closingCtaSubheadline,
+        aboutHeadline: defaultSiteConfig.aboutHeadlineBn || defaultSiteConfig.aboutHeadline,
+        aboutBody: defaultSiteConfig.aboutBodyBn || defaultSiteConfig.aboutBody,
+      };
+    }
     return defaultSiteConfig;
   }
 }

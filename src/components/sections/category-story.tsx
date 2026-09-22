@@ -99,10 +99,10 @@ const STORIES_EN: StoryItem[] = [
 const STORIES_BN: StoryItem[] = [
   {
     slug: "solar-panels",
-    kicker: "বিদ্যুৎ উৎপাদন",
+    kicker: "পাওয়ার জেনারেশন",
     title: "N-Type TOPCon ও বাইফেসিয়াল সোলার প্যানেল",
     highlight: "বেঞ্চমার্ক মডেল NS-620TOP-BF • সর্বোচ্চ 620W পিক",
-    body: "আমরা আমদানি করি উন্নত ডুয়াল-গ্লাস বাইফেসিয়াল মডিউল, যা বাংলাদেশের উচ্চ তাপমাত্রা ও আর্দ্রতায় সর্বোচ্চ বিদ্যুৎ উৎপাদন করে। উভয় পাশ দিয়ে সূর্যালোক শোষণের ফলে শিল্পকারখানা ও রুফটপ প্রকল্পে অতিরিক্ত উৎপাদন পাওয়া যায়।",
+    body: "আমরা সরাসরি আমদানি করি ডুয়াল-গ্লাস বাইফেসিয়াল মডিউল, যা বাংলাদেশের উচ্চ তাপমাত্রা ও আর্দ্র পরিবেশেও সর্বোচ্চ বিদ্যুৎ উৎপাদন নিশ্চিত করে। উচ্চ বাইফেসিয়ালিটি ফ্যাক্টরের কারণে শিল্প কারখানা, গার্মেন্টস রুফটপ ও গ্রাউন্ড-মাউন্টেড সোলার প্রজেক্টে ব্যাক-সাইড থেকে উল্লেখযোগ্য অতিরিক্ত বিদ্যুৎ পাওয়া যায়।",
     icon: Zap,
     previewImage: "/photos/story-panels.webp",
     counters: [
@@ -111,9 +111,9 @@ const STORIES_BN: StoryItem[] = [
       { label: "বাইফেসিয়াল গেইন", value: 25, prefix: "সর্বোচ্চ +", suffix: "%", decimals: 0, subtext: "মডেল NS-620TOP-BF পরীক্ষিত" },
     ],
     bullets: [
-      "উচ্চ তাপমাত্রা সহনশীল ও অ্যান্টি-PID সুরক্ষা",
-      "2.0mm + 2.0mm টেম্পার্ড ডুয়াল-গ্লাস স্থায়িত্ব",
-      "সারাদেশে নিরাপদ প্যালেট ও কন্টেইনার সরবরাহ",
+      "অ্যান্টি-PID ও ট্রপিক্যাল আবহাওয়ার জন্য লো-টেম্পারেচার কোফিসিয়েন্ট",
+      "উন্নত 2.0mm + 2.0mm টেম্পার্ড ডুয়াল-গ্লাস সুরক্ষা",
+      "সারাদেশে নির্ভরযোগ্য প্যালেট ডেলিভারি ও কন্টেইনার ইনডেন্ট",
     ],
   },
   {
@@ -121,18 +121,18 @@ const STORIES_BN: StoryItem[] = [
     kicker: "এনার্জি স্টোরেজ",
     title: "LiFePO4 সার্ভার র্যাক ও মডুলার ব্যাটারি",
     highlight: "বেঞ্চমার্ক মডেল NS-BAT-48100R • ৬,০০০+ সাইকেল",
-    body: "নিরাপদ ও দীর্ঘস্থায়ী লিথিয়াম আয়রন ফসফেট (LiFePO4) স্টোরেজ ব্যাটারি। ইন্ডাস্ট্রিয়াল ব্যাকআপ ও সোলার হাইব্রিড সিস্টেমের জন্য 51.2V র্যাক মাউন্ট ও উচ্চ ভোল্টেজ মডুলার সিস্টেমে সরবরাহযোগ্য।",
+    body: "নিরাপদ ও দীর্ঘস্থায়ী লিথিয়াম আয়রন ফসফেট (LiFePO4) স্টোরেজ ব্যাটারি। ইন্ডাস্ট্রিয়াল ব্যাকআপ ও কমার্শিয়াল সোলার সিস্টেমের জন্য স্ট্যান্ডার্ড 51.2V সার্ভার র্যাক এবং হাই-ভোল্টেজ মডুলার সিস্টেমে তাৎক্ষণিক সরবরাহযোগ্য।",
     icon: BatteryCharging,
     previewImage: "/bettry/500_F_2090872600_mpL6CKZulRNh7R8OMe31iD00cXQpEpR7.jpg",
     counters: [
-      { label: "প্যাক এনার্জি (NS-BAT-48100R)", value: 5.12, prefix: "", suffix: " kWh", decimals: 2, subtext: "51.2V 100Ah গ্রেড-A প্রিজম্যাটিক" },
-      { label: "সাইকেল লাইফ (NS-BAT-48100R)", value: 6000, prefix: ">", suffix: " সাইকেল", decimals: 0, subtext: "৮০% DOD স্ট্যান্ডার্ড মান" },
-      { label: "প্যারালাল সংযোগ", value: 15, prefix: "সর্বোচ্চ ", suffix: " ইউনিট", decimals: 0, subtext: "76.8 kWh মডুলার ব্যাংক" },
+      { label: "প্যাক এনার্জি (NS-BAT-48100R)", value: 5.12, prefix: "", suffix: " kWh", decimals: 2, subtext: "51.2V 100Ah গ্রেড-A প্রিজম্যাটিক সেল" },
+      { label: "সাইকেল লাইফ (NS-BAT-48100R)", value: 6000, prefix: ">", suffix: " সাইকেল", decimals: 0, subtext: "৮০% DoD, ২৫°C স্ট্যান্ডার্ড" },
+      { label: "প্যারালাল এক্সপ্যানশন", value: 15, prefix: "সর্বোচ্চ ", suffix: " ইউনিট", decimals: 0, subtext: "76.8 kWh মডুলার ব্যাংক" },
     ],
     bullets: [
-      "ইন্টেলিজেন্ট মাল্টি-স্টেজ ব্যাটারি ম্যানেজমেন্ট (BMS)",
-      "শীর্ষস্থানীয় হাইব্রিড ইনভার্টারের সাথে CAN/RS485 সাপোর্ট",
-      "রক্ষণাবেক্ষণমুক্ত সিল্ড গ্রেড-A প্রিজম্যাটিক সেল",
+      "ইন্টেলিজেন্ট মাল্টি-স্টেজ ব্যাটারি ম্যানেজমেন্ট সিস্টেম (BMS)",
+      "শীর্ষস্থানীয় হাইব্রিড ইনভার্টারের সাথে CAN ও RS485 কমিউনিকেশন",
+      "রক্ষণাবেক্ষণমুক্ত জেনুইন গ্রেড-A প্রিজম্যাটিক সেল",
     ],
   },
   {
@@ -140,18 +140,18 @@ const STORIES_BN: StoryItem[] = [
     kicker: "পাওয়ার কনভার্সন",
     title: "কমার্শিয়াল হাইব্রিড ও স্ট্রিং ইনভার্টার",
     highlight: "মডেল NS-INV-5000H1 ও NS-INV-30KG3 স্পেসিফিকেশন",
-    body: "উচ্চ-দক্ষতাসম্পন্ন পিওর সাইন ওয়েভ সোলার ইনভার্টার, যা দীর্ঘস্থায়ী এবং গ্রিডের ওঠানামায় নিখুঁত কাজ করে। মাল্টি-চ্যানেল MPPT ট্র্যাকিং, IP65 সুরক্ষা এবং সংবেদনশীল লোডের জন্য তাৎক্ষণিক ইউপিএস সুইচিং।",
+    body: "সর্বোচ্চ আপটাইম ও গ্রিড স্ট্যাবিলিটির জন্য উচ্চ-দক্ষতাসম্পন্ন পিওর সাইন ওয়েভ ইনভার্টার। মাল্টি-চ্যানেল MPPT ট্র্যাকিং, IP65/IP66 আউটডোর প্রটেকশন এবং স্পর্শকাতর লোডের জন্য ১০ মিলি-সেকেন্ডের কম সময়ে স্বয়ংক্রিয় ইউপিএস সুইচওভার।",
     icon: Cpu,
     previewImage: "/Inverter/solar-inverter-with-battery-storage.jpg",
     counters: [
-      { label: "রেটেড আউটপুট (NS-INV-10KH3)", value: 10, prefix: "", suffix: " kW", decimals: 0, subtext: "৩-ফেজ ৩৮০V/৪০০V গ্রিড" },
-      { label: "সর্বোচ্চ কর্মদক্ষতা (NS-INV-30KG3)", value: 98.7, prefix: "", suffix: "%", decimals: 1, subtext: "30kW কমার্শিয়াল স্ট্রিং" },
-      { label: "ইউপিএস রূপান্তর (NS-INV-5000H1)", value: 8, prefix: "< ", suffix: " ms", decimals: 0, subtext: "স্বয়ংক্রিয় ট্রান্সফার সময়" },
+      { label: "রেটেড আউটপুট (NS-INV-10KH3)", value: 10, prefix: "", suffix: " kW", decimals: 0, subtext: "থ্রি-ফেজ 380V/400V গ্রিড" },
+      { label: "পিক এফিসিয়েন্সি (NS-INV-30KG3)", value: 98.7, prefix: "", suffix: "%", decimals: 1, subtext: "30kW কমার্শিয়াল স্ট্রিং" },
+      { label: "ইউপিএস সুইচওভার (NS-INV-5000H1)", value: 8, prefix: "< ", suffix: " ms", decimals: 0, subtext: "তাৎক্ষণিক স্বয়ংক্রিয় ট্রান্সফার" },
     ],
     bullets: [
-      "রিয়েল-টাইম স্ট্রিং মনিটরিং ও রিমোট কন্ট্রোল",
-      "অন্তর্নির্মিত DC/AC Type II সার্জ প্রোটেকশন",
-      "শীর্ষস্থানীয় লিথিয়াম ব্যাটারি প্রটোকলের সাথে পূর্ণ সামঞ্জস্য",
+      "স্মার্ট স্ট্রিং মনিটরিং ও রিয়েল-টাইম ক্লাউড টেলিমেট্রি",
+      "বিল্ট-ইন DC/AC Type II সার্জ অ্যারেস্টার সুরক্ষা",
+      "জনপ্রিয় সব লিথিয়াম ব্যাটারি প্রটোকলের সাথে সরাসরি কানেক্টিভিটি",
     ],
   },
 ];
@@ -167,55 +167,55 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
   // Visual Theme Config for the 3 Stacking Cards
   const cardThemes = [
     {
-      // Card 1: Solar Panels (Deep Slate Theme)
-      sectionBg: "bg-slate-950 text-white",
-      gridColor: "bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)]",
+      // Card 1: Solar Panels (Forest Green Theme)
+      sectionBg: "bg-[#074031] text-white",
+      gridColor: "bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)]",
       roundedClass: "",
       shadowClass: "",
       borderClass: "",
-      tagBg: "bg-[#CEF23E]/15 text-[#CEF23E] border border-[#CEF23E]/30",
+      tagBg: "bg-[#FEBE16]/15 text-[#FEBE16] border border-[#FEBE16]/30",
       imageBorder: "border-white/10 bg-white/5",
       counterBg: "bg-white/[0.06] border border-white/10 text-white",
-      counterSubtext: "text-slate-400",
-      bulletCheck: "bg-[#CEF23E] text-[#111311]",
-      bulletText: "text-slate-200",
-      bodyText: "text-slate-300",
-      ctaBtn: "bg-[#CEF23E] hover:bg-white text-[#111311]",
-      indexPill: "bg-white/10 text-[#CEF23E] border border-white/15",
+      counterSubtext: "text-[#DCE4E0]/70",
+      bulletCheck: "bg-[#FEBE16] text-[#052F25]",
+      bulletText: "text-white/90",
+      bodyText: "text-white/80",
+      ctaBtn: "bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25]",
+      indexPill: "bg-white/10 text-[#FEBE16] border border-white/15",
     },
     {
-      // Card 2: Lithium Batteries (Clean Industrial Light Gray Theme)
-      sectionBg: "bg-neutral-300 text-black",
-      gridColor: "bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)]",
+      // Card 2: Lithium Batteries (Soft Surface Theme)
+      sectionBg: "bg-[#F1F4F1] text-[#17251F]",
+      gridColor: "bg-[linear-gradient(to_right,#07403115_1px,transparent_1px),linear-gradient(to_bottom,#07403115_1px,transparent_1px)]",
       roundedClass: "rounded-tr-2xl rounded-tl-2xl sm:rounded-tr-[40px] sm:rounded-tl-[40px]",
-      shadowClass: "shadow-[0_-25px_60px_rgba(0,0,0,0.35)]",
-      borderClass: "border-t border-white/70",
-      tagBg: "bg-white/90 text-[#111311] border border-slate-300",
-      imageBorder: "border-slate-300 bg-white/70",
-      counterBg: "bg-white/90 border border-slate-300 text-[#111311]",
-      counterSubtext: "text-[#5C605C]",
-      bulletCheck: "bg-[#111311] text-[#CEF23E]",
-      bulletText: "text-[#111311]",
-      bodyText: "text-[#3D423D]",
-      ctaBtn: "bg-[#111311] hover:bg-black text-[#CEF23E]",
-      indexPill: "bg-[#111311] text-white border border-[#111311]",
+      shadowClass: "shadow-[0_-25px_60px_rgba(7,64,49,0.15)]",
+      borderClass: "border-t border-[#DCE4E0]",
+      tagBg: "bg-white text-[#074031] border border-[#DCE4E0]",
+      imageBorder: "border-[#DCE4E0] bg-white/70",
+      counterBg: "bg-white/90 border border-[#DCE4E0] text-[#074031]",
+      counterSubtext: "text-[#62706A]",
+      bulletCheck: "bg-[#074031] text-[#FEBE16]",
+      bulletText: "text-[#17251F]",
+      bodyText: "text-[#62706A]",
+      ctaBtn: "bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25]",
+      indexPill: "bg-[#074031] text-white border border-[#074031]",
     },
     {
-      // Card 3: Solar Inverters (Deep Black / Neon Lime Theme)
-      sectionBg: "bg-slate-950 text-white",
-      gridColor: "bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)]",
+      // Card 3: Solar Inverters (Deep Green Theme)
+      sectionBg: "bg-[#052F25] text-white",
+      gridColor: "bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)]",
       roundedClass: "rounded-tr-2xl rounded-tl-2xl sm:rounded-tr-[40px] sm:rounded-tl-[40px]",
-      shadowClass: "shadow-[0_-30px_70px_rgba(0,0,0,0.55)]",
-      borderClass: "border-t border-[#CEF23E]/30",
-      tagBg: "bg-[#CEF23E]/15 text-[#CEF23E] border border-[#CEF23E]/30",
+      shadowClass: "shadow-[0_-30px_70px_rgba(0,0,0,0.45)]",
+      borderClass: "border-t border-[#0B513E]",
+      tagBg: "bg-[#FEBE16]/15 text-[#FEBE16] border border-[#FEBE16]/30",
       imageBorder: "border-white/10 bg-white/5",
       counterBg: "bg-white/[0.06] border border-white/10 text-white",
-      counterSubtext: "text-slate-400",
-      bulletCheck: "bg-[#CEF23E] text-[#111311]",
-      bulletText: "text-slate-200",
-      bodyText: "text-slate-300",
-      ctaBtn: "bg-[#CEF23E] hover:bg-white text-[#111311]",
-      indexPill: "bg-white/10 text-[#CEF23E] border border-white/15",
+      counterSubtext: "text-[#DCE4E0]/70",
+      bulletCheck: "bg-[#FEBE16] text-[#052F25]",
+      bulletText: "text-white/90",
+      bodyText: "text-white/80",
+      ctaBtn: "bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25]",
+      indexPill: "bg-white/10 text-[#FEBE16] border border-white/15",
     },
   ];
 
@@ -244,9 +244,9 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
               <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-current/15 gap-4">
                 <div>
                   <div className="inline-flex items-center gap-2 mb-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E] animate-pulse" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#FEBE16] animate-pulse" />
                     <span className="text-xs font-mono uppercase tracking-wider opacity-75">
-                      {isBn ? "স্ক্রোল স্টোরি • তিনটি মূল ক্যাটাগরি" : "Scroll Story • Three Core Categories"}
+                      {isBn ? "প্রোডাক্ট স্টোরি • তিনটি মূল ক্যাটাগরি" : "Scroll Story • Three Core Categories"}
                     </span>
                   </div>
                   <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
@@ -364,7 +364,7 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
                       href={linkHref}
                       className={`inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full text-xs sm:text-sm font-bold tracking-tight transition-all duration-300 shadow-md hover:scale-105 active:scale-95 ${theme.ctaBtn}`}
                     >
-                      <span>{isBn ? "বিস্তারিত দেখুন" : `Explore ${story.kicker}`}</span>
+                      <span>{isBn ? "টেকনিক্যাল তথ্য ও পণ্য দেখুন" : `View ${story.kicker} Products`}</span>
                       <ArrowUpRight className="w-4 h-4" />
                     </Link>
                   </div>

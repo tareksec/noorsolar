@@ -7,6 +7,18 @@ export interface ProductDocuments {
   packingSheet?: string | null;
 }
 
+export function isValidDocumentUrl(url?: string | null): string | null {
+  if (!url || typeof url !== "string") return null;
+  const trimmed = url.trim();
+  if (!trimmed || trimmed === "#" || trimmed === "/#" || trimmed === "/" || trimmed.toLowerCase().includes("example.com")) {
+    return null;
+  }
+  if (!trimmed.startsWith("http://") && !trimmed.startsWith("https://") && !trimmed.startsWith("/")) {
+    return null;
+  }
+  return trimmed;
+}
+
 /**
  * Parses the raw datasheetUrl field from a Product.
  * Backwards-compatible: if it's a plain URL, treats it as { datasheet: raw }.
@@ -22,20 +34,20 @@ export function parseProductDocuments(raw?: string | null): ProductDocuments {
     try {
       const parsed = JSON.parse(trimmed);
       return {
-        datasheet: parsed.datasheet?.trim() || null,
-        warranty: parsed.warranty?.trim() || null,
-        certificate: parsed.certificate?.trim() || null,
-        manual: parsed.manual?.trim() || null,
-        testReport: parsed.testReport?.trim() || null,
-        packingSheet: parsed.packingSheet?.trim() || null,
+        datasheet: isValidDocumentUrl(parsed.datasheet),
+        warranty: isValidDocumentUrl(parsed.warranty),
+        certificate: isValidDocumentUrl(parsed.certificate),
+        manual: isValidDocumentUrl(parsed.manual),
+        testReport: isValidDocumentUrl(parsed.testReport),
+        packingSheet: isValidDocumentUrl(parsed.packingSheet),
       };
     } catch {
       // If parsing fails, treat as a single datasheet URL
-      return { datasheet: trimmed };
+      return { datasheet: isValidDocumentUrl(trimmed) };
     }
   }
 
-  return { datasheet: trimmed };
+  return { datasheet: isValidDocumentUrl(trimmed) };
 }
 
 /**

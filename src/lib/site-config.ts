@@ -99,62 +99,62 @@ export const defaultSiteConfig: SiteConfig = {
   whatsapp: "8801884611888",
   whatsappDisplay: "+880 1884-611888",
   email: "info@noorsolaren.com",
-  address: "Motijheel Commercial Area, Dhaka-1000, Bangladesh",
-  addressBn: "মতিঝিল বাণিজ্যিক এলাকা, ঢাকা-১০০০, বাংলাদেশ",
+  address: "House-38 (Flat-1A), Road-5/A, Sector-5, Uttara, Dhaka-1230, Bangladesh",
+  addressBn: "হাউস-৩৮ (ফ্ল্যাট-১এ), রোড-৫/এ, সেক্টর-৫, উত্তরা, ঢাকা-১২৩০, বাংলাদেশ",
   hours: "Sat - Thu: 9:00 AM - 7:00 PM (Friday Closed)",
   hoursBn: "শনি - বৃহস্পতি: সকাল ৯:০০ - সন্ধ্যা ৭:০০ (শুক্রবার বন্ধ)",
   heroHeadline: "Solar Equipment. Imported Direct. Supplied at Project Scale.",
-  heroHeadlineBn: "সরাসরি আমদানিকৃত সোলার ইকুইপমেন্ট। সরবরাহ প্রকল্প পর্যায়ে।",
+  heroHeadlineBn: "সরাসরি আমদানিকৃত সোলার ইকুইপমেন্ট। প্রজেক্ট স্কেলে পাইকারি সরবরাহ।",
   heroSubheadline:
     "N-Type PV modules, LiFePO4 storage and commercial inverters for EPCs, industrial facilities and solar dealers across Bangladesh.",
   heroSubheadlineBn:
-    "ইপিসি (EPC), শিল্প কারখানা এবং সোলার ডিলারদের জন্য এন-টাইপ পিভি মডিউল, LiFePO4 স্টোরেজ ও কমার্শিয়াল ইনভার্টার।",
+    "EPC ঠিকাদার, শিল্পপ্রতিষ্ঠান ও সোলার ডিলারদের জন্য N-Type পিভি মডিউল, LiFePO4 ব্যাটারি ও কমার্শিয়াল ইনভার্টার সরবরাহ।",
   heroPrimaryCta: "Request Wholesale Quote",
-  heroPrimaryCtaBn: "হোলসেল কোটেশন চান",
+  heroPrimaryCtaBn: "পাইকারি কোটেশন নিন",
   heroSecondaryCta: "View Available Stock",
-  heroSecondaryCtaBn: "মজুদ পণ্য দেখুন",
+  heroSecondaryCtaBn: "বর্তমান স্টক দেখুন",
   processHeadline: "Order in four simple steps",
-  processHeadlineBn: "চারটি সহজ ধাপে অর্ডার করুন",
+  processHeadlineBn: "চারটি সহজ ধাপে অর্ডার প্রক্রিয়া",
   processSubheadline: "A straightforward procurement workflow engineered for commercial contractors, installers, and B2B buyers across Bangladesh.",
-  processSubheadlineBn: "বাণিজ্যিক ঠিকাদার, ইনস্টলার এবং পাইকারি ক্রেতাদের জন্য একটি সহজ ও স্বচ্ছ সরবরাহ প্রক্রিয়া।",
+  processSubheadlineBn: "বাণিজ্যিক ঠিকাদার, ইনস্টলার ও পাইকারি ক্রেতাদের জন্য একটি সহজ ও স্বচ্ছ সরবরাহ প্রক্রিয়া।",
   processSteps: [
     {
       title: "Request a quote",
-      titleBn: "কোটেশন চান",
+      titleBn: "কোটেশনের অনুরোধ করুন",
       desc: "Tell us the products and quantity you need. Send the form, call us or message us on WhatsApp.",
-      descBn: "আপনার প্রয়োজনীয় পণ্য ও পরিমাণের বিবরণ দিন। ওয়েব ফরম পূরণ করুন, ফোন করুন অথবা হোয়াটসঅ্যাপে মেসেজ পাঠান।",
+      descBn: "আপনার প্রয়োজনীয় ইকুইপমেন্ট ও পরিমাণের তালিকা দিন—ওয়েবসাইট ফর্ম, ফোন কল কিংবা সরাসরি হোয়াটসঅ্যাপের মাধ্যমে।",
     },
     {
       title: "Confirm specifications",
-      titleBn: "স্পেসিফিকেশন মিলিয়ে নিন",
+      titleBn: "স্পেসিফিকেশন যাচাই",
       desc: "Our team checks the datasheets and matches the right models and quantities to your project.",
-      descBn: "আমাদের কারিগরি দল ডেটাশিট পর্যালোচনা করে আপনার প্রকল্পের জন্য সবচেয়ে উপযুক্ত মডেল ও সংখ্যা নির্ধারণ করবে।",
+      descBn: "আমাদের টেকনিক্যাল টিম ডেটাশিট পর্যালোচনা করে আপনার প্রজেক্টের চাহিদামতো সঠিক মডেল ও পরিমাণ নিশ্চিত করবে।",
     },
     {
       title: "Receive your quotation",
-      titleBn: "আনুষ্ঠানিক কোটেশন পান",
+      titleBn: "আনুষ্ঠানিক কোটেশন গ্রহণ",
       desc: "Get a formal quotation with pricing and terms for your order.",
-      descBn: "মূল্যতালিকা, পেমেন্টের শর্তাবলি ও ডেলিভারি বিবরণসহ আনুষ্ঠানিক লিখিত কোটেশন বুঝে নিন।",
+      descBn: "মূল্যতালিকা, পেমেন্টের শর্তাবলি ও ডেলিভারির সময় উল্লেখসহ লিখিত আনুষ্ঠানিক কোটেশন বুঝে নিন।",
     },
     {
       title: "Confirm and arrange delivery",
-      titleBn: "অর্ডার নিশ্চিত ও ডেলিভারি গ্রহণ",
+      titleBn: "অর্ডার নিশ্চিতকরণ ও ডেলিভারি",
       desc: "Confirm the order and we coordinate delivery. Contact sales for current schedules.",
-      descBn: "অর্ডার নিশ্চিত করার পর আমরা ডেলিভারির ব্যবস্থা করব। বর্তমান সময়সূচি জানতে আমাদের সেলস ডেস্কে কথা বলুন।",
+      descBn: "অর্ডার চূড়ান্ত হলে আমরা নির্ধারিত সময়ে সরাসরি ডিপো বা সাইটে নিরাপদ ডেলিভারির সমন্বয় করব।",
     },
   ],
   closingCtaHeadline: "Ready to Order or Inquire About Container Pricing?",
-  closingCtaHeadlineBn: "অর্ডার দিতে অথবা কনটেইনার পাইকারি মূল্য জানতে চান?",
+  closingCtaHeadlineBn: "প্রজেক্টের অর্ডার বা কন্টেইনারের পাইকারি মূল্য জানতে চান?",
   closingCtaSubheadline:
     "Submit your project specifications or required equipment quantity below. Our commercial sales engineers respond with formal quotations within working hours.",
   closingCtaSubheadlineBn:
-    "নিচে আপনার প্রকল্পের বিবরণ অথবা কাঙ্ক্ষিত পণ্যের সংখ্যা লিখে পাঠান। আমাদের সেলস ইঞ্জিনিয়াররা অফিস চলাকালীন দ্রুত আনুষ্ঠানিক কোটেশন পাঠাবেন।",
+    "নিচে আপনার প্রজেক্টের স্পেসিফিকেশন বা প্রয়োজনীয় ইকুইপমেন্টের পরিমাণ লিখে পাঠান। আমাদের সেলস ইঞ্জিনিয়াররা কার্যদিবসে দ্রুত আনুষ্ঠানিক কোটেশন প্রদান করবেন।",
   aboutHeadline: "Engineering-Grade Solar Equipment for Bangladesh .",
-  aboutHeadlineBn: "বাংলাদেশে উন্নত কারিগরি মানের সোলার সরঞ্জাম।",
+  aboutHeadlineBn: "বাংলাদেশে নির্ভরযোগ্য ও ইঞ্জিনিয়ারিং-গ্রেড সোলার ইকুইপমেন্ট সরবরাহ।",
   aboutBody:
     "Supplying Solar Panels, High-Capacity Lithium-ion Batteries, and Industrial/Commercial Inverters across Bangladesh.",
   aboutBodyBn:
-    "সারা দেশে বাণিজ্যিক ছাদ, শিল্প কারখানা ও সৌর বিদ্যুৎ প্রকল্পের জন্য উন্নত প্রযুক্তির সোলার প্যানেল, লিথিয়াম ব্যাটারি ও ইনভার্টার পাইকারি সরবরাহ করছি।",
+    "সারা দেশে বাণিজ্যিক রুফটপ, শিল্প কারখানা ও সোলার প্রজেক্টের জন্য উন্নত প্রযুক্তির সোলার প্যানেল, LiFePO4 ব্যাটারি ও ইনভার্টার পাইকারি সরবরাহ করছি।",
   businessPhotos: {
     warehouse: "/photos/step-3-logistics.webp",
     palletStock: "/photos/cat-solar-panels.webp",
@@ -170,35 +170,35 @@ export const defaultSiteConfig: SiteConfig = {
   faq: [
     {
       question: "How do I request a bulk quote?",
-      questionBn: "পাইকারি কোটেশন কীভাবে চাইবেন?",
+      questionBn: "পাইকারি কোটেশন কীভাবে পাওয়া যাবে?",
       answer:
         "Select your required products or categories, specify your estimated quantity, and submit our quotation form. You can also reach our technical sales team directly via WhatsApp or phone for immediate pricing.",
       answerBn:
-        "পণ্য নির্বাচন করে কাঙ্ক্ষিত পরিমাণ উল্লেখ করে আমাদের কোটেশন ফরম জমা দিন। দ্রুত মূল্যের জন্য সরাসরি আমাদের ফোন বা হোয়াটসঅ্যাপেও যোগাযোগ করতে পারেন।",
+        "আপনার প্রয়োজনীয় পণ্য ও পরিমাণ উল্লেখ করে কোটেশন ফর্ম জমা দিন। তাৎক্ষণিক মূল্যের জন্য সরাসরি আমাদের ফোন বা হোয়াটসঅ্যাপেও যোগাযোগ করতে পারেন।",
     },
     {
       question: "Do you supply engineering datasheets and factory specifications?",
-      questionBn: "আপনারা কি কারিগরি ডেটাশিট ও ফ্যাক্টরি স্পেসিফিকেশন প্রদান করেন?",
+      questionBn: "আপনারা কি টেকনিক্যাল ডেটাশিট ও ফ্যাক্টরি স্পেসিফিকেশন প্রদান করেন?",
       answer:
         "Yes, all solar panels, lithium batteries, and inverters include technical datasheets and factory specifications.",
       answerBn:
-        "হ্যাঁ, আমাদের প্রতিটি সোলার প্যানেল, লিথিয়াম ব্যাটারি ও ইনভার্টারের সাথে প্রস্তুতকারকের পূর্ণাঙ্গ কারিগরি ডেটাশিট ও স্পেসিফিকেশন দেওয়া হয়।",
+        "হ্যাঁ, আমাদের প্রতিটি সোলার প্যানেল, LiFePO4 ব্যাটারি ও ইনভার্টারের সাথে প্রস্তুতকারকের অফিসিয়াল টেকনিক্যাল ডেটাশিট ও স্পেসিফিকেশন সরবরাহ করা হয়।",
     },
     {
       question: "What is your typical delivery lead time in Bangladesh?",
-      questionBn: "বাংলাদেশে পণ্য ডেলিভারির সময়সীমা কেমন?",
+      questionBn: "বাংলাদেশে পণ্য ডেলিভারির সময়সীমা কেমন?",
       answer:
         "Contact our sales team for current delivery schedules and stock availability for container and pallet orders.",
       answerBn:
-        "স্টক প্রাপ্যতা ও কনটেইনার বা প্যালেট অর্ডারের বর্তমান ডেলিভারি সময়সূচি জানতে আমাদের সেলস টিমের সাথে যোগাযোগ করুন।",
+        "ডিপোতে প্রস্তুত স্টকের জন্য দ্রুত ডেলিভারি নিশ্চিত করা হয়। কন্টেইনার বা বড় প্যালেট অর্ডারের বর্তমান ডেলিভারি শিডিউল জানতে সেলস টিমের সাথে যোগাযোগ করুন।",
     },
     {
       question: "Do you offer installation or EPC services?",
-      questionBn: "আপনারা কি ইনস্টলেশন বা EPC সেবা দেন?",
+      questionBn: "আপনারা কি সরাসরি ইনস্টলেশন বা EPC সেবা দেন?",
       answer:
         "We are an equipment importer and wholesale supplier. We partner with and supply certified EPC contractors, factories, and solar dealers nationwide.",
       answerBn:
-        "আমরা মূলত পাইকারি সরঞ্জাম আমদানিকারক ও পরিবেশক। আমরা সারা দেশের অনুমোদিত EPC ঠিকাদার, কারখানা ও সোলার ডিলারদের সরঞ্জাম সরবরাহ করে থাকি।",
+        "আমরা সরাসরি সোলার ইকুইপমেন্ট আমদানিকারক ও পাইকারি সরবরাহকারী। আমরা সারা দেশের নিবন্ধিত EPC ঠিকাদার, শিল্পপ্রতিষ্ঠান ও অনুমোদিত সোলার ডিলারদের ইকুইপমেন্ট সরবরাহ করে থাকি।",
     },
   ],
 };

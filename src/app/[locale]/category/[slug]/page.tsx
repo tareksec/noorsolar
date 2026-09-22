@@ -69,7 +69,9 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       url: isBn ? `/bn/category/${category.slug}` : `/category/${category.slug}`,
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
-      images: category.image ? [{ url: category.image }] : [],
+      images: category.image
+        ? [{ url: category.image }]
+        : [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Noor Solar Energy" }],
     },
   };
 }
@@ -87,32 +89,32 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const isBn = locale === "bn";
 
   return (
-    <div className="pt-28 sm:pt-36 pb-24 bg-[#E4E7E4] min-h-screen">
+    <div className="pt-28 sm:pt-36 pb-24 bg-[#F7F8F5] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Back Link */}
         <div className="mb-6">
           <Link
             href="/products"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#5C605C] hover:text-[#111311] transition-colors min-h-[44px]"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#62706A] hover:text-[#074031] transition-colors min-h-[44px]"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>{isBn ? "সকল পণ্যে ফিরে যান" : "Back to All Equipment"}</span>
+            <span>{isBn ? "সকল সরঞ্জামে ফিরে যান" : "Back to All Equipment"}</span>
           </Link>
         </div>
 
         {/* Category Header Banner */}
-        <div className="p-8 sm:p-12 rounded-[36px] bg-[#EDEDED] border border-[#DDE1DC] mb-12 relative overflow-hidden">
+        <div className="p-8 sm:p-12 rounded-[36px] bg-[#F1F4F1] border border-[#DCE4E0] mb-12 relative overflow-hidden">
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-[#111311] mb-3">
-              <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
-              <span>{isBn ? "সরাসরি আমদানি লাইন" : "Direct Import Line"}</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-[#074031] mb-3 border border-[#DCE4E0]">
+              <span className="w-2 h-2 rounded-full bg-[#FEBE16]"></span>
+              <span>{isBn ? "সরাসরি আমদানি বিভাগ" : "Direct Import Line"}</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111311]">
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#074031]">
               {category.name}
             </h1>
             {category.description && (
-              <p className="text-sm sm:text-base text-[#5C605C] leading-relaxed mt-3">
+              <p className="text-sm sm:text-base text-[#62706A] leading-relaxed mt-3">
                 {category.description}
               </p>
             )}
@@ -134,19 +136,19 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             ))}
           </div>
         ) : (
-          <div className="p-12 text-center rounded-3xl bg-white border border-[#DDE1DC] max-w-lg mx-auto">
+          <div className="p-12 text-center rounded-3xl bg-white border border-[#DCE4E0] max-w-lg mx-auto">
             <EmptyCatalogIllustration className="w-40 h-36 mx-auto mb-2" />
-            <h3 className="text-lg font-bold text-[#111311] mb-2">
+            <h3 className="text-lg font-bold text-[#074031] mb-2">
               {isBn ? "এই ক্যাটাগরিতে এখনও কোনো পণ্য নেই" : "No active products listed yet"}
             </h3>
-            <p className="text-xs text-[#5C605C] mb-6">
+            <p className="text-xs text-[#62706A] mb-6">
               {isBn
-                ? "এই ক্যাটাগরির জন্য নতুন কনটেইনারের পণ্য ওয়্যারহাউসে যুক্ত হওয়ার প্রক্রিয়ায় রয়েছে।"
+                ? "এই ক্যাটাগরির নতুন কন্টেইনার চালান ঢাকা ডিপোতে যুক্ত হওয়ার প্রক্রিয়ায় রয়েছে।"
                 : "New container inventory for this category is currently being staged in our warehouse."}
             </p>
             <Link
               href="/products"
-              className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] rounded-full bg-[#111311] text-white text-xs font-medium hover:bg-black transition-colors"
+              className="inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] rounded-full bg-[#FEBE16] text-[#052F25] text-xs font-bold hover:bg-[#E4A900] transition-colors shadow-sm"
             >
               {isBn ? "পূর্ণাঙ্গ ক্যাটালগ দেখুন" : "View Full Catalog"}
             </Link>

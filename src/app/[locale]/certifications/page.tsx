@@ -39,10 +39,10 @@ export async function generateMetadata({ params }: CertificationsPageProps): Pro
 
   return {
     title: isBn
-      ? "শিল্প সমিতি সদস্যপদ ও নথি | নূর সোলার এনার্জি"
+      ? "শিল্প সমিতি সদস্যপদ ও কমপ্লায়েন্স নথি | নূর সোলার এনার্জি"
       : "Industry Membership & Compliance Documents | Noor Solar Energy",
     description: isBn
-      ? "বাংলাদেশ সাসটেইনেবল অ্যান্ড রিনিউয়েবল এনার্জি অ্যাসোসিয়েশন (BSREA) সদস্যপদ ও বাণিজ্যিক মানদণ্ড নথি।"
+      ? "বাংলাদেশ সাসটেইনেবল অ্যান্ড রিনিউয়েবল এনার্জি অ্যাসোসিয়েশন (BSREA) সদস্যপদ, আমদানি নথিপত্র এবং বাণিজ্যিক সোলার ইকুইপমেন্টের মান নিয়ন্ত্রণ সনদ।"
       : "Official BSREA industry association membership and commercial compliance documentation for Noor Solar Energy.",
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/certifications` : `${siteUrl}/certifications`,
@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: CertificationsPageProps): Pro
     },
     openGraph: {
       title: isBn
-        ? "শিল্প সমিতি সদস্যপদ ও নথি — নূর সোলার এনার্জি"
+        ? "শিল্প সমিতি সদস্যপদ ও কমপ্লায়েন্স নথি — নূর সোলার এনার্জি"
         : "Industry Membership & Compliance Documents — Noor Solar Energy",
       description: isBn
         ? "BSREA সদস্যপদ ও বাণিজ্যিক সোলার সরঞ্জামের কোয়ালিটি কন্ট্রোল মানদণ্ড।"
@@ -62,6 +62,7 @@ export async function generateMetadata({ params }: CertificationsPageProps): Pro
       url: isBn ? "/bn/certifications" : "/certifications",
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
+      images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Noor Solar Energy" }],
     },
   };
 }
@@ -90,14 +91,14 @@ export default async function CertificationsPage({ params }: CertificationsPageP
   const isBn = locale === "bn";
 
   return (
-    <div className="pt-28 sm:pt-36 pb-24 bg-[#E4E7E4] min-h-screen">
+    <div className="pt-28 sm:pt-36 pb-24 bg-[#F7F8F5] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Navigation Breadcrumb */}
         <div className="mb-8">
           <Link
             href="/"
-            className="inline-flex items-center min-h-[44px] gap-2 text-xs font-mono text-[#5C605C] hover:text-[#111311] transition-colors"
+            className="inline-flex items-center min-h-[44px] gap-2 text-xs font-mono text-[#62706A] hover:text-[#074031] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>{isBn ? "হোমে ফিরুন" : "Back to Home"}</span>
@@ -106,14 +107,14 @@ export default async function CertificationsPage({ params }: CertificationsPageP
 
         {/* Page Hero */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-xs font-mono text-[#111311] mb-4 border border-[#DDE1DC] shadow-2xs">
-            <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-xs font-mono text-[#074031] mb-4 border border-[#DCE4E0] shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-[#FEBE16]"></span>
             <span>{isBn ? "সদস্যপদ ও কমপ্লায়েন্স রেজিস্ট্রি" : "Membership & Compliance Registry"}</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111311] leading-tight mb-4">
+          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#074031] leading-tight mb-4">
             {isBn ? "শিল্প সমিতি সদস্যপদ ও কমপ্লায়েন্স" : "Industry Membership & Compliance Documents"}
           </h1>
-          <p className="text-base text-[#5C605C] leading-relaxed">
+          <p className="text-base text-[#62706A] leading-relaxed">
             {isBn
               ? "নবায়নযোগ্য জ্বালানি খাতের প্রাতিষ্ঠানিক সমিতি সদস্যপদ এবং প্রকল্প পর্যায়ে সরবরাহকৃত সরঞ্জামের কারিগরি মানদণ্ড সংক্রান্ত তথ্যাবলি।"
               : "Official industry association membership records and technical quality standards for commercial solar equipment supplied across Bangladesh."}
@@ -124,25 +125,25 @@ export default async function CertificationsPage({ params }: CertificationsPageP
         <div className="mb-16">
           <div className="flex items-center justify-between gap-4 mb-6">
             <div>
-              <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C] block">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#62706A] block">
                 {isBn ? "শিল্প সমিতি সদস্যপদ" : "Industry Membership"}
               </span>
-              <h2 className="text-2xl font-bold text-[#111311]">
+              <h2 className="text-2xl font-bold text-[#074031]">
                 {isBn ? "জাতীয় সমিতি সদস্যপদ" : "National Association Membership"}
               </h2>
             </div>
-            <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#CEF23E] text-[#111311] text-xs font-bold">
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEBE16] text-[#052F25] text-xs font-bold">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>{isBn ? "অফিসিয়াল নিবন্ধিত সদস্য" : "Official Registered Member"}</span>
             </span>
           </div>
 
-          <div className="rounded-[32px] sm:rounded-[40px] bg-[#EDEDED] border border-[#DDE1DC] p-6 sm:p-10 lg:p-12 relative overflow-hidden shadow-xs">
+          <div className="rounded-[32px] sm:rounded-[40px] bg-[#F1F4F1] border border-[#DCE4E0] p-6 sm:p-10 lg:p-12 relative overflow-hidden shadow-xs">
             {/* Background image overlay */}
-            <div className="absolute inset-0 z-0 opacity-25 pointer-events-none">
+            <div className="absolute inset-0 z-0 opacity-25 pointer-events-none" aria-hidden="true">
               <Image
                 src="/photos/bsrea-compliance-bg.webp"
-                alt="BSREA Solar Background"
+                alt=""
                 fill
                 className="object-cover object-center"
               />
@@ -151,79 +152,79 @@ export default async function CertificationsPage({ params }: CertificationsPageP
               
               {/* Crest & Identity */}
               <div className="lg:col-span-4 flex flex-col items-center sm:items-start text-center sm:text-left">
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-white p-3 border border-[#DDE1DC] shadow-xs flex items-center justify-center mb-5 shrink-0">
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-white p-3 border border-[#DCE4E0] shadow-xs flex items-center justify-center mb-5 shrink-0">
                   <Image
                     src={bsreaCert?.image || "/photos/bsrea-logo.png"}
-                    alt="BSREA Logo"
+                    alt={isBn ? "বিএসআরইএ লোগো" : "BSREA Logo"}
                     width={100}
                     height={100}
                     className="w-full h-full object-contain"
                   />
                 </div>
 
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#111311] text-[#CEF23E] text-xs font-mono mb-3">
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#CEF23E]" />
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#052F25] text-[#FEBE16] text-xs font-mono mb-3">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#FEBE16]" />
                   <span>{isBn ? "সক্রিয় সাধারণ সদস্য" : "Active General Member"}</span>
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-bold text-[#111311] leading-snug">
+                <h3 className="text-xl sm:text-2xl font-bold text-[#074031] leading-snug">
                   {isBn ? "বাংলাদেশ সাসটেইনেবল অ্যান্ড রিনিউয়েবল এনার্জি অ্যাসোসিয়েশন" : "Bangladesh Sustainable & Renewable Energy Association"}
                 </h3>
-                <p className="text-xs font-mono text-[#5C605C] mt-1">
+                <p className="text-xs font-mono text-[#62706A] mt-1">
                   {isBn ? "জাতীয় শীর্ষ নবায়নযোগ্য জ্বালানি সংস্থা" : "Apex National Renewable Energy Body"}
                 </p>
               </div>
 
               {/* Specifications & Document Details */}
-              <div className="lg:col-span-8 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-[#DDE1DC]">
-                <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-[#DDE1DC]">
+              <div className="lg:col-span-8 bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-[#DCE4E0]">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-[#DCE4E0]">
                   <div>
-                    <span className="text-[11px] font-mono text-[#5C605C] uppercase tracking-wider block">
+                    <span className="text-[11px] font-mono text-[#62706A] uppercase tracking-wider block">
                       {isBn ? "সদস্যপদ সনদ" : "Membership Certificate"}
                     </span>
-                    <h4 className="text-lg sm:text-xl font-bold text-[#111311]">
+                    <h4 className="text-lg sm:text-xl font-bold text-[#074031]">
                       {isBn ? "BSREA সদস্যপদ সনদপত্র" : "BSREA Certificate of Membership"}
                     </h4>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#CEF23E]/30 text-[#111311] text-xs font-semibold border border-[#CEF23E]">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#111311]" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#074031]/10 text-[#074031] text-xs font-semibold border border-[#074031]/20">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#074031]" />
                     <span>{isBn ? "সাধারণ সদস্যপদ" : "General Membership"}</span>
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                  <div className="p-4 rounded-xl bg-[#F5F7F3] border border-[#E0E5DC]">
-                    <span className="text-[11px] font-mono text-[#5C605C] block mb-1">
+                  <div className="p-4 rounded-xl bg-[#F1F4F1] border border-[#DCE4E0]">
+                    <span className="text-[11px] font-mono text-[#62706A] block mb-1">
                       {isBn ? "সনদধারী নিবন্ধিত প্রতিষ্ঠান" : "Certificate Holder / Registered Entity"}
                     </span>
-                    <span className="text-sm font-bold text-[#111311]">
+                    <span className="text-sm font-bold text-[#074031]">
                       Tasneem Knitting Industry
                     </span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-[#F5F7F3] border border-[#E0E5DC]">
-                    <span className="text-[11px] font-mono text-[#5C605C] block mb-1">
+                  <div className="p-4 rounded-xl bg-[#F1F4F1] border border-[#DCE4E0]">
+                    <span className="text-[11px] font-mono text-[#62706A] block mb-1">
                       {isBn ? "মেম্বারশিপ নম্বর" : "Membership ID"}
                     </span>
-                    <span className="text-sm font-bold font-mono text-[#111311]">
+                    <span className="text-sm font-bold font-mono text-[#074031]">
                       20260915GEN113
                     </span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-[#F5F7F3] border border-[#E0E5DC]">
-                    <span className="text-[11px] font-mono text-[#5C605C] block mb-1">
+                  <div className="p-4 rounded-xl bg-[#F1F4F1] border border-[#DCE4E0]">
+                    <span className="text-[11px] font-mono text-[#62706A] block mb-1">
                       {isBn ? "ডকুমেন্ট টাইপ" : "Document Type"}
                     </span>
-                    <span className="text-sm font-semibold text-[#111311]">
+                    <span className="text-sm font-semibold text-[#074031]">
                       {isBn ? "সাধারণ সদস্যপদ সনদ" : "General Membership Certificate"}
                     </span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-[#F5F7F3] border border-[#E0E5DC]">
-                    <span className="text-[11px] font-mono text-[#5C605C] block mb-1">
+                  <div className="p-4 rounded-xl bg-[#F1F4F1] border border-[#DCE4E0]">
+                    <span className="text-[11px] font-mono text-[#62706A] block mb-1">
                       {isBn ? "মেয়াদ" : "Validity Period"}
                     </span>
-                    <span className="text-sm font-semibold text-[#111311] flex items-center gap-1.5">
+                    <span className="text-sm font-semibold text-[#074031] flex items-center gap-1.5">
                       <span>{isBn ? "৩১ ডিসেম্বর, ২০২৬" : "December 31, 2026"}</span>
                       <span className="text-[10px] text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full font-bold">
                         {isBn ? "সক্রিয়" : "Active"}
@@ -232,9 +233,9 @@ export default async function CertificationsPage({ params }: CertificationsPageP
                   </div>
                 </div>
 
-                <p className="text-xs sm:text-sm text-[#5C605C] leading-relaxed mb-6">
+                <p className="text-xs sm:text-sm text-[#62706A] leading-relaxed mb-6">
                   {isBn
-                    ? "বিএসআরইএ (BSREA) সাধারণ সদস্যপদ সনদপত্রটি (২০২৬০৯১৫GEN১১৩) সনদধারী নিবন্ধিত প্রতিষ্ঠান তাসনিম নিটিং ইন্ডাস্ট্রির অনুকূলে ইস্যুকৃত, যা বাংলাদেশে নূর সোলার এনার্জির বাণিজ্যিক নবায়নযোগ্য শক্তি কার্যক্রমের প্রাতিষ্ঠানিক সমিতি সদস্যপদ নিশ্চিত করে।"
+                    ? "বিএসআরইএ (BSREA) সাধারণ সদস্যপদ সনদপত্রটি (২০২৬০৯১৫GEN১১৩) নিবন্ধিত প্রতিষ্ঠান তাসনিম নিটিং ইন্ডাস্ট্রিজের অনুকূলে ইস্যুকৃত, যা বাংলাদেশে নূর সোলার এনার্জির বাণিজ্যিক কার্যক্রমের প্রাতিষ্ঠানিক সমিতি সদস্যপদ নির্দেশ করে।"
                     : "The official BSREA General Membership (20260915GEN113) is held under registered entity Tasneem Knitting Industry, serving as the trade association membership documentation for Noor Solar Energy operations in Bangladesh."}
                 </p>
 
@@ -243,9 +244,9 @@ export default async function CertificationsPage({ params }: CertificationsPageP
                     href={bsreaDocUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] rounded-full bg-[#111311] text-white text-xs font-semibold hover:bg-black transition-all"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 min-h-[44px] rounded-full bg-[#FEBE16] text-[#052F25] text-xs font-bold hover:bg-[#E4A900] transition-all shadow-sm"
                   >
-                    <FileText className="w-4 h-4 text-[#CEF23E]" />
+                    <FileText className="w-4 h-4 text-[#052F25]" />
                     <span>{isBn ? "অফিসিয়াল সনদ দেখুন (Google Drive)" : "View Official Certificate (Google Drive)"}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
@@ -254,9 +255,9 @@ export default async function CertificationsPage({ params }: CertificationsPageP
                     href="https://bsreabd.org/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] rounded-full bg-[#EDEDED] hover:bg-[#DDE1DC] text-[#111311] text-xs font-semibold transition-colors"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] rounded-full bg-[#F1F4F1] hover:bg-[#DCE4E0] text-[#074031] text-xs font-semibold transition-colors border border-[#DCE4E0]"
                   >
-                    <Globe className="w-3.5 h-3.5 text-[#5C605C]" />
+                    <Globe className="w-3.5 h-3.5 text-[#62706A]" />
                     <span>{isBn ? "BSREA অফিসিয়াল পোর্টাল" : "BSREA Official Web Portal"}</span>
                   </a>
                 </div>
@@ -270,13 +271,13 @@ export default async function CertificationsPage({ params }: CertificationsPageP
         {otherCerts.length > 0 && (
           <div className="mb-16">
             <div className="mb-8">
-              <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C] block">
+              <span className="text-xs font-mono uppercase tracking-wider text-[#62706A] block">
                 {isBn ? "পরিদর্শন ও মানদণ্ড" : "Inspection & Standards"}
               </span>
-              <h2 className="text-2xl font-bold text-[#111311]">
+              <h2 className="text-2xl font-bold text-[#074031]">
                 {isBn ? "প্রযুক্তিগত কমপ্লায়েন্স ও মান নিয়ন্ত্রণ পরীক্ষা" : "Technical Compliance & Quality Testing"}
               </h2>
-              <p className="text-xs sm:text-sm text-[#5C605C] mt-1">
+              <p className="text-xs sm:text-sm text-[#62706A] mt-1">
                 {isBn
                   ? "ফ্যাক্টরি অডিট যাচাই, বৈদ্যুতিক সক্ষমতা পরীক্ষা এবং বাণিজ্যিক পরিচালনা অনুমোদন।"
                   : "Factory audit verifications, electrical performance testing, and commercial operating licenses."}
@@ -294,10 +295,10 @@ export default async function CertificationsPage({ params }: CertificationsPageP
               return (
                 <div
                   key={cert.id}
-                  className="rounded-2xl bg-white border border-[#DDE1DC] p-6 shadow-xs hover:border-[#111311] transition-all flex flex-col justify-between group"
+                  className="rounded-2xl bg-white border border-[#DCE4E0] p-6 shadow-xs hover:border-[#074031]/50 transition-all flex flex-col justify-between group"
                 >
                   <div>
-                    <div className="w-14 h-14 rounded-xl bg-[#EDEDED] flex items-center justify-center mb-5 overflow-hidden relative border border-[#DDE1DC] shrink-0">
+                    <div className="w-14 h-14 rounded-xl bg-[#F1F4F1] flex items-center justify-center mb-5 overflow-hidden relative border border-[#DCE4E0] shrink-0">
                       {cert.image ? (
                         <AppImage
                           src={cert.image}
@@ -307,41 +308,41 @@ export default async function CertificationsPage({ params }: CertificationsPageP
                           className="w-full h-full object-contain p-1.5"
                         />
                       ) : (
-                        <ShieldCheck className="w-7 h-7 text-[#111311]" />
+                        <ShieldCheck className="w-7 h-7 text-[#074031]" />
                       )}
                     </div>
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#F5F7F3] text-[10px] font-mono text-[#5C605C] mb-2 border border-[#E0E5DC]">
-                      <BadgeCheck className="w-3 h-3 text-[#111311]" />
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#F1F4F1] text-[10px] font-mono text-[#62706A] mb-2 border border-[#DCE4E0]">
+                      <BadgeCheck className="w-3 h-3 text-[#074031]" />
                       <span>{isBn ? "যাচাইকৃত মানদণ্ড" : "Verified Standard"}</span>
                     </div>
-                    <h3 className="text-base font-bold text-[#111311] group-hover:text-black mb-1">
+                    <h3 className="text-base font-bold text-[#074031] group-hover:text-[#052F25] mb-1">
                       {cert.name}
                     </h3>
                     {cert.issuer && (
-                      <div className="text-xs font-mono text-[#5C605C] mb-3 font-medium">
+                      <div className="text-xs font-mono text-[#62706A] mb-3 font-medium">
                         {cert.issuer}
                       </div>
                     )}
                     {cleanDesc && (
-                      <p className="text-xs text-[#5C605C] leading-relaxed">
+                      <p className="text-xs text-[#62706A] leading-relaxed">
                         {cleanDesc}
                       </p>
                     )}
                   </div>
 
-                  <div className="pt-4 mt-4 border-t border-[#DDE1DC]/70">
+                  <div className="pt-4 mt-4 border-t border-[#DCE4E0]/70">
                     {docUrl ? (
                       <a
                         href={docUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-[#111311] hover:text-[#2E3B27] bg-[#EDEDED] hover:bg-[#CEF23E] px-3.5 py-2 rounded-full min-h-[44px] transition-colors"
+                        className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-[#074031] hover:text-[#052F25] bg-[#F1F4F1] hover:bg-[#FEBE16] hover:text-[#052F25] px-3.5 py-2 rounded-full min-h-[44px] transition-colors"
                       >
                         <span>{isBn ? "নথি দেখুন" : "View Document"}</span>
                         <ExternalLink className="w-3 h-3" />
                       </a>
                     ) : (
-                      <span className="text-[11px] font-mono text-[#828B7D] inline-flex items-center gap-1">
+                      <span className="text-[11px] font-mono text-[#62706A] inline-flex items-center gap-1">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                         <span>{isBn ? "নথিতে সক্রিয়" : "Active On Record"}</span>
                       </span>
@@ -355,15 +356,15 @@ export default async function CertificationsPage({ params }: CertificationsPageP
       )}
 
         {/* 3. Engineering Quality Assurance Protocols */}
-        <div className="rounded-[32px] bg-[#EDEDED] border border-[#DDE1DC] p-8 sm:p-12 mb-16">
+        <div className="rounded-[32px] bg-[#F1F4F1] border border-[#DCE4E0] p-8 sm:p-12 mb-16">
           <div className="max-w-3xl mb-8">
-            <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C] block">
+            <span className="text-xs font-mono uppercase tracking-wider text-[#62706A] block">
               {isBn ? "কোয়ালিটি অ্যাসিউরেন্স" : "Quality Assurance"}
             </span>
-            <h2 className="text-2xl font-bold text-[#111311] mt-1">
+            <h2 className="text-2xl font-bold text-[#074031] mt-1">
               {isBn ? "কোয়ালিটি কন্ট্রোল ও পরিদর্শন নীতিমালা" : "Quality Control & Inspection Benchmarks"}
             </h2>
-            <p className="text-sm text-[#5C605C] mt-2">
+            <p className="text-sm text-[#62706A] mt-2">
               {isBn
                 ? "চট্টগ্রাম বন্দরে আসা প্রতিটি চালান গুদামে প্রবেশ এবং কন্টেইনার ডেলিভারির আগে বহুস্তরীয় কঠোর পরীক্ষার মধ্য দিয়ে যায়।"
                 : "Every shipment arriving at Chattogram Port undergoes multi-point inspection prior to warehouse acceptance and container dispatch."}
@@ -371,44 +372,44 @@ export default async function CertificationsPage({ params }: CertificationsPageP
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-2xl p-6 border border-[#DDE1DC]">
-              <div className="w-10 h-10 rounded-xl bg-[#F5F7F3] border border-[#E0E5DC] flex items-center justify-center mb-4 text-[#111311]">
-                <Zap className="w-5 h-5 text-[#111311]" />
+            <div className="bg-white rounded-2xl p-6 border border-[#DCE4E0]">
+              <div className="w-10 h-10 rounded-xl bg-[#F1F4F1] border border-[#DCE4E0] flex items-center justify-center mb-4 text-[#074031]">
+                <Zap className="w-5 h-5 text-[#074031]" />
               </div>
-              <h3 className="font-bold text-base text-[#111311] mb-2">
+              <h3 className="font-bold text-base text-[#074031] mb-2">
                 {isBn ? "ফ্ল্যাশ টেস্টিং ও EL ভেরিফিকেশন" : "Flash Testing & EL Verification"}
               </h3>
-              <p className="text-xs text-[#5C605C] leading-relaxed">
+              <p className="text-xs text-[#62706A] leading-relaxed">
                 {isBn
-                  ? "প্রতিটি প্যালেটের জন্য STC ফ্ল্যাশ টেস্ট ডাটা যাচাই করা হয়। কোনো মাইক্রো-ফাটল নেই তা নিশ্চিত করতে হয় ইলেক্ট্রোলুমিনেসেন্স (EL) স্ক্যানিং।"
+                  ? "প্রতিটি প্যালেটের জন্য STC ফ্ল্যাশ টেস্ট ডাটা যাচাই করা হয়। সিলিকন সেলে কোনো সূক্ষ্ম ফাটল (micro-crack) নেই তা নিশ্চিত করতে করা হয় ইলেক্ট্রোলুমিনেসেন্স (EL) স্ক্যানিং।"
                   : "Standard Test Condition (STC) flash data verified per pallet. Electroluminescence (EL) crack scanning ensures zero micro-fractures in silicon cells."}
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-[#DDE1DC]">
-              <div className="w-10 h-10 rounded-xl bg-[#F5F7F3] border border-[#E0E5DC] flex items-center justify-center mb-4 text-[#111311]">
-                <Lock className="w-5 h-5 text-[#111311]" />
+            <div className="bg-white rounded-2xl p-6 border border-[#DCE4E0]">
+              <div className="w-10 h-10 rounded-xl bg-[#F1F4F1] border border-[#DCE4E0] flex items-center justify-center mb-4 text-[#074031]">
+                <Lock className="w-5 h-5 text-[#074031]" />
               </div>
-              <h3 className="font-bold text-base text-[#111311] mb-2">
+              <h3 className="font-bold text-base text-[#074031] mb-2">
                 {isBn ? "ডাইইলেকট্রিক ও ইনসুলেশন সহনশীলতা" : "Dielectric & Insulation Withstand"}
               </h3>
-              <p className="text-xs text-[#5C605C] leading-relaxed">
+              <p className="text-xs text-[#62706A] leading-relaxed">
                 {isBn
-                  ? "ইনভার্টার ও লিথিয়াম ব্যাটারি উচ্চ ভোল্টেজ আইসোলেশন রেজিস্ট্যান্স, ওভারভোল্টেজ সার্জ সুরক্ষা এবং গ্রাউন্ড-ফল্ট অডিট পাস করে।"
+                  ? "ইনভার্টার ও লিথিয়াম ব্যাটারি প্রতিটি চালানে হাই-ভোল্টেজ আইসোলেশন রেজিস্ট্যান্স, সার্জ প্রোটেকশন এবং গ্রাউন্ড-ফল্ট অডিট সম্পন্ন করে ছাড়পত্র পায়।"
                   : "Inverters and lithium batteries pass high-voltage isolation resistance tests, overvoltage surge suppression, and ground-fault protection audits."}
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-[#DDE1DC]">
-              <div className="w-10 h-10 rounded-xl bg-[#F5F7F3] border border-[#E0E5DC] flex items-center justify-center mb-4 text-[#111311]">
-                <Layers className="w-5 h-5 text-[#111311]" />
+            <div className="bg-white rounded-2xl p-6 border border-[#DCE4E0]">
+              <div className="w-10 h-10 rounded-xl bg-[#F1F4F1] border border-[#DCE4E0] flex items-center justify-center mb-4 text-[#074031]">
+                <Layers className="w-5 h-5 text-[#074031]" />
               </div>
-              <h3 className="font-bold text-base text-[#111311] mb-2">
+              <h3 className="font-bold text-base text-[#074031] mb-2">
                 {isBn ? "বাতাস ও কাঠামোগত লোড সহনশীলতা" : "Mechanical Wind & Snow Load"}
               </h3>
-              <p className="text-xs text-[#5C605C] leading-relaxed">
+              <p className="text-xs text-[#62706A] leading-relaxed">
                 {isBn
-                  ? "প্যানেল ফ্রেম ২৪০০ Pa আপলিফট উইন্ড লোড এবং ৫৪০০ Pa মেকানিক্যাল প্রেসার সহ্য করতে সক্ষম, যা দেশের উপকূলীয় ঘূর্ণিঝড়ের জন্য উপযুক্ত।"
+                  ? "প্যানেল ফ্রেম ২৪০০ Pa উইন্ড লোড এবং ৫৪০০ Pa মেকানিক্যাল প্রেসার সহ্য করতে সক্ষম, যা বাংলাদেশের উপকূলীয় ও ঘূর্ণিঝড়প্রবণ এলাকার জন্য বিশেষভাবে উপযোগী।"
                   : "Solar frames certified to withstand 2400 Pa wind uplift loads and 5400 Pa mechanical downforce, engineered for coastal tropical cyclones."}
               </p>
             </div>
@@ -416,17 +417,17 @@ export default async function CertificationsPage({ params }: CertificationsPageP
         </div>
 
         {/* 4. Request Documentation CTA */}
-        <div className="rounded-3xl bg-[#111311] text-white p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="rounded-3xl bg-[#074031] text-white p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
           <div className="max-w-xl text-center md:text-left">
-            <span className="text-xs font-mono text-[#CEF23E] block mb-2 uppercase tracking-wider">
+            <span className="text-xs font-mono text-[#FEBE16] block mb-2 uppercase tracking-wider font-semibold">
               {isBn ? "B2B ভেরিফিকেশন ডেস্ক" : "B2B Verification Desk"}
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
               {isBn ? "ব্যাচ-নির্দিষ্ট টেস্ট রিপোর্ট বা কাস্টমস নথি প্রয়োজন?" : "Need Batch-Specific Test Reports or Customs Dossiers?"}
             </h2>
-            <p className="text-xs sm:text-sm text-[#9CA3AF] mt-2 leading-relaxed">
+            <p className="text-xs sm:text-sm text-white/80 mt-2 leading-relaxed">
               {isBn
-                ? "কন্টেইনার স্কেল ক্রয় চুক্তি ও টেন্ডারের জন্য আমরা ফ্যাক্টরি ফ্ল্যাশ রিপোর্ট, বিল অব এন্ট্রি ভেরিফিকেশন এবং ওয়ারেন্টি সনদ সরবরাহ করি।"
+                ? "কন্টেইনার স্কেল সরবরাহ চুক্তি ও টেন্ডারের জন্য আমরা ফ্যাক্টরি ফ্ল্যাশ রিপোর্ট, কাস্টমস বিল অব এন্ট্রি এবং আনুষ্ঠানিক ওয়ারেন্টি সনদপত্র প্রদান করি।"
                 : "We provide factory flash reports, customs bill of entry verification, and warranty certificates for container-scale procurement contracts and tenders."}
             </p>
           </div>
@@ -434,7 +435,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-[#CEF23E] text-[#111311] text-xs font-bold hover:bg-[#b8da35] transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-[#FEBE16] text-[#052F25] text-xs font-bold hover:bg-[#E4A900] transition-colors shadow-sm"
             >
               <span>{isBn ? "সেলস ডেস্কে যোগাযোগ করুন" : "Contact Sales Desk"}</span>
               <ArrowUpRight className="w-4 h-4" />
@@ -442,9 +443,9 @@ export default async function CertificationsPage({ params }: CertificationsPageP
 
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-white/10 text-white text-xs font-semibold hover:bg-white/20 border border-white/10 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-white/10 text-white text-xs font-semibold hover:bg-white/20 border border-white/15 transition-colors"
             >
-              <span>{isBn ? "কোটেশন চান" : "Request Quote"}</span>
+              <span>{isBn ? "কোটেশনের অনুরোধ পাঠান" : "Request Quote"}</span>
             </Link>
           </div>
         </div>

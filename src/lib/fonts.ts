@@ -1,4 +1,5 @@
-import { Inter, JetBrains_Mono, Hind_Siliguri } from "next/font/google";
+import localFont from "next/font/local";
+import { Inter, JetBrains_Mono } from "next/font/google";
 
 export const inter = Inter({
   variable: "--font-inter",
@@ -16,11 +17,39 @@ export const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500"],
 });
 
-// Self-hosted Bengali font through next/font/google (weights 400, 500, 600, 700 only)
-export const hindSiliguri = Hind_Siliguri({
-  variable: "--font-bengali",
-  subsets: ["bengali"],
+// Scoutie Sans variable font from Google Fonts (weights 200..800, normal & italic)
+export const scoutieSans = localFont({
+  src: [
+    {
+      path: "../../public/fonts/ScoutieSans[wght].ttf",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/ScoutieSans-Italic[wght].ttf",
+      style: "italic",
+    },
+  ],
+  variable: "--font-scoutie",
   display: "swap",
-  preload: true,
-  weight: ["400", "500", "600", "700"],
 });
+
+// Official Tiro Bangla font from Google Fonts (normal & italic) - Default Bangla Font
+export const tiroBangla = localFont({
+  src: [
+    {
+      path: "../../public/fonts/TiroBangla-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/TiroBangla-Italic.ttf",
+      weight: "400",
+      style: "italic",
+    },
+  ],
+  variable: "--font-bengali",
+  display: "swap",
+});
+
+// Backward compatibility alias for legacy imports
+export const hindSiliguri = tiroBangla;

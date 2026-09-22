@@ -628,6 +628,129 @@ export const demoProducts = [
     "metaDescriptionBn": "কৃষি ও বাণিজ্যিক সৌর বিদ্যুৎ ব্যবস্থার জন্য 400W মনো পার্ক সোলার প্যানেল। পাইকারি মূল্যে সরবরাহ।"
   },
   {
+    "slug": "n-type-topcon-bifacial-585w",
+    "categorySlug": "solar-panels",
+    "name": "N-Type TOPCon Bifacial Module 585W",
+    "shortDescription": "High-efficiency 585W bifacial solar module featuring cutting-edge N-Type cell technology with exceptional temperature coefficient.",
+    "description": "Built with precision N-Type TOPCon technology, this 585W bifacial dual-glass module provides outstanding energy generation for commercial rooftop installations across Bangladesh.\n\nIts anti-reflective glass surface and low light degradation profile guarantee sustained ROI over 30 years.",
+    "brand": null,
+    "model": "NS-585TOP-BF",
+    "stockStatus": "IN_STOCK",
+    "moq": "31 pcs (1 Pallet)",
+    "leadTime": "Immediate warehouse dispatch",
+    "isFeatured": true,
+    "sortOrder": 6,
+    "images": [
+      {
+        "url": "/demo/panel-620w-topcon-front.svg",
+        "alt": "N-Type TOPCon Bifacial Module 585W front view",
+        "sortOrder": 0,
+        "altBn": "এন-টাইপ TOPCon বাইফেসিয়াল সোলার প্যানেল 585W সামনের দৃশ্য"
+      },
+      {
+        "url": "/demo/panel-620w-topcon-angled.svg",
+        "alt": "N-Type TOPCon Bifacial Module 585W angled view",
+        "sortOrder": 1,
+        "altBn": "এন-টাইপ TOPCon বাইফেসিয়াল সোলার প্যানেল 585W কোণাকুণি দৃশ্য"
+      }
+    ],
+    "specs": [
+      { "label": "Nominal Max Power (Pmax)", "value": "585 W", "sortOrder": 1, "labelBn": "রেটেড সর্বোচ্চ ক্ষমতা (Pmax)", "valueBn": "585 W" },
+      { "label": "Module Efficiency", "value": "22.65%", "sortOrder": 2, "labelBn": "মডিউল দক্ষতা", "valueBn": "22.65%" },
+      { "label": "Operating Voltage (Vmp)", "value": "42.80 V", "sortOrder": 3, "labelBn": "কার্যকারী ভোল্টেজ (Vmp)", "valueBn": "42.80 V" },
+      { "label": "Operating Current (Imp)", "value": "13.67 A", "sortOrder": 4, "labelBn": "কার্যকারী কারেন্ট (Imp)", "valueBn": "13.67 A" }
+    ],
+    "nameBn": "এন-টাইপ TOPCon বাইফেসিয়াল 585W",
+    "shortDescriptionBn": "উচ্চ-দক্ষতাসম্পন্ন 585W বাইফেসিয়াল সোলার মডিউল, বাণিজ্যিক ও শিল্প কারখানার জন্য আদর্শ।",
+    "descriptionBn": "এন-টাইপ টপকন প্রযুক্তির এই ৫৮৫ ওয়াট বাইফেসিয়াল মডিউল তীব্র গরমেও বেশি বিদ্যুৎ উৎপাদন ধরে রাখতে পারে।\n\nউভয় পাশ থেকে আলো শোষণ করার ক্ষমতার কারণে গ্রাউন্ড মাউন্ট এবং প্রতিফলক ছাদে এটি সাধারণ প্যানেলের চেয়ে অনেক বেশি বিদ্যুৎ দেয়।",
+    "moqBn": "৩১ টি (১ প্যালেট)",
+    "leadTimeBn": "ওয়ারহাউস থেকে সরাসরি ডেলিভারি",
+    "metaTitleBn": "এন-টাইপ TOPCon বাইফেসিয়াল 585W — নূর সোলার এনার্জি",
+    "metaDescriptionBn": "বাণিজ্যিক ও শিল্প ছাদের জন্য এন-টাইপ TOPCon 585W বাইফেসিয়াল সোলার প্যানেল।"
+  },
+  {
+    "slug": "mono-perc-half-cut-550w",
+    "categorySlug": "solar-panels",
+    "name": "Mono PERC Half-Cut Module 550W",
+    "shortDescription": "Industry standard 550W monocrystalline half-cell solar module engineered for optimal shade tolerance and industrial durability.",
+    "description": "A trusted workhorse for large-scale utility and industrial rooftops, featuring 144 half-cut cells that mitigate micro-cracking and hot-spot risks.\n\nHeavy-duty anodized aluminum frame withstands coastal winds and severe monsoon conditions.",
+    "brand": null,
+    "model": "NS-550PERC-HC",
+    "stockStatus": "IN_STOCK",
+    "moq": "31 pcs (1 Pallet)",
+    "leadTime": "Immediate delivery",
+    "isFeatured": true,
+    "sortOrder": 7,
+    "images": [
+      {
+        "url": "/demo/panel-550w-perc-front.svg",
+        "alt": "Mono PERC Half-Cut Module 550W front view",
+        "sortOrder": 0,
+        "altBn": "মনো পার্ক হাফ-কাট সোলার প্যানেল 550W সামনের দৃশ্য"
+      },
+      {
+        "url": "/demo/panel-550w-perc-angled.svg",
+        "alt": "Mono PERC Half-Cut Module 550W angled view",
+        "sortOrder": 1,
+        "altBn": "মনো পার্ক হাফ-কাট সোলার প্যানেল 550W কোণাকুণি দৃশ্য"
+      }
+    ],
+    "specs": [
+      { "label": "Nominal Max Power (Pmax)", "value": "550 W", "sortOrder": 1, "labelBn": "রেটেড সর্বোচ্চ ক্ষমতা (Pmax)", "valueBn": "550 W" },
+      { "label": "Module Efficiency", "value": "21.3%", "sortOrder": 2, "labelBn": "মডিউল দক্ষতা", "valueBn": "21.3%" },
+      { "label": "Operating Voltage (Vmp)", "value": "41.95 V", "sortOrder": 3, "labelBn": "কার্যকারী ভোল্টেজ (Vmp)", "valueBn": "41.95 V" },
+      { "label": "Operating Current (Imp)", "value": "13.12 A", "sortOrder": 4, "labelBn": "কার্যকারী কারেন্ট (Imp)", "valueBn": "13.12 A" }
+    ],
+    "nameBn": "মনো পার্ক হাফ-কাট মডিউল 550W",
+    "shortDescriptionBn": "শিল্প কারখানা ও বাণিজ্যিক সোলার প্রকল্পের জন্য অত্যন্ত নির্ভরযোগ্য 550W মনো পার্ক প্যানেল।",
+    "descriptionBn": "বাংলাদেশের ইন্ডাস্ট্রিয়াল ও বাণিজ্যিক সৌর প্রকল্পে বহুল ব্যবহৃত 550W হাফ-কাট মনোক্রিস্টালাইন মডিউল। ছায়াযুক্ত অবস্থাতেও সেল-স্প্লিট ডিজাইনের কারণে বিদ্যুৎ উৎপাদন অব্যাহত থাকে।",
+    "moqBn": "৩১ টি (১ প্যালেট)",
+    "leadTimeBn": "স্টক থেকে সরাসরি সরবরাহ",
+    "metaTitleBn": "মনো পার্ক হাফ-কাট মডিউল 550W — নূর সোলার এনার্জি",
+    "metaDescriptionBn": "বাণিজ্যিক সৌর প্রকল্পের জন্য উচ্চ নির্ভরযোগ্য 550W মনো পার্ক সোলার মডিউল।"
+  },
+  {
+    "slug": "bifacial-dual-glass-700w",
+    "categorySlug": "solar-panels",
+    "name": "Ultra High-Power HJT Bifacial Module 700W",
+    "shortDescription": "Next-generation 700W Heterojunction (HJT) dual-glass module offering industry-leading 22.8% efficiency and ultra-low degradation.",
+    "description": "Designed for maximum megawatt yield in large ground-mount solar farms and commercial megawatt-scale rooftops.\n\nHeterojunction silicon wafers offer superior temperature coefficients, generating more energy per square meter than standard PERC modules.",
+    "brand": null,
+    "model": "NS-700HJT-BF",
+    "stockStatus": "IN_STOCK",
+    "moq": "31 pcs (1 Pallet)",
+    "leadTime": "Warehouse stock ready",
+    "isFeatured": true,
+    "sortOrder": 8,
+    "images": [
+      {
+        "url": "/demo/panel-700w-hjt-front.svg",
+        "alt": "Ultra High-Power HJT Bifacial Module 700W front view",
+        "sortOrder": 0,
+        "altBn": "আল্ট্রা হাই-পাওয়ার HJT বাইফেসিয়াল মডিউল 700W সামনের দৃশ্য"
+      },
+      {
+        "url": "/demo/panel-700w-hjt-angled.svg",
+        "alt": "Ultra High-Power HJT Bifacial Module 700W angled view",
+        "sortOrder": 1,
+        "altBn": "আল্ট্রা হাই-পাওয়ার HJT বাইফেসিয়াল মডিউল 700W কোণাকুণি দৃশ্য"
+      }
+    ],
+    "specs": [
+      { "label": "Nominal Max Power (Pmax)", "value": "700 W", "sortOrder": 1, "labelBn": "রেটেড সর্বোচ্চ ক্ষমতা (Pmax)", "valueBn": "700 W" },
+      { "label": "Module Efficiency", "value": "22.8%", "sortOrder": 2, "labelBn": "মডিউল দক্ষতা", "valueBn": "22.8%" },
+      { "label": "Operating Voltage (Vmp)", "value": "44.60 V", "sortOrder": 3, "labelBn": "কার্যকারী ভোল্টেজ (Vmp)", "valueBn": "44.60 V" },
+      { "label": "Operating Current (Imp)", "value": "15.70 A", "sortOrder": 4, "labelBn": "কার্যকারী কারেন্ট (Imp)", "valueBn": "15.70 A" }
+    ],
+    "nameBn": "আল্ট্রা হাই-পাওয়ার HJT বাইফেসিয়াল 700W",
+    "shortDescriptionBn": "মেগাওয়াট-স্কেল সৌর বিদ্যুৎ কেন্দ্র ও বৃহৎ কারখানার জন্য ৭০০ ওয়াট আল্ট্রা হাই-পাওয়ার প্যানেল।",
+    "descriptionBn": "সর্বাধুনিক হেটেরোজাংশন (HJT) প্রযুক্তির এই ৭০০ ওয়াট মডিউল প্রতি বর্গমিটারে সর্বোচ্চ বিদ্যুৎ উৎপাদন করে। ডুয়াল-গ্লাস গঠন কাঠামোগত শক্তি বৃদ্ধি করে এবং ৩০ বছরের জন্য নির্ভরযোগ্য ফলন নিশ্চিত করে।",
+    "moqBn": "৩১ টি (১ প্যালেট)",
+    "leadTimeBn": "স্টক থেকে সরাসরি ডেলিভারি",
+    "metaTitleBn": "আল্ট্রা হাই-পাওয়ার HJT বাইফেসিয়াল 700W — নূর সোলার এনার্জি",
+    "metaDescriptionBn": "মেগাওয়াট-স্কেল সোলার প্রকল্পের জন্য 700W ডুয়াল-গ্লাস বাইফেসিয়াল সোলার প্যানেল।"
+  },
+  {
     "slug": "48v-100ah-lifepo4-rack-battery",
     "categorySlug": "lithium-batteries",
     "name": "48V 100Ah LiFePO4 Rack Battery",
@@ -1212,6 +1335,129 @@ export const demoProducts = [
     "leadTimeBn": "স্টক থেকে তাৎক্ষণিক ডেলিভারি",
     "metaTitleBn": "48V 100Ah ওয়াল-মাউন্ট LiFePO4 ব্যাটারি — নূর সোলার এনার্জি",
     "metaDescriptionBn": "অফিস ও বাণিজ্যিক প্রতিষ্ঠানের জন্য স্লিম 48V 100Ah ওয়াল-মাউন্ট LiFePO4 ব্যাটারি। সরাসরি পাইকারি সরবরাহ।"
+  },
+  {
+    "slug": "high-voltage-stackable-ess-20kwh",
+    "categorySlug": "lithium-batteries",
+    "name": "High-Voltage Stackable LiFePO4 ESS 20.48kWh",
+    "shortDescription": "Modular 20.48 kWh high-voltage energy storage tower designed for commercial three-phase hybrid inverters.",
+    "description": "A high-performance modular energy storage system comprised of four stackable 5.12 kWh LiFePO4 modules and a master high-voltage BMS controller.\n\nOperates at nominal 204.8V DC for high conversion efficiency, rapid charge-discharge cycling, and minimal transmission loss in commercial factories and solar microgrids.",
+    "brand": null,
+    "model": "NS-HV-20KWH",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit",
+    "leadTime": "Immediate delivery",
+    "isFeatured": true,
+    "sortOrder": 9,
+    "images": [
+      {
+        "url": "/demo/battery-wall-front.svg",
+        "alt": "High-Voltage Stackable LiFePO4 ESS 20.48kWh front view",
+        "sortOrder": 0,
+        "altBn": "হাই-ভোল্টেজ স্ট্যাকেবল LiFePO4 ESS ২০.৪৮kWh সামনের দৃশ্য"
+      },
+      {
+        "url": "/demo/battery-wall-angled.svg",
+        "alt": "High-Voltage Stackable LiFePO4 ESS 20.48kWh angled view",
+        "sortOrder": 1,
+        "altBn": "হাই-ভোল্টেজ স্ট্যাকেবল LiFePO4 ESS ২০.৪৮kWh কোণাকুণি দৃশ্য"
+      }
+    ],
+    "specs": [
+      { "label": "Usable Energy", "value": "20.48 kWh", "sortOrder": 1, "labelBn": "ব্যবহারযোগ্য শক্তি", "valueBn": "২০.৪৮ kWh" },
+      { "label": "Nominal Voltage", "value": "204.8 V (4 Modules Series)", "sortOrder": 2, "labelBn": "রেটেড ভোল্টেজ", "valueBn": "২০৪.৮ V" },
+      { "label": "Cycle Life", "value": "6,000+ Cycles @ 80% DoD", "sortOrder": 3, "labelBn": "সাইকেল লাইফ", "valueBn": "৬,০০০+ সাইকেল" },
+      { "label": "Communication", "value": "CAN / RS485 / Modbus", "sortOrder": 4, "labelBn": "যোগাযোগ প্রোটোকল", "valueBn": "CAN / RS485 / Modbus" }
+    ],
+    "nameBn": "হাই-ভোল্টেজ স্ট্যাকেবল LiFePO4 ESS ২০.৪৮kWh",
+    "shortDescriptionBn": "বাণিজ্যিক থ্রি-ফেজ হাইব্রিড ইনভার্টারের উপযোগী ২০.৪৮ kWh হাই-ভোল্টেজ মডুলার ব্যাটারি সিস্টেম।",
+    "descriptionBn": "উচ্চ ভোল্টেজের এই মডুলার লিথিয়াম এনার্জি স্টোরেজ সিস্টেমটি বাণিজ্যিক ভবন, হাসপাতাল ও ফ্যাক্টরির জন্য নিখুঁত ব্যাকআপ সমাধান। ২০৪.৮V রেটেড ভোল্টেজে কাজ করায় এর কনভার্সন লস সর্বনিম্ন এবং ব্যাকআপ ব্যাকবোন অত্যন্ত শক্তিশালী।",
+    "moqBn": "১ টি",
+    "leadTimeBn": "স্টক থেকে সরাসরি সরবরাহ",
+    "metaTitleBn": "হাই-ভোল্টেজ স্ট্যাকেবল LiFePO4 ESS ২০.৪৮kWh — নূর সোলার এনার্জি",
+    "metaDescriptionBn": "বাণিজ্যিক থ্রি-ফেজ হাইব্রিড সিস্টেমের জন্য 20.48kWh হাই-ভোল্টেজ LiFePO4 ব্যাটারি টাওয়ার।"
+  },
+  {
+    "slug": "industrial-cabinet-battery-51kwh",
+    "categorySlug": "lithium-batteries",
+    "name": "Commercial Outdoor LiFePO4 Cabinet 51.2kWh",
+    "shortDescription": "All-in-one IP55 outdoor industrial energy storage cabinet with integrated aerosol fire suppression and smart HVAC.",
+    "description": "Heavy-duty outdoor commercial battery cabinet delivering 51.2 kWh capacity with built-in climate control and aerosol fire extinguishing systems.\n\nEngineered specifically for harsh tropical conditions in Bangladesh, safeguarding peak-shaving operations and factory emergency loads.",
+    "brand": null,
+    "model": "NS-IND-51KWH",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit",
+    "leadTime": "Warehouse stock ready",
+    "isFeatured": true,
+    "sortOrder": 10,
+    "images": [
+      {
+        "url": "/demo/battery-rack-detail.svg",
+        "alt": "Commercial Outdoor LiFePO4 Cabinet 51.2kWh front view",
+        "sortOrder": 0,
+        "altBn": "বাণিজ্যিক আউটডোর LiFePO4 কেবিনেট ৫১.২kWh সামনের দৃশ্য"
+      },
+      {
+        "url": "/demo/battery-wall-angled.svg",
+        "alt": "Commercial Outdoor LiFePO4 Cabinet 51.2kWh angled view",
+        "sortOrder": 1,
+        "altBn": "বাণিজ্যিক আউটডোর LiFePO4 কেবিনেট ৫১.২kWh কোণাকুণি দৃশ্য"
+      }
+    ],
+    "specs": [
+      { "label": "Nominal Energy", "value": "51.2 kWh", "sortOrder": 1, "labelBn": "মোট শক্তি ক্ষমতা", "valueBn": "৫১.২ kWh" },
+      { "label": "Operating Voltage", "value": "512 V High-Voltage", "sortOrder": 2, "labelBn": "কার্যকারী ভোল্টেজ", "valueBn": "৫১২ V" },
+      { "label": "Enclosure Rating", "value": "IP55 Outdoor Weatherproof", "sortOrder": 3, "labelBn": "এনক্লোজার রেটিং", "valueBn": "IP55 আউটডোর" },
+      { "label": "Thermal Management", "value": "Industrial Smart AC Inverter Cooling", "sortOrder": 4, "labelBn": "থার্মাল ম্যানেজমেন্ট", "valueBn": "স্মার্ট এসি কুলিং" }
+    ],
+    "nameBn": "বাণিজ্যিক আউটডোর LiFePO4 কেবিনেট ৫১.২kWh",
+    "shortDescriptionBn": "শিল্প কারখানা ও মাঝারি প্রতিষ্ঠানের জন্য স্বয়ংসম্পূর্ণ আউটডোর ওয়েদারপ্রুফ ৫১.২kWh ব্যাটারি কেবিনেট।",
+    "descriptionBn": "আউটডোর আবহাওয়া প্রতিরোধী এই ৫১.২ kWh ইন্ডাস্ট্রিয়াল ব্যাটারি কেবিনেটে রয়েছে স্মার্ট এসি কুলিং ও স্বয়ংক্রিয় অগ্নি নির্বাপক ব্যবস্থা। কঠোর গরমেও টানা নির্ভরযোগ্য শক্তি সরবরাহ করে।",
+    "moqBn": "১ টি",
+    "leadTimeBn": "সরাসরি ডেলিভারি",
+    "metaTitleBn": "বাণিজ্যিক আউটডোর LiFePO4 কেবিনেট ৫১.২kWh — নূর সোলার এনার্জি",
+    "metaDescriptionBn": "শিল্প ও বাণিজ্যিক প্রতিষ্ঠানের জন্য 51.2kWh আউটডোর LiFePO4 ব্যাটারি কেবিনেট।"
+  },
+  {
+    "slug": "48v-200ah-server-rack-battery",
+    "categorySlug": "lithium-batteries",
+    "name": "48V 200Ah High-Capacity Rack Battery 10.24kWh",
+    "shortDescription": "10.24 kWh standard 19-inch 4U server rack LiFePO4 battery module for high-drain telecom and solar backups.",
+    "description": "Double the capacity in a single compact 4U chassis, offering 10.24 kWh of ultra-stable A-grade prismatic LiFePO4 chemistry.\n\nDesigned for telecom base stations, corporate server rooms, and off-grid solar microgrids requiring extended autonomy without occupying excessive floor area.",
+    "brand": null,
+    "model": "NS-BAT-48200R",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit",
+    "leadTime": "Immediate delivery",
+    "isFeatured": true,
+    "sortOrder": 11,
+    "images": [
+      {
+        "url": "/demo/battery-48v100ah-front.svg",
+        "alt": "48V 200Ah High-Capacity Rack Battery front view",
+        "sortOrder": 0,
+        "altBn": "48V 200Ah হাই-ক্যাপাসিটি র্যাক ব্যাটারি সামনের দৃশ্য"
+      },
+      {
+        "url": "/demo/battery-48v100ah-angled.svg",
+        "alt": "48V 200Ah High-Capacity Rack Battery angled view",
+        "sortOrder": 1,
+        "altBn": "48V 200Ah হাই-ক্যাপাসিটি র্যাক ব্যাটারি কোণাকুণি দৃশ্য"
+      }
+    ],
+    "specs": [
+      { "label": "Rated Capacity", "value": "200 Ah (10.24 kWh)", "sortOrder": 1, "labelBn": "রেটেড ক্যাপাসিটি", "valueBn": "২০০ Ah (১০.২৪ kWh)" },
+      { "label": "Nominal Voltage", "value": "51.2 V", "sortOrder": 2, "labelBn": "রেটেড ভোল্টেজ", "valueBn": "৫১.২ V" },
+      { "label": "Max Continuous Discharge", "value": "150 A (7.68 kW)", "sortOrder": 3, "labelBn": "সর্বোচ্চ ডিসচার্জ", "valueBn": "১৫০ A" },
+      { "label": "Design Life", "value": "15+ Years / 6,000 Cycles", "sortOrder": 4, "labelBn": "স্থায়িত্বকাল", "valueBn": "১৫+ বছর / ৬,০০০ সাইকেল" }
+    ],
+    "nameBn": "48V 200Ah হাই-ক্যাপাসিটি র্যাক ব্যাটারি ১০.২৪kWh",
+    "shortDescriptionBn": "টেলিকম সাইট ও বাণিজ্যিক পাওয়ার ব্যাকআপের জন্য ১০.২৪ kWh উচ্চ ক্ষমতাসম্পন্ন LiFePO4 র্যাক ব্যাটারি।",
+    "descriptionBn": "স্ট্যান্ডার্ড সার্ভার র্যাকে মাউন্ট উপযোগী এই ১০.২৪ kWh ব্যাটারিটি কম জায়গায় দ্বিগুণ শক্তি সঞ্চয় করতে সক্ষম। এ-গ্রেড প্রিজম্যাটিক সেল এবং স্মার্ট বিএমএস দীর্ঘায়ু নিশ্চিত করে।",
+    "moqBn": "১ টি",
+    "leadTimeBn": "তাৎক্ষণিক ডেলিভারি",
+    "metaTitleBn": "48V 200Ah হাই-ক্যাপাসিটি র্যাক ব্যাটারি ১০.২৪kWh — নূর সোলার এনার্জি",
+    "metaDescriptionBn": "বাণিজ্যিক ও টেলিকম ব্যাকআপের জন্য 48V 200Ah 10.24kWh LiFePO4 র্যাক ব্যাটারি।"
   },
   {
     "slug": "3kw-hybrid-inverter-single-phase",
@@ -1826,5 +2072,128 @@ export const demoProducts = [
     "leadTimeBn": "স্টক থেকে তাৎক্ষণিক ডেলিভারি",
     "metaTitleBn": "30kW থ্রি-ফেজ অন-গ্রিড স্ট্রিং ইনভার্টার — নূর সোলার এনার্জি",
     "metaDescriptionBn": "শিল্প কারখানার নেট মিটারিং ও বাণিজ্যিক ছাদের জন্য 30kW থ্রি-ফেজ অন-গ্রিড ইনভার্টার। সরাসরি আমদানি ও সরবরাহ।"
+  },
+  {
+    "slug": "15kw-three-phase-hybrid-inverter",
+    "categorySlug": "solar-inverters",
+    "name": "15kW Three-Phase Hybrid Solar Inverter",
+    "shortDescription": "High-voltage battery compatible 15kW three-phase hybrid inverter with dual MPPTs and unbalance phase output.",
+    "description": "Engineered for mid-sized factories, commercial offices, and cold storage facilities requiring reliable three-phase battery backup during grid load-shedding.\n\nSupports 100% unbalanced three-phase AC load support, dual high-efficiency MPPT trackers, and seamless generator integration.",
+    "brand": null,
+    "model": "NS-INV-15000H3",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit",
+    "leadTime": "Immediate warehouse dispatch",
+    "isFeatured": true,
+    "sortOrder": 16,
+    "images": [
+      {
+        "url": "/demo/inverter-10kw-front.svg",
+        "alt": "15kW Three-Phase Hybrid Solar Inverter front view",
+        "sortOrder": 0,
+        "altBn": "১৫kW থ্রি-ফেজ হাইব্রিড সোলার ইনভার্টার সামনের দৃশ্য"
+      },
+      {
+        "url": "/demo/inverter-10kw-angled.svg",
+        "alt": "15kW Three-Phase Hybrid Solar Inverter angled view",
+        "sortOrder": 1,
+        "altBn": "১৫kW থ্রি-ফেজ হাইব্রিড সোলার ইনভার্টার কোণাকুণি দৃশ্য"
+      }
+    ],
+    "specs": [
+      { "label": "Rated AC Output", "value": "15,000 W (3-Phase 400V)", "sortOrder": 1, "labelBn": "রেটেড আউটপুট", "valueBn": "১৫,০০০ W (থ্রি-ফেজ)" },
+      { "label": "Battery Voltage Range", "value": "160V - 600V (High Voltage)", "sortOrder": 2, "labelBn": "ব্যাটারি ভোল্টেজ রেঞ্জ", "valueBn": "১৬০V - ৬০০V" },
+      { "label": "Max PV Input Power", "value": "22,500 W", "sortOrder": 3, "labelBn": "সর্বোচ্চ সোলার ইনপুট", "valueBn": "২২,৫০০ W" },
+      { "label": "Peak Efficiency", "value": "98.2%", "sortOrder": 4, "labelBn": "সর্বোচ্চ দক্ষতা", "valueBn": "৯৮.২%" }
+    ],
+    "nameBn": "১৫kW থ্রি-ফেজ হাইব্রিড সোলার ইনভার্টার",
+    "shortDescriptionBn": "মাঝারি শিল্প ও বাণিজ্যিক প্রতিষ্ঠানের নিরবচ্ছিন্ন ব্যাকআপের জন্য ১৫kW থ্রি-ফেজ হাই-ভোল্টেজ হাইব্রিড ইনভার্টার।",
+    "descriptionBn": "উচ্চ ভোল্টেজ ব্যাটারি সামঞ্জস্যপূর্ণ এই ১৫kW থ্রি-ফেজ হাইব্রিড ইনভার্টার গ্রিড ফেইলিওরের সময় চোখের পলকে ব্যাকআপে চলে যায়। ফ্যাক্টরির আনব্যালেন্সড লোড সামলানোর সক্ষমতা রয়েছে।",
+    "moqBn": "১ টি",
+    "leadTimeBn": "স্টক থেকে ডেলিভারি",
+    "metaTitleBn": "১৫kW থ্রি-ফেজ হাইব্রিড সোলার ইনভার্টার — নূর সোলার এনার্জি",
+    "metaDescriptionBn": "শিল্প ও বাণিজ্যিক ব্যবহারের জন্য 15kW থ্রি-ফেজ হাইব্রিড সোলার ইনভার্টার।"
+  },
+  {
+    "slug": "50kw-industrial-ongrid-inverter",
+    "categorySlug": "solar-inverters",
+    "name": "50kW Industrial Commercial On-Grid Inverter",
+    "shortDescription": "Heavy-duty 50kW commercial grid-tied string inverter with 5 MPPTs optimized for industrial net-metering rooftops.",
+    "description": "Designed for demanding factory and textile plant environments, featuring 5 independent MPPT trackers with 10 string inputs for complex multi-oriented rooftops.\n\nType II surge arresters on both DC and AC sides protect equipment from heavy monsoon electrical disturbances.",
+    "brand": null,
+    "model": "NS-INV-50K-OG",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit",
+    "leadTime": "Immediate delivery",
+    "isFeatured": true,
+    "sortOrder": 17,
+    "images": [
+      {
+        "url": "/demo/inverter-30kw-front.svg",
+        "alt": "50kW Industrial Commercial On-Grid Inverter front view",
+        "sortOrder": 0,
+        "altBn": "৫০kW ইন্ডাস্ট্রিয়াল অন-গ্রিড ইনভার্টার সামনের দৃশ্য"
+      },
+      {
+        "url": "/demo/inverter-30kw-angled.svg",
+        "alt": "50kW Industrial Commercial On-Grid Inverter angled view",
+        "sortOrder": 1,
+        "altBn": "৫০kW ইন্ডাস্ট্রিয়াল অন-গ্রিড ইনভার্টার কোণাকুণি দৃশ্য"
+      }
+    ],
+    "specs": [
+      { "label": "Rated AC Power", "value": "50,000 W (50 kW)", "sortOrder": 1, "labelBn": "রেটেড এসি ক্ষমতা", "valueBn": "৫০,০০০ W (৫০ kW)" },
+      { "label": "Number of MPPTs", "value": "5 MPPTs (10 String Inputs)", "sortOrder": 2, "labelBn": "MPPT সংখ্যা", "valueBn": "৫ MPPT" },
+      { "label": "Max System Voltage", "value": "1100 V DC", "sortOrder": 3, "labelBn": "সর্বোচ্চ ভোল্টেজ", "valueBn": "১১০০ V DC" },
+      { "label": "Efficiency", "value": "98.7%", "sortOrder": 4, "labelBn": "এফিসিয়েন্সি", "valueBn": "৯৮.৭%" }
+    ],
+    "nameBn": "৫০kW ইন্ডাস্ট্রিয়াল অন-গ্রিড ইনভার্টার",
+    "shortDescriptionBn": "গার্মেন্টস ও ইন্ডাস্ট্রিয়াল নেট-মিটারিং সোলার রুফটপের জন্য ৫টি MPPT বিশিষ্ট ৫০kW বাণিজ্যিক অন-গ্রিড ইনভার্টার।",
+    "descriptionBn": "টেক্সটাইল, স্টিল ও ম্যানুফ্যাকচারিং প্ল্যান্টের নেট মিটারিং প্রকল্পের জন্য নির্ভরযোগ্য ৫০ কিলোওয়াট অন-গ্রিড ইনভার্টার। ৫টি স্বাধীন MPPT বিভিন্ন কোণের ছাদ থেকে সর্বোচ্চ বিদ্যুৎ আহরণ নিশ্চিত করে।",
+    "moqBn": "১ টি",
+    "leadTimeBn": "সরাসরি পাইকারি সরবরাহ",
+    "metaTitleBn": "৫০kW ইন্ডাস্ট্রিয়াল অন-গ্রিড ইনভার্টার — নূর সোলার এনার্জি",
+    "metaDescriptionBn": "শিল্প কারখানার নেট মিটারিংয়ের জন্য 50kW ইন্ডাস্ট্রিয়াল অন-গ্রিড ইনভার্টার।"
+  },
+  {
+    "slug": "100kw-utility-scale-string-inverter",
+    "categorySlug": "solar-inverters",
+    "name": "100kW Utility-Scale Grid-Tied Inverter",
+    "shortDescription": "High-capacity 100kW string inverter with 10 MPPTs for large-scale commercial complexes and solar parks.",
+    "description": "Engineered for utility-scale solar farms and massive industrial warehouse roofs. Features 10 independent MPPTs with intelligent string monitoring and smart I-V curve scanning.\n\nIP66 ingress protection and C5 anti-corrosion rating withstand the most demanding environmental environments.",
+    "brand": null,
+    "model": "NS-INV-100K-UT",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit",
+    "leadTime": "Immediate delivery",
+    "isFeatured": true,
+    "sortOrder": 18,
+    "images": [
+      {
+        "url": "/demo/inverter-30kw-angled.svg",
+        "alt": "100kW Utility-Scale Grid-Tied Inverter front view",
+        "sortOrder": 0,
+        "altBn": "১০০kW ইউটিলিটি-স্কেল স্ট্রিং ইনভার্টার সামনের দৃশ্য"
+      },
+      {
+        "url": "/demo/inverter-30kw-front.svg",
+        "alt": "100kW Utility-Scale Grid-Tied Inverter angled view",
+        "sortOrder": 1,
+        "altBn": "১০০kW ইউটিলিটি-স্কেল স্ট্রিং ইনভার্টার কোণাকুণি দৃশ্য"
+      }
+    ],
+    "specs": [
+      { "label": "Rated AC Power", "value": "100,000 W (100 kW)", "sortOrder": 1, "labelBn": "রেটেড এসি আউটপুট", "valueBn": "১০০,০০০ W (১০০ kW)" },
+      { "label": "MPPT Configuration", "value": "10 MPPTs (20 Inputs)", "sortOrder": 2, "labelBn": "MPPT কনফিগারেশন", "valueBn": "১০ MPPT (২০ ইনপুট)" },
+      { "label": "Max Efficiency", "value": "98.8%", "sortOrder": 3, "labelBn": "সর্বোচ্চ দক্ষতা", "valueBn": "৯৮.৮%" },
+      { "label": "Protection", "value": "IP66 / AFCI / Anti-PID Optional", "sortOrder": 4, "labelBn": "সুরক্ষা", "valueBn": "IP66 / AFCI" }
+    ],
+    "nameBn": "১০০kW ইউটিলিটি-স্কেল স্ট্রিং ইনভার্টার",
+    "shortDescriptionBn": "মেগাওয়াট-স্কেল সৌর বিদ্যুৎ পার্ক ও মেগা ইন্ডাস্ট্রিয়াল রুফটপের জন্য ১০০ কিলোওয়াট হাই-পাওয়ার স্ট্রিং ইনভার্টার।",
+    "descriptionBn": "বৃহৎ বাণিজ্যিক স্থাপনা ও সোলার পার্কের জন্য ১০০kW ধারণক্ষমতার স্ট্রিং ইনভার্টার। ১০টি স্বতন্ত্র MPPT ট্র্যাকারের মাধ্যমে সর্বোচ্চ বিদ্যুৎ উৎপাদন এবং স্মার্ট আই-ভি কার্ভ স্ক্যানিং সক্ষমতা রয়েছে।",
+    "moqBn": "১ টি",
+    "leadTimeBn": "সরাসরি ওয়্যারহাউস সরবরাহ",
+    "metaTitleBn": "১০০kW ইউটিলিটি-স্কেল স্ট্রিং ইনভার্টার — নূর সোলার এনার্জি",
+    "metaDescriptionBn": "মেগা ইন্ডাস্ট্রিয়াল রুফটপ ও সোলার পার্কের জন্য 100kW ইউটিলিটি স্ট্রিং ইনভার্টার।"
   }
 ];

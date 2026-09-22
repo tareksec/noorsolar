@@ -136,37 +136,37 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
   if (displayProducts.length === 0) return null;
 
   return (
-    <section data-motion="featured-carousel" className="relative bg-[#E4E7E4]">
+    <section data-motion="featured-carousel" className="relative bg-[#F1F4F1]">
       {/* Balanced & Smooth Sticky Scroll Container (320vh provides calm, controlled product browsing) */}
       <div ref={containerRef} className="w-full relative" style={{ height: "320vh" }}>
         <div className="sticky top-0 h-screen w-full flex flex-col justify-between py-6 sm:py-8 overflow-hidden">
           
           {/* 1. Header: Shop Solar / Featured Products */}
           <div className="text-center max-w-3xl mx-auto px-4 shrink-0">
-            {/* Amber Kicker Lines */}
-            <div className="inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-semibold tracking-wider text-[#85580F] uppercase mb-2">
-              <span className="w-8 sm:w-12 h-[1.5px] bg-[#85580F]/70 rounded-full" />
-              <span>{isBn ? "সোলার সামগ্রী" : "Shop Solar"}</span>
-              <span className="w-8 sm:w-12 h-[1.5px] bg-[#85580F]/70 rounded-full" />
+            {/* Kicker Lines */}
+            <div className="inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-semibold tracking-wider text-[#074031] uppercase mb-2">
+              <span className="w-8 sm:w-12 h-[1.5px] bg-[#074031]/50 rounded-full" />
+              <span>{isBn ? "সোলার ইকুইপমেন্ট" : "Shop Solar"}</span>
+              <span className="w-8 sm:w-12 h-[1.5px] bg-[#074031]/50 rounded-full" />
             </div>
 
             {/* Heading */}
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#111311] leading-tight">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#17251F] leading-tight">
               {isBn ? (
                 <>
-                  নির্বাচিত <span className="text-[#485244] font-extrabold">পাইকারি সরঞ্জাম</span>
+                  নির্বাচিত <span className="text-[#074031] font-extrabold">পাইকারি ইকুইপমেন্ট</span>
                 </>
               ) : (
                 <>
-                  Featured <span className="text-[#485244] font-extrabold">Wholesale Equipment</span>
+                  Featured <span className="text-[#074031] font-extrabold">Wholesale Equipment</span>
                 </>
               )}
             </h2>
 
             {/* Subtitle */}
-            <p className="mt-1.5 text-xs sm:text-sm text-[#5C605C] max-w-2xl mx-auto leading-relaxed">
+            <p className="mt-1.5 text-xs sm:text-sm text-[#62706A] max-w-2xl mx-auto leading-relaxed">
               {isBn
-                ? "আসল প্যানেল, ইনভার্টার ও ব্যাটারি — প্রতিটি পণ্যে ডিজিটাল ওয়ারেন্টি ও বারকোড যাচাইকরণ।"
+                ? "প্রজেক্ট-গ্রেড সোলার প্যানেল, ইনভার্টার ও ব্যাটারি — প্রতিটি পণ্যে প্রস্তুতকারকের অফিসিয়াল ওয়ারেন্টি।"
                 : "Genuine panels, inverters, batteries and UPS systems — each with digital warranty and authenticity on every serial."}
             </p>
           </div>
@@ -191,12 +191,12 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
                   role="group"
                   aria-roledescription="slide"
                   data-motion="product-card"
-                  className="w-[280px] sm:w-[330px] md:w-[360px] h-[450px] sm:h-[470px] shrink-0 rounded-[28px] bg-white border border-[#DDE1DC] shadow-[0_6px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_45px_rgba(0,0,0,0.1)] hover:-translate-y-2 transition-all duration-500 overflow-hidden flex flex-col justify-between group"
+                  className="w-[280px] sm:w-[330px] md:w-[360px] h-[450px] sm:h-[470px] shrink-0 rounded-[28px] bg-white border border-[#DCE4E0] shadow-[0_6px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_45px_rgba(7,64,49,0.08)] hover:-translate-y-2 transition-all duration-500 overflow-hidden flex flex-col justify-between group"
                 >
                   <Link href={linkHref} className="flex flex-col h-full">
                     
                     {/* Top Studio Image Area with Light Neutral Display Canvas */}
-                    <div className="relative w-full h-56 sm:h-60 bg-[#F5F7F3] border-b border-[#E8ECE5] overflow-hidden flex items-center justify-center p-6">
+                    <div className="relative w-full h-56 sm:h-60 bg-[#F7F8F5] border-b border-[#DCE4E0] overflow-hidden flex items-center justify-center p-6">
                       <Image
                         src={imageSrc}
                         alt={product.name}
@@ -207,13 +207,13 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
 
                       {/* Brand Pill */}
                       {product.brand && (
-                        <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-white/95 border border-[#DDE1DC] text-xs font-mono font-bold text-[#111311] shadow-2xs">
+                        <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-white/95 border border-[#DCE4E0] text-xs font-mono font-bold text-[#17251F] shadow-2xs">
                           {product.brand}
                         </div>
                       )}
 
                       {/* Item Index Pill */}
-                      <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-[#111311] text-white text-xs font-mono font-bold">
+                      <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-[#074031] text-white text-xs font-mono font-bold">
                         0{index + 1}
                       </div>
                     </div>
@@ -222,26 +222,26 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
                     <div className="p-5 sm:p-6 flex flex-col justify-between flex-1">
                       <div>
                         {/* Category Kicker */}
-                        <span className="text-xs font-mono uppercase tracking-wider text-[#6B7567] font-semibold block mb-1.5">
+                        <span className="text-xs font-mono uppercase tracking-wider text-[#62706A] font-semibold block mb-1.5">
                           {categoryTitle}
                         </span>
 
                         {/* Product Name */}
-                        <h3 className="text-base sm:text-lg font-bold text-[#111311] group-hover:text-black line-clamp-2 leading-snug mb-2.5">
+                        <h3 className="text-base sm:text-lg font-bold text-[#17251F] group-hover:text-[#074031] line-clamp-2 leading-snug mb-2.5">
                           {product.name}
                         </h3>
 
                         {/* Model / Subtitle */}
                         {product.model && (
-                          <p className="text-xs font-mono text-[#4F594A] mb-3">
+                          <p className="text-xs font-mono text-[#62706A] mb-3">
                             {isBn ? `মডেল: ${product.model}` : `Model: ${product.model}`}
                           </p>
                         )}
 
                         {/* Top Spec Chip if available */}
                         {product.specs && product.specs[0] && (
-                          <div className="inline-block px-2.5 py-1 rounded-md bg-[#F4F6F2] border border-[#E2E6DF] text-xs font-mono text-[#4C5447]">
-                            <span className="font-semibold text-[#111311]">
+                          <div className="inline-block px-2.5 py-1 rounded-md bg-[#F1F4F1] border border-[#DCE4E0] text-xs font-mono text-[#62706A]">
+                            <span className="font-semibold text-[#17251F]">
                               {product.specs[0].label}:
                             </span>{" "}
                             {product.specs[0].value}
@@ -250,15 +250,15 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
                       </div>
 
                       {/* Bottom Footer Info */}
-                      <div className="pt-3.5 border-t border-[#F0F2EF] flex items-center justify-between mt-auto">
+                      <div className="pt-3.5 border-t border-[#F1F4F1] flex items-center justify-between mt-auto">
                         <span className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full font-semibold">
                           <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                          <span>{isBn ? "স্টকে আছে" : "In Stock"}</span>
+                          <span>{isBn ? "রেডি স্টক" : "In Stock"}</span>
                         </span>
 
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-[#111311] group-hover:text-black group-hover:translate-x-1 transition-all">
-                          <span>{isBn ? "বিস্তারিত দেখুন" : "View Details"}</span>
-                          <ArrowUpRight className="w-3.5 h-3.5 text-[#111311]" />
+                        <span className="inline-flex items-center gap-1 text-xs font-bold text-[#074031] group-hover:text-[#0B513E] group-hover:translate-x-1 transition-all">
+                          <span>{isBn ? "টেকনিক্যাল তথ্য" : "View Details"}</span>
+                          <ArrowUpRight className="w-3.5 h-3.5 text-[#074031]" />
                         </span>
                       </div>
 
@@ -273,14 +273,14 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
 
           {/* 3. Bottom Progress Bar */}
           <div className="max-w-xs mx-auto w-full px-4 shrink-0 flex flex-col items-center gap-1.5 pb-2">
-            <div className="w-full h-1 bg-[#D8E1D5] rounded-full overflow-hidden">
+            <div className="w-full h-1 bg-[#DCE4E0] rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-[#111311] rounded-full"
+                className="h-full bg-[#074031] rounded-full"
                 style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
               />
             </div>
-            <span className="text-xs font-mono text-[#5C605C] tracking-wider">
-              {isBn ? "স্ক্রোল করে দেখুন" : "Scroll to explore"}
+            <span className="text-xs font-mono text-[#62706A] tracking-wider">
+              {isBn ? "স্ক্রোল করে ডানে দেখুন" : "Scroll to explore"}
             </span>
           </div>
 
@@ -288,21 +288,21 @@ export function FeaturedCarousel({ products, locale }: FeaturedCarouselProps): R
       </div>
 
       {/* 3. Bottom Transition Strip to Next Section */}
-      <div className="bg-[#111311] py-12 px-4 text-center text-white border-t border-[#252A25]">
+      <div className="bg-[#074031] py-12 px-4 text-center text-white border-t border-[#0B513E]">
         <div className="max-w-xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-left">
-            <span className="text-xs font-mono text-[#CEF23E] block">
-              {isBn ? "বি২বি পাইকারি ক্যাটালগ" : "B2B Wholesale Catalog"}
+            <span className="text-xs font-mono text-[#FEBE16] block">
+              {isBn ? "B2B পাইকারি ক্যাটালগ" : "B2B Wholesale Catalog"}
             </span>
             <p className="text-sm font-semibold text-white">
-              {isBn ? "সব মডেল ও টেকনিক্যাল স্পেসিফিকেশন দেখুন" : "Explore all equipment models & specs"}
+              {isBn ? "সকল মডেল ও টেকনিক্যাল স্পেসিফিকেশন দেখুন" : "Explore all equipment models & specs"}
             </p>
           </div>
           <Link
             href={isBn ? "/bn/products" : "/products"}
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 min-h-[44px] rounded-full bg-[#CEF23E] hover:bg-[#b8da35] text-[#111311] text-xs font-bold transition-all hover:scale-105 shrink-0"
+            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 min-h-[44px] rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] text-xs font-bold transition-all hover:scale-105 shrink-0"
           >
-            <span>{isBn ? "সব পণ্য দেখুন" : `View All ${products.length} Products`}</span>
+            <span>{isBn ? "সকল পণ্য দেখুন" : `View All ${products.length} Products`}</span>
             <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>

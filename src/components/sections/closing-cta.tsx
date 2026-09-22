@@ -40,13 +40,13 @@ export function ClosingCTA({
   const resolvedHeadline =
     headline ||
     (isBn
-      ? "অর্ডার দিতে অথবা কনটেইনার পাইকারি মূল্য জানতে চান?"
+      ? "প্রজেক্টের অর্ডার বা কন্টেইনারের পাইকারি মূল্য জানতে যোগাযোগ করুন"
       : "Ready to Order or Inquire About Container Pricing?");
 
   const resolvedSubheadline =
     subheadline ||
     (isBn
-      ? "নিচে আপনার প্রকল্পের বিবরণ অথবা কাঙ্ক্ষিত পণ্যের সংখ্যা লিখে পাঠান। আমাদের সেলস ইঞ্জিনিয়াররা অফিস চলাকালীন দ্রুত আনুষ্ঠানিক কোটেশন পাঠাবেন।"
+      ? "নিচে আপনার প্রজেক্টের স্পেসিফিকেশন বা প্রয়োজনীয় ইকুইপমেন্টের পরিমাণ লিখে পাঠান। আমাদের সেলস ইঞ্জিনিয়াররা কার্যদিবসে দ্রুত আনুষ্ঠানিক কোটেশন প্রদান করবেন।"
       : "Submit your project specifications or required equipment quantity below. Our commercial sales engineers respond with formal quotations within working hours.");
 
   const [state, formAction, isPending] = useActionState(submitQuoteRequest, initialState);
@@ -82,65 +82,65 @@ export function ClosingCTA({
   )}`;
 
   return (
-    <section id="quote-section" className="py-24 bg-[#EDEDED] border-t border-[#DDE1DC]">
+    <section id="quote-section" className="py-24 bg-[#F1F4F1] border-t border-[#DCE4E0]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
           {/* Left Summary & Contact Quick Links */}
           <div className="lg:col-span-5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#DDE1DC] text-xs font-mono text-[#111311] mb-4">
-              <span className="w-2 h-2 rounded-full bg-[#CEF23E]"></span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#DCE4E0] text-xs font-mono text-[#17251F] mb-4">
+              <span className="w-2 h-2 rounded-full bg-[#FEBE16]"></span>
               <span>{isBn ? "দ্রুত পাইকারি কোটেশন" : "Fast Wholesale Quotations"}</span>
             </div>
 
             <h2
-              className="closing-headline-anim text-3xl sm:text-4xl font-bold tracking-tight text-[#111311] leading-tight mb-4 will-change-transform"
+              className="closing-headline-anim text-3xl sm:text-4xl font-bold tracking-tight text-[#074031] leading-tight mb-4 will-change-transform"
               data-motion="closing-headline"
             >
               {resolvedHeadline}
             </h2>
 
-            <p className="text-sm sm:text-base text-[#5C605C] leading-relaxed mb-8">
+            <p className="text-sm sm:text-base text-[#62706A] leading-relaxed mb-8">
               {resolvedSubheadline}
             </p>
 
-            <div className="p-6 rounded-3xl bg-white border border-[#DDE1DC] space-y-4 shadow-sm">
+            <div className="p-6 rounded-3xl bg-white border border-[#DCE4E0] space-y-4 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#111311] text-[#CEF23E] flex items-center justify-center shrink-0">
+                <div className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#074031] text-[#FEBE16] flex items-center justify-center shrink-0">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-mono uppercase text-[#5C605C] block">
+                  <span className="text-[11px] font-mono uppercase text-[#62706A] block">
                     {isBn ? "সরাসরি সেলস ডেস্ক" : "Direct Sales Desk"}
                   </span>
-                  <a href={`tel:${phoneDisplay}`} className="inline-flex items-center min-h-[44px] text-sm font-bold font-mono text-[#111311]">
+                  <a href={`tel:${phoneDisplay.replace(/[^0-9+]/g, "")}`} className="inline-flex items-center min-h-[44px] text-sm font-bold font-mono text-[#074031]">
                     {phoneDisplay}
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 pt-3 border-t border-[#EDEDED]">
-                <div className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#CEF23E] text-[#111311] flex items-center justify-center shrink-0 font-bold">
+              <div className="flex items-center gap-3 pt-3 border-t border-[#DCE4E0]">
+                <div className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#FEBE16] text-[#052F25] flex items-center justify-center shrink-0 font-bold">
                   <MessageCircle className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[11px] font-mono uppercase text-[#5C605C] block">
+                  <span className="text-[11px] font-mono uppercase text-[#62706A] block">
                     {isBn ? "তাৎক্ষণিক হোয়াটসঅ্যাপ" : "Instant WhatsApp"}
                   </span>
                   <a
-                    href={`https://wa.me/${whatsappNumber}`}
+                    href={`https://wa.me/${whatsappNumber.replace(/[^0-9]/g, "")}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center min-h-[44px] text-sm font-bold font-mono text-[#111311] hover:underline"
+                    className="inline-flex items-center min-h-[44px] text-sm font-bold font-mono text-[#074031] hover:underline"
                   >
-                    {isBn ? "ইঞ্জিনিয়ারের সাথে কথা বলুন" : "Chat with an Engineer"}
+                    {isBn ? "সেলস ইঞ্জিনিয়ারের সাথে কথা বলুন" : "Chat with an Engineer"}
                   </a>
                 </div>
               </div>
             </div>
 
-            <PhotoReveal className="relative aspect-16/9 w-full rounded-3xl overflow-hidden border border-[#DDE1DC] mt-6 shadow-sm bg-[#111311]">
+            <PhotoReveal className="relative aspect-16/9 w-full rounded-3xl overflow-hidden border border-[#DCE4E0] mt-6 shadow-sm bg-[#052F25]">
               <Image
                 src="/photos/cta-sunset-panels.webp"
                 alt={isBn ? "সূর্যাস্তের আলোয় সোলার প্যানেল অ্যারে" : "Solar panel array against sunset sky"}
@@ -148,13 +148,13 @@ export function ClosingCTA({
                 sizes="(max-width: 1024px) 100vw, 450px"
                 className="object-cover opacity-90"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/85 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#052F25]/90 via-transparent to-transparent pointer-events-none" />
               <div className="absolute bottom-3.5 left-4 right-4 text-white pointer-events-none">
-                <span className="text-[11px] font-mono text-[#CEF23E] font-semibold block">
-                  {isBn ? "বাণিজ্যিক আমদানি ও সরবরাহ" : "Commercial Indents & Supply"}
+                <span className="text-[11px] font-mono text-[#FEBE16] font-semibold block">
+                  {isBn ? "বাণিজ্যিক আমদানি ও প্রজেক্ট সরবরাহ" : "Commercial Indents & Supply"}
                 </span>
                 <span className="text-xs text-white/90 leading-tight block mt-0.5">
-                  {isBn ? "বাংলাদেশের ৬৪টি জেলায় নির্ভরযোগ্য ডেলিভারি" : "Reliable dispatch across all 64 districts in Bangladesh"}
+                  {isBn ? "বাংলাদেশের ৬৪ জেলায় সরাসরি সাইট ডেলিভারি" : "Reliable dispatch across all 64 districts in Bangladesh"}
                 </span>
               </div>
             </PhotoReveal>
@@ -162,18 +162,18 @@ export function ClosingCTA({
 
           {/* Right Form Card */}
           <div className="lg:col-span-7">
-            <div className="p-6 sm:p-10 rounded-[36px] bg-white border border-[#DDE1DC] shadow-[0_16px_36px_-10px_rgba(0,0,0,0.05)]">
+            <div className="p-6 sm:p-10 rounded-[36px] bg-white border border-[#DCE4E0] shadow-[0_16px_36px_-10px_rgba(7,64,49,0.06)]">
               
               {state.success ? (
                 <div className="py-8 flex flex-col items-center text-center space-y-5 animate-in fade-in zoom-in-95 duration-300">
-                  <div className="w-16 h-16 rounded-full bg-[#CEF23E]/30 flex items-center justify-center text-[#111311]">
-                    <CheckCircle className="w-8 h-8 text-[#111311]" />
+                  <div className="w-16 h-16 rounded-full bg-[#FEBE16]/20 flex items-center justify-center text-[#074031]">
+                    <CheckCircle className="w-8 h-8 text-[#074031]" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-[#111311] tracking-tight">
-                      {isBn ? "কোটেশন রিকোয়েস্ট জমা হয়েছে!" : "Quotation Request Received!"}
+                    <h3 className="text-2xl font-bold text-[#074031] tracking-tight">
+                      {isBn ? "কোটেশনের অনুরোধ সফলভাবে জমা হয়েছে!" : "Quotation Request Received!"}
                     </h3>
-                    <p className="text-sm text-[#5C605C] max-w-md mt-2 leading-relaxed">
+                    <p className="text-sm text-[#62706A] max-w-md mt-2 leading-relaxed">
                       {state.message}
                     </p>
                   </div>
@@ -183,10 +183,10 @@ export function ClosingCTA({
                       href={whatsappFollowupUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#111311] text-[#CEF23E] text-xs font-semibold hover:bg-black transition-colors"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] text-xs font-bold transition-colors shadow-md"
                     >
                       <MessageCircle className="w-4 h-4" />
-                      <span>{isBn ? "হোয়াটসঅ্যাপে যোগাযোগ করুন" : "Follow-up on WhatsApp"}</span>
+                      <span>{isBn ? "হোয়াটসঅ্যাপে দ্রুত ফলো-আপ করুন" : "Follow-up on WhatsApp"}</span>
                     </a>
                   </div>
                 </div>
@@ -216,22 +216,22 @@ export function ClosingCTA({
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        {isBn ? "পূর্ণ নাম / যোগাযোগকারীর নাম *" : "Full Name / Contact Person *"}
+                      <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
+                        {isBn ? "নাম ও পদবি *" : "Full Name / Contact Person *"}
                       </label>
                       <input
                         type="text"
                         name="name"
                         required
                         autoComplete="name"
-                        placeholder={isBn ? "যেমন: প্রকৌশলী রফিকুল ইসলাম" : "e.g. Engr. Rafiqul Islam"}
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
+                        placeholder={isBn ? "যেমন: ইঞ্জিনিয়ার রফিকুল ইসলাম" : "e.g. Engr. Rafiqul Islam"}
+                        className="w-full px-4 py-3 rounded-2xl bg-[#F1F4F1] border border-transparent focus:border-[#074031] focus:bg-white text-base text-[#17251F] placeholder:text-[#62706A]/70 outline-none transition-colors"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        {isBn ? "ফোন / মোবাইল নম্বর *" : "Phone / Mobile Number *"}
+                      <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
+                        {isBn ? "মোবাইল নম্বর *" : "Phone / Mobile Number *"}
                       </label>
                       <input
                         type="tel"
@@ -242,28 +242,28 @@ export function ClosingCTA({
                         value={phoneVal}
                         onChange={(e) => setPhoneVal(e.target.value)}
                         placeholder={isBn ? "+880 17... অথবা 017..." : "+880 17... or 017..."}
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors font-mono"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#F1F4F1] border border-transparent focus:border-[#074031] focus:bg-white text-base text-[#17251F] placeholder:text-[#62706A]/70 outline-none transition-colors font-mono"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        {isBn ? "প্রতিষ্ঠান / প্রকল্পের নাম" : "Company / Project Name"}
+                      <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
+                        {isBn ? "প্রতিষ্ঠান বা প্রজেক্টের নাম" : "Company / Project Name"}
                       </label>
                       <input
                         type="text"
                         name="company"
                         autoComplete="organization"
-                        placeholder={isBn ? "যেমন: ঢাকা সোলার ইপিসি লিমিটেড" : "e.g. Dhaka Solar EPC Ltd."}
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
+                        placeholder={isBn ? "যেমন: সানরাইজ এনার্জি লিমিটেড" : "e.g. Dhaka Solar EPC Ltd."}
+                        className="w-full px-4 py-3 rounded-2xl bg-[#F1F4F1] border border-transparent focus:border-[#074031] focus:bg-white text-base text-[#17251F] placeholder:text-[#62706A]/70 outline-none transition-colors"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        {isBn ? "ইমেইল অ্যাড্রেস" : "Email Address"}
+                      <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
+                        {isBn ? "ব্যবসায়িক ইমেইল" : "Email Address"}
                       </label>
                       <input
                         type="email"
@@ -271,101 +271,101 @@ export function ClosingCTA({
                         inputMode="email"
                         autoComplete="email"
                         placeholder="procurement@company.com"
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#F1F4F1] border border-transparent focus:border-[#074031] focus:bg-white text-base text-[#17251F] placeholder:text-[#62706A]/70 outline-none transition-colors"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        {isBn ? "বায়ার / ক্রেতার ধরণ" : "Buyer Classification"}
+                      <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
+                        {isBn ? "প্রতিষ্ঠানের ধরন" : "Buyer Classification"}
                       </label>
                       <select
                         name="buyerType"
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] outline-none transition-colors"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#F1F4F1] border border-transparent focus:border-[#074031] focus:bg-white text-base text-[#17251F] outline-none transition-colors"
                         defaultValue=""
                       >
-                        <option value="">{isBn ? "ধরণ নির্বাচন করুন..." : "Select buyer type..."}</option>
-                        <option value="Solar EPC Contractor">{isBn ? "সোলার ইপিসি ঠিকাদার (EPC Contractor)" : "Solar EPC Contractor"}</option>
-                        <option value="Commercial / Industrial Factory">{isBn ? "বাণিজ্যিক / শিল্প কারখানা (C&I Facility)" : "Commercial & Industrial (C&I)"}</option>
-                        <option value="Regional Solar Dealer">{isBn ? "স্থানীয় সোলার ডিলার / পাইকারি বিক্রেতা" : "Regional Solar Dealer / Wholesaler"}</option>
+                        <option value="">{isBn ? "ধরন নির্বাচন করুন..." : "Select buyer type..."}</option>
+                        <option value="Solar EPC Contractor">{isBn ? "সোলার EPC ঠিকাদার" : "Solar EPC Contractor"}</option>
+                        <option value="Commercial / Industrial Factory">{isBn ? "বাণিজ্যিক বা শিল্প প্রতিষ্ঠান (C&I)" : "Commercial & Industrial (C&I)"}</option>
+                        <option value="Regional Solar Dealer">{isBn ? "আঞ্চলিক সোলার ডিলার বা রিসেলার" : "Regional Solar Dealer / Wholesaler"}</option>
                         <option value="Rooftop Project Developer">{isBn ? "রুফটপ প্রজেক্ট ডেভেলপার" : "Rooftop Project Developer"}</option>
-                        <option value="Government / NGO">{isBn ? "সরকারি / প্রাতিষ্ঠানিক প্রকল্প" : "Government / Institutional"}</option>
+                        <option value="Government / NGO">{isBn ? "সরকারি বা প্রাতিষ্ঠানিক প্রজেক্ট" : "Government / Institutional"}</option>
                         <option value="Other">{isBn ? "অন্যান্য" : "Other"}</option>
                       </select>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        {isBn ? "কাঙ্ক্ষিত পণ্য বা ক্যাটাগরি" : "Required Equipment / Category"}
+                      <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
+                        {isBn ? "প্রয়োজনীয় ইকুইপমেন্ট ক্যাটাগরি" : "Required Equipment / Category"}
                       </label>
                       <select
                         name="category"
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] outline-none transition-colors"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#F1F4F1] border border-transparent focus:border-[#074031] focus:bg-white text-base text-[#17251F] outline-none transition-colors"
                         defaultValue=""
                       >
                         <option value="">{isBn ? "ক্যাটাগরি নির্বাচন করুন..." : "Select equipment category..."}</option>
                         <option value="Solar Panels">{isBn ? "সোলার প্যানেল (N-Type TOPCon / Bifacial)" : "Solar Panels (TOPCon / Bifacial)"}</option>
-                        <option value="Lithium Batteries">{isBn ? "লিথিয়াম ব্যাটারি (LiFePO4 Server Rack / Wall)" : "Lithium Batteries (LiFePO4)"}</option>
-                        <option value="Solar Inverters">{isBn ? "সোলার ইনভার্টার (Hybrid / Commercial On-Grid)" : "Solar Inverters (Hybrid / On-Grid)"}</option>
-                        <option value="Full Container Consignment">{isBn ? "পূর্ণাঙ্গ কন্টেইনার প্যাকেজ (Multi-Item Consignment)" : "Full Container Consignment"}</option>
+                        <option value="Lithium Batteries">{isBn ? "লিথিয়াম ব্যাটারি (LiFePO4 Server Rack / High Voltage)" : "Lithium Batteries (LiFePO4)"}</option>
+                        <option value="Solar Inverters">{isBn ? "সোলার ইনভার্টার (Commercial On-Grid / Hybrid)" : "Solar Inverters (Hybrid / On-Grid)"}</option>
+                        <option value="Full Container Consignment">{isBn ? "ফুল কন্টেইনার প্যাকেজ (Multi-Item Consignment)" : "Full Container Consignment"}</option>
                       </select>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        {isBn ? "আনুমানিক পরিমাণ বা ক্ষমতা" : "Estimated Volume / Quantity"}
+                      <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
+                        {isBn ? "প্রয়োজনীয় পরিমাণ বা ক্ষমতা (kW/MW)" : "Estimated Volume / Quantity"}
                       </label>
                       <input
                         type="text"
                         name="quantity"
                         placeholder={isBn ? "যেমন: ৫০০ পিস বা ১০০ kW প্রজেক্ট" : "e.g. 500 pcs or 100 kW project"}
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#F1F4F1] border border-transparent focus:border-[#074031] focus:bg-white text-base text-[#17251F] placeholder:text-[#62706A]/70 outline-none transition-colors"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                        {isBn ? "ডেলিভারি জেলা / সাইট লোকেশন" : "Delivery District / Site"}
+                      <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
+                        {isBn ? "ডেলিভারি জেলা বা সাইট লোকেশন" : "Delivery District / Site"}
                       </label>
                       <input
                         type="text"
                         name="location"
                         autoComplete="street-address"
                         placeholder={isBn ? "যেমন: গাজীপুর, চট্টগ্রাম, খুলনা" : "e.g. Gazipur, Chittagong, Dhaka"}
-                        className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
+                        className="w-full px-4 py-3 rounded-2xl bg-[#F1F4F1] border border-transparent focus:border-[#074031] focus:bg-white text-base text-[#17251F] placeholder:text-[#62706A]/70 outline-none transition-colors"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                      {isBn ? "কাঙ্ক্ষিত ডেলিভারি সময়সীমা" : "Target Delivery Date / Timeframe"}
+                    <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
+                      {isBn ? "ডেলিভারি গ্রহণের সম্ভাব্য সময়" : "Target Delivery Date / Timeframe"}
                     </label>
                     <input
                       type="text"
                       name="requiredDate"
-                      placeholder={isBn ? "যেমন: অবিলম্বে (রেডি স্টক) অথবা আগামী ৩০ দিন" : "e.g. Immediate ready-stock, or within 30 days"}
-                      className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors"
+                      placeholder={isBn ? "যেমন: অবিলম্বে (রেডি স্টক) অথবা আগামী ১৫-৩০ দিন" : "e.g. Immediate ready-stock, or within 30 days"}
+                      className="w-full px-4 py-3 rounded-2xl bg-[#F1F4F1] border border-transparent focus:border-[#074031] focus:bg-white text-base text-[#17251F] placeholder:text-[#62706A]/70 outline-none transition-colors"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
-                      {isBn ? "প্রয়োজনীয় বিবরণ বা বিশেষ নোট" : "Technical Requirements or Message"}
+                    <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
+                      {isBn ? "প্রজেক্টের বিবরণ বা বিশেষ টেকনিক্যাল নোট" : "Technical Requirements or Message"}
                     </label>
                     <textarea
                       name="message"
                       rows={3}
                       placeholder={
                         isBn
-                          ? "মডেল নম্বর, কাঙ্ক্ষিত স্পেসিফিকেশন বা প্রকল্পের সময়সীমা উল্লেখ করুন..."
+                          ? "মডেল নম্বর, কাঙ্ক্ষিত স্পেসিফিকেশন বা প্রজেক্টের চাহিদার বিস্তারিত লিখুন..."
                           : "Specify model numbers, target specs, or project timeline..."
                       }
-                      className="w-full px-4 py-3 rounded-2xl bg-[#EDEDED] border border-transparent focus:border-[#111311] focus:bg-white text-base text-[#111311] placeholder:text-[#8A8F8A] outline-none transition-colors resize-none"
+                      className="w-full px-4 py-3 rounded-2xl bg-[#F1F4F1] border border-transparent focus:border-[#074031] focus:bg-white text-base text-[#17251F] placeholder:text-[#62706A]/70 outline-none transition-colors resize-none"
                     />
                   </div>
 
@@ -375,22 +375,22 @@ export function ClosingCTA({
                       id="btn-submit-quote"
                       disabled={isPending}
                       data-motion="button-slide"
-                      className="btn-slide-fill w-full min-h-[48px] flex items-center justify-center gap-2 py-4 rounded-full bg-[#111311] text-[#CEF23E] font-semibold text-sm tracking-tight transition-all duration-200 active:scale-[0.99] disabled:opacity-60 shadow-lg cursor-pointer"
+                      className="btn-slide-fill w-full min-h-[48px] flex items-center justify-center gap-2 py-4 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-sm tracking-tight transition-all duration-200 active:scale-[0.99] disabled:opacity-60 shadow-lg cursor-pointer"
                     >
                       {isPending ? (
                         <span>{isBn ? "কোটেশন পাঠানো হচ্ছে..." : "Submitting Request..."}</span>
                       ) : (
                         <>
                           <Send className="w-4 h-4" />
-                          <span>{isBn ? "পাইকারি কোটেশন চান" : "Submit Wholesale Quote Request"}</span>
+                          <span>{isBn ? "কোটেশনের অনুরোধ পাঠান" : "Submit Wholesale Quote Request"}</span>
                         </>
                       )}
                     </button>
                   </MagneticButton>
 
-                  <p className="text-center text-[11px] font-mono text-[#5C605C] pt-2">
+                  <p className="text-center text-[11px] font-mono text-[#62706A] pt-2">
                     {isBn
-                      ? "সম্পূর্ণ কারিগরি ডেটাশিট সহ সরাসরি B2B আমদানিকারক মূল্য"
+                      ? "অফিসিয়াল টেকনিক্যাল ডেটাশিটসহ সরাসরি B2B আমদানিকারক মূল্য"
                       : "Direct B2B importer pricing with complete technical datasheets"}
                   </p>
                 </form>

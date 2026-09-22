@@ -15,7 +15,9 @@ export function TestimonialsSection({
   locale?: string;
 }) {
   const isBn = locale === "bn";
-  const displayItems = testimonials && testimonials.length > 0 ? testimonials : [];
+  const displayItems = (testimonials || []).filter(
+    (t) => t && typeof t.authorName === "string" && t.authorName.trim().length > 0 && typeof t.quote === "string" && t.quote.trim().length > 0
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -46,12 +48,12 @@ export function TestimonialsSection({
   };
 
   const currentItem = displayItems[currentIndex] || displayItems[0];
-  const photoSrc = currentItem?.photo || "/photos/testimonial-arif.jpg";
   const roleText = [currentItem?.authorRole, currentItem?.company].filter(Boolean).join(" · ");
 
   return (
     <section
-      className="py-20 lg:py-28 bg-[#EDEDED] border-y border-[#DDE1DC]"
+      id="testimonials"
+      className="py-20 lg:py-28 bg-[#F1F4F1] border-y border-[#DCE4E0]"
       aria-label={isBn ? "গ্রাহক মতামত" : "Client feedback"}
       data-motion="testimonials-slider"
     >
@@ -60,19 +62,19 @@ export function TestimonialsSection({
           {/* Left Column: Heading and Controls */}
           <div className="lg:col-span-5">
             <div className="flex items-center gap-2 mb-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#CEF23E]" />
-              <span className="text-xs font-mono uppercase tracking-wider text-[#5C605C]">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#FEBE16]" />
+              <span className="text-xs font-mono uppercase tracking-wider text-[#62706A]">
                 {isBn ? "গ্রাহক মতামত" : "Client Feedback"}
               </span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#111311] leading-[1.12] mb-6">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#074031] leading-[1.12] mb-6">
               {isBn
-                ? "শীর্ষস্থানীয় ইপিসি ও শিল্পপ্রতিষ্ঠানসমূহের অভিজ্ঞতা"
+                ? "শীর্ষস্থানীয় EPC ও শিল্পপ্রতিষ্ঠানসমূহের অভিজ্ঞতা"
                 : "Trusted by Leading EPCs & Commercial Facilities"}
             </h2>
-            <p className="text-[#5C605C] text-sm sm:text-base leading-relaxed mb-8">
+            <p className="text-[#62706A] text-sm sm:text-base leading-relaxed mb-8">
               {isBn
-                ? "বাণিজ্যিক ক্রেতা ও প্রকল্প পরিচালকদের বাস্তব প্রতিক্রিয়া ও অভিজ্ঞতা।"
+                ? "বাণিজ্যিক ক্রেতা ও প্রকল্প পরিচালকদের বাস্তব অভিজ্ঞতা ও মূল্যায়ন।"
                 : "Direct feedback from commercial procurement and project engineering partners across Bangladesh."}
             </p>
 
@@ -82,14 +84,14 @@ export function TestimonialsSection({
                 <button
                   onClick={prevSlide}
                   aria-label={isBn ? "পূর্ববর্তী মন্তব্য" : "Previous testimonial"}
-                  className="w-11 h-11 rounded-full bg-white border border-[#DDE1DC] hover:border-[#111311] text-[#111311] flex items-center justify-center transition-all shadow-xs hover:scale-105 active:scale-95 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
+                  className="w-11 h-11 rounded-full bg-white border border-[#DCE4E0] hover:border-[#074031] text-[#074031] flex items-center justify-center transition-all shadow-xs hover:scale-105 active:scale-95 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#FEBE16]"
                 >
                   <ArrowLeft className="w-4 h-4" />
                 </button>
                 <button
                   onClick={nextSlide}
                   aria-label={isBn ? "পরবর্তী মন্তব্য" : "Next testimonial"}
-                  className="w-11 h-11 rounded-full bg-white border border-[#DDE1DC] hover:border-[#111311] text-[#111311] flex items-center justify-center transition-all shadow-xs hover:scale-105 active:scale-95 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
+                  className="w-11 h-11 rounded-full bg-white border border-[#DCE4E0] hover:border-[#074031] text-[#074031] flex items-center justify-center transition-all shadow-xs hover:scale-105 active:scale-95 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#FEBE16]"
                 >
                   <ArrowRight className="w-4 h-4" />
                 </button>
@@ -102,13 +104,13 @@ export function TestimonialsSection({
                     key={idx}
                     onClick={() => setCurrentIndex(idx)}
                     aria-label={isBn ? `মন্তব্য ${idx + 1} দেখুন` : `Go to testimonial ${idx + 1}`}
-                    className="p-2 flex items-center justify-center min-w-[44px] min-h-[44px] cursor-pointer rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#CEF23E]"
+                    className="p-2 flex items-center justify-center min-w-[44px] min-h-[44px] cursor-pointer rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-[#FEBE16]"
                   >
                     <span
                       className={`h-2.5 rounded-full transition-all duration-300 block ${
                         currentIndex === idx
-                          ? "w-8 bg-[#111311]"
-                          : "w-2.5 bg-[#DDE1DC] hover:bg-[#5C605C]"
+                          ? "w-8 bg-[#074031]"
+                          : "w-2.5 bg-[#DCE4E0] hover:bg-[#62706A]"
                       }`}
                     />
                   </button>
@@ -129,9 +131,9 @@ export function TestimonialsSection({
             aria-roledescription="carousel"
             aria-label={isBn ? "গ্রাহক মতামত স্লাইডার" : "Testimonial slider"}
           >
-            <div className="relative min-h-[320px] sm:min-h-[280px] bg-white rounded-[32px] p-8 sm:p-10 border border-[#DDE1DC] shadow-[0_16px_40px_-12px_rgba(0,0,0,0.06)] flex flex-col justify-between overflow-hidden">
+            <div className="relative min-h-[320px] sm:min-h-[280px] bg-white rounded-[32px] p-8 sm:p-10 border border-[#DCE4E0] shadow-[0_16px_40px_-12px_rgba(7,64,49,0.06)] flex flex-col justify-between overflow-hidden">
               {/* Quote Mark Watermark */}
-              <Quote className="absolute top-6 right-6 w-20 h-20 text-[#CEF23E]/20 pointer-events-none -rotate-12" />
+              <Quote className="absolute top-6 right-6 w-20 h-20 text-[#FEBE16]/20 pointer-events-none -rotate-12" />
 
               <AnimatePresence mode="wait">
                 <motion.div
@@ -143,27 +145,33 @@ export function TestimonialsSection({
                   className="flex flex-col justify-between h-full relative z-10 will-change-transform"
                 >
                   {/* Quote Body */}
-                  <p className="text-lg sm:text-xl font-medium text-[#111311] leading-relaxed mb-8">
+                  <p className="text-lg sm:text-xl font-medium text-[#17251F] leading-relaxed mb-8">
                     {currentItem.quote}
                   </p>
 
                   {/* Author Profile */}
-                  <div className="flex items-center gap-4 pt-6 border-t border-[#EDEDED]">
-                    <div className="relative w-12 h-12 rounded-full overflow-hidden bg-[#EDEDED] border border-[#DDE1DC] shrink-0">
-                      <Image
-                        src={photoSrc}
-                        alt={currentItem.authorName}
-                        fill
-                        sizes="48px"
-                        className="object-cover"
-                      />
+                  <div className="flex items-center gap-4 pt-6 border-t border-[#DCE4E0]">
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden bg-[#F1F4F1] border border-[#DCE4E0] shrink-0 flex items-center justify-center">
+                      {currentItem.photo ? (
+                        <Image
+                          src={currentItem.photo}
+                          alt={currentItem.authorName}
+                          fill
+                          sizes="48px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <span className="font-bold font-mono text-sm text-[#074031]">
+                          {currentItem.authorName.charAt(0).toUpperCase()}
+                        </span>
+                      )}
                     </div>
                     <div>
-                      <h3 className="font-bold text-base text-[#111311]">
+                      <h3 className="font-bold text-base text-[#074031]">
                         {currentItem.authorName}
                       </h3>
                       {roleText && (
-                        <p className="text-xs font-mono text-[#5C605C] mt-0.5">
+                        <p className="text-xs font-mono text-[#62706A] mt-0.5">
                           {roleText}
                         </p>
                       )}

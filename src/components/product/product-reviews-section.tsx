@@ -64,24 +64,24 @@ export function ProductReviewsSection({
 
   return (
     <section className="mb-20">
-      <div className="p-8 sm:p-12 rounded-[36px] bg-white border border-[#DDE1DC] shadow-sm">
+      <div className="p-8 sm:p-12 rounded-[36px] bg-white border border-[#DCE4E0] shadow-sm">
         
         {/* Section Header with Aggregates & CTA */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-8 border-b border-[#EDEDED]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-8 border-b border-[#DCE4E0]">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="px-3 py-1 rounded-full bg-[#EDEDED] text-[11px] font-mono text-[#111311]">
-                {isBn ? "গ্রাহকদের মতামত" : "Customer Feedback"}
+              <span className="px-3 py-1 rounded-full bg-[#F1F4F1] text-[11px] font-mono text-[#074031] font-medium border border-[#DCE4E0]">
+                {isBn ? "যাচাইকৃত মতামত" : "Customer Feedback"}
               </span>
               {totalReviews > 0 && (
-                <span className="text-xs font-mono text-[#5C605C]">
+                <span className="text-xs font-mono text-[#62706A]">
                   {isBn ? `${totalReviews}টি যাচাইকৃত রিভিউ` : `${totalReviews} Verified ${totalReviews === 1 ? "Review" : "Reviews"}`}
                 </span>
               )}
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111311]">
-              {isBn ? "কর্মক্ষমতা ও গ্রাহক রেটিং" : "Performance & Client Ratings"}
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#074031]">
+              {isBn ? "প্রকল্প মূল্যায়ন ও ক্লায়েন্ট রেটিং" : "Performance & Client Ratings"}
             </h2>
 
             {totalReviews > 0 ? (
@@ -98,15 +98,15 @@ export function ProductReviewsSection({
                     />
                   ))}
                 </div>
-                <span className="text-lg font-bold text-[#111311] font-mono">
+                <span className="text-lg font-bold text-[#17251F] font-mono">
                   {averageRating.toFixed(1)}
                 </span>
-                <span className="text-xs text-[#5C605C] font-mono">{isBn ? "৫.০ এর মধ্যে" : "out of 5.0"}</span>
+                <span className="text-xs text-[#62706A] font-mono">{isBn ? "৫.০ এর মধ্যে" : "out of 5.0"}</span>
               </div>
             ) : (
-              <p className="text-xs sm:text-sm text-[#5C605C] mt-2">
+              <p className="text-xs sm:text-sm text-[#62706A] mt-2">
                 {isBn
-                  ? "এখনও কোনো গ্রাহক রিভিউ নেই। আপনার অভিজ্ঞতা শেয়ার করতে প্রথম রিভিউ দিন।"
+                  ? "এখনও কোনো রিভিউ যুক্ত হয়নি। আপনার অভিজ্ঞতা শেয়ার করতে প্রথম রিভিউ দিন।"
                   : "No customer reviews yet. Be the first partner or client to submit feedback."}
               </p>
             )}
@@ -117,9 +117,9 @@ export function ProductReviewsSection({
               type="button"
               id="btn-write-review"
               onClick={() => setShowForm(!showForm)}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-semibold text-xs tracking-tight transition-all self-start sm:self-auto shadow-sm"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#074031] hover:bg-[#0B513E] text-white font-semibold text-xs tracking-tight transition-all self-start sm:self-auto shadow-sm"
             >
-              <MessageSquare className="w-4 h-4" />
+              <MessageSquare className="w-4 h-4 text-[#FEBE16]" />
               <span>{showForm ? (isBn ? "বাতিল করুন" : "Cancel Review") : (isBn ? "রিভিউ লিখুন" : "Write a Review")}</span>
               <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showForm ? "rotate-180" : ""}`} />
             </button>
@@ -139,8 +139,8 @@ export function ProductReviewsSection({
 
         {/* Public Review Submission Form */}
         {publicSubmissionEnabled && isFormVisible && (
-          <form action={formAction} className="my-8 p-6 sm:p-8 rounded-3xl bg-[#EDEDED]/60 border border-[#DDE1DC] space-y-4">
-            <h3 className="text-base font-bold text-[#111311]">
+          <form action={formAction} className="my-8 p-6 sm:p-8 rounded-3xl bg-[#F1F4F1] border border-[#DCE4E0] space-y-4">
+            <h3 className="text-base font-bold text-[#074031]">
               {isBn ? `${productName}-এর জন্য রিভিউ দিন` : `Submit Feedback for ${productName}`}
             </h3>
 
@@ -168,7 +168,7 @@ export function ProductReviewsSection({
 
             {/* Star Rating Picker */}
             <div>
-              <label className="block text-xs font-mono font-medium text-[#111311] mb-2">
+              <label className="block text-xs font-mono font-medium text-[#17251F] mb-2">
                 {isBn ? "আপনার সামগ্রিক রেটিং *" : "Your Overall Rating *"}
               </label>
               <input type="hidden" name="rating" value={selectedRating} />
@@ -191,7 +191,7 @@ export function ProductReviewsSection({
                     />
                   </button>
                 ))}
-                <span className="text-xs font-mono text-[#5C605C] ml-2">
+                <span className="text-xs font-mono text-[#62706A] ml-2">
                   {isBn ? `৫ তারকার মধ্যে ${selectedRating}` : `${selectedRating} of 5 Stars`}
                 </span>
               </div>
@@ -199,7 +199,7 @@ export function ProductReviewsSection({
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+                <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
                   {isBn ? "আপনার পূর্ণ নাম *" : "Your Full Name *"}
                 </label>
                 <input
@@ -208,50 +208,50 @@ export function ProductReviewsSection({
                   required
                   autoComplete="name"
                   placeholder={isBn ? "যেমন: প্রকৌশলী তানভীর আহমেদ" : "e.g. Engr. Tanvir Ahmed"}
-                  className="w-full px-4 py-2.5 rounded-2xl bg-white text-base text-[#111311] outline-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white border border-[#DCE4E0] text-base text-[#17251F] outline-none focus:border-[#074031]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+                <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
                   {isBn ? "পদবী / ভূমিকা (ঐচ্ছিক)" : "Role / Designation (Optional)"}
                 </label>
                 <input
                   type="text"
                   name="authorRole"
                   placeholder={isBn ? "প্রকল্প পরিচালক / লিড ইঞ্জিনিয়ার" : "Project Director / EPC Engineer"}
-                  className="w-full px-4 py-2.5 rounded-2xl bg-white text-base text-[#111311] outline-none"
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white border border-[#DCE4E0] text-base text-[#17251F] outline-none focus:border-[#074031]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+                <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
                   {isBn ? "প্রতিষ্ঠান / সংস্থা (ঐচ্ছিক)" : "Company / Organization (Optional)"}
                 </label>
                 <input
                   type="text"
                   name="company"
                   autoComplete="organization"
-                  placeholder={isBn ? "সোলার ইপিসি বাংলাদেশ লি." : "Solar EPC Bangladesh Ltd."}
-                  className="w-full px-4 py-2.5 rounded-2xl bg-white text-base text-[#111311] outline-none"
+                  placeholder={isBn ? "সোলার ইপিসি বা প্রতিষ্ঠানের নাম" : "Solar EPC Bangladesh Ltd."}
+                  className="w-full px-4 py-2.5 rounded-2xl bg-white border border-[#DCE4E0] text-base text-[#17251F] outline-none focus:border-[#074031]"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+              <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
                 {isBn ? "রিভিউ শিরোনাম (ঐচ্ছিক)" : "Headline / Summary (Optional)"}
               </label>
               <input
                 type="text"
                 name="title"
-                placeholder={isBn ? "উন্নত বিদ্যুৎ ফলন ও টেকসই মডিউল ফ্রেম" : "High generation yield and sturdy module frames"}
-                className="w-full px-4 py-2.5 rounded-2xl bg-white text-base text-[#111311] outline-none"
+                placeholder={isBn ? "উচ্চ বিদ্যুৎ উৎপাদন ও মজবুত মডিউল ফ্রেম" : "High generation yield and sturdy module frames"}
+                className="w-full px-4 py-2.5 rounded-2xl bg-white border border-[#DCE4E0] text-base text-[#17251F] outline-none focus:border-[#074031]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-mono font-medium text-[#111311] mb-1.5">
+              <label className="block text-xs font-mono font-medium text-[#17251F] mb-1.5">
                 {isBn ? "বিস্তারিত রিভিউ *" : "Detailed Review *"}
               </label>
               <textarea
@@ -262,24 +262,24 @@ export function ProductReviewsSection({
                 maxLength={2000}
                 placeholder={
                   isBn
-                    ? "পণ্যের কর্মক্ষমতা, বিল্ড কোয়ালিটি ও ইনস্টলেশনের অভিজ্ঞতা শেয়ার করুন..."
+                    ? "সরঞ্জামের পারফরম্যান্স, কোয়ালিটি ও ইনস্টলেশনের অভিজ্ঞতা শেয়ার করুন..."
                     : "Share your experience with product efficiency, build quality, and installation performance..."
                 }
-                className="w-full px-4 py-3 rounded-2xl bg-white text-base text-[#111311] outline-none"
+                className="w-full px-4 py-3 rounded-2xl bg-white border border-[#DCE4E0] text-base text-[#17251F] outline-none focus:border-[#074031]"
               />
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2">
-              <span className="text-[11px] text-[#5C605C]">
+              <span className="text-[11px] text-[#62706A]">
                 {isBn
-                  ? "সব রিভিউ প্রকাশের আগে প্রকৌশলী দ্বারা যাচাই করা হয়। কেবল আসল প্রকল্পের মতামত গ্রহণযোগ্য।"
+                  ? "সকল রিভিউ প্রকাশের পূর্বে টেকনিক্যাল টিম কর্তৃক যাচাই করা হয়। কেবলমাত্র বাস্তবিক প্রকল্পের মতামত গ্রহণযোগ্য।"
                   : "Submissions are screened by engineers before publishing. Only genuine project feedback is accepted."}
               </span>
               <button
                 type="submit"
                 id="btn-submit-public-review"
                 disabled={isPending}
-                className="inline-flex items-center justify-center gap-2 px-7 py-3 min-h-[44px] rounded-full bg-[#111311] hover:bg-[#222622] text-[#CEF23E] font-semibold text-xs tracking-tight transition-all disabled:opacity-60 shadow-sm shrink-0"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 min-h-[44px] rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-semibold text-xs tracking-tight transition-all disabled:opacity-60 shadow-sm shrink-0"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{isPending ? (isBn ? "জমা হচ্ছে..." : "Submitting...") : (isBn ? "রিভিউ জমা দিন" : "Submit Review")}</span>
@@ -290,7 +290,7 @@ export function ProductReviewsSection({
 
         {/* Approved Reviews List */}
         {reviews.length > 0 && (
-          <div className="divide-y divide-[#EDEDED] mt-6">
+          <div className="divide-y divide-[#DCE4E0] mt-6">
             {reviews.map((review) => (
               <div key={review.id} className="py-6 first:pt-2">
                 <div className="flex items-center justify-between gap-4 mb-2">
@@ -305,7 +305,7 @@ export function ProductReviewsSection({
                     ))}
                   </div>
 
-                  <span className="text-[11px] font-mono text-[#5C605C]">
+                  <span className="text-[11px] font-mono text-[#62706A]">
                     {new Date(review.createdAt).toLocaleDateString(isBn ? "bn-BD" : "en-US", {
                       year: "numeric",
                       month: "short",
@@ -315,17 +315,17 @@ export function ProductReviewsSection({
                 </div>
 
                 {review.title && (
-                  <h4 className="text-sm sm:text-base font-bold text-[#111311] mb-1.5">
+                  <h4 className="text-sm sm:text-base font-bold text-[#17251F] mb-1.5">
                     {review.title}
                   </h4>
                 )}
 
-                <p className="text-xs sm:text-sm text-[#383D38] leading-relaxed mb-3 whitespace-pre-line">
+                <p className="text-xs sm:text-sm text-[#33433C] leading-relaxed mb-3 whitespace-pre-line">
                   {review.body}
                 </p>
 
-                <div className="flex items-center gap-2 text-xs font-mono text-[#5C605C]">
-                  <span className="font-semibold text-[#111311]">{review.authorName}</span>
+                <div className="flex items-center gap-2 text-xs font-mono text-[#62706A]">
+                  <span className="font-semibold text-[#17251F]">{review.authorName}</span>
                   {review.authorRole && <span>&bull; {review.authorRole}</span>}
                   {review.company && <span>@ {review.company}</span>}
                 </div>

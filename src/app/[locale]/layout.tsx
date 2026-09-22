@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { setRequestLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { routing, Locale } from "@/i18n/routing";
-import { inter, jetbrainsMono, hindSiliguri } from "@/lib/fonts";
+import { inter, jetbrainsMono, scoutieSans, tiroBangla } from "@/lib/fonts";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppButton } from "@/components/layout/whatsapp-button";
@@ -57,9 +57,14 @@ export async function generateMetadata({
       },
     },
     icons: {
-      icon: "/icon.png",
+      icon: [
+        { url: "/icon.png", sizes: "512x512", type: "image/png" },
+        { url: "/icons/favicon.png", sizes: "32x32", type: "image/png" },
+      ],
       shortcut: "/icon.png",
-      apple: "/apple-icon.png",
+      apple: [
+        { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+      ],
     },
     openGraph: {
       title: isBn
@@ -71,6 +76,16 @@ export async function generateMetadata({
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
       images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Noor Solar Energy" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: isBn
+        ? "নূর সোলার এনার্জি — সোলার প্যানেল, ব্যাটারি ও ইনভার্টার পাইকারি সরবরাহকারী"
+        : "Noor Solar Energy — Solar Panels, Batteries & Inverters Wholesale",
+      description: isBn
+        ? "বাংলাদেশে বাণিজ্যিক সোলার প্যানেল, LiFePO4 ব্যাটারি স্টোরেজ এবং সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
+        : "Direct importer and bulk B2B wholesale supplier of commercial solar panels, LiFePO4 battery storage, and solar inverters in Bangladesh.",
+      images: ["/opengraph-image.png"],
     },
   };
 }
@@ -98,7 +113,7 @@ export default async function LocaleLayout({
   ]);
 
   const isBn = locale === "bn";
-  const fontClasses = `${inter.variable} ${jetbrainsMono.variable} ${isBn ? hindSiliguri.variable : ""}`;
+  const fontClasses = `${scoutieSans.variable} ${tiroBangla.variable} ${inter.variable} ${jetbrainsMono.variable}`;
 
   return (
     <html
@@ -107,10 +122,10 @@ export default async function LocaleLayout({
       className={fontClasses}
     >
       <head />
-      <body suppressHydrationWarning className="min-h-screen bg-[#E4E7E4] text-[#111311] antialiased selection:bg-[#CEF23E] selection:text-[#111311]">
+      <body suppressHydrationWarning className="min-h-screen bg-[#F7F8F5] text-[#17251F] antialiased selection:bg-[#FEBE16] selection:text-[#052F25]">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SmoothScrollProvider>
-            <div className="flex flex-col min-h-screen bg-[#E4E7E4]">
+            <div className="flex flex-col min-h-screen bg-[#F7F8F5]">
               <Header
                 phoneDisplay={settings.phoneDisplay}
                 phoneRaw={settings.phone}
