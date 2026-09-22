@@ -196,6 +196,20 @@ export async function getAllStats(): Promise<Stat[]> {
 }
 
 // 2. Certifications
+function sanitizeCert<T extends { description: string | null; descriptionBn?: string | null }>(c: T): T {
+  return {
+    ...c,
+    description: c.description
+      ? c.description.replace(/Tasneem Knitting Industry/gi, "Noor Solar Energy")
+      : c.description,
+    descriptionBn: c.descriptionBn
+      ? c.descriptionBn
+          .replace(/তাসনিম নিটিং ইন্ডাস্ট্রিজ?/gi, "নূর সোলার এনার্জি")
+          .replace(/Tasneem Knitting Industry/gi, "Noor Solar Energy")
+      : c.descriptionBn,
+  };
+}
+
 export async function getCertifications(locale?: string): Promise<Certification[]> {
   try {
     const certifications = await db.certification.findMany({
@@ -210,9 +224,11 @@ export async function getCertifications(locale?: string): Promise<Certification[
       return getFallbackCertifications(locale);
     }
 
-    if (locale !== "bn") return certifications;
+    const sanitized = certifications.map(sanitizeCert);
 
-    return certifications.map((c) => ({
+    if (locale !== "bn") return sanitized;
+
+    return sanitized.map((c) => ({
       ...c,
       name: c.nameBn?.trim() || c.name,
       issuer: c.issuerBn?.trim() || c.issuer,
@@ -229,7 +245,7 @@ export async function getAllCertifications(): Promise<Certification[]> {
     const certs = await db.certification.findMany({
       orderBy: { sortOrder: "asc" },
     });
-    return certs.length > 0 ? certs : getFallbackCertifications();
+    return certs.length > 0 ? certs.map(sanitizeCert) : getFallbackCertifications();
   } catch (error) {
     console.warn("getAllCertifications: database not available, returning fallback certifications");
     return getFallbackCertifications();

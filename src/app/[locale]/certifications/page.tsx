@@ -289,7 +289,11 @@ export default async function CertificationsPage({ params }: CertificationsPageP
               const urlMatch = cert.description?.match(/https?:\/\/[^\s]+/i);
               const docUrl = urlMatch ? urlMatch[0] : null;
               const cleanDesc = cert.description
-                ? cert.description.replace(/Document:\s*https?:\/\/[^\s]+/i, "").trim()
+                ? cert.description
+                    .replace(/Document:\s*https?:\/\/[^\s]+/i, "")
+                    .replace(/Tasneem Knitting Industry/gi, "Noor Solar Energy")
+                    .replace(/তাসনিম নিটিং ইন্ডাস্ট্রিজ?/gi, "নূর সোলার এনার্জি")
+                    .trim()
                 : "";
 
               return (
