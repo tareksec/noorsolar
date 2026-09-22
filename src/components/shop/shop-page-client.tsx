@@ -938,7 +938,7 @@ export function ShopPageClient({
 
                             {/* Direct Quote link */}
                             <Link
-                              href={`/contact?product=${encodeURIComponent(product.slug)}`}
+                              href={`/quote?product=${encodeURIComponent(product.slug)}`}
                               data-quote-link="true"
                               onClick={(e) => e.stopPropagation()}
                               className="inline-flex items-center justify-center min-h-[44px] gap-1.5 px-3.5 py-2 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-xs shadow-xs transition-transform hover:scale-105"

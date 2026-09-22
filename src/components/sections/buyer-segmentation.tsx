@@ -30,7 +30,7 @@ export function BuyerSegmentation({ locale }: BuyerSegmentationProps) {
             "Technical product matching & datasheets",
           ],
       ctaText: isBn ? "প্রজেক্ট কোটেশন নিন" : "Request Project Quote",
-      href: "/contact?segment=epc",
+      href: "/quote?segment=epc",
     },
     {
       id: "commercial",
@@ -52,7 +52,7 @@ export function BuyerSegmentation({ locale }: BuyerSegmentationProps) {
             "Inverter and project equipment supply",
           ],
       ctaText: isBn ? "বাণিজ্যিক কোটেশন নিন" : "Request Commercial Quote",
-      href: "/contact?segment=commercial",
+      href: "/quote?segment=commercial",
     },
     {
       id: "resellers",
@@ -74,7 +74,7 @@ export function BuyerSegmentation({ locale }: BuyerSegmentationProps) {
             "Volume enquiries & competitive wholesale margins",
           ],
       ctaText: isBn ? "ডিলার কোটেশন নিন" : "Inquire for Dealership",
-      href: "/contact?segment=reseller",
+      href: "/quote?segment=reseller",
     },
   ];
 

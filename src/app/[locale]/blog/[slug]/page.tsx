@@ -211,7 +211,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
             </div>
 
             <Link
-              href="/contact"
+              href={isBn ? "/bn/quote" : "/quote"}
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-xs font-mono tracking-tight shrink-0 transition-transform active:scale-95 shadow-sm"
             >
               <span>{isBn ? "কোটেশনের অনুরোধ পাঠান" : "Request A Quote"}</span>

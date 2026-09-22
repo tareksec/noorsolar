@@ -361,7 +361,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               {/* Commercial Quote Action CTAs */}
               <div className="flex flex-col sm:flex-row items-center gap-4 pt-6 border-t border-[#DCE4E0]">
                 <Link
-                  href={`/contact?product=${encodeURIComponent(product.slug)}`}
+                  href={isBn ? `/bn/quote?product=${encodeURIComponent(product.slug)}` : `/quote?product=${encodeURIComponent(product.slug)}`}
                   className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 py-4 px-6 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-sm tracking-tight transition-all duration-200 shadow-sm active:scale-95"
                 >
                   <span>{isBn ? "পাইকারি কোটেশন নিন" : "Request Wholesale Quotation"}</span>
