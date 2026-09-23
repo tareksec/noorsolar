@@ -7,11 +7,13 @@ export function sanitizeDatabaseUrl(raw?: string): string {
   while ((url.startsWith('"') && url.endsWith('"')) || (url.startsWith("'") && url.endsWith("'"))) {
     url = url.slice(1, -1).trim();
   }
-  // Enforce mysql protocol
+  // Allow SQLite database URLs
+  if (url.startsWith("file:") || url.startsWith("sqlite:")) {
+    return url;
+  }
+
+  // Enforce mysql protocol for non-sqlite connections
   if (!url.startsWith("mysql://")) {
-    if (url.startsWith("file:") || url.startsWith("sqlite:")) {
-      return "mysql://root:@127.0.0.1:3306/noorsolar";
-    }
     url = `mysql://${url}`;
   }
 

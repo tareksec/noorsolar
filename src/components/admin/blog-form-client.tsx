@@ -407,7 +407,7 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
               <input
                 type="file"
                 name="coverFile"
-                accept="image/jpeg,image/png,image/webp"
+                accept="image/*"
                 className="w-full text-xs font-mono file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#111311] file:text-[#CEF23E] hover:file:bg-[#222622] file:cursor-pointer"
               />
             </div>
@@ -586,6 +586,7 @@ export function BlogFormClient({ initialPost }: BlogFormClientProps) {
                 </span>
                 <input
                   ref={fileInputRef}
+                  id="blog-inline-image-input"
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
                   disabled={isUploadingImage}

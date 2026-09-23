@@ -169,6 +169,34 @@ export function ProductFormClient({
   const [metaDescVal, setMetaDescVal] = useState(initialProduct?.metaDescription || "");
   const [metaDescBnVal, setMetaDescBnVal] = useState(initialProduct?.metaDescriptionBn || "");
 
+  const [selectedUploadPreviews, setSelectedUploadPreviews] = useState<
+    { name: string; size: string; url: string }[]
+  >([]);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleImageFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    markDirty();
+    const files = e.target.files;
+    if (!files || files.length === 0) {
+      setSelectedUploadPreviews([]);
+      return;
+    }
+    const previews = Array.from(files).map((file) => ({
+      name: file.name,
+      size: (file.size / (1024 * 1024)).toFixed(2) + " MB",
+      url: URL.createObjectURL(file),
+    }));
+    setSelectedUploadPreviews(previews);
+  };
+
+  const clearSelectedImages = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    selectedUploadPreviews.forEach((p) => URL.revokeObjectURL(p.url));
+    setSelectedUploadPreviews([]);
+  };
+
   const saveSuccess = state.success;
 
   // Unsaved changes warning
@@ -693,7 +721,8 @@ export function ProductFormClient({
               <div>
                 <input
                   type="file"
-                  name="doc_datasheet_file"
+                  name="datasheetFile"
+                  id="doc_datasheet_file"
                   accept="application/pdf,.pdf"
                   className="w-full text-xs font-mono file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[#111311] file:text-[#CEF23E] hover:file:bg-[#222622] file:cursor-pointer"
                 />
@@ -1151,9 +1180,9 @@ export function ProductFormClient({
         )}
 
         {/* Upload new images */}
-        <div className="p-6 rounded-3xl bg-[#EDEDED] border border-dashed border-[#5C605C]/40 text-center">
-          <Upload className="w-6 h-6 text-[#5C605C] mx-auto mb-2" />
-          <label className="cursor-pointer">
+        <div className="p-6 rounded-3xl bg-[#EDEDED] border border-dashed border-[#5C605C]/40 text-center space-y-4">
+          <Upload className="w-6 h-6 text-[#5C605C] mx-auto mb-1" />
+          <label className="cursor-pointer inline-block">
             <span className="text-xs font-bold text-[#111311] underline">
               Click to select photos
             </span>
@@ -1161,13 +1190,58 @@ export function ProductFormClient({
               Supports JPEG, PNG, WebP up to 5MB (auto-converted to WebP + responsive thumbnail)
             </span>
             <input
+              ref={fileInputRef}
               type="file"
               name="images"
+              id="product-images-input"
               multiple
               accept="image/jpeg,image/png,image/webp"
+              onChange={handleImageFilesChange}
               className="hidden"
             />
           </label>
+
+          {selectedUploadPreviews.length > 0 && (
+            <div className="pt-4 border-t border-[#DDE1DC] text-left">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-mono font-bold text-[#111311]">
+                  Photos Ready to Upload ({selectedUploadPreviews.length})
+                </span>
+                <button
+                  type="button"
+                  onClick={clearSelectedImages}
+                  className="text-xs font-mono text-red-600 hover:underline"
+                >
+                  Clear Selection
+                </button>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+                {selectedUploadPreviews.map((p, idx) => (
+                  <div
+                    key={idx}
+                    className="group relative rounded-2xl overflow-hidden bg-white border border-[#DDE1DC] shadow-sm p-1.5"
+                  >
+                    <div className="aspect-square relative rounded-xl overflow-hidden bg-[#EDEDED]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={p.url}
+                        alt={p.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="p-1">
+                      <p className="text-[10px] font-mono font-medium truncate text-[#111311]">
+                        {p.name}
+                      </p>
+                      <p className="text-[9px] font-mono text-[#5C605C]">
+                        {p.size}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

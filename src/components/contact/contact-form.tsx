@@ -113,8 +113,27 @@ export function ContactForm({ isBn = false }: ContactFormProps) {
         </div>
       </div>
 
-      {/* Row 2: Email & Category / Topic */}
+      {/* Row 2: Company & Email */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Company */}
+        <div>
+          <label className="block text-xs font-semibold text-[#17251F] mb-1.5">
+            {isBn ? "কোম্পানি বা প্রতিষ্ঠানের নাম" : "Company / Project Name"}
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#62706A]">
+              <Building className="w-4 h-4" />
+            </div>
+            <input
+              type="text"
+              name="company"
+              autoComplete="organization"
+              placeholder={isBn ? "যেমন: সানরাইজ এনার্জি লিমিটেড" : "e.g. Dhaka Solar EPC Ltd."}
+              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#F7F8F5] border border-[#DCE4E0] text-sm text-[#17251F] placeholder:text-[#62706A]/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#074031]/20 focus:border-[#074031] transition-all"
+            />
+          </div>
+        </div>
+
         {/* Email */}
         <div>
           <label className="block text-xs font-semibold text-[#17251F] mb-1.5">
@@ -132,42 +151,42 @@ export function ContactForm({ isBn = false }: ContactFormProps) {
             />
           </div>
         </div>
+      </div>
 
-        {/* Category / Subject */}
-        <div>
-          <label className="block text-xs font-semibold text-[#17251F] mb-1.5">
-            {isBn ? "বিষয় নির্বাচন করুন *" : "Select Topic *"}
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#62706A]">
-              <FileText className="w-4 h-4" />
-            </div>
-            <select
-              name="category"
-              defaultValue={isBn ? "পণ্য সম্পর্কে জানতে চাই" : "Inquire About Products"}
-              className="w-full pl-10 pr-8 py-2.5 rounded-xl bg-[#F7F8F5] border border-[#DCE4E0] text-sm text-[#17251F] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#074031]/20 focus:border-[#074031] transition-all appearance-none cursor-pointer"
-            >
-              <option value={isBn ? "পণ্য সম্পর্কে জানতে চাই" : "Inquire About Products"}>
-                {isBn ? "পণ্য সম্পর্কে জানতে চাই" : "Inquire About Products"}
-              </option>
-              <option value={isBn ? "পাইকারি কোটেশন (Wholesale Quote)" : "Wholesale Quotation"}>
-                {isBn ? "পাইকারি কোটেশন (Wholesale Quote)" : "Wholesale Quotation"}
-              </option>
-              <option value={isBn ? "সোলার প্যানেল কন্টেইনার অর্ডার" : "Solar Panels Container Order"}>
-                {isBn ? "সোলার প্যানেল কন্টেইনার অর্ডার" : "Solar Panels Container Order"}
-              </option>
-              <option value={isBn ? "ইনভার্টার ও লিথিয়াম ব্যাটারি" : "Inverters & Lithium Batteries"}>
-                {isBn ? "ইনভার্টার ও লিথিয়াম ব্যাটারি" : "Inverters & Lithium Batteries"}
-              </option>
-              <option value={isBn ? "টেকনিক্যাল সাপোর্ট ও SLD রিভিউ" : "Technical Support & SLD Review"}>
-                {isBn ? "টেকনিক্যাল সাপোর্ট ও SLD রিভিউ" : "Technical Support & SLD Review"}
-              </option>
-            </select>
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[#62706A]">
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-              </svg>
-            </div>
+      {/* Row 3: Category / Subject */}
+      <div>
+        <label className="block text-xs font-semibold text-[#17251F] mb-1.5">
+          {isBn ? "বিষয় নির্বাচন করুন *" : "Select Topic *"}
+        </label>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#62706A]">
+            <FileText className="w-4 h-4" />
+          </div>
+          <select
+            name="category"
+            defaultValue={isBn ? "পণ্য সম্পর্কে জানতে চাই" : "Inquire About Products"}
+            className="w-full pl-10 pr-8 py-2.5 rounded-xl bg-[#F7F8F5] border border-[#DCE4E0] text-sm text-[#17251F] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#074031]/20 focus:border-[#074031] transition-all appearance-none cursor-pointer"
+          >
+            <option value={isBn ? "পণ্য সম্পর্কে জানতে চাই" : "Inquire About Products"}>
+              {isBn ? "পণ্য সম্পর্কে জানতে চাই" : "Inquire About Products"}
+            </option>
+            <option value={isBn ? "পাইকারি কোটেশন (Wholesale Quote)" : "Wholesale Quotation"}>
+              {isBn ? "পাইকারি কোটেশন (Wholesale Quote)" : "Wholesale Quotation"}
+            </option>
+            <option value={isBn ? "সোলার প্যানেল কন্টেইনার অর্ডার" : "Solar Panels Container Order"}>
+              {isBn ? "সোলার প্যানেল কন্টেইনার অর্ডার" : "Solar Panels Container Order"}
+            </option>
+            <option value={isBn ? "ইনভার্টার ও লিথিয়াম ব্যাটারি" : "Inverters & Lithium Batteries"}>
+              {isBn ? "ইনভার্টার ও লিথিয়াম ব্যাটারি" : "Inverters & Lithium Batteries"}
+            </option>
+            <option value={isBn ? "টেকনিক্যাল সাপোর্ট ও SLD রিভিউ" : "Technical Support & SLD Review"}>
+              {isBn ? "টেকনিক্যাল সাপোর্ট ও SLD রিভিউ" : "Technical Support & SLD Review"}
+            </option>
+          </select>
+          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[#62706A]">
+            <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+              <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+            </svg>
           </div>
         </div>
       </div>
@@ -270,6 +289,7 @@ export function ContactForm({ isBn = false }: ContactFormProps) {
 
       {/* Submit Button in Brand Solar Gold */}
       <button
+        id="btn-submit-quote"
         type="submit"
         disabled={isPending}
         className="w-full py-3.5 px-6 rounded-2xl bg-[#FEBE16] hover:bg-[#E4A900] active:scale-[0.99] text-[#052F25] font-bold text-base transition-all shadow-[0_4px_16px_rgba(254,190,22,0.35)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"

@@ -24,19 +24,17 @@ async function extractAndSaveProductDocuments(
   const updatedDocs: ProductDocuments = { ...currentDocs };
 
   for (const item of docTypes) {
-    const file = formData.get(item.fileField) as File | null;
+    let file = formData.get(item.fileField) as File | null;
     let url = (formData.get(item.urlField) as string)?.trim();
 
-    // Fallback for legacy datasheet field names
+    // Fallback for legacy or direct datasheet field names
     if (item.key === "datasheet") {
       const legacyFile = formData.get("datasheetFile") as File | null;
       const legacyUrl = (formData.get("datasheetUrl") as string)?.trim();
-      if (!file && legacyFile && legacyFile.size > 0 && legacyFile.name) {
-        const saved = await processAndSavePdf(legacyFile, item.prefix);
-        if (saved) updatedDocs[item.key] = saved.url;
-        continue;
+      if ((!file || file.size === 0) && legacyFile && legacyFile.size > 0 && legacyFile.name) {
+        file = legacyFile;
       }
-      if (!url && legacyUrl !== undefined) {
+      if (!url && legacyUrl) {
         url = legacyUrl;
       }
     }

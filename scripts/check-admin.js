@@ -197,19 +197,10 @@ async function main() {
     // STEP 1: Log in
     try {
       await page.goto(`${BASE_URL}/admin/login`, { waitUntil: "domcontentloaded" });
-      await page.waitForSelector('input[name="email"]');
-      await page.$eval('input[name="email"]', (el, v) => {
-        el.value = v;
-        el.dispatchEvent(new Event("input", { bubbles: true }));
-        el.dispatchEvent(new Event("change", { bubbles: true }));
-      }, ADMIN_EMAIL);
-
-      await page.$eval('input[name="password"]', (el, v) => {
-        el.value = v;
-        el.dispatchEvent(new Event("input", { bubbles: true }));
-        el.dispatchEvent(new Event("change", { bubbles: true }));
-      }, ADMIN_PASSWORD);
-
+      await page.click('input[name="email"]', { clickCount: 3 });
+      await page.type('input[name="email"]', ADMIN_EMAIL);
+      await page.click('input[name="password"]', { clickCount: 3 });
+      await page.type('input[name="password"]', ADMIN_PASSWORD);
       await page.click('button[type="submit"]');
 
       await page.waitForFunction(
@@ -282,8 +273,9 @@ async function main() {
         );
       }
 
-      // Upload PDF datasheet
-      const pdfInput = await page.$('input[name="datasheetFile"]');
+      const pdfInput =
+        (await page.$('input[name="datasheetFile"]')) ||
+        (await page.$('input[name="doc_datasheet_file"]'));
       if (pdfInput) {
         await pdfInput.uploadFile(path.join(FIXTURES_DIR, "datasheet.pdf"));
       }
@@ -460,7 +452,9 @@ async function main() {
 
       await page.select('select[name="status"]', "PUBLISHED");
 
-      const inlineInput = await page.$('input[type="file"][accept="image/jpeg,image/png,image/webp"]');
+      const inlineInput =
+        (await page.$("#blog-inline-image-input")) ||
+        (await page.$('input[type="file"][accept="image/jpeg,image/png,image/webp"]'));
       if (inlineInput) {
         await inlineInput.uploadFile(path.join(FIXTURES_DIR, "blog-inline.png"));
         await new Promise((r) => setTimeout(r, 1500));
@@ -617,7 +611,6 @@ async function main() {
       const pendingReview = await prisma.productReview.findFirst({
         where: { authorName: "Mahmudul Haque" },
       });
-      console.log("   [Step 14 Debug]: Found submitted review in DB:", Boolean(pendingReview), pendingReview?.status);
 
       await page.goto(`${BASE_URL}/product/${reviewTargetProduct.slug}`, {
         waitUntil: "domcontentloaded",
@@ -634,19 +627,12 @@ async function main() {
       }
       await new Promise((r) => setTimeout(r, 3000));
 
-      const reviewAfterApprove = await prisma.productReview.findFirst({
-        where: { authorName: "Mahmudul Haque" },
-      });
-      console.log("   [Step 14 Debug]: Review status after approve action:", reviewAfterApprove?.status);
-      console.log("   [Step 14 Debug]: pendingReview productId:", pendingReview?.productId, "reviewTargetProduct id:", reviewTargetProduct.id);
-
       await page.goto(`${BASE_URL}/product/${reviewTargetProduct.slug}?_t=${Date.now()}`, {
         waitUntil: "domcontentloaded",
       });
       const contentApproved = await page.content();
       const hasFastDelivery = contentApproved.includes("Fast Delivery & Great Quality");
       const hasMahmudul = contentApproved.includes("Mahmudul Haque");
-      console.log("   [Step 14 Debug]: Has Fast Delivery:", hasFastDelivery, "Has Mahmudul:", hasMahmudul, "Has Nazmul:", contentApproved.includes("Nazmul Hassan"));
       const visibleNow = hasFastDelivery || hasMahmudul;
 
       const passed = notVisibleYet && visibleNow;
