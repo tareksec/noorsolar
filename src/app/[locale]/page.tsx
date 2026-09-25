@@ -16,6 +16,7 @@ import { getPublishedProjects } from "@/lib/data/projects";
 import { ProjectsShowcase } from "@/components/sections/projects-showcase";
 
 import { HeroSection } from "@/components/sections/hero-section";
+import { CompleteServicesSection } from "@/components/sections/complete-services";
 import { CategoryDock } from "@/components/sections/category-dock";
 import { StatsBand } from "@/components/sections/stats-band";
 import { CertificationsSection } from "@/components/sections/certifications-section";
@@ -168,7 +169,10 @@ export default async function HomePage({
         locale={locale}
       />
 
-      {/* 2. Text Marquee Band */}
+      {/* 2. Complete Services Section (Editorial Poster Deck Design) */}
+      <CompleteServicesSection locale={locale} />
+
+      {/* 3. Text Marquee Band */}
       <TextMarquee locale={locale} />
 
       {/* 3. Category Dock ("What We Offer") */}
