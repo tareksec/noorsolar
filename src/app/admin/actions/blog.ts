@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { revalidatePublic } from "@/lib/revalidate";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { processAndSaveImage, deleteUploadedFile } from "@/lib/uploads";
@@ -54,9 +54,9 @@ export async function uploadBlogInlineImageAction(
     }
 
     return { success: true, imageUrl: saved.url };
-  } catch (err) {
+  } catch (err: unknown) {
     console.error("Upload blog image error:", err);
-    return { success: false, error: "Image upload failed" };
+    return { success: false, error: err instanceof Error ? err.message : "Image upload failed." };
   }
 }
 
@@ -146,10 +146,10 @@ export async function createBlogPostAction(
       },
     });
 
-    revalidatePath("/blog");
-    revalidatePath("/bn/blog");
-    revalidatePath("/admin/blog");
-    revalidatePath("/sitemap.xml");
+    revalidatePublic("/blog");
+    revalidatePublic("/bn/blog");
+    revalidatePublic("/admin/blog");
+    revalidatePublic("/sitemap.xml");
 
     return { success: true, postId: created.id };
   } catch (err: unknown) {
@@ -261,16 +261,16 @@ export async function updateBlogPostAction(
       },
     });
 
-    revalidatePath("/blog");
-    revalidatePath("/bn/blog");
-    revalidatePath(`/blog/${slug}`);
-    revalidatePath(`/bn/blog/${slug}`);
+    revalidatePublic("/blog");
+    revalidatePublic("/bn/blog");
+    revalidatePublic(`/blog/${slug}`);
+    revalidatePublic(`/bn/blog/${slug}`);
     if (currentPost.slug !== slug) {
-      revalidatePath(`/blog/${currentPost.slug}`);
-      revalidatePath(`/bn/blog/${currentPost.slug}`);
+      revalidatePublic(`/blog/${currentPost.slug}`);
+      revalidatePublic(`/bn/blog/${currentPost.slug}`);
     }
-    revalidatePath("/admin/blog");
-    revalidatePath("/sitemap.xml");
+    revalidatePublic("/admin/blog");
+    revalidatePublic("/sitemap.xml");
 
     return { success: true, postId: id };
   } catch (err: unknown) {
@@ -297,9 +297,9 @@ export async function deleteBlogPostAction(formData: FormData) {
     await db.blogPost.delete({ where: { id } });
   }
 
-  revalidatePath("/blog");
-  revalidatePath("/admin/blog");
-  revalidatePath("/sitemap.xml");
+  revalidatePublic("/blog");
+  revalidatePublic("/admin/blog");
+  revalidatePublic("/sitemap.xml");
   redirect("/admin/blog");
 }
 
@@ -325,8 +325,8 @@ export async function toggleBlogPostStatusAction(formData: FormData) {
     },
   });
 
-  revalidatePath("/blog");
-  revalidatePath(`/blog/${post.slug}`);
-  revalidatePath("/admin/blog");
-  revalidatePath("/sitemap.xml");
+  revalidatePublic("/blog");
+  revalidatePublic(`/blog/${post.slug}`);
+  revalidatePublic("/admin/blog");
+  revalidatePublic("/sitemap.xml");
 }

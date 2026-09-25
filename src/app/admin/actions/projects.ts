@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { revalidatePath } from "next/cache";
+import { revalidatePublic } from "@/lib/revalidate";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 
@@ -80,9 +80,9 @@ export async function createProjectAction(
       },
     });
 
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/admin/content/projects");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/admin/content/projects");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to create project" };
@@ -130,9 +130,9 @@ export async function updateProjectAction(
       data: parsed.data,
     });
 
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/admin/content/projects");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/admin/content/projects");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to update project" };
@@ -145,9 +145,9 @@ export async function deleteProjectAction(id: string): Promise<ProjectActionResu
 
   try {
     await db.project.delete({ where: { id } });
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/admin/content/projects");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/admin/content/projects");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to delete project" };
@@ -163,9 +163,9 @@ export async function togglePublishProjectAction(id: string, current: boolean): 
       where: { id },
       data: { isPublished: !current },
     });
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/admin/content/projects");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/admin/content/projects");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to toggle status" };

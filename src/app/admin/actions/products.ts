@@ -1,10 +1,10 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { revalidatePublic } from "@/lib/revalidate";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
-import { processAndSaveImage, processAndSavePdf, deleteUploadedFile } from "@/lib/uploads";
+import { processAndSaveImage, processAndSavePdf, deleteUploadedFile, duplicateUploadedFile } from "@/lib/uploads";
 import { parseProductDocuments, encodeProductDocuments, ProductDocuments } from "@/lib/product-documents";
 
 async function extractAndSaveProductDocuments(
@@ -132,10 +132,10 @@ export async function createProductAction(
     let datasheetUrl: string | null = null;
     try {
       datasheetUrl = await extractAndSaveProductDocuments(formData);
-    } catch (e: any) {
+    } catch (e: unknown) {
       return {
         success: false,
-        error: e?.message || "Failed to process attached technical documents.",
+        error: e instanceof Error ? e.message : "Failed to process attached technical documents.",
       };
     }
 
@@ -243,11 +243,11 @@ export async function createProductAction(
       },
     });
 
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/products");
-    revalidatePath("/bn/products");
-    revalidatePath("/admin/products");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/products");
+    revalidatePublic("/bn/products");
+    revalidatePublic("/admin/products");
     return { success: true, productId: created.id };
   } catch (err: unknown) {
     console.error("Create product error:", err);
@@ -321,10 +321,10 @@ export async function updateProductAction(
     let datasheetUrl: string | null = null;
     try {
       datasheetUrl = await extractAndSaveProductDocuments(formData, currentProduct?.datasheetUrl);
-    } catch (e: any) {
+    } catch (e: unknown) {
       return {
         success: false,
-        error: e?.message || "Failed to process attached technical documents.",
+        error: e instanceof Error ? e.message : "Failed to process attached technical documents.",
       };
     }
 
@@ -450,13 +450,13 @@ export async function updateProductAction(
       await db.productImage.createMany({ data: newImages });
     }
 
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/products");
-    revalidatePath("/bn/products");
-    revalidatePath(`/product/${slug}`);
-    revalidatePath(`/bn/product/${slug}`);
-    revalidatePath("/admin/products");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/products");
+    revalidatePublic("/bn/products");
+    revalidatePublic(`/product/${slug}`);
+    revalidatePublic(`/bn/product/${slug}`);
+    revalidatePublic("/admin/products");
 
     return { success: true, productId: id };
   } catch (err: unknown) {
@@ -487,16 +487,19 @@ export async function deleteProductAction(formData: FormData) {
     for (const img of product.images) {
       deleteUploadedFile(img.url);
     }
-    // Clean up uploaded datasheet if stored locally
-    if (product.datasheetUrl?.startsWith("/uploads/")) {
-      deleteUploadedFile(product.datasheetUrl);
+    // Clean up every locally stored document (single URL or multi-doc JSON)
+    const docsToDelete = parseProductDocuments(product.datasheetUrl);
+    for (const url of Object.values(docsToDelete)) {
+      if (url && url.startsWith("/uploads/")) {
+        deleteUploadedFile(url);
+      }
     }
     await db.product.delete({ where: { id } });
   }
 
-  revalidatePath("/");
-  revalidatePath("/products");
-  revalidatePath("/admin/products");
+  revalidatePublic("/");
+  revalidatePublic("/products");
+  revalidatePublic("/admin/products");
   redirect("/admin/products");
 }
 
@@ -517,9 +520,9 @@ export async function deleteProductImageAction(formData: FormData) {
     await db.productImage.delete({ where: { id: imageId } });
   }
 
-  revalidatePath(`/admin/products/${productId}`);
-  revalidatePath(`/product/${productId}`);
-  revalidatePath("/");
+  revalidatePublic(`/admin/products/${productId}`);
+  revalidatePublic(`/product/${productId}`);
+  revalidatePublic("/");
 }
 
 export async function duplicateProductAction(formData: FormData) {
@@ -545,6 +548,17 @@ export async function duplicateProductAction(formData: FormData) {
   const newSlug = `${original.slug}-copy-${copySuffix}`;
   const newName = `${original.name} (Copy)`;
 
+  // Duplicate owned files so the copy survives deletion of the original
+  const originalDocs = parseProductDocuments(original.datasheetUrl);
+  const copiedDocs: ProductDocuments = { ...originalDocs };
+  (Object.keys(copiedDocs) as Array<keyof ProductDocuments>).forEach((key) => {
+    const url = copiedDocs[key];
+    if (url && url.startsWith("/uploads/")) {
+      copiedDocs[key] = duplicateUploadedFile(url, "datasheet");
+    }
+  });
+  const copiedDatasheetUrl = encodeProductDocuments(copiedDocs);
+
   await db.product.create({
     data: {
       name: newName,
@@ -559,16 +573,16 @@ export async function duplicateProductAction(formData: FormData) {
       leadTime: original.leadTime,
       priceBdt: original.priceBdt,
       showPrice: original.showPrice,
-      datasheetUrl: original.datasheetUrl,
       metaTitle: original.metaTitle,
       metaDescription: original.metaDescription,
+      datasheetUrl: copiedDatasheetUrl,
       isFeatured: false,
       isActive: false, // Inactive by default per Task E!
       isDemo: false,
       sortOrder: original.sortOrder + 1,
       images: {
         create: original.images.map((img, idx) => ({
-          url: img.url,
+          url: duplicateUploadedFile(img.url, "prod"),
           alt: `${newName} image ${idx + 1}`,
           sortOrder: img.sortOrder,
         })),
@@ -583,9 +597,9 @@ export async function duplicateProductAction(formData: FormData) {
     },
   });
 
-  revalidatePath("/admin/products");
-  revalidatePath("/products");
-  revalidatePath("/");
+  revalidatePublic("/admin/products");
+  revalidatePublic("/products");
+  revalidatePublic("/");
 }
 
 export async function reorderProductImageAction(formData: FormData) {
@@ -626,9 +640,9 @@ export async function reorderProductImageAction(formData: FormData) {
     }),
   ]);
 
-  revalidatePath(`/admin/products/${productId}`);
-  revalidatePath(`/product/${productId}`);
-  revalidatePath("/");
+  revalidatePublic(`/admin/products/${productId}`);
+  revalidatePublic(`/product/${productId}`);
+  revalidatePublic("/");
 }
 
 export async function reorderProductSpecAction(formData: FormData) {
@@ -669,8 +683,8 @@ export async function reorderProductSpecAction(formData: FormData) {
     }),
   ]);
 
-  revalidatePath(`/admin/products/${productId}`);
-  revalidatePath(`/product/${productId}`);
+  revalidatePublic(`/admin/products/${productId}`);
+  revalidatePublic(`/product/${productId}`);
 }
 
 export async function bulkUpdateProductsAction(formData: FormData) {
@@ -701,17 +715,20 @@ export async function bulkUpdateProductsAction(formData: FormData) {
         for (const img of p.images) {
           deleteUploadedFile(img.url);
         }
-        if (p.datasheetUrl?.startsWith("/uploads/")) {
-          deleteUploadedFile(p.datasheetUrl);
+        for (const docUrl of Object.values(parseProductDocuments(p.datasheetUrl))) {
+          if (docUrl && docUrl.startsWith("/uploads/")) {
+            deleteUploadedFile(docUrl);
+          }
         }
+
         await db.product.delete({ where: { id } });
       }
     }
   }
 
-  revalidatePath("/");
-  revalidatePath("/products");
-  revalidatePath("/admin/products");
+  revalidatePublic("/");
+  revalidatePublic("/products");
+  revalidatePublic("/admin/products");
 }
 
 export async function toggleProductFeaturedAction(formData: FormData) {
@@ -726,8 +743,8 @@ export async function toggleProductFeaturedAction(formData: FormData) {
       where: { id },
       data: { isFeatured: !current },
     });
-    revalidatePath("/admin/products");
-    revalidatePath("/");
+    revalidatePublic("/admin/products");
+    revalidatePublic("/");
   }
 }
 
@@ -743,8 +760,8 @@ export async function toggleProductActiveAction(formData: FormData) {
       where: { id },
       data: { isActive: !current },
     });
-    revalidatePath("/admin/products");
-    revalidatePath("/products");
-    revalidatePath("/");
+    revalidatePublic("/admin/products");
+    revalidatePublic("/products");
+    revalidatePublic("/");
   }
 }

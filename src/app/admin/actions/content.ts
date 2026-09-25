@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { revalidatePath } from "next/cache";
+import { revalidatePublic } from "@/lib/revalidate";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { processAndSaveImage, deleteUploadedFile } from "@/lib/uploads";
@@ -16,7 +16,7 @@ const StatSchema = z.object({
   label: z.string().min(1, "Label is required"),
   labelBn: z.string().trim().optional().nullable(),
   value: z.coerce.number(),
-  valueBn: z.string().trim().optional().nullable(),
+
   prefix: z.string().trim().optional().nullable(),
   suffix: z.string().trim().optional().nullable(),
   description: z.string().trim().optional().nullable(),
@@ -54,10 +54,10 @@ export async function createStatAction(
         isSample: false,
       },
     });
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/admin/content/stats");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/admin/content/stats");
+    revalidatePublic("/admin");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to create stat" };
@@ -98,9 +98,9 @@ export async function updateStatAction(
         isSample: false,
       },
     });
-    revalidatePath("/");
-    revalidatePath("/admin/content/stats");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/stats");
+    revalidatePublic("/admin");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to update stat" };
@@ -113,9 +113,9 @@ export async function deleteStatAction(formData: FormData): Promise<void> {
   const id = formData.get("id") as string;
   if (id) {
     await db.stat.delete({ where: { id } });
-    revalidatePath("/");
-    revalidatePath("/admin/content/stats");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/stats");
+    revalidatePublic("/admin");
   }
 }
 
@@ -130,9 +130,9 @@ export async function toggleStatActiveAction(formData: FormData): Promise<void> 
         where: { id },
         data: { isActive: !curr.isActive },
       });
-      revalidatePath("/");
-      revalidatePath("/admin/content/stats");
-      revalidatePath("/admin");
+      revalidatePublic("/");
+      revalidatePublic("/admin/content/stats");
+      revalidatePublic("/admin");
     }
   }
 }
@@ -146,9 +146,9 @@ export async function markStatAsRealAction(formData: FormData): Promise<void> {
       where: { id },
       data: { isSample: false },
     });
-    revalidatePath("/");
-    revalidatePath("/admin/content/stats");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/stats");
+    revalidatePublic("/admin");
   }
 }
 
@@ -174,9 +174,9 @@ export async function reorderStatAction(formData: FormData): Promise<void> {
     db.stat.update({ where: { id: targetItem.id }, data: { sortOrder: currentItem.sortOrder } }),
   ]);
 
-  revalidatePath("/");
-  revalidatePath("/admin/content/stats");
-  revalidatePath("/admin");
+  revalidatePublic("/");
+  revalidatePublic("/admin/content/stats");
+  revalidatePublic("/admin");
 }
 
 // 2. Certifications
@@ -228,12 +228,12 @@ export async function createCertificationAction(
         isSample: false,
       },
     });
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/certifications");
-    revalidatePath("/bn/certifications");
-    revalidatePath("/admin/content/certifications");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/certifications");
+    revalidatePublic("/bn/certifications");
+    revalidatePublic("/admin/content/certifications");
+    revalidatePublic("/admin");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to create certification" };
@@ -269,7 +269,13 @@ export async function updateCertificationAction(
   const file = formData.get("image") as File;
   if (file && file.size > 0 && file.name) {
     const saved = await processAndSaveImage(file, "cert");
-    if (saved) newImageUrl = saved.url;
+    if (saved) {
+      newImageUrl = saved.url;
+      const current = await db.certification.findUnique({ where: { id } });
+      if (current?.image && current.image.startsWith("/uploads/")) {
+        deleteUploadedFile(current.image);
+      }
+    }
   }
 
   try {
@@ -281,12 +287,12 @@ export async function updateCertificationAction(
         isSample: false,
       },
     });
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/certifications");
-    revalidatePath("/bn/certifications");
-    revalidatePath("/admin/content/certifications");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/certifications");
+    revalidatePublic("/bn/certifications");
+    revalidatePublic("/admin/content/certifications");
+    revalidatePublic("/admin");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to update certification" };
@@ -303,9 +309,9 @@ export async function deleteCertificationAction(formData: FormData): Promise<voi
       deleteUploadedFile(cert.image);
     }
     await db.certification.delete({ where: { id } });
-    revalidatePath("/");
-    revalidatePath("/admin/content/certifications");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/certifications");
+    revalidatePublic("/admin");
   }
 }
 
@@ -320,9 +326,9 @@ export async function toggleCertificationActiveAction(formData: FormData): Promi
         where: { id },
         data: { isActive: !curr.isActive },
       });
-      revalidatePath("/");
-      revalidatePath("/admin/content/certifications");
-      revalidatePath("/admin");
+      revalidatePublic("/");
+      revalidatePublic("/admin/content/certifications");
+      revalidatePublic("/admin");
     }
   }
 }
@@ -336,9 +342,9 @@ export async function markCertificationAsRealAction(formData: FormData): Promise
       where: { id },
       data: { isSample: false },
     });
-    revalidatePath("/");
-    revalidatePath("/admin/content/certifications");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/certifications");
+    revalidatePublic("/admin");
   }
 }
 
@@ -364,9 +370,9 @@ export async function reorderCertificationAction(formData: FormData): Promise<vo
     db.certification.update({ where: { id: targetItem.id }, data: { sortOrder: currentItem.sortOrder } }),
   ]);
 
-  revalidatePath("/");
-  revalidatePath("/admin/content/certifications");
-  revalidatePath("/admin");
+  revalidatePublic("/");
+  revalidatePublic("/admin/content/certifications");
+  revalidatePublic("/admin");
 }
 
 // 3. Partners
@@ -411,9 +417,9 @@ export async function createPartnerAction(
         isSample: false,
       },
     });
-    revalidatePath("/");
-    revalidatePath("/admin/content/partners");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/partners");
+    revalidatePublic("/admin");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to create partner" };
@@ -445,7 +451,13 @@ export async function updatePartnerAction(
   const file = formData.get("logo") as File;
   if (file && file.size > 0 && file.name) {
     const saved = await processAndSaveImage(file, "partner");
-    if (saved) newLogoUrl = saved.url;
+    if (saved) {
+      newLogoUrl = saved.url;
+      const current = await db.partner.findUnique({ where: { id } });
+      if (current?.logo && current.logo.startsWith("/uploads/")) {
+        deleteUploadedFile(current.logo);
+      }
+    }
   }
 
   try {
@@ -457,9 +469,9 @@ export async function updatePartnerAction(
         isSample: false,
       },
     });
-    revalidatePath("/");
-    revalidatePath("/admin/content/partners");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/partners");
+    revalidatePublic("/admin");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to update partner" };
@@ -476,9 +488,9 @@ export async function deletePartnerAction(formData: FormData): Promise<void> {
       deleteUploadedFile(p.logo);
     }
     await db.partner.delete({ where: { id } });
-    revalidatePath("/");
-    revalidatePath("/admin/content/partners");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/partners");
+    revalidatePublic("/admin");
   }
 }
 
@@ -493,9 +505,9 @@ export async function togglePartnerActiveAction(formData: FormData): Promise<voi
         where: { id },
         data: { isActive: !curr.isActive },
       });
-      revalidatePath("/");
-      revalidatePath("/admin/content/partners");
-      revalidatePath("/admin");
+      revalidatePublic("/");
+      revalidatePublic("/admin/content/partners");
+      revalidatePublic("/admin");
     }
   }
 }
@@ -509,9 +521,9 @@ export async function markPartnerAsRealAction(formData: FormData): Promise<void>
       where: { id },
       data: { isSample: false },
     });
-    revalidatePath("/");
-    revalidatePath("/admin/content/partners");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/partners");
+    revalidatePublic("/admin");
   }
 }
 
@@ -537,9 +549,9 @@ export async function reorderPartnerAction(formData: FormData): Promise<void> {
     db.partner.update({ where: { id: targetItem.id }, data: { sortOrder: currentItem.sortOrder } }),
   ]);
 
-  revalidatePath("/");
-  revalidatePath("/admin/content/partners");
-  revalidatePath("/admin");
+  revalidatePublic("/");
+  revalidatePublic("/admin/content/partners");
+  revalidatePublic("/admin");
 }
 
 // 4. Testimonials
@@ -595,10 +607,10 @@ export async function createTestimonialAction(
         isSample: false,
       },
     });
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/admin/content/testimonials");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/admin/content/testimonials");
+    revalidatePublic("/admin");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to create testimonial" };
@@ -636,7 +648,13 @@ export async function updateTestimonialAction(
   const file = formData.get("photo") as File;
   if (file && file.size > 0 && file.name) {
     const saved = await processAndSaveImage(file, "testimonial");
-    if (saved) newPhotoUrl = saved.url;
+    if (saved) {
+      newPhotoUrl = saved.url;
+      const current = await db.testimonial.findUnique({ where: { id } });
+      if (current?.photo && current.photo.startsWith("/uploads/")) {
+        deleteUploadedFile(current.photo);
+      }
+    }
   }
 
   try {
@@ -648,10 +666,10 @@ export async function updateTestimonialAction(
         isSample: false,
       },
     });
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/admin/content/testimonials");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/admin/content/testimonials");
+    revalidatePublic("/admin");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to update testimonial" };
@@ -668,9 +686,9 @@ export async function deleteTestimonialAction(formData: FormData): Promise<void>
       deleteUploadedFile(t.photo);
     }
     await db.testimonial.delete({ where: { id } });
-    revalidatePath("/");
-    revalidatePath("/admin/content/testimonials");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/testimonials");
+    revalidatePublic("/admin");
   }
 }
 
@@ -685,9 +703,9 @@ export async function toggleTestimonialActiveAction(formData: FormData): Promise
         where: { id },
         data: { isActive: !curr.isActive },
       });
-      revalidatePath("/");
-      revalidatePath("/admin/content/testimonials");
-      revalidatePath("/admin");
+      revalidatePublic("/");
+      revalidatePublic("/admin/content/testimonials");
+      revalidatePublic("/admin");
     }
   }
 }
@@ -701,9 +719,9 @@ export async function markTestimonialAsRealAction(formData: FormData): Promise<v
       where: { id },
       data: { isSample: false },
     });
-    revalidatePath("/");
-    revalidatePath("/admin/content/testimonials");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/testimonials");
+    revalidatePublic("/admin");
   }
 }
 
@@ -729,9 +747,9 @@ export async function reorderTestimonialAction(formData: FormData): Promise<void
     db.testimonial.update({ where: { id: targetItem.id }, data: { sortOrder: currentItem.sortOrder } }),
   ]);
 
-  revalidatePath("/");
-  revalidatePath("/admin/content/testimonials");
-  revalidatePath("/admin");
+  revalidatePublic("/");
+  revalidatePublic("/admin/content/testimonials");
+  revalidatePublic("/admin");
 }
 
 // 5. FAQ
@@ -771,10 +789,10 @@ export async function createFaqItemAction(
         isSample: false,
       },
     });
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/admin/content/faq");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/admin/content/faq");
+    revalidatePublic("/admin");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to create FAQ item" };
@@ -812,10 +830,10 @@ export async function updateFaqItemAction(
         isSample: false,
       },
     });
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/admin/content/faq");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/admin/content/faq");
+    revalidatePublic("/admin");
     return { success: true };
   } catch (err: unknown) {
     return { success: false, error: err instanceof Error ? err.message : "Failed to update FAQ item" };
@@ -828,9 +846,9 @@ export async function deleteFaqItemAction(formData: FormData): Promise<void> {
   const id = formData.get("id") as string;
   if (id) {
     await db.faqItem.delete({ where: { id } });
-    revalidatePath("/");
-    revalidatePath("/admin/content/faq");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/faq");
+    revalidatePublic("/admin");
   }
 }
 
@@ -845,9 +863,9 @@ export async function toggleFaqItemActiveAction(formData: FormData): Promise<voi
         where: { id },
         data: { isActive: !curr.isActive },
       });
-      revalidatePath("/");
-      revalidatePath("/admin/content/faq");
-      revalidatePath("/admin");
+      revalidatePublic("/");
+      revalidatePublic("/admin/content/faq");
+      revalidatePublic("/admin");
     }
   }
 }
@@ -861,9 +879,9 @@ export async function markFaqItemAsRealAction(formData: FormData): Promise<void>
       where: { id },
       data: { isSample: false },
     });
-    revalidatePath("/");
-    revalidatePath("/admin/content/faq");
-    revalidatePath("/admin");
+    revalidatePublic("/");
+    revalidatePublic("/admin/content/faq");
+    revalidatePublic("/admin");
   }
 }
 
@@ -889,7 +907,7 @@ export async function reorderFaqItemAction(formData: FormData): Promise<void> {
     db.faqItem.update({ where: { id: targetItem.id }, data: { sortOrder: currentItem.sortOrder } }),
   ]);
 
-  revalidatePath("/");
-  revalidatePath("/admin/content/faq");
-  revalidatePath("/admin");
+  revalidatePublic("/");
+  revalidatePublic("/admin/content/faq");
+  revalidatePublic("/admin");
 }

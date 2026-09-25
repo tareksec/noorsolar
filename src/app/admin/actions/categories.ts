@@ -1,9 +1,9 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePublic } from "@/lib/revalidate";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
-import { processAndSaveImage } from "@/lib/uploads";
+import { processAndSaveImage, deleteUploadedFile } from "@/lib/uploads";
 
 function slugify(text: string): string {
   return text
@@ -63,13 +63,13 @@ export async function createCategoryAction(
       },
     });
 
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/products");
-    revalidatePath("/bn/products");
-    revalidatePath("/admin/categories");
-    revalidatePath("/admin/products");
-    revalidatePath("/admin/products/new");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/products");
+    revalidatePublic("/bn/products");
+    revalidatePublic("/admin/categories");
+    revalidatePublic("/admin/products");
+    revalidatePublic("/admin/products/new");
     return { success: true };
   } catch (err: unknown) {
     console.error("Create category error:", err);
@@ -105,7 +105,13 @@ export async function updateCategoryAction(
     let newImageUrl: string | undefined = undefined;
     if (file && file.size > 0 && file.name) {
       const saved = await processAndSaveImage(file, "cat");
-      if (saved) newImageUrl = saved.url;
+      if (saved) {
+        newImageUrl = saved.url;
+        const current = await db.category.findUnique({ where: { id } });
+        if (current?.image && current.image.startsWith("/uploads/")) {
+          deleteUploadedFile(current.image);
+        }
+      }
     }
 
     await db.category.update({
@@ -121,13 +127,13 @@ export async function updateCategoryAction(
       },
     });
 
-    revalidatePath("/");
-    revalidatePath("/bn");
-    revalidatePath("/products");
-    revalidatePath("/bn/products");
-    revalidatePath(`/category/${slug}`);
-    revalidatePath(`/bn/category/${slug}`);
-    revalidatePath("/admin/categories");
+    revalidatePublic("/");
+    revalidatePublic("/bn");
+    revalidatePublic("/products");
+    revalidatePublic("/bn/products");
+    revalidatePublic(`/category/${slug}`);
+    revalidatePublic(`/bn/category/${slug}`);
+    revalidatePublic("/admin/categories");
     return { success: true };
   } catch (err: unknown) {
     console.error("Update category error:", err);
@@ -175,7 +181,73 @@ export async function reorderCategoryAction(formData: FormData) {
     }),
   ]);
 
-  revalidatePath("/admin/categories");
-  revalidatePath("/");
-  revalidatePath("/products");
+  revalidatePublic("/admin/categories");
+  revalidatePublic("/");
+  revalidatePublic("/products");
+}
+
+export async function toggleCategoryActiveAction(formData: FormData) {
+  const session = await getSession();
+  if (!session) throw new Error("Unauthorized");
+
+  const id = formData.get("id") as string;
+  if (!id) return;
+
+  const curr = await db.category.findUnique({ where: { id } });
+  if (!curr) return;
+
+  await db.category.update({
+    where: { id },
+    data: { isActive: !curr.isActive },
+  });
+
+  revalidatePublic("/admin/categories");
+  revalidatePublic("/admin/products");
+  revalidatePublic("/admin/products/new");
+  revalidatePublic("/");
+  revalidatePublic("/bn");
+  revalidatePublic("/products");
+  revalidatePublic("/bn/products");
+}
+
+export type CategoryDeleteResult = {
+  success: boolean;
+  error?: string;
+};
+
+export async function deleteCategoryAction(
+  _prevState: unknown,
+  formData: FormData
+): Promise<CategoryDeleteResult> {
+  const session = await getSession();
+  if (!session) return { success: false, error: "Unauthorized" };
+
+  const id = formData.get("id") as string;
+  if (!id) return { success: false, error: "Missing category ID." };
+
+  const productCount = await db.product.count({ where: { categoryId: id } });
+  if (productCount > 0) {
+    return {
+      success: false,
+      error: `Cannot delete: ${productCount} product(s) still use this category. Move or delete them first.`,
+    };
+  }
+
+  const cat = await db.category.findUnique({ where: { id } });
+  if (!cat) return { success: false, error: "Category not found." };
+
+  await db.category.delete({ where: { id } });
+
+  if (cat.image && cat.image.startsWith("/uploads/")) {
+    deleteUploadedFile(cat.image);
+  }
+
+  revalidatePublic("/admin/categories");
+  revalidatePublic("/admin/products");
+  revalidatePublic("/admin/products/new");
+  revalidatePublic("/");
+  revalidatePublic("/bn");
+  revalidatePublic("/products");
+  revalidatePublic("/bn/products");
+  return { success: true };
 }

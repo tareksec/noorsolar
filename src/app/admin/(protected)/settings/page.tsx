@@ -3,7 +3,7 @@ import { KeyRound } from "lucide-react";
 import React from "react";
 import { getSiteSettings, updateSiteSettings } from "@/lib/data/settings";
 import { isPublicReviewsEnabled, setPublicReviewsEnabled } from "@/lib/data/reviews";
-import { revalidatePath } from "next/cache";
+import { revalidatePublic } from "@/lib/revalidate";
 import { getSession } from "@/lib/auth";
 import { SettingsFormClient } from "@/components/admin/settings-form-client";
 
@@ -109,15 +109,15 @@ async function saveSettingsAction(formData: FormData) {
     aboutBodyBn,
   });
 
-  revalidatePath("/");
-  revalidatePath("/bn");
-  revalidatePath("/admin/settings");
-  revalidatePath("/about");
-  revalidatePath("/bn/about");
-  revalidatePath("/contact");
-  revalidatePath("/bn/contact");
-  revalidatePath("/products");
-  revalidatePath("/bn/products");
+  revalidatePublic("/");
+  revalidatePublic("/bn");
+  revalidatePublic("/admin/settings");
+  revalidatePublic("/about");
+  revalidatePublic("/bn/about");
+  revalidatePublic("/contact");
+  revalidatePublic("/bn/contact");
+  revalidatePublic("/products");
+  revalidatePublic("/bn/products");
 }
 
 export default async function AdminSettingsPage() {

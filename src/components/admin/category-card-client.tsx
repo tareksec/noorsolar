@@ -3,8 +3,8 @@
 import React, { useState, useActionState } from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
 import Link from "next/link";
-import { updateCategoryAction, reorderCategoryAction, CategoryActionResult } from "@/app/admin/actions/categories";
-import { ExternalLink, Edit2, Check, X, ArrowUp, ArrowDown } from "lucide-react";
+import { updateCategoryAction, reorderCategoryAction, toggleCategoryActiveAction, deleteCategoryAction, CategoryActionResult, CategoryDeleteResult } from "@/app/admin/actions/categories";
+import { ExternalLink, Edit2, Check, X, ArrowUp, ArrowDown, Eye, EyeOff, Trash2 } from "lucide-react";
 
 interface CategoryCardProps {
   category: {
@@ -16,6 +16,7 @@ interface CategoryCardProps {
     descriptionBn?: string | null;
     image?: string | null;
     sortOrder: number;
+    isActive: boolean;
     _count: { products: number };
   };
   isFirst?: boolean;
@@ -27,6 +28,7 @@ const initialState: CategoryActionResult = { success: false };
 export function CategoryCardClient({ category, isFirst, isLast }: CategoryCardProps) {
   const [editing, setEditing] = useState(false);
   const [state, formAction, isPending] = useActionState(updateCategoryAction, initialState);
+  const [deleteState, deleteAction, isDeleting] = useActionState<CategoryDeleteResult, FormData>(deleteCategoryAction, { success: false });
   const isFormOpen = editing && !state.success;
 
   return (
@@ -111,6 +113,18 @@ export function CategoryCardClient({ category, isFirst, isLast }: CategoryCardPr
               />
             </div>
 
+            <div>
+              <label className="block text-[10px] font-mono text-[#5C605C] mb-1">
+                Category Image (JPEG, PNG or WebP, max 5MB)
+              </label>
+              <input
+                type="file"
+                name="image"
+                accept="image/jpeg,image/png,image/webp"
+                className="w-full px-3 py-1.5 rounded-xl bg-[#EDEDED] text-xs text-[#111311] outline-none file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-[10px] file:font-mono file:bg-[#111311] file:text-white"
+              />
+            </div>
+
             <div className="flex items-center gap-2">
               <button
                 type="submit"
@@ -135,6 +149,11 @@ export function CategoryCardClient({ category, isFirst, isLast }: CategoryCardPr
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="font-bold text-base text-[#111311]">{category.name}</h3>
+                {!category.isActive && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#EDEDED] text-[#5C605C] border border-[#DDE1DC]">
+                    HIDDEN
+                  </span>
+                )}
                 {category.nameBn ? (
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-100 text-emerald-800 border border-emerald-300">
                     BN ✓
@@ -183,6 +202,36 @@ export function CategoryCardClient({ category, isFirst, isLast }: CategoryCardPr
                 >
                   <Edit2 className="w-3.5 h-3.5" />
                 </button>
+
+                <form action={toggleCategoryActiveAction}>
+                  <input type="hidden" name="id" value={category.id} />
+                  <button
+                    type="submit"
+                    title={category.isActive ? "Hide category from public site" : "Show category on public site"}
+                    className="p-1 text-[#5C605C] hover:text-[#111311] transition-colors"
+                  >
+                    {category.isActive ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                  </button>
+                </form>
+
+                <form
+                  action={deleteAction}
+                  onSubmit={(e) => {
+                    if (!confirm(`Delete category "${category.name}"? Only possible when it has no products.`)) {
+                      e.preventDefault();
+                    }
+                  }}
+                >
+                  <input type="hidden" name="id" value={category.id} />
+                  <button
+                    type="submit"
+                    disabled={isDeleting}
+                    title="Delete category"
+                    className="p-1 text-red-600 hover:text-red-800 transition-colors disabled:opacity-50"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </form>
               </div>
             </div>
 
@@ -198,6 +247,12 @@ export function CategoryCardClient({ category, isFirst, isLast }: CategoryCardPr
           </>
         )}
       </div>
+
+      {deleteState.error && (
+        <p className="p-2 rounded-xl bg-red-50 border border-red-200 text-[11px] text-red-700">
+          {deleteState.error}
+        </p>
+      )}
 
       <div className="pt-4 border-t border-[#EDEDED] flex items-center justify-between text-xs">
         <span className="font-mono text-[#5C605C]">

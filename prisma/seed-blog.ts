@@ -61,7 +61,7 @@ Grid-tied inverters must provide anti-islanding protection, low-voltage ride-thr
 ### ৩. গ্রিড সুরক্ষা ও নেট মিটারিং নির্দেশিকা
 
 বাণিজ্যিক নেট মিটারিং প্রকল্পের জন্য ইনভার্টারে অ্যান্টি-আইল্যান্ডিং সুরক্ষা, ফল্ট রাইড-থ্রু এবং প্রতিক্রিয়াশীল শক্তি নিয়ন্ত্রণ ব্যবস্থা থাকা বাধ্যতামূলক। ইনভার্টার ক্রয়ের আগে ডিস্ট্রিবিউশন কোম্পানির প্রয়োজনীয় অনুমোদন ও সার্টিফিকেশন যাচাই করে নেওয়া উচিত।`,
-    coverImage: "/demo/products/30kw-on-grid-string-inverter-three-phase-angled.jpg",
+    coverImage: "/demo/products/10kw-hybrid-inverter-three-phase-angled.jpg",
     coverAlt: "Commercial solar inverter installation",
     coverAltBn: "বাণিজ্যিক কারখানায় শিল্প গ্রেড সোলার ইনভার্টার স্থাপন",
     tags: "Inverters, Engineering, B2B",
@@ -206,7 +206,7 @@ State any required testing certifications upfront:
 কোটেশনের অনুরোধ পাঠানোর সময় অতিরিক্ত কিছু শর্ত শুরুতেই উল্লেখ করলে সুবিধা হয়:
 - প্রস্তুতকারকের ফ্ল্যাশ টেস্ট রিপোর্ট (Flash Test) এবং EL টেস্টিং ইমেজ প্রয়োজন কি না।
 - ডেলিভারির কাঙ্ক্ষিত গন্তব্য (আমাদের ঢাকা ওয়্যারহাউস থেকে সরাসরি পিকআপ নাকি প্রকল্প সাইটে সরাসরি ট্রাক সরবরাহ)।`,
-    coverImage: "/demo/products/n-type-topcon-bifacial-module-620w-front.jpg",
+    coverImage: "/demo/products/n-type-topcon-bifacial-module-620w-front.webp",
     coverAlt: "Bulk solar PV equipment delivery",
     coverAltBn: "পাইকারি সৌর বিদ্যুৎ সামগ্রী পরিবহন ও সরবরাহ",
     tags: "Procurement, Wholesale, EPC",

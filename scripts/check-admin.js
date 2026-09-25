@@ -197,6 +197,8 @@ async function main() {
     // STEP 1: Log in
     try {
       await page.goto(`${BASE_URL}/admin/login`, { waitUntil: "domcontentloaded" });
+      await page.waitForSelector('input[name="email"]', { timeout: 20000 });
+      await new Promise((r) => setTimeout(r, 1500));
       await page.click('input[name="email"]', { clickCount: 3 });
       await page.type('input[name="email"]', ADMIN_EMAIL);
       await page.click('input[name="password"]', { clickCount: 3 });
@@ -263,13 +265,13 @@ async function main() {
         await specVal.type("110 kW");
       }
 
-      // Upload 3 images
+      // Upload 3 images (JPG + PNG mix covers both sharp pipelines)
       const imgInput = await page.$('input[name="images"]');
       if (imgInput) {
         await imgInput.uploadFile(
+          path.join(FIXTURES_DIR, "photo.jpg"),
           path.join(FIXTURES_DIR, "img1.png"),
-          path.join(FIXTURES_DIR, "img2.png"),
-          path.join(FIXTURES_DIR, "img3.png")
+          path.join(FIXTURES_DIR, "img2.png")
         );
       }
 
@@ -398,7 +400,7 @@ async function main() {
       record(7, "Toggle featured and active", false, err.message);
     }
 
-    // STEP 8: Check the public page shows the changes
+    // STEP 8: Check the public page shows the changes + uploaded image serves raw, via optimizer, and in an <img>
     try {
       const p = await prisma.product.findUnique({ where: { id: createdProductId } });
       const slug = p ? p.slug : "sungrow-sg110cx-inverter";
@@ -406,8 +408,22 @@ async function main() {
       const content = await page.content();
       const hasTitle = content.includes("Sungrow");
       const hasDatasheet = content.includes("Download Datasheet") || content.includes(".pdf");
-      const passed = res.status() === 200 && hasTitle && hasDatasheet;
-      record(8, "Check public product page", passed, `Status: ${res.status()}, Datasheet rendered: ${hasDatasheet}`);
+      const hasUploadImgTag = content.includes("/uploads/");
+
+      const prodImgs = await prisma.productImage.findMany({ where: { productId: createdProductId } });
+      let uploadsOk = prodImgs.length > 0;
+      for (const im of prodImgs.slice(0, 2)) {
+        const rawOk = await page.evaluate(async (u) => {
+          try { const r = await fetch(u, { method: "HEAD" }); return r.status; } catch { return 0; }
+        }, im.url).then((s) => s === 200).catch(() => false);
+        const optOk = await page.evaluate(async (u) => {
+          try { const r = await fetch(`/_next/image?url=${encodeURIComponent(u)}&w=640&q=75`); return r.status; } catch { return 0; }
+        }, im.url).then((s) => s === 200).catch(() => false);
+        if (!rawOk || !optOk) uploadsOk = false;
+      }
+
+      const passed = res.status() === 200 && hasTitle && hasDatasheet && hasUploadImgTag && uploadsOk;
+      record(8, "Check public product page", passed, `Status: ${res.status()}, Datasheet: ${hasDatasheet}, ImgTag: ${hasUploadImgTag}, Served: ${uploadsOk}`);
     } catch (err) {
       record(8, "Check public product page", false, err.message);
     }
@@ -551,9 +567,19 @@ async function main() {
     // STEP 13: Add an admin review and see it on the product page
     try {
       await page.goto(`${BASE_URL}/admin/reviews`, { waitUntil: "domcontentloaded" });
-      await page.waitForSelector('#btn-open-add-review');
-      await page.click('#btn-open-add-review');
-      await page.waitForSelector('input[name="authorName"]');
+      await page.waitForSelector('#btn-open-add-review', { timeout: 15000 });
+      // Open the modal with a retry: slow hydration can swallow the first click
+      let authorInput = null;
+      for (let attempt = 0; attempt < 3 && !authorInput; attempt++) {
+        await page.click('#btn-open-add-review');
+        try {
+          await page.waitForSelector('input[name="authorName"]', { timeout: 4000 });
+          authorInput = true;
+        } catch {
+          await new Promise((r) => setTimeout(r, 1000));
+        }
+      }
+      if (!authorInput) throw new Error('Add-review modal did not open after 3 attempts');
 
       if (reviewTargetProduct) {
         await page.waitForSelector('select[name="productId"]');
@@ -595,7 +621,7 @@ async function main() {
       });
       await page.waitForSelector('#btn-write-review', { timeout: 10000 });
       await page.click('#btn-write-review');
-      await page.waitForSelector('input[name="authorName"]');
+      await page.waitForSelector('input[name="authorName"]', { timeout: 15000 }).catch(async () => { await page.click('#btn-write-review'); await page.waitForSelector('input[name="authorName"]', { timeout: 15000 }); });
       await page.type('input[name="authorName"]', "Mahmudul Haque");
       await page.type('input[name="authorRole"]', "Lead EPC Engineer");
       await page.type('input[name="company"]', "GreenTech Solar BD");
@@ -681,7 +707,372 @@ async function main() {
       record(15, "Submit quote and verify in admin quotes", false, err.message);
     }
 
-    // STEP 16: Confirm unauthenticated requests to admin pages and actions are rejected
+    // STEP 16: Oversize product image is rejected with a clear error (no silent hang, nothing saved)
+    try {
+      const scratchDir = path.join(__dirname, "..", "scratch");
+      fs.mkdirSync(scratchDir, { recursive: true });
+      const bigPath = path.join(scratchDir, ".check-admin-big.jpg");
+      if (!fs.existsSync(bigPath) || fs.statSync(bigPath).size < 5 * 1024 * 1024) {
+        const sharp = require("sharp");
+        const crypto = require("crypto");
+        const w = 2800, h = 1900, c = 3;
+        const buf = crypto.randomBytes(w * h * c);
+        await sharp(buf, { raw: { width: w, height: h, channels: c } }).jpeg({ quality: 100 }).toFile(bigPath);
+      }
+      const bigSize = fs.statSync(bigPath).size;
+      await page.goto(`${BASE_URL}/admin/products/new`, { waitUntil: "domcontentloaded" });
+      await page.waitForSelector('input[name="name"]', { timeout: 15000 });
+      const bigName = `Oversize Probe ${Date.now()}`;
+      await page.type('input[name="name"]', bigName);
+      const bigInput = await page.$('input[name="images"]');
+      await bigInput.uploadFile(bigPath);
+      await page.waitForSelector('#btn-save-product');
+      await page.click('#btn-save-product');
+      await new Promise((r) => setTimeout(r, 6000));
+      const bigErr = await page.$eval('.bg-red-50', (el) => el.textContent).catch(() => '');
+      const bigCreated = await prisma.product.findFirst({ where: { name: bigName } });
+      try { fs.unlinkSync(bigPath); } catch {}
+      const passed = !bigCreated && bigErr.includes("5MB");
+      record(16, "Reject oversize image with clear error", passed, `File: ${(bigSize / 1048576).toFixed(1)}MB, Shown: ${bigErr.trim().slice(0, 60)}`);
+    } catch (err) {
+      record(16, "Reject oversize image with clear error", false, err.message);
+    }
+
+    // STEP 17: Duplicated product owns independent files (still serves after original was deleted in step 9)
+    try {
+      const dup = dupProductId ? await prisma.product.findUnique({ where: { id: dupProductId }, include: { images: true } }) : null;
+      let passed = false, note = "duplicate missing";
+      if (dup) {
+        const imgStatuses = [];
+        for (const im of dup.images) {
+          const s = await page.evaluate(async (u) => { try { const r = await fetch(u); return r.status; } catch { return 0; } }, im.url);
+          imgStatuses.push(`${String(im.url).split("/").pop()}:${s}`);
+        }
+        const imgsOk = dup.images.length === 3 && imgStatuses.every((x) => x.endsWith(":200"));
+        let dsStatus = "none";
+        if (dup.datasheetUrl) {
+          let dsUrl = dup.datasheetUrl;
+          try { const parsed = JSON.parse(dup.datasheetUrl); dsUrl = parsed.datasheet || Object.values(parsed)[0]; } catch {}
+          dsStatus = await page.evaluate(async (u) => { try { const r = await fetch(u); return r.status; } catch { return 0; } }, dsUrl);
+        }
+        passed = imgsOk && Number(dsStatus) === 200;
+        note = `Images: ${imgStatuses.join(",")}, Datasheet: ${dsStatus}`;
+      }
+      record(17, "Duplicate owns independent files", passed, note);
+    } catch (err) {
+      record(17, "Duplicate owns independent files", false, err.message);
+    }
+
+    // STEP 18: Category image upload, hide/show toggle, delete
+    try {
+      await page.goto(`${BASE_URL}/admin/categories`, { waitUntil: "domcontentloaded" });
+      await page.waitForSelector("#btn-open-create-category", { timeout: 15000 });
+      await page.click("#btn-open-create-category");
+      await page.waitForSelector("#category-name-input");
+      await page.type("#category-name-input", "E2E Cables Connectors");
+      await page.type("#category-slug-input", "e2e-cables-connectors");
+      const catImg = await page.$("#category-image-input");
+      if (!catImg) throw new Error("category image input missing");
+      await catImg.uploadFile(path.join(FIXTURES_DIR, "photo.jpg"));
+      await page.click("#category-submit-btn");
+      await new Promise((r) => setTimeout(r, 3000));
+      await page.reload({ waitUntil: "domcontentloaded" });
+      let e2e = await prisma.category.findUnique({ where: { slug: "e2e-cables-connectors" } });
+      const imgOk = e2e && e2e.image && e2e.image.startsWith("/uploads/");
+      const imgServed = imgOk ? await page.evaluate(async (u) => { try { const r = await fetch(u); return r.status; } catch { return 0; } }, e2e.image) : 0;
+
+      const clickInE2ECard = async (titlePart) => {
+        await page.evaluate((tp) => {
+          const h = Array.from(document.querySelectorAll("h3")).find((e) => e.textContent.includes("E2E Cables"));
+          if (!h) throw new Error("E2E card not found");
+          const card = h.closest("div.rounded-3xl");
+          const btn = Array.from(card.querySelectorAll("button")).find((b) => (b.title || "").includes(tp));
+          if (!btn) throw new Error("button not found: " + tp);
+          btn.click();
+        }, titlePart);
+        await new Promise((r) => setTimeout(r, 2500));
+      };
+
+      let hideOk = false, showOk = false, delOk = false;
+      if (imgOk) {
+        await clickInE2ECard("Hide category");
+        e2e = await prisma.category.findUnique({ where: { slug: "e2e-cables-connectors" } });
+        await page.reload({ waitUntil: "domcontentloaded" });
+        hideOk = e2e && e2e.isActive === false && (await page.content()).includes("HIDDEN");
+        await clickInE2ECard("Show category");
+        e2e = await prisma.category.findUnique({ where: { slug: "e2e-cables-connectors" } });
+        showOk = e2e && e2e.isActive === true;
+        await clickInE2ECard("Delete category");
+        await new Promise((r) => setTimeout(r, 1500));
+        e2e = await prisma.category.findUnique({ where: { slug: "e2e-cables-connectors" } });
+        delOk = e2e === null;
+      }
+      const passed = Boolean(imgOk) && imgServed === 200 && hideOk && showOk && delOk;
+      record(18, "Category image, hide/show, delete", passed, `Img served: ${imgServed}, Hide: ${hideOk}, Show: ${showOk}, Deleted: ${delOk}`);
+    } catch (err) {
+      record(18, "Category image, hide/show, delete", false, err.message);
+    }
+
+    // STEP 19: Quote internal note, status change, CSV export
+    try {
+      await page.goto(`${BASE_URL}/admin/quotes`, { waitUntil: "domcontentloaded" });
+      await page.waitForSelector('input[name="note"]', { timeout: 15000 });
+      await page.$eval('input[name="note"]', (el, v) => {
+        el.value = v;
+        el.dispatchEvent(new Event("input", { bubbles: true }));
+        el.dispatchEvent(new Event("change", { bubbles: true }));
+      }, "Called back; sent 250kW offer");
+      const statusSelects = await page.$$('select[name="status"]');
+      await statusSelects[statusSelects.length - 1].select("CONTACTED");
+      await clickButtonByText(page, "Update");
+      await new Promise((r) => setTimeout(r, 3000));
+      const quote = await prisma.quoteRequest.findFirst({ where: { name: { contains: "Tarek" } } });
+      const noteOk = quote && quote.note === "Called back; sent 250kW offer" && quote.status === "CONTACTED";
+      const noteVisible = (await page.content()).includes("Internal note:");
+      const csv = await page.evaluate(async () => {
+        try {
+          const r = await fetch("/admin/quotes/export");
+          const t = await r.text();
+          return { status: r.status, ct: r.headers.get("content-type"), has: t.includes("Tarek") };
+        } catch (e) { return { status: 0, ct: "", has: false }; }
+      });
+      const csvOk = csv.status === 200 && (csv.ct || "").includes("text/csv") && csv.has;
+      const passed = Boolean(noteOk) && noteVisible && csvOk;
+      record(19, "Quote note, status, CSV export", passed, `Note+status: ${Boolean(noteOk)}, Visible: ${noteVisible}, CSV: ${csv.status}/${csv.has}`);
+    } catch (err) {
+      record(19, "Quote note, status, CSV export", false, err.message);
+    }
+
+    // STEP 20: Trust content uploads + lifecycle (cert logo, partner logo, testimonial photo, stat, faq)
+    try {
+      const rowAction = async (itemId, titlePart) => {
+        await page.evaluate((iid, tp) => {
+          const hiddens = Array.from(document.querySelectorAll('input[type="hidden"]')).filter((e) => e.value === iid);
+          for (const h of hiddens) {
+            let node = h.parentElement;
+            for (let i = 0; i < 10 && node && node !== document.body; i++) {
+              const btn = node.querySelector(`button[title*="${tp}"]`);
+              if (btn) { btn.click(); return; }
+              node = node.parentElement;
+            }
+          }
+          throw new Error("row action not found: " + tp);
+        }, itemId, titlePart);
+        await new Promise((r) => setTimeout(r, 2500));
+      };
+      const serves200 = async (u) => page.evaluate(async (x) => { try { const r = await fetch(x); return r.status; } catch { return 0; } }, u);
+
+      // Certification with logo
+      await page.goto(`${BASE_URL}/admin/content/certifications`, { waitUntil: "domcontentloaded" });
+      await clickButtonByText(page, "Add Certificate");
+      await page.waitForSelector('input[name="name"]', { timeout: 10000 });
+      await page.type('input[name="name"]', "E2E Test Certificate");
+      await page.type('input[name="issuer"]', "E2E Laboratory");
+      await (await page.$('input[name="image"]')).uploadFile(path.join(FIXTURES_DIR, "photo.jpg"));
+      await clickButtonByText(page, "Save Certification");
+      await new Promise((r) => setTimeout(r, 3000));
+      const cert = await prisma.certification.findFirst({ where: { name: "E2E Test Certificate" } });
+      const certOk = cert && cert.image && cert.image.startsWith("/uploads/") && (await serves200(cert.image)) === 200;
+      let certLive = false;
+      for (let i = 0; i < 15 && !certLive; i++) {
+        await page.goto(`${BASE_URL}/certifications`, { waitUntil: "domcontentloaded" });
+        certLive = (await page.content()).includes("E2E Test Certificate");
+        if (!certLive) await new Promise((r) => setTimeout(r, 5000));
+      }
+
+      // Partner with logo + mark as real
+      await page.goto(`${BASE_URL}/admin/content/partners`, { waitUntil: "domcontentloaded" });
+      await clickButtonByText(page, "Add Partner");
+      await page.waitForSelector('input[name="name"]', { timeout: 10000 });
+      await page.type('input[name="name"]', "E2E Partner Co");
+      await page.type('input[name="url"]', "https://example.com");
+      await (await page.$('input[name="logo"]')).uploadFile(path.join(FIXTURES_DIR, "photo.jpg"));
+      await clickButtonByText(page, "Save Partner");
+      await new Promise((r) => setTimeout(r, 3000));
+      let partner = await prisma.partner.findFirst({ where: { name: "E2E Partner Co" } });
+      const partnerOk = partner && partner.logo && partner.logo.startsWith("/uploads/") && (await serves200(partner.logo)) === 200;
+      if (partner) {
+        await prisma.partner.update({ where: { id: partner.id }, data: { isSample: true } });
+        await page.reload({ waitUntil: "domcontentloaded" });
+        await rowAction(partner.id, "Mark as real");
+        partner = await prisma.partner.findFirst({ where: { name: "E2E Partner Co" } });
+      }
+      const partnerReal = partner && partner.isSample === false;
+
+      // Testimonial with photo
+      await page.goto(`${BASE_URL}/admin/content/testimonials`, { waitUntil: "domcontentloaded" });
+      await clickButtonByText(page, "Add Testimonial");
+      await page.waitForSelector('input[name="authorName"]', { timeout: 10000 });
+      await page.type('input[name="authorName"]', "E2E Reviewer");
+      await page.type('input[name="company"]', "E2E Ltd");
+      await page.type('textarea[name="quote"]', "Reliable supply and honest engineering advice.");
+      await (await page.$('input[name="photo"]')).uploadFile(path.join(FIXTURES_DIR, "photo.jpg"));
+      await clickButtonByText(page, "Save Testimonial");
+      await new Promise((r) => setTimeout(r, 3000));
+      const testi = await prisma.testimonial.findFirst({ where: { authorName: "E2E Reviewer" } });
+      const testiOk = testi && testi.photo && testi.photo.startsWith("/uploads/") && (await serves200(testi.photo)) === 200;
+
+      // Stat create + hide toggle
+      await page.goto(`${BASE_URL}/admin/content/stats`, { waitUntil: "domcontentloaded" });
+      await clickButtonByText(page, "Add Stat");
+      await page.waitForSelector('input[name="label"]', { timeout: 10000 });
+      await page.type('input[name="label"]', "E2E Projects Supplied");
+      await page.type('input[name="value"]', "123");
+      await clickButtonByText(page, "Save Stat");
+      await new Promise((r) => setTimeout(r, 3000));
+      let stat = await prisma.stat.findFirst({ where: { label: "E2E Projects Supplied" } });
+      const statOk = Boolean(stat);
+      if (stat) { await rowAction(stat.id, "Hide from public"); stat = await prisma.stat.findFirst({ where: { label: "E2E Projects Supplied" } }); }
+      const statHidden = stat && stat.isActive === false;
+
+      // FAQ create + delete
+      await page.goto(`${BASE_URL}/admin/content/faq`, { waitUntil: "domcontentloaded" });
+      await clickButtonByText(page, "Add FAQ");
+      await page.waitForSelector('input[name="question"]', { timeout: 10000 });
+      await page.type('input[name="question"]', "E2E test question?");
+      await page.type('textarea[name="answer"]', "E2E test answer.");
+      await clickButtonByText(page, "Save FAQ Item");
+      await new Promise((r) => setTimeout(r, 3000));
+      let faq = await prisma.faqItem.findFirst({ where: { question: "E2E test question?" } });
+      const faqOk = Boolean(faq);
+      if (faq) { await rowAction(faq.id, "Delete"); await new Promise((r) => setTimeout(r, 1500)); faq = await prisma.faqItem.findFirst({ where: { question: "E2E test question?" } }); }
+      const faqGone = faq === null;
+
+      // Cleanup E2E content rows (cert/partner/testimonial/stat) so counts stay clean
+      if (cert) { await page.goto(`${BASE_URL}/admin/content/certifications`, { waitUntil: "domcontentloaded" }); await rowAction(cert.id, "Delete"); }
+      if (partner) { await page.goto(`${BASE_URL}/admin/content/partners`, { waitUntil: "domcontentloaded" }); await rowAction(partner.id, "Delete"); }
+      if (testi) { await page.goto(`${BASE_URL}/admin/content/testimonials`, { waitUntil: "domcontentloaded" }); await rowAction(testi.id, "Delete"); }
+      if (stat) { await page.goto(`${BASE_URL}/admin/content/stats`, { waitUntil: "domcontentloaded" }); await rowAction(stat.id, "Delete"); }
+
+      const passed = Boolean(certOk) && certLive && Boolean(partnerOk) && Boolean(partnerReal) && Boolean(testiOk) && statOk && Boolean(statHidden) && faqOk && faqGone;
+      record(20, "Trust content uploads + lifecycle", passed, `Cert:${Boolean(certOk)}/${certLive} Partner:${Boolean(partnerOk)}/${Boolean(partnerReal)} Testi:${Boolean(testiOk)} Stat:${statOk}/${Boolean(statHidden)} Faq:${faqOk}/${faqGone}`);
+    } catch (err) {
+      record(20, "Trust content uploads + lifecycle", false, err.message);
+    }
+
+    // STEP 21: Settings change goes live on the public site (and reverts cleanly)
+    try {
+      await page.goto(`${BASE_URL}/admin/settings`, { waitUntil: "domcontentloaded" });
+      await page.waitForSelector('input[name="heroHeadline"]', { timeout: 15000 });
+      await page.$eval('input[name="heroHeadline"]', (el) => { el.value = ""; el.dispatchEvent(new Event("input", { bubbles: true })); });
+      await page.type('input[name="heroHeadline"]', "E2E Hero Headline Live Test");
+      await clickButtonByText(page, "Save Changes");
+      await new Promise((r) => setTimeout(r, 3000));
+      const dbAfterSave = await prisma.siteSetting.findUnique({ where: { key: "site_config" } });
+      const dbHeadline1 = (() => { try { return JSON.parse(dbAfterSave.value).heroHeadline; } catch { return "?"; } })();
+      let liveShown = false;
+      for (let i = 0; i < 15 && !liveShown; i++) {
+        await page.goto(`${BASE_URL}/`, { waitUntil: "domcontentloaded" });
+        liveShown = (await page.content()).includes("E2E Hero Headline Live Test");
+        if (!liveShown) await new Promise((r) => setTimeout(r, 5000));
+      }
+      await page.goto(`${BASE_URL}/admin/settings`, { waitUntil: "domcontentloaded" });
+      await page.waitForSelector('input[name="heroHeadline"]', { timeout: 15000 });
+      await page.$eval('input[name="heroHeadline"]', (el) => { el.value = ""; el.dispatchEvent(new Event("input", { bubbles: true })); });
+      await page.type('input[name="heroHeadline"]', "Solar Equipment. Imported Direct. Supplied at Project Scale.");
+      await clickButtonByText(page, "Save Changes");
+      await new Promise((r) => setTimeout(r, 3000));
+      let reverted = false;
+      for (let i = 0; i < 15 && !reverted; i++) {
+        await page.goto(`${BASE_URL}/`, { waitUntil: "domcontentloaded" });
+        const homeAfterPoll = await page.content();
+        reverted = homeAfterPoll.includes("Solar Equipment. Imported Direct. Supplied at Project Scale.") && !homeAfterPoll.includes("E2E Hero Headline Live Test");
+        if (!reverted) await new Promise((r) => setTimeout(r, 5000));
+      }
+      const dbAfterRevert = await prisma.siteSetting.findUnique({ where: { key: "site_config" } });
+      const dbHeadline2 = (() => { try { return JSON.parse(dbAfterRevert.value).heroHeadline; } catch { return "?"; } })();
+      record(21, "Settings change goes live", liveShown && reverted, `Live: ${liveShown}, Reverted: ${reverted}, DB1: ${String(dbHeadline1).slice(0, 30)}, DB2: ${String(dbHeadline2).slice(0, 30)}`);
+    } catch (err) {
+      record(21, "Settings change goes live", false, err.message);
+    }
+
+    // STEP 22: Product bulk activate/deactivate + search/filter
+    try {
+      await page.goto(`${BASE_URL}/admin/products/new`, { waitUntil: "domcontentloaded" });
+      await page.waitForSelector('input[name="name"]', { timeout: 15000 });
+      await page.type('input[name="name"]', "E2E Bulk Panel");
+      await page.waitForSelector('#btn-save-product');
+      await page.click('#btn-save-product');
+      await new Promise((r) => setTimeout(r, 4000));
+      const bulk = await prisma.product.findFirst({ where: { name: "E2E Bulk Panel" } });
+      let bulkOk = false, searchOk = false, emptyOk = false;
+      if (bulk) {
+        await page.goto(`${BASE_URL}/admin/products`, { waitUntil: "domcontentloaded" });
+        await page.waitForSelector("#selectAllHeader", { timeout: 15000 });
+        await page.click("#selectAllHeader");
+        await page.waitForFunction(() => document.body.textContent.includes("Bulk Actions:"), { timeout: 10000 });
+        await clickButtonByText(page, "Deactivate");
+        await new Promise((r) => setTimeout(r, 3000));
+        const afterOff = await prisma.product.findMany();
+        const allOff = afterOff.length > 0 && afterOff.every((p) => !p.isActive);
+        await page.click("#selectAllHeader");
+        await page.waitForFunction(() => document.body.textContent.includes("Bulk Actions:"), { timeout: 10000 });
+        await clickButtonByText(page, "Activate");
+        await new Promise((r) => setTimeout(r, 3000));
+        const afterOn = await prisma.product.findMany();
+        bulkOk = allOff && afterOn.length > 0 && afterOn.every((p) => p.isActive);
+        await page.goto(`${BASE_URL}/admin/products?q=Bulk`, { waitUntil: "domcontentloaded" });
+        searchOk = (await page.content()).includes("E2E Bulk Panel");
+        await page.goto(`${BASE_URL}/admin/products?q=ZZZ-NOMATCH-XYZ`, { waitUntil: "domcontentloaded" });
+        emptyOk = (await page.content()).includes("No products matched your criteria.");
+        await prisma.product.delete({ where: { id: bulk.id } }).catch(() => {});
+      }
+      record(22, "Bulk activate/deactivate + search", bulkOk && searchOk && emptyOk, `Bulk: ${bulkOk}, Search: ${searchOk}, Empty: ${emptyOk}`);
+    } catch (err) {
+      record(22, "Bulk activate/deactivate + search", false, err.message);
+    }
+
+    // STEP 23: Dashboard shows counts and latest quote
+    try {
+      await page.goto(`${BASE_URL}/admin`, { waitUntil: "domcontentloaded" });
+      await new Promise((r) => setTimeout(r, 1500));
+      const dash = await page.content();
+      const passed = dash.includes("Tarek") && (dash.includes("Products") || dash.includes("products"));
+      record(23, "Dashboard counts + latest quote", passed, "Latest quote visible with metrics");
+    } catch (err) {
+      record(23, "Dashboard counts + latest quote", false, err.message);
+    }
+
+    // STEP 24: Change password, log in with the new one, restore the original
+    try {
+      const NEW_PW = "e2e-very-long-test-password-1";
+      await page.goto(`${BASE_URL}/admin/settings/password`, { waitUntil: "domcontentloaded" });
+      await page.waitForSelector('input[name="currentPassword"]', { timeout: 15000 });
+      await page.type('input[name="currentPassword"]', ADMIN_PASSWORD);
+      await page.type('input[name="newPassword"]', NEW_PW);
+      await page.type('input[name="confirmPassword"]', NEW_PW);
+      await clickButtonByText(page, "Update Password");
+      await new Promise((r) => setTimeout(r, 2500));
+      const changed = (await page.content()).includes("Password updated successfully");
+      await page.goto(`${BASE_URL}/admin`, { waitUntil: "domcontentloaded" });
+      await page.waitForSelector("#btn-admin-logout", { timeout: 15000 });
+      await page.click("#btn-admin-logout");
+      await page.waitForFunction(() => window.location.pathname.includes("/admin/login"), { timeout: 10000 });
+      await page.waitForSelector('input[name="email"]', { timeout: 15000 });
+      await page.click('input[name="email"]', { clickCount: 3 });
+      await page.type('input[name="email"]', ADMIN_EMAIL);
+      await page.click('input[name="password"]', { clickCount: 3 });
+      await page.type('input[name="password"]', NEW_PW);
+      await page.click('button[type="submit"]');
+      await page.waitForFunction(
+        () => window.location.pathname.startsWith("/admin") && window.location.pathname !== "/admin/login",
+        { timeout: 15000 }
+      );
+      const reloginOk = true;
+      await page.goto(`${BASE_URL}/admin/settings/password`, { waitUntil: "domcontentloaded" });
+      await page.waitForSelector('input[name="currentPassword"]', { timeout: 15000 });
+      await page.type('input[name="currentPassword"]', NEW_PW);
+      await page.type('input[name="newPassword"]', ADMIN_PASSWORD);
+      await page.type('input[name="confirmPassword"]', ADMIN_PASSWORD);
+      await clickButtonByText(page, "Update Password");
+      await new Promise((r) => setTimeout(r, 2500));
+      const restored = (await page.content()).includes("Password updated successfully");
+      record(24, "Password change + relogin + restore", changed && reloginOk && restored, `Changed: ${changed}, Restored: ${restored}`);
+    } catch (err) {
+      record(24, "Password change + relogin + restore", false, err.message);
+    }
+
+    // STEP 25: Confirm unauthenticated requests to admin pages and actions are rejected
     try {
       const incognitoContext = await browser.createBrowserContext();
       const incognitoPage = await incognitoContext.newPage();
@@ -700,16 +1091,16 @@ async function main() {
       await incognitoContext.close();
       const passed = redirectedToLogin && productsRedirected;
       record(
-        16,
+        25,
         "Reject unauthenticated requests to admin",
         passed,
         `Redirected to: ${unauthAdminUrl}`
       );
     } catch (err) {
-      record(16, "Reject unauthenticated requests to admin", false, err.message);
+      record(25, "Reject unauthenticated requests to admin", false, err.message);
     }
 
-    // STEP 17: Log out
+    // STEP 26: Log out
     try {
       await page.goto(`${BASE_URL}/admin`, { waitUntil: "domcontentloaded" });
       await page.waitForSelector("#btn-admin-logout");
@@ -722,9 +1113,9 @@ async function main() {
       }
       const logoutUrl = page.url();
       const passed = logoutUrl.includes("/admin/login");
-      record(17, "Log out", passed, `Landed at: ${logoutUrl}`);
+      record(26, "Log out", passed, `Landed at: ${logoutUrl}`);
     } catch (err) {
-      record(17, "Log out", false, err.message);
+      record(26, "Log out", false, err.message);
     }
   } catch (fatalErr) {
     console.error("FATAL SUITE ERROR:", fatalErr);
@@ -773,8 +1164,8 @@ async function main() {
     }
     console.log("================================================================================\n");
 
-    if (allPassed && results.length >= 17) {
-      console.log("\x1b[32mALL 17 ADMIN VERIFICATION STEPS PASSED SUCCESSFULLY!\x1b[0m\n");
+    if (allPassed && results.length >= 26) {
+      console.log("\x1b[32mALL 26 ADMIN VERIFICATION STEPS PASSED SUCCESSFULLY!\x1b[0m\n");
       process.exit(0);
     } else {
       console.error("\x1b[31mSOME STEPS FAILED OR DID NOT EXECUTE. EXITING WITH CODE 1.\x1b[0m\n");

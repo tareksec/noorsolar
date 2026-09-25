@@ -1,7 +1,7 @@
 import React from "react";
 import { db } from "@/lib/db";
 import { Prisma } from "@prisma/client";
-import { revalidatePath } from "next/cache";
+import { revalidatePublic } from "@/lib/revalidate";
 import { getSession } from "@/lib/auth";
 import Link from "next/link";
 import { Plus, Search, ChevronLeft, ChevronRight } from "lucide-react";
@@ -21,8 +21,8 @@ async function toggleProductFeatured(formData: FormData) {
       where: { id },
       data: { isFeatured: !current },
     });
-    revalidatePath("/admin/products");
-    revalidatePath("/");
+    revalidatePublic("/admin/products");
+    revalidatePublic("/");
   }
 }
 
@@ -40,9 +40,9 @@ async function toggleProductActive(formData: FormData) {
       where: { id },
       data: { isActive: !current },
     });
-    revalidatePath("/admin/products");
-    revalidatePath("/products");
-    revalidatePath("/");
+    revalidatePublic("/admin/products");
+    revalidatePublic("/products");
+    revalidatePublic("/");
   }
 }
 
