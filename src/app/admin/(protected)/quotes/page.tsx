@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { Prisma } from "@prisma/client";
-import { revalidatePath } from "next/cache";
+import { revalidatePublic } from "@/lib/revalidate";
 import { getSession } from "@/lib/auth";
 import { Download, Search } from "lucide-react";
 
@@ -21,8 +21,8 @@ async function updateQuoteStatus(formData: FormData) {
       where: { id },
       data: { status, note: note || null },
     });
-    revalidatePath("/admin/quotes");
-    revalidatePath("/admin");
+    revalidatePublic("/admin/quotes");
+    revalidatePublic("/admin");
   }
 }
 
@@ -211,6 +211,13 @@ export default async function AdminQuotesPage({
                 </p>
               )}
 
+              {q.note && (
+                <p className="text-xs text-[#111311] bg-amber-50 border border-amber-200 p-3 rounded-xl">
+                  <span className="font-mono font-bold">Internal note: </span>
+                  {q.note}
+                </p>
+              )}
+
               {/* Actions & Status Updates */}
               <div className="pt-3 border-t border-[#EDEDED] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
@@ -230,8 +237,15 @@ export default async function AdminQuotesPage({
                   </a>
                 </div>
 
-                <form action={updateQuoteStatus} className="flex items-center gap-2">
+                <form action={updateQuoteStatus} className="flex flex-wrap items-center gap-2">
                   <input type="hidden" name="id" value={q.id} />
+                  <input
+                    type="text"
+                    name="note"
+                    defaultValue={q.note ?? ""}
+                    placeholder="Internal note (staff only)..."
+                    className="px-3 py-1.5 rounded-full bg-[#EDEDED] text-xs text-[#111311] outline-none placeholder:text-[#5C605C] min-w-44 flex-1"
+                  />
                   <select
                     name="status"
                     defaultValue={q.status}

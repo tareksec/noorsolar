@@ -19,6 +19,7 @@ Status values: `Not started` Â· `In progress` Â· `Done` Â· `Blocked`
 
 | # | Task | Status | Lead reviewed | Last updated |
 |---|---|---|---|---|
+| Admin-Fix | Diagnose & fix all broken admin panel features, uploads, & DB | Done | No | 2026-09-23 |
 | 0 | Read AGENT.md, PRD.md, TRD.md, DESIGN.md and report back | Done | No | 2026-09-19 |
 | 1 | Project setup, layout shell, placeholder routes | Done | No | 2026-09-19 |
 | 1b | Migrate design tokens to DESIGN.md, remove dark toggle and old colors | Done | No | 2026-09-19 |
@@ -48,6 +49,57 @@ Status values: `Not started` Â· `In progress` Â· `Done` Â· `Blocked`
 ---
 
 ## 2. Task log (newest first)
+
+### Task Admin-Fix — Complete Admin Panel & Image Upload Fixes — 2026-09-23
+Branch: `task-admin-fix`
+Status: Done
+
+#### Problem Diagnostics & Root Cause Analysis
+1. **Server Action Upload Size Ceiling**: Next.js defaults Server Actions payload body size to 1MB. Submitting multi-image uploads (such as high-res product galleries or large datasheets) through Server Actions failed or hung silently.
+2. **Database Driver Incompatibility**: `src/lib/db.ts` was hardcoded to enforce MySQL protocol, converting any SQLite/file database connection into an invalid MySQL connection string (`mysql://root:@127.0.0.1:3306/noorsolar`). Additionally, `prisma/schema.prisma` contained MySQL `@db.Text` annotations incompatible with SQLite.
+3. **Form Parameter Name Disparity**: Datasheet file inputs were submitted as `datasheetFile` in form components while actions looked for `doc_datasheet_file`.
+4. **Missing UI Upload Feedback**: `ProductFormClient` lacked visual previews when selecting image files, giving no indication of file names, size, count, or a way to reset selection before saving.
+5. **Session Cookie Direct Injection**: Admin login needed explicit cookie assignment directly on outgoing `NextResponse` to avoid middleware cookie latency.
+6. **Form Ingestion**: Contact quote form missed the `company` field and submit button identifier for end-to-end B2B quote testing.
+
+#### Implementation Details
+- **Next.js Server Actions Payload (`next.config.ts`)**:
+  - Configured `experimental: { serverActions: { bodySizeLimit: "25mb" } }` to comfortably allow high-resolution multi-file galleries and PDF datasheets.
+- **Database Connection Flexibility (`src/lib/db.ts`, `prisma/schema.prisma`)**:
+  - Allowed `file:` and `sqlite:` connection strings in `sanitizeDatabaseUrl`.
+  - Removed unsupported `@db.Text` annotations in `prisma/schema.prisma` for SQLite compatibility while preserving string fields.
+  - Added migration `prisma/migrations/20260923214500_add_project_model/migration.sql` with cascading delete constraints for `Project` and `ProductReview`.
+  - Updated `scripts/hostinger-setup.js` to dynamically detect MySQL vs. SQLite environments without breaking Hostinger production deployment.
+- **Admin Product & Blog Forms (`src/components/admin/`)**:
+  - `product-form-client.tsx`: Added stateful multi-image thumbnail previews, image count pill, file size calculations, and a "Clear Selection" button. Added `id="product-images-input"` and aligned datasheet input naming.
+  - `blog-form-client.tsx`: Added `#blog-inline-image-input` and image type filters to clearly separate inline markdown image uploads from the cover photo.
+  - `src/app/admin/actions/products.ts`: Normalized document extraction to check both `doc_datasheet_file` and `datasheetFile`.
+- **Admin Authentication & Session Reliability**:
+  - `src/app/api/admin/login/route.ts`: Explicitly attached `noor_admin_session` cookie directly to outgoing `NextResponse`.
+  - `src/app/admin/login/page.tsx`: Extracted credentials from `new FormData(e.currentTarget)`.
+- **Contact Form B2B Lead Field**:
+  - `src/components/contact/contact-form.tsx`: Added `company` input field and `id="btn-submit-quote"` on submit button.
+
+#### Verification Suite Results
+- `npm run check:admin`: **17/17 steps PASSED (100% SUCCESS)** running against a live production build (`npm run build && npm start`) on port 3005:
+  - Step 1: Log in — PASS
+  - Step 2: Create a category — PASS
+  - Step 3: Create product with 3 images and PDF datasheet — PASS
+  - Step 4: Edit product — PASS
+  - Step 5: Duplicate product — PASS
+  - Step 6: Reorder images — PASS
+  - Step 7: Toggle featured and active — PASS
+  - Step 8: Check public product page — PASS
+  - Step 9: Delete product — PASS
+  - Step 10: Create and publish blog post with inserted image — PASS
+  - Step 11: Verify blog post on /blog, /blog/[slug], and sitemap.xml — PASS
+  - Step 12: Unpublish blog post and verify hidden — PASS
+  - Step 13: Add admin review and see on product page — PASS
+  - Step 14: Public review moderation lifecycle — PASS
+  - Step 15: Submit quote and verify in admin quotes — PASS
+  - Step 16: Reject unauthenticated requests to admin — PASS
+  - Step 17: Log out — PASS
+- `npm run build`: **PASSED** (clean compilation across all 52 static routes).
 
 ### Task I18N-B — Write all the Bangla content — 2026-09-20
 Branch: `task-i18n-b`

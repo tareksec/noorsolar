@@ -101,6 +101,10 @@ async function run() {
     console.log(`Authenticating admin on ${BASE_URL}/admin/login with ${ADMIN_EMAIL} ...`);
     await authPage.goto(`${BASE_URL}/admin/login`, { waitUntil: "networkidle0" });
     
+    // Fill both credentials (the login action requires a non-empty email)
+    await authPage.waitForSelector('input[name="email"]', { timeout: 15000 });
+    await authPage.click('input[name="email"]', { clickCount: 3 });
+    await authPage.type('input[name="email"]', ADMIN_EMAIL);
     // Wait for password input to be ready
     await authPage.waitForSelector('input[name="password"]', { timeout: 10000 });
     await authPage.type('input[name="password"]', ADMIN_PASSWORD);
