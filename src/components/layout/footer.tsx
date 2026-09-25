@@ -381,17 +381,42 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
 
           </div>
 
-        {/* Sub-Footer Copyright & Disclaimer */}
-        <div className="py-4 sm:py-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-white/60">
-          <div className="flex items-center gap-4 flex-wrap">
+        {/* Sub-Footer Copyright, Legal & Developer Credits */}
+        <div className="py-4 sm:py-5 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] font-mono text-white/60">
+          <div className="flex items-center gap-4 flex-wrap justify-center md:justify-start">
             <span>&copy; {currentYear} {isBn ? "নূর সোলার এনার্জি। সর্বস্বত্ব সংরক্ষিত।" : "Noor Solar Energy. All rights reserved."}</span>
           </div>
-          <nav aria-label="Legal" className="flex items-center gap-4 flex-wrap">
-            <Link href="/contact" className="hover:text-[#FEBE16] inline-flex items-center justify-center px-1 min-w-[44px] min-h-[44px] transition-colors">
+
+          {/* Developer Credit */}
+          <div className="flex items-center gap-2 text-white/70 flex-wrap justify-center">
+            <span>{isBn ? "ডেভেলপমেন্ট:" : "Developed by:"}</span>
+            <a
+              href="https://artxdev.tech/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#FEBE16] hover:underline font-semibold transition-colors"
+            >
+              artxdev.tech
+            </a>
+            <span className="text-white/30">•</span>
+            <a
+              href="https://www.linkedin.com/in/mdtarek404/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-white hover:text-[#FEBE16] transition-colors"
+              title="MD Tarek | LinkedIn"
+            >
+              <LinkedinIcon className="w-3.5 h-3.5 text-[#0A66C2] bg-white rounded-[2px]" />
+              <span className="font-medium underline decoration-white/30 hover:decoration-[#FEBE16]">MD Tarek</span>
+            </a>
+          </div>
+
+          <nav aria-label="Legal" className="flex items-center gap-4 flex-wrap justify-center md:justify-end">
+            <Link href="/contact" className="hover:text-[#FEBE16] inline-flex items-center justify-center px-1 min-h-[36px] transition-colors">
               {isBn ? "বাণিজ্যিক শর্তাবলী" : "Wholesale Terms"}
             </Link>
             <span>&bull;</span>
-            <span className="inline-flex items-center min-h-[44px]">{isBn ? "বাংলাদেশের B2B শিল্পের জন্য নিবেদিত" : "Made for B2B Bangladesh"}</span>
+            <span className="inline-flex items-center min-h-[36px]">{isBn ? "বাংলাদেশের B2B শিল্পের জন্য নিবেদিত" : "Made for B2B Bangladesh"}</span>
           </nav>
         </div>
 
