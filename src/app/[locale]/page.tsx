@@ -16,7 +16,7 @@ import { getPublishedProjects } from "@/lib/data/projects";
 import { ProjectsShowcase } from "@/components/sections/projects-showcase";
 
 import { HeroSection } from "@/components/sections/hero-section";
-import { CategoryDock } from "@/components/sections/category-dock";
+
 import { StatsBand } from "@/components/sections/stats-band";
 import { CertificationsSection } from "@/components/sections/certifications-section";
 import { OrderingSteps } from "@/components/sections/ordering-steps";
@@ -171,8 +171,8 @@ export default async function HomePage({
       {/* 2. Text Marquee Band */}
       <TextMarquee locale={locale} />
 
-      {/* 3. Category Dock ("What We Offer") */}
-      <CategoryDock categories={categories} locale={locale} />
+      {/* 3. WE PROVIDE (Core Supply Lineup) */}
+      <ServicesSolutions locale={locale} />
 
       {/* 4. Products Tabbed Section (Solar, Battery, Inverter - 4x2 Grid) */}
       <HomeProductsTabs products={allProducts} locale={locale} />
@@ -183,8 +183,6 @@ export default async function HomePage({
       {/* 6. B2B Buyer Segmentation (EPCs, Industrial & Commercial, Dealers) */}
       <BuyerSegmentation locale={locale} />
 
-      {/* 7. Complete Solar Solutions For Every Project (Design Match) */}
-      <ServicesSolutions locale={locale} />
 
       {/* 5. Trusted Expertise & Key Metrics (Design Match) */}
       <WhyChooseUs locale={locale} stats={stats} />
