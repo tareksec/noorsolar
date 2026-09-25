@@ -27,6 +27,8 @@ import { SustainabilityImpact } from "@/components/sections/sustainability-impac
 import { VideoCtaBanner } from "@/components/sections/video-cta-banner";
 import { DynamicHomeSections } from "@/components/sections/dynamic-home-sections";
 import { HomeProductsTabs } from "@/components/sections/home-products-tabs";
+import { FeaturedProducts } from "@/components/sections/featured-products";
+import { RecentDeals } from "@/components/sections/recent-deals";
 import { BuyerSegmentation } from "@/components/sections/buyer-segmentation";
 import { HomeContactBanner } from "@/components/sections/home-contact-banner";
 import { SITE_URL } from "@/lib/site-config";
@@ -177,12 +179,18 @@ export default async function HomePage({
       {/* 4. Products Tabbed Section (Solar, Battery, Inverter - 4x2 Grid) */}
       <HomeProductsTabs products={allProducts} locale={locale} />
 
+      {/* Recent Deals Section */}
+      <RecentDeals products={allProducts} stats={stats} locale={locale} />
+
       {/* 5. Business Statistics Band (Server Component - 4 Counters) */}
       <StatsBand stats={stats} />
 
       {/* 6. B2B Buyer Segmentation (EPCs, Industrial & Commercial, Dealers) */}
       <BuyerSegmentation locale={locale} />
 
+
+      {/* Featured Products (Top In-Stock Equipment) */}
+      <FeaturedProducts products={featuredProducts} locale={locale} />
 
       {/* 5. Trusted Expertise & Key Metrics (Design Match) */}
       <WhyChooseUs locale={locale} stats={stats} />
