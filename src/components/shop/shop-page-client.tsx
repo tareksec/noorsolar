@@ -9,6 +9,7 @@ import {
   ShoppingBag,
   Heart,
   ArrowRight,
+  ArrowLeft,
   Sparkles,
   CheckCircle2,
   Clock,
@@ -20,6 +21,10 @@ import {
   X,
   Check,
   ShoppingBasket,
+  Home,
+  LayoutGrid,
+  Phone,
+  Star,
 } from "lucide-react";
 
 export interface ShopProduct {
@@ -90,6 +95,7 @@ export function ShopPageClient({
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [showSavedOnly, setShowSavedOnly] = useState(false);
+  const [sortBy, setSortBy] = useState<"featured" | "price-asc" | "price-desc" | "name">("featured");
 
   // Load saved favorites & cart items from localStorage after mount
   useEffect(() => {
@@ -228,6 +234,26 @@ export function ShopPageClient({
     });
   }, [products, selectedCategory, searchQuery, showSavedOnly, savedProductIds]);
 
+  // Sorted products for mobile & desktop views
+  const sortedProducts = useMemo(() => {
+    const list = [...filteredProducts];
+    if (sortBy === "price-asc") {
+      return list.sort((a, b) => (a.priceBdt || 0) - (b.priceBdt || 0));
+    }
+    if (sortBy === "price-desc") {
+      return list.sort((a, b) => (b.priceBdt || 0) - (a.priceBdt || 0));
+    }
+    if (sortBy === "name") {
+      return list.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    return list;
+  }, [filteredProducts, sortBy]);
+
+  const activeCategoryObj = useMemo(() => {
+    if (selectedCategory === "all") return null;
+    return categories.find((c) => c.slug === selectedCategory) || null;
+  }, [categories, selectedCategory]);
+
   const popularCategoryCards = [
     {
       id: "solar-panels",
@@ -268,9 +294,339 @@ export function ShopPageClient({
   ];
 
   return (
-    <main className="min-h-screen bg-[#F7F8F5] pt-28 sm:pt-36 pb-20 px-3 sm:px-6 lg:px-8">
-      {/* Outer App Window / Canvas matching mockup */}
-      <div className="max-w-[1380px] mx-auto bg-white rounded-[32px] sm:rounded-[40px] shadow-[0_20px_70px_rgba(7,64,49,0.06)] border border-[#DCE4E0] relative p-5 sm:p-8 lg:p-10">
+    <main className="min-h-screen bg-[#F7F8F5] pt-16 lg:pt-36 pb-24 lg:pb-20 px-3 sm:px-6 lg:px-8">
+      {/* ========================================================================= */}
+      {/* MOBILE APP LAYOUT (Matches reference screenshot for mobile version)       */}
+      {/* ========================================================================= */}
+      <div className="block lg:hidden max-w-lg mx-auto pb-4">
+        {/* 1. Mobile App Top Bar */}
+        <div className="flex items-center justify-between py-2 mb-3">
+          <Link
+            href="/"
+            className="w-10 h-10 rounded-full bg-white border border-[#DCE4E0] shadow-xs flex items-center justify-center text-[#17251F] hover:bg-[#F1F4F1] transition-colors"
+            aria-label="Back to home"
+          >
+            <ArrowLeft className="w-5 h-5 text-[#074031]" />
+          </Link>
+
+          <h1 className="text-base font-bold text-[#074031] tracking-tight uppercase">
+            {showSavedOnly
+              ? isBn
+                ? "সংরক্ষিত পণ্য"
+                : "Wishlist"
+              : activeCategoryObj
+              ? activeCategoryObj.name
+              : isBn
+              ? "ক্যাটাগরি"
+              : "Category"}
+          </h1>
+
+          <div className="flex items-center gap-2">
+            {/* Wishlist Heart Toggle */}
+            <button
+              type="button"
+              onClick={() => setShowSavedOnly((prev) => !prev)}
+              className={`relative w-10 h-10 rounded-full border border-[#DCE4E0] flex items-center justify-center shadow-xs transition-colors ${
+                showSavedOnly ? "bg-rose-50 text-rose-600" : "bg-white text-slate-600"
+              }`}
+              aria-label="Toggle Wishlist"
+            >
+              <Heart className={`w-5 h-5 ${showSavedOnly ? "fill-rose-500 text-rose-500" : ""}`} />
+              {isMounted && totalSavedCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center shadow-xs">
+                  {totalSavedCount}
+                </span>
+              )}
+            </button>
+
+            {/* Cart / Quote Bag Toggle */}
+            <button
+              type="button"
+              onClick={() => setIsCartOpen(true)}
+              className="relative w-10 h-10 rounded-full bg-white border border-[#DCE4E0] flex items-center justify-center shadow-xs text-[#074031] hover:bg-[#F1F4F1] transition-colors"
+              aria-label="Open Quote Bag"
+            >
+              <ShoppingBag className="w-5 h-5" />
+              {isMounted && totalCartCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#FEBE16] text-[#052F25] text-[10px] font-bold flex items-center justify-center shadow-xs">
+                  {totalCartCount}
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* 2. Mobile Search Input Bar */}
+        <div className="relative mb-3">
+          <div className="flex items-center bg-white border border-[#DCE4E0] rounded-2xl px-3.5 py-2.5 shadow-xs focus-within:ring-2 focus-within:ring-[#074031]/20">
+            <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={isBn ? "সোলার প্যানেল, ইনভার্টার বা মডেল খুঁজুন..." : "Search for equipment, brands..."}
+              className="w-full bg-transparent border-none text-xs sm:text-sm text-[#17251F] placeholder:text-slate-400 focus:outline-none"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="text-slate-400 hover:text-slate-600 p-1"
+                aria-label="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* 3. Horizontal Category Selection Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none mb-3.5 -mx-1 px-1">
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedCategory("all");
+              setShowSavedOnly(false);
+            }}
+            className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all shadow-xs ${
+              selectedCategory === "all" && !showSavedOnly
+                ? "bg-[#074031] text-white"
+                : "bg-white text-[#62706A] border border-[#DCE4E0]"
+            }`}
+          >
+            {isBn ? "সকল পণ্য" : "All"} ({products.length})
+          </button>
+          {categories.map((cat) => {
+            const isSelected = selectedCategory === cat.slug && !showSavedOnly;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => {
+                  setSelectedCategory(cat.slug);
+                  setShowSavedOnly(false);
+                }}
+                className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all shadow-xs ${
+                  isSelected
+                    ? "bg-[#074031] text-white"
+                    : "bg-white text-[#62706A] border border-[#DCE4E0]"
+                }`}
+              >
+                {cat.name}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 4. Active Category Teaser Banner (Matches screenshot middle card) */}
+        {!showSavedOnly && (
+          <div className="relative rounded-2xl bg-gradient-to-r from-[#074031] via-[#0A4E3D] to-[#07362A] text-white p-4 mb-3.5 overflow-hidden flex items-center justify-between shadow-xs border border-[#0B513E]">
+            <div className="max-w-[65%] z-10">
+              <span className="inline-block text-[10px] font-mono uppercase tracking-wider text-[#CEF23E] font-bold mb-1">
+                {isBn ? "পাইকারি সরবরাহ" : "B2B WHOLESALE"}
+              </span>
+              <h2 className="text-sm sm:text-base font-bold leading-tight mb-1 text-white">
+                {selectedCategory === "solar-panels"
+                  ? isBn
+                    ? "টায়ার-১ সোলার প্যানেল"
+                    : "Tier-1 Solar Panels"
+                  : selectedCategory === "solar-inverters"
+                  ? isBn
+                    ? "হাইব্রিড সোলার ইনভার্টার"
+                    : "Commercial Inverters"
+                  : selectedCategory === "lithium-batteries"
+                  ? isBn
+                    ? "লিথিয়াম LiFePO4 ব্যাটারি"
+                    : "LiFePO4 Storage"
+                  : isBn
+                  ? "সরাসরি আমদানিকৃত সরঞ্জাম"
+                  : "Direct Imported Equipment"}
+              </h2>
+              <p className="text-[11px] text-white/80 line-clamp-1 mb-2.5">
+                {isBn
+                  ? "অফিসিয়াল ফ্যাক্টরি ওয়ারেন্টি ও রেডি স্টক"
+                  : "Genuine factory warranty & ready stock"}
+              </p>
+              <button
+                type="button"
+                onClick={() => setIsCartOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEBE16] text-[#052F25] text-[10px] font-bold shadow-xs active:scale-95 transition-transform"
+              >
+                <span>{isBn ? "কোটেশন নিন" : "Request Quote"}</span>
+                <ArrowRight className="w-3 h-3" />
+              </button>
+            </div>
+            <div className="relative w-20 h-20 shrink-0">
+              <Image
+                src={
+                  selectedCategory === "solar-panels"
+                    ? "/solar-images/solar-panel-3d-isolated.webp"
+                    : selectedCategory === "solar-inverters"
+                    ? "/demo/inverter-10kw-hybrid-front.svg"
+                    : selectedCategory === "lithium-batteries"
+                    ? "/demo/battery-51v-200ah-powerwall.svg"
+                    : "/solar-images/solar-panel-3d-isolated.webp"
+                }
+                alt="Category Banner Preview"
+                fill
+                className="object-contain drop-shadow-md"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* 5. Sort & Filter Bar (Matching screenshot Sort ▾ and Filter icon) */}
+        <div className="flex items-center justify-between mb-3 px-1">
+          <div className="flex items-center gap-1.5 bg-white border border-[#DCE4E0] rounded-xl px-3 py-1.5 shadow-xs">
+            <span className="text-[11px] text-[#62706A] font-medium">{isBn ? "সর্ট:" : "Sort:"}</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as any)}
+              className="bg-transparent text-[#17251F] font-bold text-xs focus:outline-none cursor-pointer"
+            >
+              <option value="featured">{isBn ? "ফিচার্ড" : "Featured"}</option>
+              <option value="price-asc">{isBn ? "কম দাম আগে" : "Price: Low to High"}</option>
+              <option value="price-desc">{isBn ? "বেশি দাম আগে" : "Price: High to Low"}</option>
+              <option value="name">{isBn ? "নাম (A-Z)" : "Name (A-Z)"}</option>
+            </select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] font-mono font-medium text-[#62706A]">
+              {sortedProducts.length} {isBn ? "টি পণ্য" : "items"}
+            </span>
+          </div>
+        </div>
+
+        {/* 6. 2-Column Mobile Product Grid (Matching screenshot grid-cols-2) */}
+        {sortedProducts.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-2xl border border-[#DCE4E0] p-6 shadow-xs">
+            <p className="text-xs sm:text-sm font-semibold text-[#62706A] mb-3">
+              {showSavedOnly
+                ? isBn
+                  ? "আপনার কোনো সংরক্ষিত সরঞ্জাম নেই"
+                  : "You haven't saved any equipment yet"
+                : isBn
+                ? "কোনো পণ্য পাওয়া যায়নি"
+                : "No products found"}
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedCategory("all");
+                setSearchQuery("");
+                setShowSavedOnly(false);
+              }}
+              className="px-4 py-2 rounded-full bg-[#074031] text-white text-xs font-bold"
+            >
+              {isBn ? "ফিল্টার রিসেট করুন" : "Reset filters"}
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5">
+            {sortedProducts.map((product) => {
+              const primaryImg = product.images[0]?.url || "/demo/category-panels.svg";
+              const isSaved = savedProductIds.includes(product.id);
+              const inCartItem = cartItems.find((i) => i.id === product.id);
+
+              return (
+                <div
+                  key={product.id}
+                  onClick={() => router.push(`/product/${product.slug}`)}
+                  className="group relative flex flex-col justify-between rounded-2xl bg-white border border-[#E2E7E2] p-2.5 shadow-[0_2px_10px_rgba(0,0,0,0.03)] hover:shadow-md transition-all cursor-pointer"
+                >
+                  {/* Product Image Box */}
+                  <div className="relative w-full aspect-square rounded-xl bg-[#F4F6F4] p-2 mb-2 flex items-center justify-center overflow-hidden">
+                    <Image
+                      src={primaryImg}
+                      alt={product.name}
+                      fill
+                      sizes="50vw"
+                      className="object-contain p-1.5 group-hover:scale-105 transition-transform duration-300"
+                    />
+
+                    {/* Status Badge */}
+                    <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-[#074031] text-white shadow-xs">
+                      {product.stockStatus === "IN_STOCK"
+                        ? isBn
+                          ? "স্টক"
+                          : "Stock"
+                        : isBn
+                        ? "ইনডেন্ট"
+                        : "Indent"}
+                    </span>
+
+                    {/* Heart Button */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleSaveProduct(product.id);
+                      }}
+                      className="absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-white/95 shadow-xs flex items-center justify-center text-slate-400 hover:text-rose-500 transition-colors"
+                      aria-label="Save product"
+                    >
+                      <Heart className={`w-3.5 h-3.5 ${isSaved ? "fill-rose-500 text-rose-500" : ""}`} />
+                    </button>
+                  </div>
+
+                  {/* Product Title */}
+                  <div className="flex-grow">
+                    {product.brand && (
+                      <span className="text-[10px] font-mono text-[#62706A] uppercase block truncate mb-0.5">
+                        {product.brand}
+                      </span>
+                    )}
+                    <h3 className="text-xs font-bold text-[#17251F] line-clamp-2 leading-snug mb-1.5">
+                      {product.name}
+                    </h3>
+                  </div>
+
+                  {/* Price & Add to Bag / Quote */}
+                  <div className="pt-2 border-t border-[#EDF1EE] flex items-center justify-between mt-auto">
+                    <div>
+                      {product.showPrice && product.priceBdt ? (
+                        <span className="text-xs font-mono font-bold text-[#17251F] block">
+                          ৳{product.priceBdt.toLocaleString()}
+                        </span>
+                      ) : (
+                        <span className="text-[10px] font-mono font-semibold text-[#074031] block">
+                          {isBn ? "কোটেশনে দর" : "On Quote"}
+                        </span>
+                      )}
+                      <span className="text-[9px] font-mono text-[#62706A] block truncate max-w-[80px]">
+                        {product.moq || (isBn ? "MOQ: ১ প্যালেট" : "MOQ: 1 Pallet")}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(product);
+                      }}
+                      className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors shadow-xs ${
+                        inCartItem
+                          ? "bg-emerald-600 text-white"
+                          : "bg-[#074031] hover:bg-[#FEBE16] text-white hover:text-[#052F25]"
+                      }`}
+                      title={isBn ? "কোটেশন ব্যাগে যোগ করুন" : "Add to quote bag"}
+                      aria-label={isBn ? "কোটেশন ব্যাগে যোগ করুন" : "Add to quote bag"}
+                    >
+                      {inCartItem ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* ========================================================================= */}
+      {/* DESKTOP CANVAS (Preserved for desktop screens >= lg)                      */}
+      {/* ========================================================================= */}
+      <div className="hidden lg:block max-w-[1380px] mx-auto bg-white rounded-[32px] sm:rounded-[40px] shadow-[0_20px_70px_rgba(7,64,49,0.06)] border border-[#DCE4E0] relative p-5 sm:p-8 lg:p-10">
         
         {/* Main 2-Column Grid: Left Sidebar + Right Content */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">

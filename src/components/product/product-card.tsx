@@ -67,23 +67,23 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
     switch (status) {
       case "IN_STOCK":
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-[#074031]/10 text-[#074031] border border-[#074031]/20">
+          <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-[11px] font-mono font-medium bg-[#074031]/10 text-[#074031] border border-[#074031]/20 whitespace-nowrap">
             <span className="w-1.5 h-1.5 rounded-full bg-[#074031]"></span>
             {isBn ? "স্টকে আছে" : "In Stock"}
           </span>
         );
       case "INCOMING":
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-amber-100 text-amber-900 border border-amber-300">
-            <Clock className="w-3.5 h-3.5 text-amber-700" />
+          <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-[11px] font-mono font-medium bg-amber-100 text-amber-900 border border-amber-300 whitespace-nowrap">
+            <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-700" />
             {isBn ? "আসছে" : "Incoming"}
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-[#F1F4F1] text-[#62706A] border border-[#DCE4E0]">
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#62706A]" />
-            {isBn ? "অনুরোধে প্রাপ্য" : "On Request"}
+          <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-[11px] font-mono font-medium bg-[#F1F4F1] text-[#62706A] border border-[#DCE4E0] whitespace-nowrap">
+            <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#62706A]" />
+            {isBn ? "অনুরোধে" : "On Request"}
           </span>
         );
     }
@@ -103,10 +103,10 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
       onPointerLeave={handlePointerLeave}
       onClick={(e) => {
         const target = e.target as HTMLElement;
-        if (target.closest("button") || target.closest("a[href*='/contact']")) return;
+        if (target.closest("button") || target.closest("a[href*='/quote']")) return;
         router.push(`/product/${product.slug}`);
       }}
-      className="group relative flex flex-col justify-between p-5 rounded-[28px] bg-white border border-[#DCE4E0] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] transition-all duration-300 hover:shadow-[0_16px_36px_-10px_rgba(7,64,49,0.08)] hover:border-[#074031]/30 hover:-translate-y-1 h-full cursor-pointer"
+      className="group relative flex flex-col justify-between p-3 sm:p-5 rounded-2xl sm:rounded-[28px] bg-white border border-[#DCE4E0] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] transition-all duration-300 hover:shadow-[0_16px_36px_-10px_rgba(7,64,49,0.08)] hover:border-[#074031]/30 hover:-translate-y-1 h-full cursor-pointer"
     >
       {/* Top Image Container with 3D Tilt on Pointer Devices */}
       <div
@@ -114,11 +114,11 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         onPointerMove={handlePointerMove}
         onClick={(e) => {
           const target = e.target as HTMLElement;
-          if (target.closest("button") || target.closest("a[href*='/contact']")) return;
+          if (target.closest("button") || target.closest("a[href*='/quote']")) return;
           e.stopPropagation();
           router.push(`/product/${product.slug}`);
         }}
-        className="relative w-full aspect-[16/11] rounded-2xl overflow-hidden bg-[#F1F4F1] flex items-center justify-center p-3 border border-[#DCE4E0] cursor-pointer group/img"
+        className="relative w-full aspect-[16/11] rounded-xl sm:rounded-2xl overflow-hidden bg-[#F1F4F1] flex items-center justify-center p-2 sm:p-3 border border-[#DCE4E0] cursor-pointer group/img"
       >
         <Link
           href={`/product/${product.slug}`}
@@ -136,20 +136,20 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               alt={primaryAlt}
               fill
               priority={priority}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
               className="object-cover transition-transform duration-300 group-hover/img:scale-105 pointer-events-auto cursor-pointer"
             />
           </div>
         </Link>
 
         {/* Stock Status Badge */}
-        <div className="absolute top-3 left-3 z-10 pointer-events-none">
+        <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 pointer-events-none">
           {getStockBadge(product.stockStatus)}
         </div>
 
         {/* Category Tag */}
         {product.category && (
-          <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-mono uppercase tracking-wider text-[#17251F] border border-[#DCE4E0] pointer-events-none">
+          <div className="hidden sm:block absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-mono uppercase tracking-wider text-[#17251F] border border-[#DCE4E0] pointer-events-none">
             {product.category.name}
           </div>
         )}
@@ -175,13 +175,13 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
       </div>
 
       {/* Product Information */}
-      <div className="flex flex-col flex-grow pt-4 pb-2">
+      <div className="flex flex-col flex-grow pt-2.5 sm:pt-4 pb-1 sm:pb-2">
         {product.model && (
-          <span className="text-[11px] font-mono text-[#62706A] mb-1">
+          <span className="text-[10px] sm:text-[11px] font-mono text-[#62706A] mb-0.5 sm:mb-1 truncate">
             {product.model}
           </span>
         )}
-        <h2 className="text-base font-bold leading-snug">
+        <h2 className="text-xs sm:text-base font-bold leading-snug">
           <Link
             href={`/product/${product.slug}`}
             onClick={(e) => {
@@ -189,7 +189,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               e.stopPropagation();
               router.push(`/product/${product.slug}`);
             }}
-            className="text-[#17251F] group-hover:text-[#074031] line-clamp-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FEBE16] rounded-xs cursor-pointer min-h-[44px] flex items-center"
+            className="text-[#17251F] group-hover:text-[#074031] line-clamp-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FEBE16] rounded-xs cursor-pointer min-h-[32px] sm:min-h-[44px] flex items-center"
           >
             {product.name}
           </Link>
@@ -197,10 +197,10 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
         {/* Technical Specs Rows */}
         {previewSpecs.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-[#DCE4E0] flex flex-col gap-1.5">
+          <div className="mt-2 pt-2 sm:mt-3 sm:pt-3 border-t border-[#DCE4E0] flex flex-col gap-1 sm:gap-1.5">
             {previewSpecs.map((spec, i) => (
-              <div key={i} className="flex items-center justify-between text-xs">
-                <span className="text-[#62706A] truncate pr-2">{spec.label}</span>
+              <div key={i} className="flex items-center justify-between text-[10px] sm:text-xs">
+                <span className="text-[#62706A] truncate pr-1 sm:pr-2">{spec.label}</span>
                 <span className="font-mono font-medium text-[#17251F] shrink-0">
                   {spec.value}
                 </span>
@@ -210,44 +210,44 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         )}
 
         {/* Wholesale / MOQ Visibility */}
-        <div className="mt-2.5 pt-2.5 border-t border-[#DCE4E0] flex items-center justify-between text-[11px] font-mono">
+        <div className="mt-1.5 pt-1.5 sm:mt-2.5 sm:pt-2.5 border-t border-[#DCE4E0] flex items-center justify-between text-[10px] sm:text-[11px] font-mono">
           <span className="text-[#62706A]">
-            {product.moq ? (isBn ? "ন্যূনতম অর্ডার:" : "MOQ:") : (isBn ? "সরবরাহ স্কেল:" : "Wholesale:")}
+            {product.moq ? (isBn ? "MOQ:" : "MOQ:") : (isBn ? "স্কেল:" : "Scale:")}
           </span>
-          <span className="font-semibold text-[#17251F] truncate max-w-[170px]">
-            {product.moq || (isBn ? "১ প্যালেট থেকে" : "From 1 Pallet")}
+          <span className="font-semibold text-[#17251F] truncate max-w-[90px] sm:max-w-[170px]">
+            {product.moq || (isBn ? "১ প্যালেট" : "1 Pallet")}
           </span>
         </div>
       </div>
 
       {/* Card Action Footer */}
-      <div className="pt-3 border-t border-[#DCE4E0] flex items-center justify-between gap-2 mt-auto">
+      <div className="pt-2.5 sm:pt-3 border-t border-[#DCE4E0] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-auto">
         <div>
           {product.showPrice && product.priceBdt ? (
             <div className="flex flex-col">
-              <span className="text-[10px] font-mono uppercase text-[#62706A]">
+              <span className="text-[9px] sm:text-[10px] font-mono uppercase text-[#62706A]">
                 {isBn ? "পাইকারি মূল্য" : "Wholesale"}
               </span>
-              <span className="text-sm font-mono font-bold text-[#17251F]">
+              <span className="text-xs sm:text-sm font-mono font-bold text-[#17251F]">
                 BDT {product.priceBdt.toLocaleString()}
               </span>
-              <span className="text-[9px] font-mono text-[#62706A]">
+              <span className="hidden sm:block text-[9px] font-mono text-[#62706A]">
                 {isBn ? "কন্টেইনার অর্ডারে বিশেষ দর" : "Container pricing on request"}
               </span>
             </div>
           ) : (
             <div className="flex flex-col">
-              <span className="text-xs font-mono font-medium text-[#17251F]">
-                {isBn ? "কোটেশনে পাইকারি মূল্য" : "Bulk Pricing on Quote"}
+              <span className="text-[10px] sm:text-xs font-mono font-medium text-[#17251F]">
+                {isBn ? "কোটেশনে দর" : "Quote Pricing"}
               </span>
-              <span className="text-[9px] font-mono text-[#62706A]">
+              <span className="hidden sm:block text-[9px] font-mono text-[#62706A]">
                 {isBn ? "কন্টেইনার অর্ডারে বিশেষ দর" : "Container pricing on request"}
               </span>
             </div>
           )}
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 w-full sm:w-auto">
           <Link
             href={`/product/${product.slug}`}
             onClick={(e) => {
@@ -255,7 +255,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               e.stopPropagation();
               router.push(`/product/${product.slug}`);
             }}
-            className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full text-[#62706A] hover:text-[#074031] hover:bg-[#F1F4F1] transition-colors flex items-center justify-center cursor-pointer"
+            className="hidden sm:flex w-11 h-11 min-w-[44px] min-h-[44px] rounded-full text-[#62706A] hover:text-[#074031] hover:bg-[#F1F4F1] transition-colors items-center justify-center cursor-pointer shrink-0"
             title={isBn ? "প্রযুক্তিগত বিবরণ দেখুন" : "View Technical Details"}
             aria-label={isBn ? `${product.name}-এর বিবরণ দেখুন` : `View details for ${product.name}`}
           >
@@ -268,9 +268,9 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           <Link
             href={`/quote?product=${product.slug}`}
             onClick={(e) => e.stopPropagation()}
-            className="px-3.5 py-1.5 min-h-[44px] inline-flex items-center justify-center rounded-full bg-[#074031] text-white text-xs font-medium tracking-tight transition-all duration-200 hover:bg-[#FEBE16] hover:text-[#052F25] active:scale-95"
+            className="w-full sm:w-auto px-2.5 sm:px-3.5 py-1.5 min-h-[34px] sm:min-h-[44px] inline-flex items-center justify-center rounded-full bg-[#074031] text-white text-[11px] sm:text-xs font-medium tracking-tight transition-all duration-200 hover:bg-[#FEBE16] hover:text-[#052F25] active:scale-95 text-center"
           >
-            {isBn ? "কোটেশন নিন" : "Request Quote"}
+            {isBn ? "কোটেশন" : "Quote"}
           </Link>
         </div>
       </div>
