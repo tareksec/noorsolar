@@ -1,20 +1,94 @@
 "use client";
 
-import React, { useRef } from "react";
-import Image from "next/image";
+import React from "react";
 import { Link } from "@/i18n/routing";
 import { usePathname } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { motion, useReducedMotion } from "motion/react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { AppImage } from "@/components/ui/app-image";
 
-interface ServiceCard {
+interface ProvideItem {
   id: string;
+  number: string;
+  badge: string;
   title: string;
   description: string;
-  image: string;
-  alt: string;
+  imageUrl: string;
+  imageAlt: string;
   link: string;
-  tag?: string;
 }
+
+const ITEMS_EN: ProvideItem[] = [
+  {
+    id: "solar-panels",
+    number: "01",
+    badge: "30-YEAR WARRANTY",
+    title: "Tier-1 N-Type TOPCon Solar Panels",
+    description:
+      "Direct manufacturer import of high-efficiency monocrystalline and bifacial solar modules. Verified with factory Sun-simulator flash tests and EL crack scans. Backed by 30-year linear performance warranties.",
+    imageUrl: "/photos/cat-solar-panels.webp",
+    imageAlt: "Tier-1 N-Type TOPCon solar panels ready for wholesale supply",
+    link: "/category/solar-panels",
+  },
+  {
+    id: "solar-inverters",
+    number: "02",
+    badge: "98.6% EFFICIENCY",
+    title: "Commercial Multi-MPPT Solar Inverters",
+    description:
+      "Heavy-duty 5kW to 100kW+ on-grid and hybrid inverters engineered for industrial continuity. Delivering 98.6%+ conversion efficiency, IP66 weatherproofing, and 24/7 cloud telemetry monitoring.",
+    imageUrl: "/photos/cat-solar-inverters.webp",
+    imageAlt: "Commercial multi-MPPT solar inverters for industrial projects",
+    link: "/category/solar-inverters",
+  },
+  {
+    id: "lithium-batteries",
+    number: "03",
+    badge: "6,000+ CYCLES",
+    title: "LiFePO4 Industrial Energy Storage (ESS)",
+    description:
+      "Grade-A prismatic lithium iron phosphate rack batteries and scalable ESS units. Rated for 6,000+ deep discharge cycles with smart active BMS protection for peak shaving and zero-downtime backup.",
+    imageUrl: "/photos/cat-lithium-batteries.webp",
+    imageAlt: "LiFePO4 industrial battery racks for energy storage systems",
+    link: "/category/lithium-batteries",
+  },
+];
+
+const ITEMS_BN: ProvideItem[] = [
+  {
+    id: "solar-panels",
+    number: "০১",
+    badge: "৩০ বছরের ওয়ারেন্টি",
+    title: "টায়ার-১ এন-টাইপ TOPCon সোলার প্যানেল",
+    description:
+      "বাণিজ্যিক ও শিল্প প্রকল্পের জন্য সরাসরি ফ্যাক্টরি থেকে আমদানিকৃত উচ্চ-দক্ষতাসম্পন্ন বাইফেসিয়াল সোলার মডিউল। প্রতিটি ব্যাচে সান-সিমুলেটর টেস্ট ও EL ক্র্যাক স্ক্যান ভেরিফিকেশন এবং ৩০ বছরের পারফরম্যান্স ওয়ারেন্টি।",
+    imageUrl: "/photos/cat-solar-panels.webp",
+    imageAlt: "পাইকারি সরবরাহের জন্য প্রস্তুত টায়ার-১ সোলার প্যানেল",
+    link: "/category/solar-panels",
+  },
+  {
+    id: "solar-inverters",
+    number: "০২",
+    badge: "৯৮.৬% এফিসিয়েন্সি",
+    title: "কমার্শিয়াল মাল্টি-MPPT সোলার ইনভার্টার",
+    description:
+      "শিল্প কারখানার নিরবচ্ছিন্ন উৎপাদনের জন্য ৫kW থেকে ১০০kW+ অন-গ্রিড ও হাইব্রিড ইনভার্টার। ৯৮.৬%+ কনভার্শন এফিসিয়েন্সি, IP66 ওয়েদারপ্রুফ কেসিং এবং ২৪/৭ ক্লাউড টেলিমেট্রি মনিটরিং সুবিধা।",
+    imageUrl: "/photos/cat-solar-inverters.webp",
+    imageAlt: "শিল্প প্রকল্পের জন্য কমার্শিয়াল মাল্টি-MPPT সোলার ইনভার্টার",
+    link: "/category/solar-inverters",
+  },
+  {
+    id: "lithium-batteries",
+    number: "০৩",
+    badge: "৬,০০০+ সাইকেল",
+    title: "LiFePO4 ইন্ডাস্ট্রিয়াল এনার্জি স্টোরেজ (ESS)",
+    description:
+      "গ্রেড-এ প্রিজম্যাটিক সেল ও স্মার্ট অ্যাক্টিভ BMS সমৃদ্ধ ৬,০০০+ ডিপ সাইকেল লাইফের লিথিয়াম স্টোরেজ। লোডশেডিংয়ে নিরবচ্ছিন্ন বিদ্যুৎ ও পিক শেভিংয়ের জন্য মেগাওয়াট স্কেল পর্যন্ত এক্সপ্যান্ডেবল।",
+    imageUrl: "/photos/cat-lithium-batteries.webp",
+    imageAlt: "এনার্জি স্টোরেজ সিস্টেমের জন্য LiFePO4 ইন্ডাস্ট্রিয়াল ব্যাটারি",
+    link: "/category/lithium-batteries",
+  },
+];
 
 interface ServicesSolutionsProps {
   locale?: string;
@@ -23,150 +97,92 @@ interface ServicesSolutionsProps {
 export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
   const pathname = usePathname() || "";
   const isBn = locale === "bn" || pathname.startsWith("/bn/") || pathname === "/bn";
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const services: ServiceCard[] = [
-    {
-      id: "container-indent",
-      title: isBn ? "সরাসরি কন্টেইনার ইনডেন্ট" : "Direct Container Indent",
-      description: isBn
-        ? "লার্জ-স্কেল ইউটিলিটি ও ফ্যাক্টরি রুফটপ প্রজেক্টের জন্য সরাসরি প্রস্তুতকারক থেকে কন্টেইনার আমদানির পূর্ণাঙ্গ লজিস্টিকস ও কাস্টমস ক্লিয়ারেন্স সুবিধা।"
-        : "Factory-direct container shipments for large EPC developers and industrial plants, with complete bill of lading and customs clearance support.",
-      image: "/photos/b2b-container-indent.webp",
-      alt: isBn ? "বাংলাদেশে সরাসরি কন্টেইনার সোলার মডিউল আমদানি ও বন্দর লজিস্টিকস" : "Direct container solar module imports and seaport logistics in Bangladesh",
-      link: "/contact",
-      tag: isBn ? "ফুল কন্টেইনার লোড (FCL)" : "Full Container Load (FCL)",
-    },
-    {
-      id: "warehouse-stock",
-      title: isBn ? "ঢাকা বাফার ডিপো স্টক" : "Dhaka Buffer Warehouse Stock",
-      description: isBn
-        ? "জরুরি প্রজেক্টের জন্য আমাদের ঢাকা ডিপোতে প্রস্তুত প্যালেট সোলার প্যানেল, LiFePO4 ব্যাটারি ও ইনভার্টারের রেডি স্টক থেকে তাৎক্ষণিক সাইট সরবরাহ।"
-        : "Immediate dispatch from ready pallet inventory in our Dhaka distribution depot, avoiding project downtime and overseas shipping lead times.",
-      image: "/photos/b2b-warehouse-stock.webp",
-      alt: isBn ? "ঢাকায় বাফার স্টক ওয়্যারহাউস ও রেডি প্যালেট সরবরাহ" : "Warehouse buffer stock and ready pallet dispatch in Dhaka",
-      link: "/products",
-      tag: isBn ? "রেডি প্যালেট স্টক" : "Ready Pallet Stock",
-    },
-    {
-      id: "compliance-verification",
-      title: isBn ? "ইঞ্জিনিয়ারিং ও কমপ্লায়েন্স ফাইল" : "Engineering & Compliance Files",
-      description: isBn
-        ? "ব্যাংক-ফাইন্যান্সড ও কমপ্লায়েন্স প্রজেক্টের জন্য ফ্যাক্টরি ফ্ল্যাশ টেস্ট রিপোর্ট, সান-সিমুলেটর ডেটাশিট ও প্রস্তুতকারকের অফিসিয়াল ওয়ারেন্টি সনদ।"
-        : "Complete compliance dossiers including original factory flash test reports, EL inspection data, and manufacturer warranty certificates for bankable installations.",
-      image: "/photos/b2b-compliance-testing.webp",
-      alt: isBn ? "বাণিজ্যিক সোলার ইঞ্জিনিয়ারিং ল্যাব টেস্টিং ও সার্টিফিকেশন ফাইল" : "Solar engineering QA testing and compliance certification files",
-      link: "/certifications",
-      tag: isBn ? "ফ্ল্যাশ টেস্ট ও EL সনদ" : "Flash Test & EL Reports",
-    },
-  ];
-
-  const handleScroll = (direction: "left" | "right") => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const scrollAmount = 380;
-    el.scrollBy({
-      left: direction === "left" ? -scrollAmount : scrollAmount,
-      behavior: "smooth",
-    });
-  };
+  const reduceMotion = useReducedMotion();
+  const items = isBn ? ITEMS_BN : ITEMS_EN;
 
   return (
-    <section id="services" className="pt-16 lg:pt-24 pb-8 lg:pb-10 bg-[#F1F4F1]">
+    <section className="relative w-full overflow-hidden bg-[#FAF9F6] dark:bg-[#0B0F0D] py-16 sm:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Row: Eyebrow + Split Headline & Value Proposition */}
-        <div className="mb-12 lg:mb-16">
-          {/* Eyebrow */}
-          <div className="flex items-center gap-2 mb-3">
-            <span className="w-2 h-2 rounded-full border-2 border-[#074031] inline-block" />
-            <span className="text-xs font-mono uppercase tracking-wider text-[#17251F] font-semibold">
-              {isBn ? "সরবরাহ চ্যানেল ও লজিস্টিকস" : "B2B Supply Channels & Fulfillment"}
-            </span>
-          </div>
-
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12">
-            {/* Main Headline */}
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#074031] max-w-xl leading-[1.08]">
-              {isBn ? "EPC ঠিকাদার ও প্রজেক্টের জন্য সুনির্দিষ্ট সরবরাহ ব্যবস্থা" : "Structured Supply Channels for EPCs & Contractors"}
-            </h2>
-
-            {/* Accent Description Box */}
-            <div className="border-l-2 border-[#074031] pl-4 sm:pl-5 max-w-md">
-              <p className="text-xs sm:text-sm text-[#62706A] leading-relaxed">
-                {isBn
-                  ? "সরাসরি কন্টেইনার আমদানি হোক কিংবা ঢাকা ডিপো থেকে জরুরি প্যালেট সরবরাহ — আমাদের দ্রুত লজিস্টিকস আপনার প্রজেক্টের কাজ রাখবে নির্বিঘ্ন।"
-                  : "Whether importing container consignments directly or pulling urgent buffer pallets from our Dhaka warehouse, our procurement channels keep projects on schedule."}
-              </p>
-            </div>
-          </div>
+        {/* Section header */}
+        <div className="max-w-3xl mb-12 sm:mb-16">
+          <span className="inline-block px-3.5 py-1 rounded-full bg-[#108958]/10 text-[#108958] font-mono text-xs font-bold tracking-widest uppercase mb-4">
+            {isBn ? "নূর সোলার / মূল সরবরাহ লাইনআপ" : "NOOR SOLAR / CORE SUPPLY"}
+          </span>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-neutral-900 dark:text-white">
+            {isBn ? "আমরা যা সরবরাহ করি" : "WE PROVIDE"}
+          </h2>
+          <p className="text-sm sm:text-base lg:text-lg text-neutral-600 dark:text-neutral-300 mt-4 max-w-2xl">
+            {isBn
+              ? "বাণিজ্যিক ও শিল্প প্রকল্পের জন্য টায়ার-১ সোলার প্যানেল, ইনভার্টার ও ব্যাটারি স্টোরেজ"
+              : "Engineered Tier-1 Solar Panels, Commercial Inverters & Industrial Energy Storage for Commercial & EPC Projects"}
+          </p>
         </div>
 
-        {/* 3 Service Cards Grid / Carousel */}
-        <div
-          ref={scrollRef}
-          className="flex lg:grid lg:grid-cols-3 gap-6 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 scrollbar-none snap-x snap-mandatory"
-        >
-          {services.map((item) => (
-            <div
-              key={item.id}
-              className="w-[300px] sm:w-[350px] lg:w-auto shrink-0 snap-start bg-white rounded-[28px] p-6 sm:p-7 border border-[#DCE4E0] shadow-xs hover:border-[#074031] transition-all duration-300 flex flex-col justify-between group"
-            >
-              <div>
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-[#17251F]">
-                    {item.title}
-                  </h3>
-                  <Link
-                    href={item.link}
-                    className="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-[#F1F4F1] text-[#074031] group-hover:bg-[#FEBE16] group-hover:text-[#052F25] transition-colors shrink-0"
-                    aria-label={isBn ? `${item.title} দেখুন` : `View ${item.title}`}
-                  >
-                    <ArrowUpRight className="w-4 h-4" />
-                  </Link>
+        {/* Alternating editorial blocks — image first on mobile, alternating on desktop */}
+        <div className="flex flex-col gap-10 sm:gap-14">
+          {items.map((item, index) => {
+            const imageRightOnDesktop = index % 2 === 1;
+            return (
+              <motion.article
+                key={item.id}
+                initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="group/row relative grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 lg:gap-14 items-center rounded-[28px] bg-white dark:bg-white/[0.04] border border-[#E3E9E1] dark:border-white/10 p-5 sm:p-8 lg:p-10 shadow-[0_16px_40px_rgba(0,0,0,0.06)]"
+              >
+                <div
+                  className={`relative w-full h-64 sm:h-80 lg:h-[380px] rounded-2xl overflow-hidden bg-neutral-200 dark:bg-white/10 ${
+                    imageRightOnDesktop ? "md:order-2" : "md:order-1"
+                  }`}
+                >
+                  <AppImage
+                    src={item.imageUrl}
+                    alt={item.imageAlt}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover"
+                  />
                 </div>
-                <p className="text-xs sm:text-[13px] text-[#62706A] leading-relaxed mb-6 line-clamp-3">
-                  {item.description}
-                </p>
-              </div>
 
-              {/* Card Photo Below Text */}
-              <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-[#F1F4F1]">
-                <Image
-                  src={item.image}
-                  alt={item.alt}
-                  fill
-                  sizes="(max-width: 640px) 300px, (max-width: 1024px) 350px, 400px"
-                  className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                />
-                {item.tag && (
-                  <div className="absolute top-3 left-3 z-10">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold text-[#074031] bg-white/95 backdrop-blur-md shadow-xs border border-white/90">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#074031]" />
-                      {item.tag}
+                <div
+                  className={`flex flex-col items-start gap-4 ${
+                    imageRightOnDesktop ? "md:order-1" : "md:order-2"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="font-mono text-xs font-bold text-neutral-500 dark:text-neutral-400 bg-black/5 dark:bg-white/10 px-2.5 py-1 rounded-full">
+                      {item.number}
+                    </span>
+                    <span className="inline-block px-3 py-1 rounded-full bg-[#108958]/10 text-[#108958] dark:text-[#22C55E] text-[11px] font-mono font-bold tracking-wider uppercase">
+                      {item.badge}
                     </span>
                   </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-neutral-900 dark:text-white leading-tight">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm sm:text-[15px] leading-relaxed text-neutral-600 dark:text-neutral-300">
+                    {item.description}
+                  </p>
+                  <Link
+                    href={item.link}
+                    className="group/cta inline-flex items-center gap-2 mt-1 text-sm font-bold text-[#108958] dark:text-[#22C55E] hover:underline"
+                  >
+                    <span>{isBn ? "বিস্তারিত ও ক্যাটালগ দেখুন" : "View Specifications & Stock"}</span>
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover/cta:translate-x-1" />
+                  </Link>
+                </div>
 
-        {/* Carousel Navigation Arrows (Desktop & Mobile) */}
-        <div className="flex items-center justify-end gap-3 mt-8">
-          <button
-            onClick={() => handleScroll("left")}
-            className="w-11 h-11 rounded-full bg-white border border-[#DCE4E0] text-[#074031] hover:border-[#074031] hover:bg-[#074031] hover:text-white flex items-center justify-center transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FEBE16] cursor-pointer"
-            aria-label={isBn ? "পূর্ববর্তী সমাধান" : "Previous service"}
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => handleScroll("right")}
-            className="w-11 h-11 rounded-full bg-white border border-[#DCE4E0] text-[#074031] hover:border-[#074031] hover:bg-[#074031] hover:text-white flex items-center justify-center transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FEBE16] cursor-pointer"
-            aria-label={isBn ? "পরবর্তী সমাধান" : "Next service"}
-          >
-            <ArrowRight className="w-4 h-4" />
-          </button>
+                <Link
+                  href={item.link}
+                  aria-label={item.title}
+                  className="hidden md:inline-flex absolute top-6 right-6 items-center justify-center w-10 h-10 rounded-full bg-[#111311] text-[#CEF23E] opacity-0 group-hover/row:opacity-100 transition-opacity"
+                >
+                  <ArrowUpRight className="w-5 h-5" />
+                </Link>
+              </motion.article>
+            );
+          })}
         </div>
       </div>
     </section>
