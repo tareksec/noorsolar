@@ -84,9 +84,17 @@ export async function POST(request: Request) {
     }
 
     const token = await createSessionToken(admin.id, admin.email);
-    await setSessionCookie(token);
+    const isHttps = process.env.NEXT_PUBLIC_SITE_URL?.startsWith("https://") ?? false;
+    const response = NextResponse.json({ success: true });
+    response.cookies.set("noor_admin_session", token, {
+      httpOnly: true,
+      secure: isHttps,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60,
+    });
 
-    return NextResponse.json({ success: true });
+    return response;
   } catch (error) {
     console.error("Login route error:", error);
     return NextResponse.json(

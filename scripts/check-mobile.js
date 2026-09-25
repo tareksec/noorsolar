@@ -129,6 +129,9 @@ async function main() {
 
   try {
     const page = await browser.newPage();
+    await page.evaluateOnNewDocument(() => {
+      try { sessionStorage.setItem("noor-preloader-seen", "1"); } catch {}
+    });
 
     // 1. Audit each device across routes
     for (const dev of DEVICES) {

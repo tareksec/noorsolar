@@ -14,16 +14,20 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const returnTo = searchParams.get("from") || "/admin";
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setIsPending(true);
+
+    const formData = new FormData(e.currentTarget);
+    const submitEmail = ((formData.get("email") as string) || email).trim().toLowerCase();
+    const submitPassword = (formData.get("password") as string) || password;
 
     try {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: submitEmail, password: submitPassword }),
       });
 
       const data = await res.json();

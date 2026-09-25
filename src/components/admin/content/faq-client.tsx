@@ -163,14 +163,14 @@ export function FaqClient({ items }: { items: FaqItemData[] }) {
                       <form action={reorderFaqItemAction}>
                         <input type='hidden' name='id' value={item.id} />
                         <input type='hidden' name='direction' value='up' />
-                        <button disabled={idx === 0} type='submit' className='p-1 text-[#5C605C] hover:text-[#111311] disabled:opacity-20'>
+                        <button disabled={idx === 0} type='submit' title='Move up' className='p-1 text-[#5C605C] hover:text-[#111311] disabled:opacity-20'>
                           <ArrowUp className='w-3.5 h-3.5' />
                         </button>
                       </form>
                       <form action={reorderFaqItemAction}>
                         <input type='hidden' name='id' value={item.id} />
                         <input type='hidden' name='direction' value='down' />
-                        <button disabled={idx === items.length - 1} type='submit' className='p-1 text-[#5C605C] hover:text-[#111311] disabled:opacity-20'>
+                        <button disabled={idx === items.length - 1} type='submit' title='Move down' className='p-1 text-[#5C605C] hover:text-[#111311] disabled:opacity-20'>
                           <ArrowDown className='w-3.5 h-3.5' />
                         </button>
                       </form>
@@ -222,12 +222,12 @@ export function FaqClient({ items }: { items: FaqItemData[] }) {
                         {item.isActive ? <Eye className='w-3.5 h-3.5' /> : <EyeOff className='w-3.5 h-3.5' />}
                       </button>
                     </form>
-                    <button type='button' onClick={() => setEditingId(item.id)} className='p-1.5 rounded-lg border border-[#DDE1DC] text-[#5C605C] hover:text-[#111311]'>
+                    <button type='button' onClick={() => setEditingId(item.id)} title='Edit' className='p-1.5 rounded-lg border border-[#DDE1DC] text-[#5C605C] hover:text-[#111311]'>
                       <Edit2 className='w-3.5 h-3.5' />
                     </button>
                     <form action={deleteFaqItemAction}>
                       <input type='hidden' name='id' value={item.id} />
-                      <button type='submit' onClick={(e) => { if (!confirm('Delete this FAQ item?')) e.preventDefault(); }} className='p-1.5 rounded-lg border border-[#DDE1DC] text-red-500 hover:bg-red-50'>
+                      <button type='submit' onClick={(e) => { if (!confirm('Delete this FAQ item?')) e.preventDefault(); }} title='Delete this FAQ item' className='p-1.5 rounded-lg border border-[#DDE1DC] text-red-500 hover:bg-red-50'>
                         <Trash2 className='w-3.5 h-3.5' />
                       </button>
                     </form>

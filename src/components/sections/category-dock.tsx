@@ -1,17 +1,18 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, ChevronDown, ChevronUp } from "lucide-react";
 import {
-  motion,
-  useScroll,
-  useTransform,
-  useSpring,
-  useMotionValueEvent,
-  useReducedMotion,
-} from "motion/react";
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Radio,
+  Sparkles,
+  Zap,
+} from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface CategoryDockProps {
   categories?: Array<{
@@ -25,472 +26,505 @@ interface CategoryDockProps {
   locale?: string;
 }
 
-interface EquipmentCard {
-  id: string;
-  stepNumber: string;
-  badge: string;
-  title: string;
-  tagline: string;
-  description: string;
-  scopeLabel: string;
-  capabilities: string[];
-  actionText: string;
+interface EquipmentSlide {
+  index: string;
+  totalIndex: string;
+  categoryTitle: string;
+  categoryBadge: string;
+  monthlyPerformance: string;
+  monthlyPerformanceLabel: string;
+  utilizationRate: string;
+  utilizationLabel: string;
+  chartData: Array<{ month: string; barHeight: number; isHighlight?: boolean }>;
+  linePoints: string;
+  thumbnails: string[];
+  heroImage: string;
   link: string;
-  image: string;
-  alt: string;
-  gradient: string;
-  accentBorder: string;
 }
-
-const EQUIPMENT_ITEMS_EN: EquipmentCard[] = [
-  {
-    id: "solar-panels",
-    stepNumber: "01",
-    badge: "01 / 03 • SOLAR MODULE SUPPLY",
-    title: "N-Type TOPCon & Bifacial PV Panels",
-    tagline: "High-Yield Tier-1 Solar Modules",
-    description:
-      "What We Do: Direct manufacturer import and nationwide delivery of high-efficiency monocrystalline solar panels for industrial rooftops, commercial plants, and EPC utility installations.",
-    scopeLabel: "Our Core Scope & Supply:",
-    capabilities: [
-      "Pallet buffer stock in Dhaka to direct 40HQ full container indent",
-      "Factory flash test validation & original EL defect-free inspection files",
-      "30-year linear performance warranty with certified local replacement support",
-    ],
-    actionText: "Explore Solar Panels",
-    link: "/category/solar-panels",
-    image: "/photos/core-topic-panel.webp",
-    alt: "N-Type TOPCon high efficiency solar panel module",
-    gradient: "linear-gradient(135deg, #FFF8F0 0%, #FFFFFF 52%, #F7F5EE 100%)",
-    accentBorder: "rgba(217, 119, 6, 0.25)",
-  },
-  {
-    id: "solar-inverters",
-    stepNumber: "02",
-    badge: "02 / 03 • POWER CONVERSION SYSTEMS",
-    title: "Commercial On-Grid & Hybrid Inverters",
-    tagline: "Intelligent Multi-MPPT Grid Integration",
-    description:
-      "What We Do: Supply and synchronize heavy-duty solar inverters from 5kW to 100kW+, ensuring high conversion efficiency, grid stability, and continuous industrial power continuity.",
-    scopeLabel: "Our Core Scope & Supply:",
-    capabilities: [
-      "Multi-channel MPPT tracking with 98.6%+ high-efficiency conversion",
-      "IP66 weatherproof outdoor enclosures engineered for extreme climates",
-      "24/7 cloud remote monitoring, smart BMS handshake & telemetry apps",
-    ],
-    actionText: "Explore Solar Inverters",
-    link: "/category/solar-inverters",
-    image: "/photos/core-topic-inverter.webp",
-    alt: "Commercial hybrid solar inverter unit",
-    gradient: "linear-gradient(135deg, #F0F8FF 0%, #FFFFFF 52%, #EEF6F4 100%)",
-    accentBorder: "rgba(2, 132, 199, 0.25)",
-  },
-  {
-    id: "lithium-batteries",
-    stepNumber: "03",
-    badge: "03 / 03 • ENERGY STORAGE SYSTEMS",
-    title: "LiFePO4 Industrial Battery Storage",
-    tagline: "Zero-Downtime Backup & Peak Shaving",
-    description:
-      "What We Do: Engineering and supply of Grade-A lithium iron phosphate rack batteries and scalable ESS units designed for 6,000+ deep cycles and uninterrupted factory power.",
-    scopeLabel: "Our Core Scope & Supply:",
-    capabilities: [
-      "Grade-A prismatic cells rated for 6,000+ cycles at 80% DoD",
-      "Integrated smart BMS with multi-tier thermal & over-voltage protection",
-      "Modular scalability from 5.12 kWh rack cabinets to containerized ESS",
-    ],
-    actionText: "Explore Energy Storage",
-    link: "/category/lithium-batteries",
-    image: "/photos/core-topic-battery.webp",
-    alt: "LiFePO4 lithium energy storage rack system",
-    gradient: "linear-gradient(135deg, #FEFCE8 0%, #FFFFFF 52%, #F5F4EE 100%)",
-    accentBorder: "rgba(202, 138, 4, 0.25)",
-  },
-];
-
-const EQUIPMENT_ITEMS_BN: EquipmentCard[] = [
-  {
-    id: "solar-panels",
-    stepNumber: "০১",
-    badge: "০১ / ০৩ • সোলার মডিউল সাপ্লাই",
-    title: "এন-টাইপ TOPCon ও বাইফেসিয়াল প্যানেল",
-    tagline: "টায়ার-১ হাই-আউটপুট সোলার মডিউল",
-    description:
-      "আমরা যা করি: বাণিজ্যিক কারখানা, টেক্সটাইল রুফটপ ও সোলার প্রজেক্টের জন্য সরাসরি প্রস্তুতকারক থেকে উচ্চ-দক্ষতাসম্পন্ন টায়ার-১ সোলার প্যানেল আমদানি ও সাইট-ডেলিভারি নিশ্চিত করি।",
-    scopeLabel: "আমাদের কাজের পরিধি:",
-    capabilities: [
-      "ঢাকা ডিপো বাফার স্টক থেকে শুরু করে সরাসরি ৪০HQ ফুল কন্টেইনার ইনডেন্ট",
-      "প্রতিটি ব্যাচে ফ্যাক্টরি সান-সিমুলেটর টেস্ট ও অরিজিনাল EL ক্র্যাক স্ক্যান রিপোর্ট",
-      "৩০ বছরের রৈখিক পারফরম্যান্স ওয়ারেন্টি ও দ্রুত লোকাল ক্লেইম সাপোর্ট",
-    ],
-    actionText: "সোলার প্যানেল দেখুন",
-    link: "/bn/category/solar-panels",
-    image: "/photos/core-topic-panel.webp",
-    alt: "এন-টাইপ TOPCon সোলার প্যানেল",
-    gradient: "linear-gradient(135deg, #FFF8F0 0%, #FFFFFF 52%, #F7F5EE 100%)",
-    accentBorder: "rgba(217, 119, 6, 0.25)",
-  },
-  {
-    id: "solar-inverters",
-    stepNumber: "০২",
-    badge: "০২ / ০৩ • পাওয়ার কনভার্শন সিস্টেম",
-    title: "কমার্শিয়াল অন-গ্রিড ও হাইব্রিড ইনভার্টার",
-    tagline: "ইন্টেলিজেন্ট মাল্টি-MPPT গ্রিড টাই",
-    description:
-      "আমরা যা করি: শিল্প কারখানার নিরবচ্ছিন্ন উৎপাদন ও গ্রিড সিঙ্ক্রোনাইজেশনের জন্য ৫kW থেকে ১০০kW+ ইন্টেলিজেন্ট মাল্টি-MPPT ইনভার্টার সরবরাহ ও সিস্টেম সমন্বয় করি।",
-    scopeLabel: "আমাদের কাজের পরিধি:",
-    capabilities: [
-      "মাল্টি-চ্যানেল MPPT ট্র্যাকিং ও ৯৮.৬%+ পিক কনভার্শন এফিসিয়েন্সি",
-      "হেভি-ডিউটি IP66 ওয়েদারপ্রুফ সুরক্ষা ও ইন্ডাস্ট্রিয়াল থার্মাল কুলিং",
-      "মোবাইল অ্যাপ ও সার্বক্ষণিক ২৪/৭ রিয়েল-টাইম ক্লাউড মনিটরিং সাপোর্ট",
-    ],
-    actionText: "সোলার ইনভার্টার দেখুন",
-    link: "/bn/category/solar-inverters",
-    image: "/photos/core-topic-inverter.webp",
-    alt: "কমার্শিয়াল সোলার ইনভার্টার ইউনিট",
-    gradient: "linear-gradient(135deg, #F0F8FF 0%, #FFFFFF 52%, #EEF6F4 100%)",
-    accentBorder: "rgba(2, 132, 199, 0.25)",
-  },
-  {
-    id: "lithium-batteries",
-    stepNumber: "০৩",
-    badge: "০৩ / ০৩ • এনার্জি স্টোরেজ সল্যুশন",
-    title: "LiFePO4 ইন্ডাস্ট্রিয়াল ব্যাটারি স্টোরেজ",
-    tagline: "নিরবচ্ছিন্ন ব্যাকআপ ও পিক শেভিং",
-    description:
-      "আমরা যা করি: বিদ্যুৎ বিভ্রাট ও পিক-আওয়ারে নিরবচ্ছিন্ন বিদ্যুৎ নিশ্চিত করতে এ-গ্রেড প্রিজম্যাটিক সেল ও স্মার্ট BMS সমৃদ্ধ ৬,০০০+ সাইকেলের লিথিয়াম স্টোরেজ সরবরাহ করি।",
-    scopeLabel: "আমাদের কাজের পরিধি:",
-    capabilities: [
-      "এ-গ্রেড প্রিজম্যাটিক সেল এবং ৬,০০০+ সাইকেল ডিপ ডিসচার্জ লাইফ",
-      "ইন্টিগ্রেটেড স্মার্ট BMS ওভার-ভোল্টেজ ও সেল ব্যালেন্সিং সুরক্ষা",
-      "৫.১২kWh থেকে মেগাওয়াট স্কেল পর্যন্ত এক্সপ্যান্ডেবল র্যাক আর্কিটেকচার",
-    ],
-    actionText: "ব্যাটারি স্টোরেজ দেখুন",
-    link: "/bn/category/lithium-batteries",
-    image: "/photos/core-topic-battery.webp",
-    alt: "LiFePO4 ব্যাটারি স্টোরেজ",
-    gradient: "linear-gradient(135deg, #FEFCE8 0%, #FFFFFF 52%, #F5F4EE 100%)",
-    accentBorder: "rgba(202, 138, 4, 0.25)",
-  },
-];
 
 export function CategoryDock({ locale }: CategoryDockProps) {
   const isBn = locale === "bn";
-  const equipmentItems = isBn ? EQUIPMENT_ITEMS_BN : EQUIPMENT_ITEMS_EN;
-  const containerRef = useRef<HTMLDivElement>(null);
-  const shouldReduceMotion = useReducedMotion();
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(0);
 
-  // Sticky Scroll: Section spans 320vh for calm, luxurious pacing
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  // Unified master spring for buttery-smooth 60fps/120fps motion
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 60,
-    damping: 20,
-    mass: 0.35,
-    restDelta: 0.0001,
-  });
-
-  useMotionValueEvent(smoothProgress, "change", (latest) => {
-    if (latest < 0.35) {
-      setActiveStep(0);
-    } else if (latest < 0.68) {
-      setActiveStep(1);
-    } else {
-      setActiveStep(2);
-    }
-  });
-
-  // Card 1: Front at start -> gently eases back and recesses as Card 2 arrives
-  const card1Y = useTransform(smoothProgress, [0, 0.28, 0.48], [0, 0, -20]);
-  const card1Scale = useTransform(smoothProgress, [0, 0.28, 0.48], [1, 1, 0.94]);
-  const card1Opacity = useTransform(smoothProgress, [0, 0.28, 0.48, 0.72], [1, 1, 0.38, 0.15]);
-
-  // Card 2: Starts below -> glides up into front -> rests -> gently recesses as Card 3 arrives
-  const card2Y = useTransform(smoothProgress, [0.18, 0.44, 0.62, 0.80], [220, 0, 0, -10]);
-  const card2Scale = useTransform(smoothProgress, [0.18, 0.44, 0.62, 0.80], [0.90, 1, 1, 0.97]);
-  const card2Opacity = useTransform(smoothProgress, [0.15, 0.35, 0.62, 0.80], [0, 1, 1, 0.38]);
-
-  // Card 3: Starts below -> glides up into front -> stays in front
-  const card3Y = useTransform(smoothProgress, [0.52, 0.78, 1], [220, 0, 0]);
-  const card3Scale = useTransform(smoothProgress, [0.52, 0.78, 1], [0.90, 1, 1]);
-  const card3Opacity = useTransform(smoothProgress, [0.48, 0.70, 1], [0, 1, 1]);
-
-  // Click on step dots or arrows to scroll directly to that position
-  const scrollToStep = (step: number) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const scrollTop = window.scrollY + rect.top;
-    const maxScroll = containerRef.current.offsetHeight - window.innerHeight;
-    const targetScroll = scrollTop + (step / 2) * maxScroll;
-    window.scrollTo({ top: targetScroll, behavior: "smooth" });
-  };
-
-  const cardMotionProps = [
+  const slides: EquipmentSlide[] = [
     {
-      style: {
-        y: shouldReduceMotion ? 0 : card1Y,
-        scale: shouldReduceMotion ? 1 : card1Scale,
-        opacity: shouldReduceMotion ? 1 : card1Opacity,
-        zIndex: 10,
-        willChange: "transform, opacity",
-      },
+      index: "01",
+      totalIndex: "01 / 03",
+      categoryTitle: isBn ? "সোলার প্যানেল লাইনআপ" : "Solar Panel Lineup",
+      categoryBadge: isBn ? "টায়ার-১ TOPCon মডিউল" : "Tier-1 TOPCon PV Panels",
+      monthlyPerformance: "$8,8k",
+      monthlyPerformanceLabel: isBn ? "মাসিক উৎপাদন ফলন" : "Monthly performance",
+      utilizationRate: "$22,8k",
+      utilizationLabel: isBn ? "মোট ইউটিলাইজেশন রেট" : "Total Utilization rate",
+      chartData: [
+        { month: "Aug", barHeight: 38 },
+        { month: "Sep", barHeight: 52 },
+        { month: "Oct", barHeight: 74, isHighlight: true },
+        { month: "Nov", barHeight: 46 },
+        { month: "Dec", barHeight: 32 },
+      ],
+      linePoints: "16,48 56,36 96,16 136,38 176,52",
+      thumbnails: ["/photos/cat-solar-panels.webp", "/photos/core-topic-panel.webp"],
+      heroImage: "/photos/solar-3d-station.jpg",
+      link: isBn ? "/bn/category/solar-panels" : "/category/solar-panels",
     },
     {
-      style: {
-        y: shouldReduceMotion ? 0 : card2Y,
-        scale: shouldReduceMotion ? 1 : card2Scale,
-        opacity: shouldReduceMotion ? 1 : card2Opacity,
-        zIndex: 20,
-        willChange: "transform, opacity",
-      },
+      index: "02",
+      totalIndex: "02 / 03",
+      categoryTitle: isBn ? "কমার্শিয়াল ইনভার্টার" : "Commercial Inverters",
+      categoryBadge: isBn ? "মাল্টি-MPPT গ্রিড টাই" : "Multi-MPPT Hybrid Inverter",
+      monthlyPerformance: "$9,4k",
+      monthlyPerformanceLabel: isBn ? "মাসিক রূপান্তর ফলন" : "Monthly performance",
+      utilizationRate: "$26,4k",
+      utilizationLabel: isBn ? "মোট ইউটিলাইজেশন রেট" : "Total Utilization rate",
+      chartData: [
+        { month: "Aug", barHeight: 42 },
+        { month: "Sep", barHeight: 58 },
+        { month: "Oct", barHeight: 82, isHighlight: true },
+        { month: "Nov", barHeight: 64 },
+        { month: "Dec", barHeight: 45 },
+      ],
+      linePoints: "16,42 56,30 96,12 136,28 176,46",
+      thumbnails: ["/photos/cat-solar-inverters.webp", "/photos/core-topic-inverter.webp"],
+      heroImage: "/photos/about-commercial-plant.webp",
+      link: isBn ? "/bn/category/solar-inverters" : "/category/solar-inverters",
     },
     {
-      style: {
-        y: shouldReduceMotion ? 0 : card3Y,
-        scale: shouldReduceMotion ? 1 : card3Scale,
-        opacity: shouldReduceMotion ? 1 : card3Opacity,
-        zIndex: 30,
-        willChange: "transform, opacity",
-      },
+      index: "03",
+      totalIndex: "03 / 03",
+      categoryTitle: isBn ? "লিথিয়াম ব্যাটারি ESS" : "Lithium ESS Batteries",
+      categoryBadge: isBn ? "LiFePO4 ডিপ সাইকেল" : "LiFePO4 Storage System",
+      monthlyPerformance: "$7,9k",
+      monthlyPerformanceLabel: isBn ? "মাসিক ব্যাকআপ ভ্যালু" : "Monthly performance",
+      utilizationRate: "$21,5k",
+      utilizationLabel: isBn ? "মোট ইউটিলাইজেশন রেট" : "Total Utilization rate",
+      chartData: [
+        { month: "Aug", barHeight: 34 },
+        { month: "Sep", barHeight: 48 },
+        { month: "Oct", barHeight: 68, isHighlight: true },
+        { month: "Nov", barHeight: 54 },
+        { month: "Dec", barHeight: 40 },
+      ],
+      linePoints: "16,52 56,40 96,20 136,34 176,50",
+      thumbnails: ["/photos/cat-lithium-batteries.webp", "/photos/core-topic-battery.webp"],
+      heroImage: "/photos/hero-solar-field.webp",
+      link: isBn ? "/bn/category/lithium-batteries" : "/category/lithium-batteries",
     },
   ];
+
+  const currentSlide = slides[activeSlide];
+
+  const nextSlide = () => {
+    setActiveSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setActiveSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
 
   return (
     <section
       id="core-lineup"
-      ref={containerRef}
-      className="relative bg-[#EAECE6] border-b border-[#D4DCD2]"
-      style={{ height: "320vh" }}
+      className="relative bg-[#FAFAF8] py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 border-b border-[#E6E8E2] overflow-hidden"
     >
-      {/* Sticky 100vh Viewport Window */}
-      <div className="sticky top-0 h-screen w-full flex flex-col justify-between py-6 sm:py-8 lg:py-10 px-4 sm:px-6 max-w-7xl mx-auto overflow-hidden">
-        {/* Background Architectural Grid Pattern */}
-        <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(#074031_1px,transparent_1px)] [background-size:28px_28px] opacity-[0.05]"
-          aria-hidden="true"
-        />
-
-        {/* 1. Header Section */}
-        <div className="text-center max-w-3xl mx-auto px-4 shrink-0 z-10">
-          <div className="inline-flex items-center justify-center gap-3 text-xs sm:text-sm font-semibold tracking-wider text-[#074031] uppercase mb-2">
-            <span className="w-8 sm:w-12 h-[1.5px] bg-[#074031]/40 rounded-full" />
-            <span className="px-3.5 py-1 rounded-full bg-white/95 backdrop-blur-md border border-[#074031]/20 font-mono text-[11px] sm:text-xs text-[#074031] shadow-2xs flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#074031] animate-pulse" />
-              {isBn ? "কোর ইকুইপমেন্ট লাইনআপ" : "Core Equipment Lineup"}
-            </span>
-            <span className="w-8 sm:w-12 h-[1.5px] bg-[#074031]/40 rounded-full" />
-          </div>
-
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#142019] leading-tight">
-            {isBn ? (
-              <>
-                বাণিজ্যিক প্রজেক্টের জন্য{" "}
-                <span className="text-[#074031] relative inline-block">
-                  ইঞ্জিনিয়ারিং-গ্রেড ইকুইপমেন্ট
+      <div className="max-w-7xl mx-auto space-y-16 lg:space-y-24">
+        {/* ======================================================== */}
+        {/* SECTION 1: TOP EXECUTIVE GRID                            */}
+        {/* ======================================================== */}
+        <div className="space-y-10 lg:space-y-12">
+          {/* Section 1 Header */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+            <div className="lg:col-span-8 space-y-4">
+              {/* Badge: Why choose us */}
+              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#F3F4EE] border border-black/[0.06] text-[#1E2922] text-xs font-semibold">
+                <span className="w-5 h-5 rounded-full bg-[#FF6B4A]/15 text-[#FF5429] flex items-center justify-center">
+                  <Sparkles className="w-3 h-3 fill-current" />
                 </span>
-              </>
-            ) : (
-              <>
-                Commercial & Industrial{" "}
-                <span className="text-[#074031] relative inline-block">
-                  Equipment Lineup
-                </span>
-              </>
-            )}
-          </h2>
+                <span>{isBn ? "কেন আমরা" : "Why choose us"}</span>
+              </div>
 
-          <p className="mt-1.5 text-xs sm:text-sm text-[#556350] max-w-xl mx-auto leading-relaxed hidden sm:block">
-            {isBn
-              ? "নিচে স্ক্রোল করুন — ৩টি প্রধান ইকুইপমেন্ট চ্যানেলের বিস্তারিত ও আমাদের কাজের পরিধি এক নজরে দেখুন।"
-              : "Scroll down to see our primary supply channels and scope of work animate onto the stage."}
-          </p>
-        </div>
+              {/* Main Headline */}
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#111713] leading-[1.12]">
+                {isBn ? (
+                  <>
+                    দায়িত্বশীল কর্পোরেট ও{" "}
+                    <span className="text-[#108958] inline-block">
+                      টেকসই সোলার সল্যুশন
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    Responsible Corporate with{" "}
+                    <span className="text-[#108958] inline-block">
+                      Sustainable Solar Solutions
+                    </span>
+                  </>
+                )}
+              </h2>
 
-        {/* 2. Stacked Cards Canvas */}
-        <div className="relative w-full max-w-4xl lg:max-w-5xl h-[480px] sm:h-[500px] lg:h-[520px] mx-auto flex items-center justify-center my-auto">
-          {equipmentItems.map((item, idx) => {
-            const motionProps = cardMotionProps[idx];
-            const isStepActive = activeStep === idx;
-
-            return (
-              <motion.div
-                key={item.id}
-                style={motionProps.style}
-                className="absolute inset-0 w-full h-full rounded-[32px] sm:rounded-[36px] lg:rounded-[40px] border border-white/95 shadow-[0_30px_70px_-15px_rgba(7,64,49,0.18),0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden"
-              >
-                {/* Individual Card Surface */}
-                <div
-                  className="relative w-full h-full p-6 sm:p-8 lg:p-10 flex flex-col justify-between"
-                  style={{ background: item.gradient }}
+              {/* Left Subtitle & CTA */}
+              <div className="pt-2 flex flex-col sm:flex-row sm:items-center gap-4">
+                <p className="text-sm text-[#5B675E] max-w-md leading-relaxed">
+                  {isBn
+                    ? "কার্যকর, বুদ্ধিমান এবং টেকসই সবুজ বিদ্যুতের অভিজ্ঞতা গ্রহণ করুন।"
+                    : "Experience power that's efficient, intelligent, and sustainable."}
+                </p>
+                <Link
+                  href={isBn ? "/bn/contact" : "/contact"}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#108958] hover:bg-[#0c6c45] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-sm hover:shadow-md group/cta w-fit"
                 >
-                  {/* Subtle Background Radial Ambient Glow */}
-                  <div
-                    className="pointer-events-none absolute -top-20 -right-20 w-80 h-80 rounded-full bg-white/60 blur-3xl"
-                    aria-hidden="true"
-                  />
+                  <span>{isBn ? "শুরু করুন" : "Get started"}</span>
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/cta:translate-x-0.5" />
+                </Link>
+              </div>
+            </div>
 
-                  {/* 2-Column Split: Content & Capabilities (Left) + Large 3D Visual (Right) */}
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 h-full items-center">
-                    {/* Left Column: What We Do & Scope */}
-                    <div className="md:col-span-7 flex flex-col justify-between h-full z-10">
-                      <div>
-                        {/* Top Step & Category Badge */}
-                        <div className="flex items-center justify-between gap-3 mb-2">
-                          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#074031]/[0.08] text-[#074031] font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#074031] animate-pulse" />
-                            {item.badge}
-                          </div>
-                          <span className="text-[11px] font-mono font-semibold text-[#556350] bg-black/[0.04] px-2.5 py-0.5 rounded-full">
-                            CAT #{item.stepNumber}
-                          </span>
-                        </div>
-
-                        {/* Title */}
-                        <h3 className="text-xl sm:text-2xl lg:text-[28px] font-black tracking-tight text-[#142019] leading-tight">
-                          {item.title}
-                        </h3>
-
-                        {/* What We Do Text */}
-                        <p className="text-xs sm:text-[13.5px] text-[#4A5748] leading-relaxed mt-2.5 font-normal">
-                          {item.description}
-                        </p>
-
-                        {/* Scope of Work / Capabilities Checklist */}
-                        <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-black/[0.06]">
-                          <div className="text-[11px] font-mono font-bold tracking-wider text-[#074031] uppercase mb-2">
-                            {item.scopeLabel}
-                          </div>
-                          <div className="space-y-1.5 sm:space-y-2">
-                            {item.capabilities.map((cap, cIdx) => (
-                              <div
-                                key={cIdx}
-                                className="flex items-start gap-2.5 text-xs sm:text-[13px] text-[#243329] font-medium leading-snug"
-                              >
-                                <CheckCircle2 className="w-4 h-4 text-[#074031] shrink-0 mt-0.5" />
-                                <span>{cap}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Action CTA Button */}
-                      <div className="pt-4 mt-auto">
-                        <Link
-                          href={item.link}
-                          className="inline-flex items-center justify-between gap-4 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#074031] hover:bg-[#052F25] text-white text-xs sm:text-[13.5px] font-semibold tracking-wide transition-all shadow-sm hover:shadow-md group/btn"
-                        >
-                          <span>{item.actionText}</span>
-                          <span className="w-6 h-6 rounded-full bg-white/20 group-hover/btn:bg-white/30 flex items-center justify-center transition-all group-hover/btn:translate-x-0.5">
-                            <ArrowRight className="w-3.5 h-3.5" />
-                          </span>
-                        </Link>
-                      </div>
-                    </div>
-
-                    {/* Right Column: High-Impact 3D Product Image */}
-                    <div className="md:col-span-5 relative h-full flex items-center justify-center">
-                      <div className="relative w-full h-[180px] sm:h-[240px] md:h-[280px] lg:h-[320px] flex items-center justify-center">
-                        {/* Soft Ambient Spotlight behind asset */}
-                        <div
-                          className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.9),transparent_65%)] pointer-events-none"
-                          aria-hidden="true"
-                        />
-                        <Image
-                          src={item.image}
-                          alt={item.alt}
-                          fill
-                          priority={idx === 0}
-                          sizes="(max-width: 768px) 300px, (max-width: 1200px) 420px, 460px"
-                          className="object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.14)] transition-transform duration-700 hover:scale-105"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        {/* 3. Bottom Interactive Scroll Indicator & Step Controls */}
-        <div className="shrink-0 flex items-center justify-between max-w-4xl lg:max-w-5xl w-full mx-auto px-4 z-20">
-          {/* Step Badges (Clickable to jump) */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {equipmentItems.map((item, idx) => {
-              const isActive = activeStep === idx;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => scrollToStep(idx)}
-                  className={`inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-mono font-bold transition-all duration-300 cursor-pointer ${
-                    isActive
-                      ? "bg-[#074031] text-white shadow-sm scale-105"
-                      : "bg-white/80 text-[#556350] hover:bg-white border border-[#DCE4DA]"
-                  }`}
-                >
-                  <span
-                    className={`w-2 h-2 rounded-full ${
-                      isActive ? "bg-[#FEBE16]" : "bg-[#074031]/30"
-                    }`}
-                  />
-                  <span>
-                    {isBn
-                      ? idx === 0
-                        ? "সোলার প্যানেল"
-                        : idx === 1
-                        ? "ইনভার্টার"
-                        : "ব্যাটারি"
-                      : idx === 0
-                      ? "01 Panels"
-                      : idx === 1
-                      ? "02 Inverters"
-                      : "03 Batteries"}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Smooth Scroll Progress Bar */}
-          <div className="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/85 backdrop-blur-xs border border-[#DCE4DA]">
-            <span className="text-[11px] font-mono text-[#556350] font-bold tracking-wider">
-              {activeStep === 0 ? "01 / 03" : activeStep === 1 ? "02 / 03" : "03 / 03"}
-            </span>
-            <div className="w-20 lg:w-28 h-1.5 rounded-full bg-[#074031]/15 overflow-hidden">
-              <motion.div
-                style={{ scaleX: smoothProgress, transformOrigin: "left" }}
-                className="w-full h-full bg-[#074031] rounded-full"
-              />
+            {/* Right Header Description */}
+            <div className="lg:col-span-4 lg:pt-12">
+              <p className="text-xs sm:text-sm text-[#667268] leading-relaxed">
+                {isBn
+                  ? "শিল্প ও বাণিজ্যিকভাবে দীর্ঘমেয়াদী জ্বালানি নিরাপত্তা দিতে আমরা সর্বোচ্চ মানের অ্যাডভান্সড সৌর সরঞ্জাম সরবরাহ করি।"
+                  : "Experience power that's efficient, intelligent, and sustainable. We deliver advanced energy solutions engineered for demanding commercial standards."}
+              </p>
             </div>
           </div>
 
-          {/* Up / Down Navigation Controls */}
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              aria-label="Previous card step"
-              onClick={() => scrollToStep(Math.max(0, activeStep - 1))}
-              disabled={activeStep === 0}
-              className="w-9 h-9 rounded-full bg-white border border-[#DCE4DA] text-[#074031] hover:bg-[#074031] hover:text-white disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-[#074031] flex items-center justify-center transition-all shadow-xs cursor-pointer"
-            >
-              <ChevronUp className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              aria-label="Next card step"
-              onClick={() => scrollToStep(Math.min(2, activeStep + 1))}
-              disabled={activeStep === 2}
-              className="w-9 h-9 rounded-full bg-white border border-[#DCE4DA] text-[#074031] hover:bg-[#074031] hover:text-white disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-[#074031] flex items-center justify-center transition-all shadow-xs cursor-pointer"
-            >
-              <ChevronDown className="w-4 h-4" />
-            </button>
+          {/* Section 1: 3-Card Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+            {/* Card 1: A Responsible Corporate */}
+            <div className="rounded-[32px] bg-white border border-black/[0.06] p-7 sm:p-8 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.06)] transition-all">
+              <div>
+                {/* Top Row: Icon & 001 */}
+                <div className="flex items-center justify-between mb-8">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#FF6B4A] to-[#FF4B26] text-white flex items-center justify-center shadow-md shadow-orange-500/25">
+                    <Radio className="w-5 h-5 animate-pulse" />
+                  </div>
+                  <span className="text-xs font-mono font-medium text-neutral-400 tracking-wider">
+                    001
+                  </span>
+                </div>
+
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-[#121A15] mb-3">
+                  {isBn ? "দায়িত্বশীল কর্পোরেট" : "A Responsible Corporate"}
+                </h3>
+
+                <p className="text-xs sm:text-sm text-[#647167] leading-relaxed mb-6 font-normal">
+                  {isBn
+                    ? "বিদ্যুৎ বিল সাশ্রয় করুন, কার্বন নিঃসরণ হ্রাস করুন এবং আপনার বাণিজ্যিক কারখানার টেকসই বাজারমূল্য বৃদ্ধি করুন।"
+                    : "Save on your electricity bills, reduce your carbon footprint and increase the value of your commercial & industrial facilities."}
+                </p>
+              </div>
+
+              {/* Bottom Pill CTA */}
+              <div className="pt-4">
+                <Link
+                  href={isBn ? "/bn/category/solar-panels" : "/category/solar-panels"}
+                  className="inline-flex items-center justify-between w-full px-5 py-3 rounded-full bg-[#F5F6F2] hover:bg-[#EDEFEA] text-[#1E2922] text-xs sm:text-sm font-semibold transition-all group/btn border border-black/[0.04]"
+                >
+                  <span>{isBn ? "বিস্তারিত জানুন" : "Learn more"}</span>
+                  <ArrowRight className="w-4 h-4 text-[#5B675E] transition-transform group-hover/btn:translate-x-1" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Card 2: Utility-Scale Solution (Hero Photography Card) */}
+            <div className="relative rounded-[32px] overflow-hidden min-h-[340px] sm:min-h-[380px] border border-black/[0.06] shadow-[0_10px_30px_rgba(0,0,0,0.04)] group/photo flex flex-col justify-end p-6">
+              <Image
+                src="/photos/hero-solar-field.webp"
+                alt="Utility-scale solar panel installation in sunny landscape"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover transition-transform duration-700 group-hover/photo:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent pointer-events-none" />
+
+              {/* Glassmorphism Floating Tag */}
+              <div className="relative z-10 mx-auto">
+                <span className="inline-block px-5 py-2.5 rounded-full bg-white/75 backdrop-blur-md border border-white/60 text-[#121A15] text-xs font-semibold tracking-wide shadow-lg">
+                  {isBn ? "ইউটিলিটি-স্কেল সল্যুশন" : "Utility-Scale Solution"}
+                </span>
+              </div>
+            </div>
+
+            {/* Card 3: Commercial Solution */}
+            <div className="rounded-[32px] bg-[#FAF8F5] border border-[#EBE6DC] p-7 sm:p-8 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.06)] transition-all">
+              <div>
+                {/* Top Row: Amber Icon & Panel Thumbnail */}
+                <div className="flex items-center justify-between mb-8">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#F59E0B] to-[#D97706] text-white flex items-center justify-center shadow-md shadow-amber-500/25">
+                    <Zap className="w-5 h-5 fill-current" />
+                  </div>
+                  <div className="relative w-20 h-14 rounded-2xl overflow-hidden border border-black/[0.08] shadow-2xs">
+                    <Image
+                      src="/photos/cat-solar-panels.webp"
+                      alt="Commercial solar project"
+                      fill
+                      sizes="80px"
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-[#121A15] mb-3">
+                  {isBn ? "কমার্শিয়াল সল্যুশন" : "Commercial Solution"}
+                </h3>
+
+                <p className="text-xs sm:text-sm text-[#647167] leading-relaxed mb-6 font-normal">
+                  {isBn
+                    ? "ব্যবসার জন্য সুচিন্তিত বিনিয়োগ নিশ্চিত করুন। দীর্ঘমেয়াদী বিদ্যুৎ খরচ হ্রাস করুন ও নির্ভরযোগ্য অপারেশনের সুরক্ষা পান।"
+                    : "Make the smart investment and choose solar for your business. Lock in energy rates, demonstrate corporate social responsibility, and power continuous industrial output."}
+                </p>
+              </div>
+
+              {/* Bottom Pill CTA */}
+              <div className="pt-4">
+                <Link
+                  href={isBn ? "/bn/category/solar-inverters" : "/category/solar-inverters"}
+                  className="inline-flex items-center justify-between w-full px-5 py-3 rounded-full bg-white hover:bg-[#F2ECE1] text-[#1E2922] text-xs sm:text-sm font-semibold transition-all group/btn border border-black/[0.04]"
+                >
+                  <span>{isBn ? "ইনভার্টার ও ব্যাটারি" : "Inverters & Storage"}</span>
+                  <ArrowRight className="w-4 h-4 text-[#5B675E] transition-transform group-hover/btn:translate-x-1" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ======================================================== */}
+        {/* SECTION 2: PRODUCTION & METRIC CARDS (DARK + LIGHT)      */}
+        {/* ======================================================== */}
+        <div className="space-y-8 lg:space-y-10">
+          {/* Section 2 Header */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="space-y-3 max-w-xl">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F3F4EE] border border-black/[0.06] text-[#1E2922] text-xs font-semibold">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#FF6B4A]" />
+                <span>{isBn ? "ইমপ্যাক্টফুল ফ্যাসিলিটিজ" : "Impact full facilities"}</span>
+              </div>
+
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[#111713]">
+                {isBn
+                  ? "শিল্প কারখানায় বিদ্যুৎ উৎপাদন ও নিয়ন্ত্রণ"
+                  : "Electricity production in industrial plants"}
+              </h3>
+            </div>
+
+            <p className="text-xs sm:text-sm text-[#667268] max-w-xs md:text-right leading-relaxed">
+              {isBn
+                ? "জীবাশ্ম জ্বালানি নির্ভরতা কমিয়ে আধুনিক সৌর ও ব্যাটারি এনার্জিতে পূর্ণ উত্তরণ"
+                : "transitioning from coal to renewables like wind and solar"}
+            </p>
+          </div>
+
+          {/* Section 2 Cards: Large Dark Dashboard Card + Light Metric Card */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+            {/* 1. Large Dark Card (Dashboard & Telemetry) */}
+            <div className="lg:col-span-8 flex flex-col justify-between">
+              <div className="rounded-[32px] bg-[#121614] border border-white/[0.08] p-6 sm:p-8 lg:p-9 text-white shadow-[0_20px_50px_rgba(0,0,0,0.25)] relative overflow-hidden">
+                {/* Background Ambient Glow */}
+                <div
+                  className="pointer-events-none absolute -top-24 -right-24 w-80 h-80 rounded-full bg-[#108958]/15 blur-3xl"
+                  aria-hidden="true"
+                />
+
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-8 items-center relative z-10">
+                  {/* Left Column: Monthly Performance & Bar Chart */}
+                  <div className="sm:col-span-7 space-y-6">
+                    {/* Top Stats + Mini Photo Thumbnails */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-xs text-neutral-400 font-medium">
+                          {currentSlide.monthlyPerformanceLabel}
+                        </div>
+                        <div className="text-2xl sm:text-3xl font-black tracking-tight text-white mt-1">
+                          {currentSlide.monthlyPerformance}
+                        </div>
+                      </div>
+
+                      {/* Two small photo thumbnails */}
+                      <div className="flex items-center gap-2">
+                        {currentSlide.thumbnails.map((src, i) => (
+                          <div
+                            key={i}
+                            className="relative w-10 h-10 rounded-xl overflow-hidden border border-white/20 shadow-xs"
+                          >
+                            <Image
+                              src={src}
+                              alt="Equipment thumbnail"
+                              fill
+                              sizes="40px"
+                              className="object-cover"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Chart Container (Gradient Bars + Overlay Line Graph) */}
+                    <div className="relative pt-6 pb-2">
+                      {/* SVG Line Graph Overlay */}
+                      <svg
+                        className="absolute inset-x-0 top-0 w-full h-24 overflow-visible pointer-events-none z-10"
+                        viewBox="0 0 192 64"
+                        preserveAspectRatio="none"
+                      >
+                        <polyline
+                          fill="none"
+                          stroke="rgba(255, 255, 255, 0.55)"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          points={currentSlide.linePoints}
+                        />
+                        {/* Dot highlight on peak */}
+                        <circle
+                          cx="96"
+                          cy="16"
+                          r="4"
+                          className="fill-[#108958] stroke-white stroke-2"
+                        />
+                      </svg>
+
+                      {/* Bar Columns */}
+                      <div className="grid grid-cols-5 gap-3 items-end h-28 pt-6">
+                        {currentSlide.chartData.map((bar, idx) => (
+                          <div
+                            key={idx}
+                            className="flex flex-col items-center justify-end h-full gap-2"
+                          >
+                            <div className="w-full flex justify-center h-full items-end">
+                              <motion.div
+                                key={`${activeSlide}-${idx}`}
+                                initial={{ height: 0 }}
+                                animate={{ height: `${bar.barHeight}%` }}
+                                transition={{ duration: 0.5, ease: "easeOut" }}
+                                className={`w-full max-w-[28px] rounded-lg transition-all ${
+                                  bar.isHighlight
+                                    ? "bg-gradient-to-t from-[#108958] to-[#22C55E] shadow-[0_0_15px_rgba(34,197,94,0.35)]"
+                                    : idx === 0 || idx === 3
+                                    ? "bg-gradient-to-t from-[#C25E2E] to-[#E07A48]"
+                                    : "bg-neutral-800"
+                                }`}
+                              />
+                            </div>
+                            <span className="text-[11px] font-mono text-neutral-400">
+                              {bar.month}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Vertical Divider / Stem Connector & Right Column */}
+                  <div className="sm:col-span-5 sm:border-l sm:border-neutral-800 sm:pl-8 flex flex-col justify-between h-full pt-4 sm:pt-0">
+                    <div>
+                      {/* Orange glowing node with vertical line */}
+                      <div className="flex flex-col items-start mb-4">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FF6B4A] to-[#FF4B26] flex items-center justify-center text-white shadow-md shadow-orange-500/30">
+                          <Radio className="w-4 h-4 animate-ping" />
+                        </div>
+                        <div className="w-0.5 h-6 bg-gradient-to-b from-[#FF6B4A] to-transparent ml-3.5 mt-1" />
+                      </div>
+
+                      {/* Slide Index (01) */}
+                      <div className="text-4xl sm:text-5xl font-black text-neutral-700/60 font-mono tracking-tighter mb-4">
+                        {currentSlide.index}
+                      </div>
+
+                      {/* Total Utilization Rate */}
+                      <div className="text-xs text-neutral-400 font-medium">
+                        {currentSlide.utilizationLabel}
+                      </div>
+                      <div className="text-3xl sm:text-4xl font-black tracking-tight text-white mt-1">
+                        {currentSlide.utilizationRate}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-neutral-800">
+                      <Link
+                        href={currentSlide.link}
+                        className="inline-flex items-center gap-2 text-xs font-semibold text-[#108958] hover:text-[#22C55E] transition-colors"
+                      >
+                        <span>{currentSlide.categoryTitle}</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Slide Controls & Counter directly below dark card */}
+              <div className="flex items-center justify-between pt-5 px-3">
+                {/* 01 / 06 (or 01 / 03) */}
+                <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-500">
+                  <span className="text-neutral-900">{currentSlide.index}</span>
+                  <span className="text-neutral-400">/ 03</span>
+                </div>
+
+                {/* Navigation Buttons: < and > */}
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={prevSlide}
+                    aria-label="Previous slide"
+                    className="w-9 h-9 rounded-full bg-white hover:bg-neutral-100 border border-black/[0.08] text-neutral-700 flex items-center justify-center transition-all shadow-xs cursor-pointer active:scale-95"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={nextSlide}
+                    aria-label="Next slide"
+                    className="w-9 h-9 rounded-full bg-[#108958] hover:bg-[#0c6c45] text-white flex items-center justify-center transition-all shadow-md shadow-emerald-600/25 cursor-pointer active:scale-95"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. Light Metric Card (Right side) */}
+            <div className="lg:col-span-4 rounded-[32px] bg-white border border-black/[0.06] p-7 sm:p-8 flex flex-col justify-between shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.06)] transition-all min-h-[360px] relative overflow-hidden">
+              <div>
+                {/* Glowing orange + node with drop line */}
+                <div className="flex flex-col items-start mb-2">
+                  <div className="w-8 h-8 rounded-full bg-[#FF8A3D] text-white flex items-center justify-center shadow-md shadow-orange-500/25">
+                    <Plus className="w-4 h-4" />
+                  </div>
+                  <div className="w-0.5 h-6 bg-gradient-to-b from-[#FF8A3D] to-transparent ml-3.5 mt-1" />
+                </div>
+
+                {/* Curved Solar Architecture Visual */}
+                <div className="relative w-full h-36 rounded-2xl overflow-hidden my-4 shadow-sm">
+                  <Image
+                    src="/photos/solar-3d-station.jpg"
+                    alt="Solar architecture and greenery"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 30vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+                </div>
+              </div>
+
+              {/* Bottom Utilization rate & Watermark '02' */}
+              <div className="relative pt-4 flex items-end justify-between">
+                <div>
+                  <div className="text-xs text-[#647167] font-medium">
+                    {isBn ? "মোট ইউটিলাইজেশন রেট" : "Total Utilization rate"}
+                  </div>
+                  <div className="text-2xl sm:text-3xl font-black tracking-tight text-[#121A15] mt-1">
+                    $22,8k
+                  </div>
+                </div>
+
+                {/* Subtle Watermark 02 */}
+                <span className="text-5xl font-black font-mono text-neutral-200/80 leading-none select-none">
+                  02
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

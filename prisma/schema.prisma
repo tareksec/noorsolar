@@ -1,5 +1,5 @@
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -38,8 +38,8 @@ model Product {
   category           Category        @relation(fields: [categoryId], references: [id])
   shortDescription   String?
   shortDescriptionBn String?
-  description        String?         @db.Text
-  descriptionBn      String?         @db.Text
+  description        String?        
+  descriptionBn      String?        
   brand              String?
   model              String?
   stockStatus        String          @default("ON_REQUEST") // IN_STOCK | INCOMING | ON_REQUEST
@@ -56,8 +56,8 @@ model Product {
   sortOrder          Int             @default(0)
   metaTitle          String?
   metaTitleBn        String?
-  metaDescription    String?         @db.Text
-  metaDescriptionBn  String?         @db.Text
+  metaDescription    String?        
+  metaDescriptionBn  String?        
   images             ProductImage[]
   specs              ProductSpec[]
   quotes             QuoteRequest[]
@@ -97,15 +97,15 @@ model QuoteRequest {
   email     String?
   quantity  String?
   location  String?
-  message   String?  @db.Text
+  message   String? 
   status    String   @default("NEW") // NEW | CONTACTED | CLOSED
-  note      String?  @db.Text
+  note      String? 
   createdAt DateTime @default(now())
 }
 
 model SiteSetting {
   key   String @id
-  value String @db.Text // plain text or a JSON string
+  value String // plain text or a JSON string
 }
 
 model Stat {
@@ -154,8 +154,8 @@ model Partner {
 
 model Testimonial {
   id           String   @id @default(cuid())
-  quote        String   @db.Text
-  quoteBn      String?  @db.Text
+  quote        String  
+  quoteBn      String? 
   authorName   String
   authorNameBn String?
   authorRole   String?
@@ -174,8 +174,8 @@ model FaqItem {
   id          String   @id @default(cuid())
   question    String
   questionBn  String?
-  answer      String   @db.Text
-  answerBn    String?  @db.Text
+  answer      String  
+  answerBn    String? 
   sortOrder   Int      @default(0)
   isActive    Boolean  @default(true)
   isSample    Boolean  @default(true)
@@ -188,10 +188,10 @@ model BlogPost {
   slug              String    @unique
   title             String
   titleBn           String?
-  excerpt           String?   @db.Text
-  excerptBn         String?   @db.Text
-  content           String    @db.Text
-  contentBn         String?   @db.Text
+  excerpt           String?  
+  excerptBn         String?  
+  content           String   
+  contentBn         String?  
   coverImage        String?
   coverAlt          String?
   coverAltBn        String?
@@ -202,8 +202,8 @@ model BlogPost {
   authorName        String?
   metaTitle         String?
   metaTitleBn       String?
-  metaDescription   String?   @db.Text
-  metaDescriptionBn String?   @db.Text
+  metaDescription   String?  
+  metaDescriptionBn String?  
   isSample          Boolean   @default(false)
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
@@ -218,7 +218,7 @@ model ProductReview {
   company    String?
   rating     Int // 1 to 5
   title      String?
-  body       String   @db.Text
+  body       String  
   status     String   @default("PENDING") // "PENDING" | "APPROVED" | "REJECTED"
   source     String   @default("PUBLIC") // "ADMIN" | "PUBLIC"
   createdAt  DateTime @default(now())
@@ -240,10 +240,10 @@ model Project {
   capacity           String?  // e.g. "500 kWp", "1.2 MWp"
   capacityBn         String?
   completionDate     String?  // e.g. "2024" or "Q3 2024"
-  summary            String?  @db.Text
-  summaryBn          String?  @db.Text
+  summary            String? 
+  summaryBn          String? 
   image              String?
-  gallery            String?  @db.Text // JSON array of image URLs
+  gallery            String?  // JSON array of image URLs
   clientLogo         String?
   sortOrder          Int      @default(0)
   isPublished        Boolean  @default(false)

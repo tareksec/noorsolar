@@ -14,10 +14,10 @@ function runCommand(command, description) {
   }
 }
 
-// 1. Always generate Prisma client
-runCommand("npx prisma generate", "Generating Prisma Client");
+const fs = require("fs");
+const path = require("path");
 
-// 2. Database Sync & Seed if DATABASE_URL is configured
+// 1. Database Sync & Seed if DATABASE_URL is configured
 function sanitizeDbUrl(raw) {
   if (!raw) return "";
   let url = raw.trim();
@@ -25,7 +25,7 @@ function sanitizeDbUrl(raw) {
     url = url.slice(1, -1).trim();
   }
   if (!url.startsWith("mysql://")) {
-    if (url.startsWith("file:") || url.startsWith("sqlite:")) return "";
+    if (url.startsWith("file:") || url.startsWith("sqlite:")) return url;
     url = `mysql://${url}`;
   }
   try {
@@ -54,6 +54,23 @@ if (process.env.DATABASE_URL) {
 }
 
 const dbUrl = process.env.DATABASE_URL;
+const schemaPath = path.join(__dirname, "..", "prisma", "schema.prisma");
+
+if (fs.existsSync(schemaPath)) {
+  let schemaContent = fs.readFileSync(schemaPath, "utf8");
+  if (dbUrl && dbUrl.startsWith("mysql://")) {
+    console.log("📦 MySQL DATABASE_URL detected. Configuring schema for MySQL...");
+    schemaContent = schemaContent.replace(/provider\s*=\s*"sqlite"/, 'provider = "mysql"');
+    fs.writeFileSync(schemaPath, schemaContent, "utf8");
+  } else {
+    schemaContent = schemaContent.replace(/provider\s*=\s*"mysql"/, 'provider = "sqlite"');
+    fs.writeFileSync(schemaPath, schemaContent, "utf8");
+  }
+}
+
+// 2. Always generate Prisma client
+runCommand("npx prisma generate", "Generating Prisma Client");
+
 if (dbUrl && dbUrl.startsWith("mysql://")) {
   console.log("📦 Valid MySQL DATABASE_URL detected. Synchronizing schema to database...");
   const pushed = runCommand("npx prisma db push --skip-generate", "Syncing database schema (prisma db push)");
@@ -61,7 +78,7 @@ if (dbUrl && dbUrl.startsWith("mysql://")) {
     runCommand("npx tsx prisma/seed.ts", "Seeding database with categories, products, and admin");
   }
 } else {
-  console.log("ℹ️ Skipping db push & seed because DATABASE_URL is not set yet in environment.");
+  console.log("ℹ️ Using local SQLite database.");
 }
 
 console.log("✨ Hostinger setup finished. Proceeding to build...");

@@ -122,6 +122,19 @@ export function CreateCategoryDialog() {
 
               <div>
                 <label className="block text-xs font-mono text-[#5C605C] mb-1">
+                  Category Image (JPEG, PNG or WebP, max 5MB)
+                </label>
+                <input
+                  type="file"
+                  name="image"
+                  id="category-image-input"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="w-full px-3 py-2 rounded-xl bg-[#EDEDED] text-xs text-[#111311] outline-none file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-mono file:bg-[#111311] file:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-mono text-[#5C605C] mb-1">
                   Display Order
                 </label>
                 <input

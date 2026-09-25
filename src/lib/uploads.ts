@@ -178,3 +178,57 @@ export function deleteUploadedFile(relativeUrl: string) {
     }
   }
 }
+
+/**
+ * Duplicate an uploaded file so a copied record owns independent files.
+ * Copies the file (plus its thumbnail for product images) under a new unique
+ * name and returns the new `/uploads/...` URL. Returns the original URL when
+ * the source is not a local upload or cannot be copied.
+ */
+export function duplicateUploadedFile(relativeUrl: string, prefix = "copy"): string {
+  if (!relativeUrl.startsWith("/uploads/")) return relativeUrl;
+
+  ensureDirs();
+
+  const cleanPath = relativeUrl.replace("/uploads/", "");
+  const srcPath = path.resolve(UPLOAD_DIR, cleanPath);
+
+  // Path traversal guard + source must exist
+  if (!srcPath.startsWith(UPLOAD_DIR)) return relativeUrl;
+  if (!fs.existsSync(srcPath)) return relativeUrl;
+
+  try {
+    const stat = fs.statSync(srcPath);
+    if (!stat.isFile()) return relativeUrl;
+
+    const parsed = path.parse(cleanPath);
+    // Only duplicate root-level uploads with thumbnail handling; nested
+    // files (e.g. existing thumbs) are copied as plain files.
+    const hash = crypto.randomBytes(8).toString("hex");
+    const newBase = `${prefix}_${Date.now()}_${hash}`;
+    const destPath =
+      parsed.dir && parsed.dir !== "."
+        ? path.resolve(UPLOAD_DIR, parsed.dir, `${newBase}${parsed.ext}`)
+        : path.join(UPLOAD_DIR, `${newBase}${parsed.ext}`);
+    if (!destPath.startsWith(UPLOAD_DIR)) return relativeUrl;
+
+    fs.copyFileSync(srcPath, destPath);
+
+    // Product images have a companion thumbnail derived from the base name
+    if (!parsed.dir || parsed.dir === ".") {
+      const thumbSrc = path.resolve(UPLOAD_DIR, "thumbs", `${parsed.name}_thumb.webp`);
+      if (fs.existsSync(thumbSrc)) {
+        fs.copyFileSync(
+          thumbSrc,
+          path.resolve(UPLOAD_DIR, "thumbs", `${newBase}_thumb.webp`)
+        );
+      }
+    }
+
+    const newRel = path.relative(UPLOAD_DIR, destPath).split(path.sep).join("/");
+    return `/uploads/${newRel}`;
+  } catch (e) {
+    console.error(`Failed to duplicate upload ${relativeUrl}:`, e);
+    return relativeUrl;
+  }
+}

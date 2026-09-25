@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePublic } from "@/lib/revalidate";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { z } from "zod";
@@ -71,8 +71,8 @@ export async function createAdminReviewAction(
       },
     });
 
-    revalidatePath(`/product/${product.slug}`);
-    revalidatePath("/admin/reviews");
+    revalidatePublic(`/product/${product.slug}`);
+    revalidatePublic("/admin/reviews");
 
     return { success: true, reviewId: created.id };
   } catch (err: unknown) {
@@ -121,8 +121,8 @@ export async function updateReviewAction(
       include: { product: { select: { slug: true } } },
     });
 
-    revalidatePath(`/product/${updated.product.slug}`);
-    revalidatePath("/admin/reviews");
+    revalidatePublic(`/product/${updated.product.slug}`);
+    revalidatePublic("/admin/reviews");
 
     return { success: true, reviewId: id };
   } catch (err: unknown) {
@@ -148,8 +148,8 @@ export async function setReviewStatusAction(formData: FormData) {
     include: { product: { select: { slug: true } } },
   });
 
-  revalidatePath(`/product/${review.product.slug}`);
-  revalidatePath("/admin/reviews");
+  revalidatePublic(`/product/${review.product.slug}`);
+  revalidatePublic("/admin/reviews");
 }
 
 export async function deleteReviewAction(formData: FormData) {
@@ -164,8 +164,8 @@ export async function deleteReviewAction(formData: FormData) {
     include: { product: { select: { slug: true } } },
   });
 
-  revalidatePath(`/product/${review.product.slug}`);
-  revalidatePath("/admin/reviews");
+  revalidatePublic(`/product/${review.product.slug}`);
+  revalidatePublic("/admin/reviews");
 }
 
 export async function bulkApproveReviewsAction(formData: FormData) {
@@ -180,6 +180,6 @@ export async function bulkApproveReviewsAction(formData: FormData) {
     data: { status: "APPROVED" },
   });
 
-  revalidatePath("/products");
-  revalidatePath("/admin/reviews");
+  revalidatePublic("/products");
+  revalidatePublic("/admin/reviews");
 }

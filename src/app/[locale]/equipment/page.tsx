@@ -2,8 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
-import { getCategories } from "@/lib/data/categories";
-import { CategoryDock } from "@/components/sections/category-dock";
+import { CompleteServicesSection } from "@/components/sections/complete-services";
 import { SITE_URL } from "@/lib/site-config";
 
 export const revalidate = 60;
@@ -59,11 +58,9 @@ export default async function EquipmentPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const categories = await getCategories(locale);
-
   return (
     <div className="pt-20 sm:pt-24">
-      <CategoryDock categories={categories} locale={locale} />
+      <CompleteServicesSection locale={locale} />
     </div>
   );
 }
