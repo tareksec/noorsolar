@@ -208,17 +208,6 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
   const [direction, setDirection] = useState<1 | -1>(1);
   const activeRef = useRef(0);
   const cooldownRef = useRef(false);
-  // Fast-scroll capture state: true position lock + gesture accumulator.
-  const lockYRef = useRef<number | null>(null);
-  const suppressLockRef = useRef(false);
-  const lockExpiryTimerRef = useRef<number | null>(null);
-  const isLockListeningRef = useRef(false);
-  const releaseLockRef = useRef<() => void>(() => {});
-  const accumRef = useRef(0);
-  const accumTimerRef = useRef<number | null>(null);
-  const touchStartRef = useRef<{ y: number } | null>(null);
-  const timersRef = useRef<number[]>([]);
-
   // Desktop guard to prevent double image decode on mobile viewports
   const [isDesktop, setIsDesktop] = useState(false);
   useEffect(() => {
@@ -234,304 +223,107 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
   }, [active]);
 
   const jumpTo = useCallback((index: number) => {
-    releaseLockRef.current();
     if (index === activeRef.current) return;
     setDirection(index > activeRef.current ? 1 : -1);
     setActive(index);
     activeRef.current = index;
   }, []);
 
-  // Discrete 1-scroll-gesture to 1-card capture for Desktop.
-  // Fast-scroll robustness: per-event preventDefault alone cannot hold the
-  // section because Lenis (smoothWheel, window-level bubble listener) converts
-  // fast wheel flicks into a ~1.1s inertial glide that sails the page past the
-  // section while our 550ms cooldown swallows the follow-up events. So while
-  // steps remain we (1) stopPropagation to keep Lenis from ever seeing captured
-  // gestures, and (2) engage a true scroll-position lock that snaps back any
-  // page movement (in-flight Lenis glides, sub-threshold trackpad momentum,
-  // keyboard scroll) until a boundary card releases it.
+  // Clean, non-locking wheel navigation for desktop
   useEffect(() => {
     if (typeof window === "undefined" || reduceMotion) return;
 
     const el = sectionRef.current;
     if (!el) return;
 
-    const STEP_THRESHOLD = 24; // accumulated px per step (one notch still steps at once)
-    const COOLDOWN_MS = 550;
-    const LOCK_EXPIRY_MS = 1100;
-    const TOUCH_STEP_PX = 40;
-
     const isDesktopWidth = () => window.innerWidth >= 768;
 
-    const inCaptureZone = () => {
-      const rect = el.getBoundingClientRect();
-      return (
-        rect.top <= 140 && rect.bottom >= window.innerHeight * 0.4
-      );
-    };
-
-    const canAdvance = (dir: 1 | -1) =>
-      dir > 0 ? activeRef.current < items.length - 1 : activeRef.current > 0;
-
-    // True position lock: snaps back in-flight Lenis glides while actively
-    // holding a step interaction.
-    const handleScrollLock = () => {
-      if (suppressLockRef.current) return;
-      if (lockYRef.current === null) {
-        detachScrollLock();
-        return;
-      }
-      // Never snap if section is not in the active capture zone or on mobile
-      if (!isDesktopWidth() || !inCaptureZone()) {
-        releaseLock();
-        return;
-      }
-      const y = window.scrollY;
-      const diff = Math.abs(y - lockYRef.current);
-      // Beyond normal glide drift (e.g. user jumped/navigated/dragged): release immediately
-      if (diff > 120) {
-        releaseLock();
-        return;
-      }
-      if (diff > 2) {
-        window.scrollTo(0, lockYRef.current);
-      }
-    };
-
-    const detachScrollLock = () => {
-      if (isLockListeningRef.current) {
-        window.removeEventListener("scroll", handleScrollLock, { capture: true });
-        isLockListeningRef.current = false;
-      }
-    };
-
-    const attachScrollLock = () => {
-      if (!isLockListeningRef.current) {
-        window.addEventListener("scroll", handleScrollLock, {
-          capture: true,
-          passive: true,
-        });
-        isLockListeningRef.current = true;
-      }
-    };
-
-    const releaseLock = () => {
-      lockYRef.current = null;
-      if (lockExpiryTimerRef.current) {
-        window.clearTimeout(lockExpiryTimerRef.current);
-        lockExpiryTimerRef.current = null;
-      }
-      detachScrollLock();
-    };
-
-    releaseLockRef.current = releaseLock;
-
-    const engageLock = (customY?: number) => {
-      if (!isDesktopWidth() || !inCaptureZone()) {
-        releaseLock();
-        return;
-      }
-      lockYRef.current = typeof customY === "number" ? customY : window.scrollY;
-      attachScrollLock();
-
-      if (lockExpiryTimerRef.current) {
-        window.clearTimeout(lockExpiryTimerRef.current);
-      }
-      lockExpiryTimerRef.current = window.setTimeout(() => {
-        releaseLock();
-      }, LOCK_EXPIRY_MS);
-    };
-
-    const stepTo = (dir: 1 | -1, rect: DOMRect) => {
-      cooldownRef.current = true;
-      accumRef.current = 0;
-      setDirection(dir);
-      setActive((prev) => {
-        const next =
-          dir > 0
-            ? Math.min(items.length - 1, prev + 1)
-            : Math.max(0, prev - 1);
-        activeRef.current = next;
-        return next;
-      });
-
-      // Smoothly align section into clear focal view on interaction.
-      // Our own realign scroll runs with the position lock suppressed, then
-      // the lock re-engages at the destination so it never fights itself.
-      if (rect.top > 80 || rect.top < 30) {
-        const target = window.scrollY + rect.top - 70;
-        suppressLockRef.current = true;
-        window.scrollTo({ top: target, behavior: "smooth" });
-        const timer = window.setTimeout(() => {
-          suppressLockRef.current = false;
-          engageLock();
-        }, 600);
-        timersRef.current.push(timer);
-      } else {
-        engageLock();
-      }
-
-      const timer = window.setTimeout(() => {
-        cooldownRef.current = false;
-      }, COOLDOWN_MS);
-      timersRef.current.push(timer);
-    };
-
-    // Capture a scroll intent heading `dir`. Returns true when the gesture was
-    // consumed (page must not move); false lets the page scroll naturally
-    // (boundary card or section outside the capture zone).
-    const capture = (dir: 1 | -1) => {
-      if (!isDesktopWidth()) return false;
-      if (!inCaptureZone()) {
-        releaseLock();
-        return false;
-      }
-      if (!canAdvance(dir)) {
-        // At the first/last card, normal page scroll continues naturally.
-        releaseLock();
-        return false;
-      }
-      engageLock();
-      if (cooldownRef.current) return true;
-      stepTo(dir, el.getBoundingClientRect());
-      return true;
-    };
+    let cooldownTimer: NodeJS.Timeout | null = null;
+    let exitCooldownTimer: NodeJS.Timeout | null = null;
+    let isExiting = false;
 
     const handleWheel = (e: WheelEvent) => {
-      // Only execute on desktop screens (mobile uses the sticky deck below)
       if (!isDesktopWidth()) return;
 
       const rect = el.getBoundingClientRect();
-      const inView =
-        rect.top <= 140 && rect.bottom >= window.innerHeight * 0.4;
-      if (!inView) {
-        releaseLock();
-        return;
-      }
+      // Section must be cleanly in view (not already scrolled past)
+      const inView = rect.top >= -80 && rect.top <= 120 && rect.bottom >= window.innerHeight * 0.45;
+      if (!inView) return;
 
       const delta = e.deltaY;
-      if (delta === 0) return;
+      if (Math.abs(delta) < 20) return; // ignore micro-jitter
       const dir: 1 | -1 = delta > 0 ? 1 : -1;
 
-      if (!canAdvance(dir)) {
-        // Boundary card: let the page scroll naturally in this direction.
-        releaseLock();
+      // If scrolling DOWN and already at the last card:
+      // Let the page scroll naturally DOWN to the next section! Do NOT preventDefault!
+      if (dir > 0 && activeRef.current >= items.length - 1) {
+        isExiting = true;
+        if (exitCooldownTimer) clearTimeout(exitCooldownTimer);
+        exitCooldownTimer = setTimeout(() => {
+          isExiting = false;
+        }, 1200);
         return;
       }
 
-      // Consume the gesture BEFORE Lenis (window bubble listener) can turn a
-      // fast flick into an inertial glide past the whole section.
+      // If scrolling UP and already at the first card:
+      // Let the page scroll naturally UP to the previous section! Do NOT preventDefault!
+      if (dir < 0 && activeRef.current <= 0) {
+        isExiting = true;
+        if (exitCooldownTimer) clearTimeout(exitCooldownTimer);
+        exitCooldownTimer = setTimeout(() => {
+          isExiting = false;
+        }, 1200);
+        return;
+      }
+
+      // If currently exiting in that direction, do not let recoil reverse the cards
+      if (isExiting) {
+        return;
+      }
+
+      // Stepping within cards: consume the wheel event so it steps cleanly
       e.preventDefault();
-      e.stopPropagation();
-      engageLock();
       if (cooldownRef.current) return;
 
-      // Accumulate sub-threshold trackpad deltas so gentle scrolling still
-      // steps; a single mouse notch exceeds the threshold on its own.
-      if (accumRef.current !== 0 && Math.sign(delta) !== Math.sign(accumRef.current)) {
-        accumRef.current = 0;
-      }
-      accumRef.current += delta;
-      if (accumTimerRef.current) window.clearTimeout(accumTimerRef.current);
-      accumTimerRef.current = window.setTimeout(() => {
-        accumRef.current = 0;
-      }, 350);
-      if (Math.abs(accumRef.current) < STEP_THRESHOLD) return;
+      const nextIndex =
+        dir > 0
+          ? Math.min(items.length - 1, activeRef.current + 1)
+          : Math.max(0, activeRef.current - 1);
 
-      stepTo(dir, rect);
-    };
+      if (nextIndex !== activeRef.current) {
+        cooldownRef.current = true;
+        setDirection(dir);
+        setActive(nextIndex);
+        activeRef.current = nextIndex;
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isDesktopWidth()) return;
-      const t = e.target as HTMLElement | null;
-      if (
-        t &&
-        (t.tagName === "INPUT" ||
-          t.tagName === "TEXTAREA" ||
-          t.tagName === "SELECT" ||
-          t.isContentEditable)
-      ) {
-        return;
-      }
-      const focusInside = !!t && el.contains(t);
-      let dir: 1 | -1 | 0 = 0;
-      if (
-        e.key === "PageDown" ||
-        e.key === "End" ||
-        (!focusInside && (e.key === " " || e.key === "Spacebar"))
-      ) {
-        dir = 1;
-      } else if (e.key === "PageUp" || e.key === "Home") {
-        dir = -1;
-      } else if (
-        !focusInside &&
-        (e.key === "ArrowDown" || e.key === "ArrowUp")
-      ) {
-        // Arrows with focus inside the section belong to its own key handler.
-        dir = e.key === "ArrowDown" ? 1 : -1;
-      }
-      if (dir === 0) return;
-      if (!inCaptureZone()) return;
-      if (!canAdvance(dir)) return; // boundary: natural page scroll
-      e.preventDefault();
-      e.stopPropagation();
-      if (capture(dir)) {
-        // consumed: position lock holds the page for the cooldown
-      }
-    };
+        // If we just reached a boundary, arm the exit cooldown
+        if (nextIndex === items.length - 1 && dir > 0) {
+          isExiting = true;
+          if (exitCooldownTimer) clearTimeout(exitCooldownTimer);
+          exitCooldownTimer = setTimeout(() => {
+            isExiting = false;
+          }, 800);
+        } else if (nextIndex === 0 && dir < 0) {
+          isExiting = true;
+          if (exitCooldownTimer) clearTimeout(exitCooldownTimer);
+          exitCooldownTimer = setTimeout(() => {
+            isExiting = false;
+          }, 800);
+        }
 
-    const handleTouchStart = (e: TouchEvent) => {
-      if (!isDesktopWidth()) return;
-      if (e.touches.length !== 1) {
-        touchStartRef.current = null;
-        return;
+        if (cooldownTimer) clearTimeout(cooldownTimer);
+        cooldownTimer = setTimeout(() => {
+          cooldownRef.current = false;
+        }, 450);
       }
-      touchStartRef.current = { y: e.touches[0].clientY };
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!isDesktopWidth() || !touchStartRef.current) return;
-      if (!inCaptureZone()) return;
-      const dy = touchStartRef.current.y - e.touches[0].clientY;
-      if (Math.abs(dy) < STEP_THRESHOLD) return;
-      const dir: 1 | -1 = dy > 0 ? 1 : -1;
-      if (!canAdvance(dir)) return; // boundary: natural touch scroll
-      // Non-passive: block the native touch scroll while steps remain.
-      e.preventDefault();
-      e.stopPropagation();
-      engageLock();
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      const start = touchStartRef.current;
-      touchStartRef.current = null;
-      if (!start || !isDesktopWidth()) return;
-      const endY = e.changedTouches[0]?.clientY ?? start.y;
-      const dy = start.y - endY;
-      if (Math.abs(dy) < TOUCH_STEP_PX) return;
-      const dir: 1 | -1 = dy > 0 ? 1 : -1;
-      capture(dir);
     };
 
     el.addEventListener("wheel", handleWheel, { passive: false });
-    el.addEventListener("touchstart", handleTouchStart, { passive: true });
-    el.addEventListener("touchmove", handleTouchMove, { passive: false });
-    el.addEventListener("touchend", handleTouchEnd, { passive: true });
-    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       el.removeEventListener("wheel", handleWheel);
-      el.removeEventListener("touchstart", handleTouchStart);
-      el.removeEventListener("touchmove", handleTouchMove);
-      el.removeEventListener("touchend", handleTouchEnd);
-      window.removeEventListener("keydown", handleKeyDown);
-      detachScrollLock();
-      if (accumTimerRef.current) window.clearTimeout(accumTimerRef.current);
-      if (lockExpiryTimerRef.current) window.clearTimeout(lockExpiryTimerRef.current);
-      timersRef.current.forEach((t) => window.clearTimeout(t));
-      timersRef.current = [];
-      releaseLock();
-      releaseLockRef.current = () => {};
+      if (cooldownTimer) clearTimeout(cooldownTimer);
+      if (exitCooldownTimer) clearTimeout(exitCooldownTimer);
     };
   }, [items.length, reduceMotion]);
 
