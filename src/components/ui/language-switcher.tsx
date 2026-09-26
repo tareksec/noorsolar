@@ -21,16 +21,22 @@ function LanguageSwitcherInner({
 }: LanguageSwitcherProps & { searchParamsString?: string }) {
   const pathname = usePathname() || "/";
 
-  // Determine current locale from prop or pathname
-  const isBn = currentLocale === "bn" || pathname.startsWith("/bn/") || pathname === "/bn";
+  // Determine current locale from prop or pathname (Bangla is now default)
+  const isBn = currentLocale === "bn" || (!pathname.startsWith("/en/") && pathname !== "/en");
   const activeLocale = isBn ? "bn" : "en";
 
   // Build target paths while preserving query params
   const queryString = searchParamsString ? `?${searchParamsString}` : "";
 
-  // Strip /bn from pathname to get base path
+  // Strip /en or /bn from pathname to get base path
   let basePath = pathname;
-  if (basePath.startsWith("/bn")) {
+  if (basePath.startsWith("/en")) {
+    basePath = basePath.slice(3);
+    if (!basePath.startsWith("/")) {
+      basePath = "/" + basePath;
+    }
+    if (!basePath) basePath = "/";
+  } else if (basePath.startsWith("/bn")) {
     basePath = basePath.slice(3);
     if (!basePath.startsWith("/")) {
       basePath = "/" + basePath;
@@ -38,17 +44,11 @@ function LanguageSwitcherInner({
     if (!basePath) basePath = "/";
   }
 
-  // English URL is always unprefixed
-  const enHref = `${basePath}${queryString}`;
+  // Bangla URL is default / unprefixed
+  const bnHref = `${basePath}${queryString}`;
 
-  // Bangla URL
-  let bnHref: string;
-  // If viewing a blog post without Bangla translation, redirect to the blog list /bn/blog
-  if (basePath.startsWith("/blog/") && !hasBanglaContent) {
-    bnHref = `/bn/blog${queryString}`;
-  } else {
-    bnHref = basePath === "/" ? `/bn${queryString}` : `/bn${basePath}${queryString}`;
-  }
+  // English URL is prefixed with /en
+  const enHref = basePath === "/" ? `/en${queryString}` : `/en${basePath}${queryString}`;
 
   const setLocaleCookie = (locale: "en" | "bn") => {
     try {

@@ -181,7 +181,7 @@ export function AnimatedNavFramer({
     setActiveDropdown(null);
   }
 
-  const isBn = currentLocale === "bn" || pathname.startsWith("/bn/") || pathname === "/bn";
+  const isBn = currentLocale === "bn" || (!pathname.startsWith("/en/") && pathname !== "/en");
 
   const defaultItems = [
     ...DEFAULT_NAV_ITEMS,
@@ -217,11 +217,17 @@ export function AnimatedNavFramer({
   const navItems = rawNavItems.map((item) => {
     let href = item.href;
     const name = isBn && item.nameBn ? item.nameBn : (isBn && BN_NAV_NAMES[item.name] ? BN_NAV_NAMES[item.name] : item.name);
-    if (isBn) {
+    if (!isBn) {
       if (href.startsWith("/#")) {
-        href = `/bn${href.slice(1)}`;
-      } else if (href.startsWith("/") && !href.startsWith("/bn")) {
-        href = `/bn${href}`;
+        href = `/en${href.slice(1)}`;
+      } else if (href.startsWith("/") && !href.startsWith("/en")) {
+        href = `/en${href}`;
+      }
+    } else {
+      if (href.startsWith("/bn/")) {
+        href = href.slice(3);
+      } else if (href === "/bn") {
+        href = "/";
       }
     }
 
@@ -229,11 +235,17 @@ export function AnimatedNavFramer({
       let childHref = child.href;
       const childName = isBn && child.nameBn ? child.nameBn : (isBn && BN_NAV_NAMES[child.name] ? BN_NAV_NAMES[child.name] : child.name);
       const childDesc = isBn && child.descriptionBn ? child.descriptionBn : child.description;
-      if (isBn) {
+      if (!isBn) {
         if (childHref.startsWith("/#")) {
-          childHref = `/bn${childHref.slice(1)}`;
-        } else if (childHref.startsWith("/") && !childHref.startsWith("/bn")) {
-          childHref = `/bn${childHref}`;
+          childHref = `/en${childHref.slice(1)}`;
+        } else if (childHref.startsWith("/") && !childHref.startsWith("/en")) {
+          childHref = `/en${childHref}`;
+        }
+      } else {
+        if (childHref.startsWith("/bn/")) {
+          childHref = childHref.slice(3);
+        } else if (childHref === "/bn") {
+          childHref = "/";
         }
       }
       return {
@@ -250,8 +262,10 @@ export function AnimatedNavFramer({
   const displayCtaText = isBn
     ? (ctaText === "Request a Quote" ? "কোটেশন নিন" : ctaText === "Contact Sales" || ctaText === "Book A Call" || !ctaText ? "যোগাযোগ করুন" : ctaText)
     : ctaText;
-  const finalCtaHref = isBn && !ctaHref.startsWith("/bn") ? `/bn${ctaHref}` : ctaHref;
-  const brandHref = isBn ? "/bn" : "/";
+  const finalCtaHref = isBn
+    ? (ctaHref.startsWith("/bn/") ? ctaHref.slice(3) : (ctaHref === "/bn" ? "/" : ctaHref))
+    : (!ctaHref.startsWith("/en") ? `/en${ctaHref}` : ctaHref);
+  const brandHref = isBn ? "/" : "/en";
 
   const { scrollY } = useScroll();
   const lastScrollY = React.useRef(0);
@@ -408,9 +422,9 @@ export function AnimatedNavFramer({
                 {/* Navigation Links (Desktop & Landscape) */}
                 <div className="flex items-center gap-1 lg:gap-2 pr-1 sm:pr-2">
                   {navItems.map((item) => {
-                    const isDirectActive = pathname === item.href || (item.href !== "/" && item.href !== "/bn" && pathname.startsWith(item.href));
+                    const isDirectActive = pathname === item.href || (item.href !== "/" && item.href !== "/en" && pathname.startsWith(item.href));
                     const isChildActive = item.children?.some(
-                      (c) => pathname === c.href || (c.href !== "/" && c.href !== "/bn" && pathname.startsWith(c.href))
+                      (c) => pathname === c.href || (c.href !== "/" && c.href !== "/en" && pathname.startsWith(c.href))
                     );
                     const isActive = isDirectActive || isChildActive;
                     const hasChildren = Boolean(item.children && item.children.length > 0);
@@ -659,9 +673,9 @@ export function AnimatedNavFramer({
 
             <div className="flex flex-col gap-2 pt-4 max-h-[calc(80vh-8rem)] overflow-y-auto no-scrollbar">
               {navItems.map((item, idx) => {
-                const isDirectActive = pathname === item.href || (item.href !== "/" && item.href !== "/bn" && pathname.startsWith(item.href));
+                const isDirectActive = pathname === item.href || (item.href !== "/" && item.href !== "/en" && pathname.startsWith(item.href));
                 const isChildActive = item.children?.some(
-                  (c) => pathname === c.href || (c.href !== "/" && c.href !== "/bn" && pathname.startsWith(c.href))
+                  (c) => pathname === c.href || (c.href !== "/" && c.href !== "/en" && pathname.startsWith(c.href))
                 );
                 const isActive = isDirectActive || isChildActive;
                 const hasChildren = Boolean(item.children && item.children.length > 0);

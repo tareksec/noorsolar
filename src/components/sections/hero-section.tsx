@@ -29,15 +29,15 @@ export function HeroSection({
   const isBn = locale === "bn" || (headline ? /[\u0980-\u09FF]/.test(headline) : false);
 
   const defaultHeadline = isBn
-    ? "সরাসরি আমদানিকৃত সোলার ইকুইপমেন্ট। প্রজেক্ট স্কেলে পাইকারি সরবরাহ।"
+    ? "সরাসরি আমদানিকৃত সেরা সোলার ইকুইপমেন্ট — আপনার প্রজেক্টের বিশ্বস্ত সমাধান"
     : "Solar Equipment. Imported Direct. Supplied at Project Scale.";
 
   const defaultSubheadline = isBn
-    ? "EPC ঠিকাদার, শিল্পপ্রতিষ্ঠান ও সোলার ডিলারদের জন্য N-Type পিভি মডিউল, LiFePO4 ব্যাটারি ও কমার্শিয়াল ইনভার্টার সরবরাহ।"
+    ? "EPC কন্ট্রাক্টর, কারখানা ও সোলার ডিলারদের জন্য টিয়ার-১ N-Type সোলার প্যানেল, নিরাপদ LiFePO4 ব্যাটারি ও স্মার্ট ইনভার্টারের নির্ভরযোগ্য পাইকারি সরবরাহ — সরাসরি চট্টগ্রাম পোর্ট ও ঢাকা ওয়্যারহাউস থেকে দ্রুত ডেলিভারি।"
     : "N-Type PV modules, LiFePO4 storage and commercial inverters for EPCs, industrial facilities and solar dealers across Bangladesh.";
 
-  const defaultPrimaryCta = isBn ? "পাইকারি কোটেশন নিন" : "Request Wholesale Quote";
-  const defaultSecondaryCta = isBn ? "বর্তমান স্টক দেখুন" : "View Available Stock";
+  const defaultPrimaryCta = isBn ? "সহজেই কোটেশন নিন" : "Request Wholesale Quote";
+  const defaultSecondaryCta = isBn ? "আমাদের রেডি স্টক দেখুন" : "View Available Stock";
 
   const resolvedHeadline = headline || defaultHeadline;
   const resolvedSubheadline = subheadline || defaultSubheadline;
@@ -98,7 +98,7 @@ export function HeroSection({
           {/* Kicker Pill Badge in Brand Solar Gold */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#FEBE16]/30 bg-[#FEBE16]/10 backdrop-blur-md text-[#FEBE16] text-xs sm:text-sm font-medium mb-5 shadow-[0_0_20px_rgba(254,190,22,0.15)]">
             <Sparkles className="w-4 h-4 text-[#FEBE16] shrink-0" />
-            <span>{isBn ? "সরাসরি B2B সোলার ইকুইপমেন্ট আমদানিকারক" : "Direct B2B Solar Equipment Importer"}</span>
+            <span>{isBn ? "✨ সরাসরি আমদানিকারক • বিশ্বস্ত B2B সোলার পার্টনার" : "Direct B2B Solar Equipment Importer"}</span>
           </div>
 
           {/* Headline */}
@@ -118,7 +118,7 @@ export function HeroSection({
           <div className="flex flex-wrap items-center justify-center gap-4">
             <MagneticButton>
               <Link
-                href={isBn ? "/bn/quote" : "/quote"}
+                href={isBn ? "/quote" : "/en/quote"}
                 data-motion="button-slide"
                 className="btn-slide-fill group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-sm sm:text-base shadow-[0_8px_25px_rgba(254,190,22,0.35)] transition-all hover:scale-[1.03] active:scale-[0.98] w-fit"
               >
@@ -131,7 +131,7 @@ export function HeroSection({
 
             {resolvedSecondaryCta && (
               <Link
-                href={isBn ? "/bn/products" : "/products"}
+                href={isBn ? "/products" : "/en/products"}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-white font-semibold text-sm sm:text-base backdrop-blur-md transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 <span>{resolvedSecondaryCta}</span>
@@ -151,7 +151,7 @@ export function HeroSection({
                 <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
-                {isBn ? "কন্টেইনার ও বাল্ক সরবরাহ" : "Container & Bulk Wholesale"}
+                {isBn ? "কন্টেইনার ও প্যালেট বাল্ক সরবরাহ" : "Container & Bulk Wholesale"}
               </span>
             </div>
 
@@ -161,7 +161,7 @@ export function HeroSection({
                 <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
-                {isBn ? "ইঞ্জিনিয়ারিং-গ্রেড পরীক্ষিত সরঞ্জাম" : "Certified Solar Equipment"}
+                {isBn ? "১০০% আসল ও টিয়ার-১ সার্টিফাইড ইকুইপমেন্ট" : "Certified Solar Equipment"}
               </span>
             </div>
 
@@ -171,7 +171,7 @@ export function HeroSection({
                 <Headset className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
-                {isBn ? "সারাদেশে প্রজেক্ট ডেলিভারি" : "Nationwide Project Supply"}
+                {isBn ? "সারা দেশে দ্রুত ও নিরাপদ ডেলিভারি" : "Nationwide Project Supply"}
               </span>
             </div>
           </div>
@@ -196,7 +196,7 @@ export function HeroSection({
                   <ShieldCheck className="w-3.5 h-3.5 fill-[#052F25] text-[#FEBE16]" />
                 </div>
                 <span className="text-xs sm:text-sm font-bold text-white leading-tight">
-                  {isBn ? "প্রজেক্ট-গ্রেড সোলার ইকুইপমেন্ট" : "Project-Scale Solar Equipment"}
+                  {isBn ? "প্রজেক্ট-গ্রেড প্রিমিয়াম ইকুইপমেন্ট" : "Project-Scale Solar Equipment"}
                 </span>
               </div>
 
@@ -236,8 +236,8 @@ export function HeroSection({
                   </div>
                 </div>
                 <div className="flex flex-col text-xs leading-tight">
-                  <span className="text-slate-300">{isBn ? "সরাসরি সরবরাহ" : "Trusted Supply"}</span>
-                  <span className="font-bold text-[#FEBE16]">{isBn ? "বাণিজ্যিক ও প্রজেক্ট ক্লায়েন্ট" : "Commercial & Project Scale"}</span>
+                  <span className="text-slate-300">{isBn ? "সরাসরি ওয়্যারহাউস থেকে" : "Trusted Supply"}</span>
+                  <span className="font-bold text-[#FEBE16]">{isBn ? "বাণিজ্যিক ও প্রজেক্টের বিশ্বস্ত পার্টনার" : "Commercial & Project Scale"}</span>
                 </div>
               </div>
             </div>

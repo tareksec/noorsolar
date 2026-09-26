@@ -50,10 +50,10 @@ export async function generateMetadata({
       : "Direct importer and bulk B2B wholesale supplier of commercial solar panels, LiFePO4 battery storage, and solar inverters in Bangladesh.",
     metadataBase: new URL(siteUrl),
     alternates: {
-      canonical: isBn ? "/bn" : "/",
+      canonical: isBn ? "/" : "/en",
       languages: {
-        en: "/",
-        bn: "/bn",
+        bn: "/",
+        en: "/en",
         "x-default": "/",
       },
     },
