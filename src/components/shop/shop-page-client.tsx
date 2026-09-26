@@ -482,7 +482,7 @@ export function ShopPageClient({
             <span className="text-[11px] text-[#62706A] font-medium">{isBn ? "সর্ট:" : "Sort:"}</span>
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as "featured" | "price-asc" | "price-desc" | "name")}
               className="bg-transparent text-[#17251F] font-bold text-xs focus:outline-none cursor-pointer"
             >
               <option value="featured">{isBn ? "ফিচার্ড" : "Featured"}</option>
