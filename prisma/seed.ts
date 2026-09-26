@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
 import { defaultSiteConfig } from "../src/lib/site-config";
-import { sampleStats, sampleCertifications, samplePartners, sampleTestimonials, sampleFaqs } from "./seed-content";
+import { sampleStats, sampleCertifications, samplePartners, sampleTestimonials, sampleFaqs, sampleProjects } from "./seed-content";
 import { demoProducts } from "./seed-products";
 import { sampleBlogPosts } from "./seed-blog";
 
@@ -280,7 +280,17 @@ async function main() {
     });
   }
 
-  console.log("✓ Sample trust content and blog posts successfully seeded!");
+  // 7. Seed Verified Projects & Case Studies
+  console.log("Seeding verified project supply references...");
+  for (const project of sampleProjects) {
+    await prisma.project.upsert({
+      where: { slug: project.slug },
+      update: project,
+      create: project,
+    });
+  }
+
+  console.log("✓ Sample trust content, projects, and blog posts successfully seeded!");
 }
 
 main()

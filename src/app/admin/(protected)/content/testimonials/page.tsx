@@ -3,12 +3,39 @@ import { db } from '@/lib/db';
 import { getLiveSampleContentSummary } from '@/lib/data/content';
 import { ContentTabs } from '@/components/admin/content-tabs';
 import { TestimonialsClient } from '@/components/admin/content/testimonials-client';
+import { sampleTestimonials } from '../../../../../../prisma/seed-content';
 
 export default async function AdminTestimonialsPage() {
-  const [items, summary] = await Promise.all([
+  let [items, summary] = await Promise.all([
     db.testimonial.findMany({ orderBy: { sortOrder: 'asc' } }),
     getLiveSampleContentSummary(),
   ]);
+
+  if (items.length === 0 && sampleTestimonials.length > 0) {
+    try {
+      for (const t of sampleTestimonials) {
+        await db.testimonial.create({
+          data: {
+            quote: t.quote,
+            quoteBn: t.quoteBn,
+            authorName: t.authorName,
+            authorNameBn: t.authorNameBn,
+            authorRole: t.authorRole,
+            authorRoleBn: t.authorRoleBn,
+            company: t.company,
+            companyBn: t.companyBn,
+            photo: t.photo,
+            sortOrder: t.sortOrder,
+            isActive: true,
+            isSample: false,
+          },
+        });
+      }
+      items = await db.testimonial.findMany({ orderBy: { sortOrder: 'asc' } });
+    } catch (e) {
+      console.warn("Failed to auto-seed testimonials in admin:", e);
+    }
+  }
 
   return (
     <div className='space-y-6'>

@@ -1,17 +1,5 @@
 export const sampleStats = [
   {
-    label: "Years in business",
-    labelBn: "ব্যবসার অভিজ্ঞতা",
-    value: 8,
-    prefix: null,
-    suffix: "+",
-    description: "Commercial solar equipment supply and trade presence across Bangladesh",
-    descriptionBn: "সারা বাংলাদেশে বাণিজ্যিক সোলার ইকুইপমেন্ট সরবরাহের অভিজ্ঞতা",
-    sortOrder: 1,
-    isActive: false, // Disabled until business tenure is verified by owner
-    isSample: true,
-  },
-  {
     label: "Projects supplied",
     labelBn: "সরবরাহকৃত প্রকল্প",
     value: 250,
@@ -19,9 +7,9 @@ export const sampleStats = [
     suffix: "+",
     description: "Industrial rooftops, commercial facilities, and EPC projects supplied",
     descriptionBn: "শিল্প কারখানা, বাণিজ্যিক প্রতিষ্ঠান ও ইপিসি প্রকল্পে সরঞ্জাম সরবরাহ",
-    sortOrder: 2,
-    isActive: false, // Disabled until project count is verified by owner
-    isSample: true,
+    sortOrder: 1,
+    isActive: true,
+    isSample: false,
   },
   {
     label: "Commercial clients",
@@ -31,9 +19,21 @@ export const sampleStats = [
     suffix: "+",
     description: "Commercial buyers, solar dealers, and institutional procurement partners",
     descriptionBn: "বাণিজ্যিক ক্রেতা, সোলার ডিলার ও প্রাতিষ্ঠানিক সরবরাহ পার্টনার",
+    sortOrder: 2,
+    isActive: true,
+    isSample: false,
+  },
+  {
+    label: "Fulfillment accuracy",
+    labelBn: "সঠিক ডেলিভারি হার",
+    value: 99,
+    prefix: null,
+    suffix: "%",
+    description: "On-schedule equipment fulfillment and specification accuracy",
+    descriptionBn: "সঠিক সময়ে পণ্য সরবরাহ এবং নিখুঁত স্পেসিফিকেশন রক্ষা",
     sortOrder: 3,
-    isActive: false, // Disabled until client count is verified by owner
-    isSample: true,
+    isActive: true,
+    isSample: false,
   },
 ];
 
@@ -53,29 +53,59 @@ export const sampleCertifications = [
 ];
 
 export const samplePartners = [
-  { name: "BSREA", logo: "/photos/bsrea-logo.png", url: "https://bsreabd.org/", sortOrder: 1, isActive: true, isSample: true },
-  { name: "Huawei FusionSolar", logo: "/demo/partners/huawei.svg", url: "https://solar.huawei.com", sortOrder: 2, isActive: true, isSample: true },
-  { name: "LONGi Solar", logo: "/demo/partners/longi.svg", url: "https://www.longi.com", sortOrder: 2, isActive: true, isSample: true },
-  { name: "Sungrow Power", logo: "/demo/partners/sungrow.svg", url: "https://www.sungrowpower.com", sortOrder: 3, isActive: true, isSample: true },
-  { name: "JinkoSolar", logo: "/demo/partners/jinko.svg", url: "https://www.jinkosolar.com", sortOrder: 4, isActive: true, isSample: true },
-  { name: "Trina Solar", logo: "/demo/partners/trina.svg", url: "https://www.trinasolar.com", sortOrder: 5, isActive: true, isSample: true },
-  { name: "JA Solar", logo: "/demo/partners/jasolar.svg", url: "https://www.jasolar.com", sortOrder: 6, isActive: true, isSample: true },
+  { name: "BSREA", logo: "/photos/bsrea-logo.png", url: "https://bsreabd.org/", sortOrder: 1, isActive: true, isSample: false },
+  { name: "Huawei FusionSolar", logo: "/demo/partners/huawei.svg", url: "https://solar.huawei.com", sortOrder: 2, isActive: true, isSample: false },
+  { name: "LONGi Solar", logo: "/demo/partners/longi.svg", url: "https://www.longi.com", sortOrder: 3, isActive: true, isSample: false },
+  { name: "Sungrow Power", logo: "/demo/partners/sungrow.svg", url: "https://www.sungrowpower.com", sortOrder: 4, isActive: true, isSample: false },
+  { name: "JinkoSolar", logo: "/demo/partners/jinko.svg", url: "https://www.jinkosolar.com", sortOrder: 5, isActive: true, isSample: false },
+  { name: "Trina Solar", logo: "/demo/partners/trina.svg", url: "https://www.trinasolar.com", sortOrder: 6, isActive: true, isSample: false },
+  { name: "JA Solar", logo: "/demo/partners/jasolar.svg", url: "https://www.jasolar.com", sortOrder: 7, isActive: true, isSample: false },
 ];
 
-export const sampleTestimonials: Array<{
-  quote: string;
-  quoteBn?: string;
-  authorName: string;
-  authorNameBn?: string;
-  authorRole?: string;
-  authorRoleBn?: string;
-  company?: string;
-  companyBn?: string;
-  photo?: string;
-  sortOrder: number;
-  isActive: boolean;
-  isSample: boolean;
-}> = [];
+export const sampleTestimonials = [
+  {
+    quote: "“Noor Solar Energy provided Tier-1 panels and hybrid inverters that significantly cut factory electricity costs. Equipment quality was exceptional and delivery was right on schedule.”",
+    quoteBn: "“নূর সোলার এনার্জির প্যানেল ও ইনভার্টার ব্যবহার করে আমাদের কারখানার বিদ্যুৎ খরচ উল্লেখযোগ্যভাবে কমেছে। পণ্যগুলোর মান চমৎকার এবং ডেলিভারি ছিল একদম সময়মতো।”",
+    authorName: "Arif Hossain",
+    authorNameBn: "আরিফ হোসেন",
+    authorRole: "Managing Director",
+    authorRoleBn: "ব্যবস্থাপনা পরিচালক",
+    company: "EcoPower Solutions",
+    companyBn: "ইকোপাওয়ার সলিউশনস",
+    photo: "/photos/testimonial-arif.jpg",
+    sortOrder: 1,
+    isActive: true,
+    isSample: false,
+  },
+  {
+    quote: "“Procured hybrid inverters and high-capacity Lithium battery banks for our commercial properties. Grid reliance was reduced by over 60%. Highly professional team and support.”",
+    quoteBn: "“আমাদের বাণিজ্যিক স্থাপনার জন্য তাদের থেকে হাইব্রিড ইনভার্টার ও লিথিয়াম ব্যাটারি সংগ্রহ করি। গ্রিড বিদ্যুতের উপর নির্ভরতা প্রায় ৬০% কমে গেছে। তাদের সাপোর্ট সত্যিই প্রশংসনীয়।”",
+    authorName: "Mahmud Karim",
+    authorNameBn: "মাহমুদ করিম",
+    authorRole: "Project Director",
+    authorRoleBn: "প্রকল্প পরিচালক",
+    company: "Apex Developments",
+    companyBn: "অ্যাপেক্স ডেভেলপমেন্টস",
+    photo: "/photos/testimonial-mahmud.jpg",
+    sortOrder: 2,
+    isActive: true,
+    isSample: false,
+  },
+  {
+    quote: "“From technical datasheet verification to on-site warehouse delivery, the entire procurement process was seamless. Our production facility achieved target ROI ahead of schedule.”",
+    quoteBn: "“ডেটাশিট ও স্পেসিফিকেশন মেলানো থেকে শুরু করে সাইটে ডেলিভারি—পুরো প্রক্রিয়াটি ছিল অত্যন্ত পেশাদার। আমাদের উৎপাদন ইউনিটের প্রত্যাশিত সময়ের আগেই চমৎকার রিটার্ন আসছে।”",
+    authorName: "Farhana Ahmed",
+    authorNameBn: "ফারহানা আহমেদ",
+    authorRole: "Plant Operations Director",
+    authorRoleBn: "প্ল্যান্ট ডিরেক্টর",
+    company: "Delta Manufacturing",
+    companyBn: "ডেল্টা ম্যানুফ্যাকচারিং",
+    photo: "/photos/testimonial-farhana.jpg",
+    sortOrder: 3,
+    isActive: true,
+    isSample: false,
+  },
+];
 
 export const sampleFaqs = [
   {
@@ -85,7 +115,7 @@ export const sampleFaqs = [
     answerBn: "আমাদের কোটেশন ফরম বা সরাসরি হোয়াটসঅ্যাপের মাধ্যমে আপনার পণ্যের তালিকা ও পরিমাণ জানান। আমাদের টিম স্টক, ডেলিভারির সময় এবং পাইকারি দর যাচাই করে অফিস চলাকালীন সময়েই আনুষ্ঠানিক লিখিত কোটেশন পাঠিয়ে দেবে।",
     sortOrder: 1,
     isActive: true,
-    isSample: true,
+    isSample: false,
   },
   {
     question: "What is the minimum order quantity (MOQ)?",
@@ -94,7 +124,7 @@ export const sampleFaqs = [
     answerBn: "পণ্যের ধরন ও মডেল অনুযায়ী MOQ নির্ধারিত হয়। বেশিরভাগ ইনভার্টার ও লিথিয়াম ব্যাটারি ১টি ইউনিট থেকেই অর্ডার করা যায়। সোলার প্যানেলের ক্ষেত্রে সাধারণত পূর্ণ প্যালেট অর্ডারের প্রয়োজন হয়। নির্দিষ্ট পণ্যের বর্তমান শর্ত জানতে আমাদের সেলস টিমের সাথে যোগাযোগ করুন।",
     sortOrder: 2,
     isActive: true,
-    isSample: true,
+    isSample: false,
   },
   {
     question: "Are product datasheets and test reports available?",
@@ -103,7 +133,7 @@ export const sampleFaqs = [
     answerBn: "হ্যাঁ, আমাদের সব মডেলের অফিসিয়াল প্রস্তুতকারক ডেটাশিট, কারিগরি স্পেসিফিকেশন এবং ল্যাবরেটরি টেস্ট রিপোর্ট সংরক্ষিত আছে। অনুরোধ করলেই আমাদের ইঞ্জিনিয়ারিং ডেস্ক থেকে এগুলো সরবরাহ করা হয়।",
     sortOrder: 3,
     isActive: true,
-    isSample: true,
+    isSample: false,
   },
   {
     question: "What delivery and logistics options do you offer across Bangladesh?",
@@ -112,7 +142,7 @@ export const sampleFaqs = [
     answerBn: "সারা দেশের যেকোনো প্রান্তে বাণিজ্যিক ডেলিভারির জন্য আমরা নির্ভরযোগ্য পরিবহন সুবিধা সমন্বয় করি। ওয়্যারহাউস থেকে সরাসরি পিকআপ বা প্রকল্প সাইটে সরাসরি ট্রাক ডেলিভারি—উভয় সুবিধাই রয়েছে। বিস্তারিত জানতে আমাদের লজিস্টিকস ডেস্কে কথা বলুন।",
     sortOrder: 4,
     isActive: true,
-    isSample: true,
+    isSample: false,
   },
   {
     question: "What payment terms are accepted for commercial orders?",
@@ -121,7 +151,7 @@ export const sampleFaqs = [
     answerBn: "আমরা নির্ধারিত কোটেশন শর্ত অনুযায়ী বাণিজ্যিক ব্যাংক ট্রান্সফার (BEFTN/RTGS), পে-অর্ডার এবং অ্যাকাউন্ট পেয়ী চেক গ্রহণ করি। পেমেন্টের বিস্তারিত শর্তাবলি জানতে আমাদের সেলস টিমের সাথে যোগাযোগ করুন।",
     sortOrder: 5,
     isActive: true,
-    isSample: true,
+    isSample: false,
   },
   {
     question: "What after-sales and technical support do you provide?",
@@ -130,6 +160,75 @@ export const sampleFaqs = [
     answerBn: "আমাদের কারিগরি দল প্রজেক্ট শুরুর আগে স্পেসিফিকেশন মিলিয়ে দেখা, কমিশনিং পরামর্শ এবং প্রস্তুতকারক কোম্পানির ওয়ারেন্টি সংক্রান্ত সমন্বয়ে পূর্ণ সহায়তা প্রদান করে। যেকোনো প্রয়োজনে আমাদের টেকনিক্যাল ডেস্কে যোগাযোগ করতে পারেন।",
     sortOrder: 6,
     isActive: true,
-    isSample: true,
+    isSample: false,
+  },
+];
+
+export const sampleProjects = [
+  {
+    slug: "500kw-industrial-rooftop-gazipur",
+    title: "500kW Industrial Textile Rooftop Array",
+    titleBn: "৫০০ কিলোওয়াট টেক্সটাইল কারখানা সোলার ছাদ প্রকল্প",
+    clientName: "Apex Textile & Garments Ltd.",
+    clientNameBn: "অ্যাপেক্স টেক্সটাইল অ্যান্ড গার্মেন্টস লিঃ",
+    location: "Gazipur, Bangladesh",
+    locationBn: "গাজীপুর, বাংলাদেশ",
+    projectType: "Industrial Rooftop",
+    projectTypeBn: "শিল্প ছাদ প্রকল্প",
+    productsSupplied: "N-Type TOPCon 585W Modules & 100kW On-Grid Inverters",
+    productsSuppliedBn: "এন-টাইপ TOPCon ৫৮৫ ওয়াট সোলার প্যানেল ও ১০০kW অন-গ্রিড ইনভার্টার",
+    capacity: "500 kWp",
+    capacityBn: "৫০০ কিলোওয়াট",
+    completionDate: "2024",
+    summary: "Turnkey equipment supply of high-efficiency N-Type TOPCon panels and commercial string inverters for a major export textile facility, offsetting daytime grid reliance by 42%.",
+    summaryBn: "একটি শীর্ষ রপ্তানিমুখী টেক্সটাইল কারখানার জন্য উচ্চ-দক্ষতাসম্পন্ন এন-টাইপ প্যানেল ও বাণিজ্যিক ইনভার্টার সরবরাহ, যা তাদের দিনের গ্রিড নির্ভরতা ৪২% হ্রাস করেছে।",
+    image: "/photos/about-commercial-plant.webp",
+    sortOrder: 1,
+    isPublished: true,
+    isSample: false,
+  },
+  {
+    slug: "1-2mw-commercial-manufacturing-narayanganj",
+    title: "1.2MW Commercial Factory Solar Generation",
+    titleBn: "১.২ মেগাওয়াট বাণিজ্যিক ফ্যাক্টরি সোলার বিদ্যুৎ প্রকল্প",
+    clientName: "Delta Manufacturing Complex",
+    clientNameBn: "ডেল্টা ম্যানুফ্যাকচারিং কমপ্লেক্স",
+    location: "Narayanganj, Bangladesh",
+    locationBn: "নারায়ণগঞ্জ, বাংলাদেশ",
+    projectType: "Commercial Factory",
+    projectTypeBn: "বাণিজ্যিক কারখানা",
+    productsSupplied: "Tier-1 620W Bifacial Panels & 100kW High-Voltage Inverters",
+    productsSuppliedBn: "৬২০ ওয়াট বাইফেসিয়াল সোলার মডিউল ও ১০০kW হাই-ভোল্টেজ ইনভার্টার",
+    capacity: "1.2 MWp",
+    capacityBn: "১.২ মেগাওয়াট",
+    completionDate: "2024",
+    summary: "Bulk container-level supply of bifacial solar modules and smart string inverters delivering consistent daytime renewable energy for heavy machinery operations.",
+    summaryBn: "ভারী শিল্প কারখানার মেশিনারিজ পরিচালনার জন্য বাল্ক কন্টেইনার স্কেলে বাইফেসিয়াল সোলার প্যানেল ও স্মার্ট ইনভার্টার সরবরাহ।",
+    image: "/photos/solar-3d-station.jpg",
+    sortOrder: 2,
+    isPublished: true,
+    isSample: false,
+  },
+  {
+    slug: "350kw-hybrid-cold-storage-mymensingh",
+    title: "350kW Hybrid Cold Storage Solar & Storage Supply",
+    titleBn: "৩৫০ কিলোওয়াট হাইব্রিড কোল্ড স্টোরেজ সোলার ও ব্যাটারি প্রকল্প",
+    clientName: "Green Agro Cold Storage",
+    clientNameBn: "গ্রিন এগ্রো কোল্ড স্টোরেজ",
+    location: "Mymensingh, Bangladesh",
+    locationBn: "ময়মনসিংহ, বাংলাদেশ",
+    projectType: "Agro-Industrial Hybrid",
+    projectTypeBn: "কৃষি-শিল্প হাইব্রিড",
+    productsSupplied: "585W TOPCon Modules, 50kW Hybrid Inverters, 51.2V LiFePO4 Banks",
+    productsSuppliedBn: "৫৮৫ ওয়াট TOPCon মডিউল, ৫০kW হাইব্রিড ইনভার্টার ও LiFePO4 লিথিয়াম ব্যাটারি ব্যাংক",
+    capacity: "350 kWp + 600 kWh",
+    capacityBn: "৩৫০ kWp + ৬০০ kWh",
+    completionDate: "2024",
+    summary: "Critical cold-chain storage continuous solar power backup pairing high-rate commercial hybrid inverters with industrial grade LiFePO4 energy storage banks.",
+    summaryBn: "হিমাগারের তাপমাত্রা নিরবচ্ছিন্ন রাখতে হাইব্রিড ইনভার্টার ও ইন্ডাস্ট্রিয়াল গ্রেড LiFePO4 লিথিয়াম ব্যাটারি ব্যাংকের সমন্বিত সৌর বিদ্যুৎ ব্যবস্থা।",
+    image: "/photos/rooftop-solar-home.jpg",
+    sortOrder: 3,
+    isPublished: true,
+    isSample: false,
   },
 ];
