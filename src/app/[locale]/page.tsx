@@ -57,10 +57,10 @@ export async function generateMetadata({
       : "Direct importer and bulk supplier of high-efficiency solar panels, Lithium-ion batteries, and hybrid solar inverters in Bangladesh.",
     metadataBase: new URL(siteUrl),
     alternates: {
-      canonical: isBn ? "/bn" : "/",
+      canonical: isBn ? "/" : "/en",
       languages: {
-        en: "/",
-        bn: "/bn",
+        bn: "/",
+        en: "/en",
         "x-default": "/",
       },
     },
@@ -71,7 +71,7 @@ export async function generateMetadata({
       description: isBn
         ? "বাংলাদেশে কন্টেইনার-স্কেল পাইকারি সরবরাহকারী: কমার্শিয়াল সোলার প্যানেল, LiFePO4 ব্যাটারি ও ইনভার্টার।"
         : "Direct importer and container-scale wholesale supplier of commercial-grade solar panels, LiFePO4 batteries, and inverters in Bangladesh.",
-      url: isBn ? "/bn" : "/",
+      url: isBn ? "/" : "/en",
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
       images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Noor Solar Energy" }],

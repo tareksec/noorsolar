@@ -18,6 +18,7 @@ export function BuyerSegmentation({ locale = "en" }: BuyerSegmentationProps) {
 
   const [scrollRange, setScrollRange] = useState(0);
   const [activeSlide, setActiveSlide] = useState(0);
+  const [mobileActiveIndex, setMobileActiveIndex] = useState(0);
 
   const segments = [
     {
@@ -112,8 +113,68 @@ export function BuyerSegmentation({ locale = "en" }: BuyerSegmentationProps) {
     }
   };
 
+  const scrollToMobileSlide = (index: number) => {
+    if (!mobileScrollRef.current) return;
+    const container = mobileScrollRef.current;
+    const cards = container.querySelectorAll<HTMLElement>("[data-segment-card]");
+    if (cards[index]) {
+      const targetCard = cards[index];
+      const scrollPos = targetCard.offsetLeft - container.offsetLeft;
+      container.scrollTo({
+        left: Math.max(0, scrollPos),
+        behavior: "smooth",
+      });
+      setMobileActiveIndex(index);
+    }
+  };
+
+  const scrollMobile = (direction: "left" | "right") => {
+    const nextIdx =
+      direction === "left"
+        ? Math.max(0, mobileActiveIndex - 1)
+        : Math.min(segments.length - 1, mobileActiveIndex + 1);
+    scrollToMobileSlide(nextIdx);
+  };
+
+  // Track active slide on mobile scroll
+  useEffect(() => {
+    const container = mobileScrollRef.current;
+    if (!container) return;
+
+    let timeoutId: NodeJS.Timeout;
+    const handleScroll = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (!container) return;
+        const cards = container.querySelectorAll<HTMLElement>("[data-segment-card]");
+        if (!cards.length) return;
+
+        const currentScroll = container.scrollLeft;
+        let closestIndex = 0;
+        let minDiff = Infinity;
+
+        cards.forEach((card, idx) => {
+          const cardOffset = card.offsetLeft - container.offsetLeft;
+          const diff = Math.abs(currentScroll - cardOffset);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestIndex = idx;
+          }
+        });
+
+        setMobileActiveIndex(closestIndex);
+      }, 50);
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      clearTimeout(timeoutId);
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, [segments.length]);
+
   return (
-    <div className="relative w-full bg-[#F7F8F5] text-[#17251F] overflow-clip">
+    <div className="relative w-full bg-[#F7F8F5] text-[#17251F] md:overflow-clip">
       {/* ========================================================
           DESKTOP PINNED HORIZONTAL SCROLL (Solar Noor Brand Theme)
           ======================================================== */}
@@ -292,19 +353,43 @@ export function BuyerSegmentation({ locale = "en" }: BuyerSegmentationProps) {
       {/* ========================================================
           MOBILE / TABLET TOUCH-FRIENDLY HORIZONTAL CAROUSEL
           ======================================================== */}
-      <section className="md:hidden py-12 px-4 sm:px-6">
+      <section className="md:hidden py-10 sm:py-12">
         {/* Header */}
-        <div className="mb-6">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="w-2.5 h-2.5 rounded-full border border-[#074031] flex items-center justify-center">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FEBE16]" />
-            </span>
-            <span className="text-xs font-mono font-bold tracking-wider text-[#074031] uppercase">
-              {isBn ? "আমাদের প্রজেক্ট ও সেগমেন্ট" : "Our Projects & Segments"}
-            </span>
+        <div className="px-4 sm:px-6 mb-5">
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full border border-[#074031] flex items-center justify-center">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FEBE16]" />
+              </span>
+              <span className="text-xs font-mono font-bold tracking-wider text-[#074031] uppercase">
+                {isBn ? "আমাদের প্রজেক্ট ও সেগমেন্ট" : "Our Projects & Segments"}
+              </span>
+            </div>
+
+            {/* Mobile Arrow Controls */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => scrollMobile("left")}
+                disabled={mobileActiveIndex === 0}
+                aria-label={isBn ? "পূর্ববর্তী সেগমেন্ট" : "Previous segment"}
+                className="w-8 h-8 rounded-full border border-[#DCE4E0] bg-white hover:bg-[#F1F4F1] text-[#074031] disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center transition-colors shadow-xs"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollMobile("right")}
+                disabled={mobileActiveIndex === segments.length - 1}
+                aria-label={isBn ? "পরবর্তী সেগমেন্ট" : "Next segment"}
+                className="w-8 h-8 rounded-full border border-[#DCE4E0] bg-white hover:bg-[#F1F4F1] text-[#074031] disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center transition-colors shadow-xs"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-[#17251F] leading-tight mb-3">
+          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-[#17251F] leading-tight mb-2.5">
             {isBn ? "সম্পূর্ণ সোলার প্রকিউরমেন্ট সমাধান" : "Complete Solar Procurement Solutions"}
           </h2>
 
@@ -320,25 +405,35 @@ export function BuyerSegmentation({ locale = "en" }: BuyerSegmentationProps) {
         {/* Horizontal Swipeable Track */}
         <div
           ref={mobileScrollRef}
-          className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 scrollbar-none"
+          style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-x pan-y" }}
+          className="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-4 pb-4 px-4 sm:px-6 scroll-pl-4 sm:scroll-pl-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
           {segments.map((seg) => (
             <div
               key={seg.id}
-              className="w-[88vw] max-w-[360px] shrink-0 snap-center rounded-[24px] overflow-hidden flex flex-col bg-white border border-[#DCE4E0] shadow-xl shadow-[#052F25]/[0.05]"
+              data-segment-card
+              className="w-[84vw] max-w-[340px] shrink-0 snap-start rounded-[24px] overflow-hidden flex flex-col bg-white border border-[#DCE4E0] shadow-xl shadow-[#052F25]/[0.05]"
             >
               {/* Top: Brand Deep Green Info Panel */}
-              <div className="bg-gradient-to-br from-[#074031] to-[#052F25] p-6 flex flex-col justify-between select-none">
-                <h4 className="text-[#FEBE16] text-xs font-mono font-bold mb-3">{seg.year}</h4>
+              <div className="bg-gradient-to-br from-[#074031] to-[#052F25] p-5 sm:p-6 flex flex-col justify-between">
+                <div className="flex items-center justify-between gap-2 mb-2.5">
+                  <h4 className="text-[#FEBE16] text-[11px] sm:text-xs font-mono font-bold tracking-wider uppercase">
+                    {seg.year}
+                  </h4>
+                  <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FEBE16]/15 border border-[#FEBE16]/30 text-[#FEBE16] text-[10px] font-mono font-semibold">
+                    <ShieldCheck className="w-3 h-3 stroke-[2.5]" />
+                    <span>{seg.metrics}</span>
+                  </div>
+                </div>
 
                 <h3 className="text-xl font-black tracking-tight text-white mb-1">
                   {seg.title}
                 </h3>
-                <p className="text-xs font-medium text-white/75 mb-3">
+                <p className="text-xs font-medium text-white/75 mb-3 leading-snug">
                   {seg.subtitle}
                 </p>
 
-                <div className="pt-3 border-t border-white/15 flex items-center justify-between gap-2">
+                <div className="pt-2.5 border-t border-white/15 flex items-center justify-between gap-2">
                   <div className="flex items-center gap-1.5 text-white/90 text-xs font-medium truncate">
                     <MapPin className="w-3.5 h-3.5 shrink-0 text-[#FEBE16]" />
                     <span className="truncate">{seg.location}</span>
@@ -346,7 +441,7 @@ export function BuyerSegmentation({ locale = "en" }: BuyerSegmentationProps) {
 
                   <Link
                     href={seg.href}
-                    className="w-7 h-7 rounded-full bg-[#FEBE16] text-[#052F25] flex items-center justify-center shrink-0 shadow-xs"
+                    className="w-7 h-7 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] flex items-center justify-center shrink-0 shadow-xs transition-colors"
                   >
                     <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
                   </Link>
@@ -354,17 +449,43 @@ export function BuyerSegmentation({ locale = "en" }: BuyerSegmentationProps) {
               </div>
 
               {/* Bottom: Image */}
-              <div className="h-48 relative overflow-hidden bg-[#F1F4F1]">
+              <div className="h-44 sm:h-48 relative overflow-hidden bg-[#F1F4F1]">
                 <Image
                   src={seg.image}
                   alt={seg.title}
                   fill
                   className="object-cover"
-                  sizes="360px"
+                  sizes="(max-width: 640px) 84vw, 340px"
                 />
               </div>
             </div>
           ))}
+          {/* Spacer for clean end-of-track padding */}
+          <div className="w-1 shrink-0" aria-hidden="true" />
+        </div>
+
+        {/* Mobile Bottom Bar: Dots & Slide Counter */}
+        <div className="px-4 sm:px-6 pt-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {segments.map((_, dotIdx) => (
+              <button
+                key={dotIdx}
+                type="button"
+                onClick={() => scrollToMobileSlide(dotIdx)}
+                aria-label={`Jump to segment ${dotIdx + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  mobileActiveIndex === dotIdx
+                    ? "w-7 bg-[#074031]"
+                    : "w-2 bg-[#DCE4E0] hover:bg-[#62706A]"
+                }`}
+              />
+            ))}
+          </div>
+
+          <p className="text-xs font-mono text-[#62706A] flex items-center gap-1.5">
+            <span>{mobileActiveIndex + 1} / {segments.length}</span>
+            <span className="text-[#FEBE16] font-bold">→</span>
+          </p>
         </div>
       </section>
     </div>

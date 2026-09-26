@@ -36,7 +36,7 @@ interface ProductCardProps {
 export function ProductCard({ product, priority = false }: ProductCardProps) {
   const router = useRouter();
   const pathname = usePathname() || "";
-  const isBn = pathname.startsWith("/bn/") || pathname === "/bn";
+  const isBn = !pathname.startsWith("/en/") && pathname !== "/en";
 
   const [isPointerDevice, setIsPointerDevice] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
