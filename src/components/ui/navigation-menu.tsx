@@ -550,7 +550,8 @@ export function AnimatedNavFramer({
                     <Link
                       href={finalCtaHref}
                       onClick={(e) => e.stopPropagation()}
-                      className="group inline-flex items-center min-h-[44px] gap-1.5 sm:gap-2 pl-3 sm:pl-4 pr-1.5 py-1.5 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] text-xs font-bold tracking-tight shadow-[0_4px_14px_rgba(254,190,22,0.35)] transition-all hover:scale-105 active:scale-95 whitespace-nowrap shrink-0"
+                      data-motion="button-slide"
+                      className="btn-slide-fill group inline-flex items-center min-h-[44px] gap-1.5 sm:gap-2 pl-3 sm:pl-4 pr-1.5 py-1.5 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] text-xs font-bold tracking-tight shadow-[0_4px_14px_rgba(254,190,22,0.35)] transition-all hover:scale-105 active:scale-95 whitespace-nowrap shrink-0"
                     >
                       <span>{displayCtaText}</span>
                       <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#052F25] flex items-center justify-center text-[#FEBE16] group-hover:translate-x-0.5 transition-transform shadow-2xs shrink-0">
@@ -776,7 +777,8 @@ export function AnimatedNavFramer({
               <Link
                 href={finalCtaHref}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center gap-2 w-full min-h-[48px] py-3 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-sm shadow-md"
+                data-motion="button-slide"
+                className="btn-slide-fill flex items-center justify-center gap-2 w-full min-h-[48px] py-3 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-sm shadow-md"
               >
                 <span>{displayCtaText}</span>
                 <ArrowRight className="w-4 h-4 stroke-[2.5]" />
