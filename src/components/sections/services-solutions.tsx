@@ -211,9 +211,6 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
   const activeRef = useRef(0);
   const cooldownRef = useRef(false);
 
-  // Mobile accordion state (default: card 0 expanded)
-  const [mobileExpanded, setMobileExpanded] = useState<number>(0);
-
   // Desktop guard to prevent double image decode on mobile viewports
   const [isDesktop, setIsDesktop] = useState(false);
   useEffect(() => {
@@ -416,6 +413,7 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
 
   return (
     <section
+      id="services-solutions"
       ref={sectionRef}
       onKeyDown={handleKeyDown}
       tabIndex={0}
@@ -434,126 +432,106 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
         <div className="mb-8 sm:mb-12">{header}</div>
 
         {/* ============================================================== */}
-        {/* MOBILE VIEW (< md): Stacked Accordion with Tap to Expand       */}
+        {/* MOBILE VIEW (< md): Sticky Scroll Card Stacking Deck Animation */}
         {/* ============================================================== */}
-        <div className="md:hidden flex flex-col gap-3.5 pb-2">
+        <div className="md:hidden relative flex flex-col pb-10">
           {items.map((content, idx) => {
-            const isExpanded = mobileExpanded === idx;
+            const topOffset = 76 + idx * 16;
 
             return (
-              <div
+              <motion.article
                 key={content.id}
-                className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
-                  isExpanded
-                    ? "bg-white dark:bg-[#131915] border-[#108958]/50 dark:border-[#22C55E]/40 shadow-md ring-1 ring-[#108958]/15"
-                    : "bg-white/70 dark:bg-white/[0.03] border-[#E2E8DF] dark:border-white/10 hover:border-neutral-400"
-                }`}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ duration: 0.45, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                style={{
+                  top: `${topOffset}px`,
+                  zIndex: 10 + idx,
+                }}
+                className="sticky flex flex-col rounded-[26px] bg-white dark:bg-[#131915] border border-[#E2E8DF] dark:border-white/10 p-4 sm:p-5 shadow-[0_-8px_30px_rgba(0,0,0,0.08),0_18px_40px_rgba(0,0,0,0.08)] mb-10 last:mb-2 transition-transform duration-300"
               >
-                {/* Accordion Trigger Header */}
-                <button
-                  type="button"
-                  onClick={() => setMobileExpanded(isExpanded ? -1 : idx)}
-                  aria-expanded={isExpanded}
-                  className="w-full flex items-center justify-between p-4 sm:p-5 text-left cursor-pointer focus:outline-none"
-                >
-                  <div className="flex items-center gap-3.5 min-w-0 pr-2">
-                    <span
-                      className={`flex items-center justify-center w-8 h-8 rounded-lg font-mono text-xs font-bold border transition-colors ${
-                        isExpanded
-                          ? "bg-[#108958] border-[#108958] text-white"
-                          : "bg-neutral-100 dark:bg-white/10 border-neutral-200 dark:border-white/10 text-neutral-600 dark:text-neutral-400"
-                      }`}
-                    >
+                {/* Header Strip */}
+                <div className="flex items-center justify-between gap-3 mb-3">
+                  <div className="flex items-center gap-2.5">
+                    <span className="flex items-center justify-center w-8 h-8 rounded-lg font-mono text-xs font-bold bg-[#108958] text-white shadow-xs">
                       {content.number}
                     </span>
-
-                    <div className="flex flex-col min-w-0">
-                      <span className="font-mono text-[10px] font-semibold text-[#108958] dark:text-[#22C55E] tracking-wider uppercase truncate">
-                        {content.badge}
-                      </span>
-                      <h3 className="text-base sm:text-lg font-bold text-neutral-900 dark:text-white leading-tight truncate">
-                        {content.title}
-                      </h3>
-                    </div>
+                    <span className="font-mono text-[11px] font-bold text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-white/10 px-2 py-0.5 rounded">
+                      {content.code}
+                    </span>
                   </div>
 
-                  <div
-                    className={`flex items-center justify-center w-7 h-7 rounded-full border transition-all shrink-0 ${
-                      isExpanded
-                        ? "bg-[#108958]/10 border-[#108958]/30 text-[#108958] rotate-180"
-                        : "bg-neutral-100 dark:bg-white/10 border-neutral-200 dark:border-white/10 text-neutral-500"
-                    }`}
-                  >
-                    {isExpanded ? (
-                      <Minus className="w-3.5 h-3.5" />
-                    ) : (
-                      <Plus className="w-3.5 h-3.5" />
-                    )}
-                  </div>
-                </button>
+                  <span className="inline-flex items-center gap-1 font-mono text-[10px] font-bold text-[#108958] dark:text-[#22C55E] tracking-wider uppercase bg-[#108958]/10 border border-[#108958]/20 px-2.5 py-1 rounded-full">
+                    <Sparkles className="w-3 h-3 text-[#108958]" />
+                    {content.badge}
+                  </span>
+                </div>
 
-                {/* Accordion Expandable Body */}
-                <AnimatePresence initial={false}>
-                  {isExpanded && (
-                    <motion.div
-                      key="content"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                      className="overflow-hidden"
+                {/* Title */}
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight text-neutral-900 dark:text-white leading-tight mb-3">
+                  {content.title}
+                </h3>
+
+                {/* High-Impact Product Imagery with Drafting Corner Crosshairs */}
+                <div className="relative w-full h-48 sm:h-56 rounded-2xl overflow-hidden bg-neutral-200 dark:bg-white/10 shadow-inner mb-3.5">
+                  <AppImage
+                    src={content.imageUrl}
+                    alt={content.imageAlt}
+                    fill
+                    sizes="(max-width: 480px) 256px, 400px"
+                    className="object-cover"
+                    loading={idx === 0 ? "eager" : "lazy"}
+                    priority={idx === 0}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/20 pointer-events-none" />
+
+                  {/* Corner Crosshairs */}
+                  <span className="absolute top-2.5 left-2.5 z-10 font-mono text-[9px] text-white/70 select-none drop-shadow" aria-hidden="true">+</span>
+                  <span className="absolute top-2.5 right-2.5 z-10 font-mono text-[9px] text-white/70 select-none drop-shadow" aria-hidden="true">+</span>
+
+                  {/* Badges */}
+                  <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-[10px] font-mono font-bold text-white shadow-xs">
+                    <CheckCircle2 className="w-3 h-3 text-[#22C55E]" />
+                    <span>{isBn ? "প্রস্তুত স্টক" : "DIRECT STOCK"}</span>
+                  </div>
+
+                  <span className="absolute bottom-2.5 left-2.5 z-10 font-mono text-[10px] font-bold tracking-widest px-2.5 py-1 rounded bg-black/75 text-white backdrop-blur-sm border border-white/15">
+                    {content.number} / {isBn ? "০৩" : "03"}
+                  </span>
+                </div>
+
+                {/* Technical Specs Micro-Grid */}
+                <div className="grid grid-cols-3 gap-2 py-1 mb-3">
+                  {content.specs.map((sp, i) => (
+                    <div
+                      key={i}
+                      className="flex flex-col p-2 rounded-xl bg-neutral-50 dark:bg-white/[0.04] border border-neutral-200/60 dark:border-white/5"
                     >
-                      <div className="px-4 pb-5 sm:px-5 sm:pb-6 pt-1 border-t border-neutral-100 dark:border-white/5 flex flex-col gap-4">
-                        {/* High-Impact Product Imagery */}
-                        <div className="relative w-full h-48 sm:h-56 rounded-xl overflow-hidden bg-neutral-200 dark:bg-white/10 shadow-inner">
-                          <AppImage
-                            src={content.imageUrl}
-                            alt={content.imageAlt}
-                            fill
-                            sizes="(max-width: 480px) 340px, (max-width: 768px) 600px, 400px"
-                            className="object-cover"
-                            priority={idx === 0}
-                          />
-                          <span className="absolute bottom-2.5 left-2.5 font-mono text-[10px] font-bold tracking-widest px-2.5 py-1 rounded bg-black/70 text-white backdrop-blur-sm border border-white/15">
-                            {content.code}
-                          </span>
-                        </div>
+                      <span className="font-mono text-[9px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider truncate">
+                        {sp.label}
+                      </span>
+                      <span className="font-mono text-[11px] font-black text-neutral-900 dark:text-neutral-100 truncate mt-0.5">
+                        {sp.val}
+                      </span>
+                    </div>
+                  ))}
+                </div>
 
-                        {/* Specs Micro-Grid */}
-                        <div className="grid grid-cols-3 gap-2 py-1">
-                          {content.specs.map((sp, i) => (
-                            <div
-                              key={i}
-                              className="flex flex-col p-2 rounded-lg bg-neutral-50 dark:bg-white/[0.04] border border-neutral-200/60 dark:border-white/5"
-                            >
-                              <span className="font-mono text-[9px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider truncate">
-                                {sp.label}
-                              </span>
-                              <span className="font-mono text-[11px] font-black text-neutral-900 dark:text-neutral-100 truncate mt-0.5">
-                                {sp.val}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
+                {/* Description */}
+                <p className="text-xs sm:text-[13px] leading-relaxed text-neutral-600 dark:text-neutral-300 mb-3.5">
+                  {content.description}
+                </p>
 
-                        {/* Description */}
-                        <p className="text-xs sm:text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">
-                          {content.description}
-                        </p>
-
-                        {/* CTA Link */}
-                        <Link
-                          href={content.link}
-                          className="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-bold text-xs hover:bg-[#108958] dark:hover:bg-[#108958] dark:hover:text-white transition-colors min-h-[44px]"
-                        >
-                          <span>{isBn ? "ক্যাটালগ ও স্পেসিফিকেশন দেখুন" : "View Specifications & Stock"}</span>
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </Link>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                {/* CTA Link */}
+                <Link
+                  href={content.link}
+                  className="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-bold text-xs hover:bg-[#108958] dark:hover:bg-[#108958] dark:hover:text-white transition-colors min-h-[44px] shadow-xs"
+                >
+                  <span>{isBn ? "ক্যাটালগ ও স্পেসিফিকেশন দেখুন" : "View Specifications & Stock"}</span>
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </motion.article>
             );
           })}
         </div>
@@ -715,27 +693,29 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
               <span className="absolute bottom-3 right-3 z-20 font-mono text-[10px] text-white/70 select-none drop-shadow" aria-hidden="true">+</span>
 
               <AnimatePresence mode="wait" initial={false} custom={direction}>
-                <motion.div
-                  key={`${item.id}-img`}
-                  custom={direction}
-                  variants={visualStageVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="absolute inset-0"
-                >
-                  <AppImage
-                    src={item.imageUrl}
-                    alt={item.imageAlt}
-                    fill
-                    sizes="(max-width: 1280px) 45vw, 550px"
-                    className="object-cover"
-                    priority={active === 0}
-                  />
+                {isDesktop && (
+                  <motion.div
+                    key={`${item.id}-img`}
+                    custom={direction}
+                    variants={visualStageVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    className="absolute inset-0"
+                  >
+                    <AppImage
+                      src={item.imageUrl}
+                      alt={item.imageAlt}
+                      fill
+                      sizes="(max-width: 1280px) 45vw, 550px"
+                      className="object-cover"
+                      priority={active === 0}
+                    />
 
-                  {/* Gradient shadow overlay for legibility */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-                </motion.div>
+                    {/* Gradient shadow overlay for legibility */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+                  </motion.div>
+                )}
               </AnimatePresence>
 
               {/* Status Header Badge on Top-Right */}
