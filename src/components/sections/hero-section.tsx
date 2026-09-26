@@ -9,6 +9,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { HeroTextReveal } from "@/components/ui/hero-text-reveal";
 
 interface HeroSectionProps {
   headline?: string;
@@ -105,7 +106,7 @@ export function HeroSection({
             data-motion="hero-headline"
             className="text-3xl sm:text-5xl lg:text-[3.8rem] xl:text-[4.3rem] font-bold tracking-tight text-white leading-[1.08] mb-5 text-center [text-shadow:_0_2px_12px_rgba(0,0,0,0.9),_0_4px_24px_rgba(0,0,0,0.85)]"
           >
-            <span className="hero-word-inner">{resolvedHeadline}</span>
+            <HeroTextReveal text={resolvedHeadline} />
           </h1>
 
           {/* Subtitle */}
@@ -119,7 +120,7 @@ export function HeroSection({
               <Link
                 href={isBn ? "/bn/quote" : "/quote"}
                 data-motion="button-slide"
-                className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-sm sm:text-base shadow-[0_8px_25px_rgba(254,190,22,0.35)] transition-all hover:scale-[1.03] active:scale-[0.98] w-fit"
+                className="btn-slide-fill group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-sm sm:text-base shadow-[0_8px_25px_rgba(254,190,22,0.35)] transition-all hover:scale-[1.03] active:scale-[0.98] w-fit"
               >
                 <span>{resolvedPrimaryCta}</span>
                 <span className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#052F25] flex items-center justify-center text-[#FEBE16] group-hover:translate-x-0.5 transition-transform shadow-xs">

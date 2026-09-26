@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import { Link } from "@/i18n/routing";
 import { getSiteSettings } from "@/lib/data/settings";
 import { CheckCircle2, ArrowUpRight, ShieldCheck, Box, Zap, Award } from "lucide-react";
+import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import { SITE_URL } from "@/lib/site-config";
 
 interface AboutPageProps {
@@ -78,7 +79,8 @@ export default async function AboutPage({ params }: AboutPageProps) {
               <div className="flex flex-wrap items-center gap-4">
                 <Link
                   href="/products"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-[#FEBE16] text-[#052F25] text-xs font-bold hover:bg-[#E4A900] transition-colors shadow-sm"
+                  data-motion="button-slide"
+                  className="btn-slide-fill inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-full bg-[#FEBE16] text-[#052F25] text-xs font-bold hover:bg-[#E4A900] transition-colors shadow-sm"
                 >
                   <span>{isBn ? "ইকুইপমেন্ট ক্যাটালগ দেখুন" : "View Equipment Catalog"}</span>
                   <ArrowUpRight className="w-4 h-4 text-[#052F25]" />
@@ -114,8 +116,9 @@ export default async function AboutPage({ params }: AboutPageProps) {
         </div>
 
         {/* Value Pillars */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <div className="p-8 rounded-3xl bg-white border border-[#DCE4E0] shadow-sm">
+        <RevealGroup stagger={0.08} className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <RevealItem y={20} className="h-full">
+          <div className="p-8 rounded-3xl bg-white border border-[#DCE4E0] shadow-sm h-full">
             <div className="w-10 h-10 rounded-full bg-[#074031]/10 flex items-center justify-center text-[#074031] mb-6">
               <ShieldCheck className="w-5 h-5 text-[#074031]" />
             </div>
@@ -128,8 +131,10 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 : "We source directly from recognized manufacturing facilities, supplying authentic solar modules, battery units, and inverters with complete technical specifications and factory acceptance test reports."}
             </p>
           </div>
+        </RevealItem>
 
-          <div className="p-8 rounded-3xl bg-white border border-[#DCE4E0] shadow-sm">
+          <RevealItem y={20} className="h-full">
+          <div className="p-8 rounded-3xl bg-white border border-[#DCE4E0] shadow-sm h-full">
             <div className="w-10 h-10 rounded-full bg-[#074031]/10 flex items-center justify-center text-[#074031] mb-6">
               <Box className="w-5 h-5 text-[#074031]" />
             </div>
@@ -142,8 +147,10 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 : "Serving industrial factories, EPC contractors, and regional solar dealers with bulk container shipments and buffer stock inventory at our central Dhaka warehouse."}
             </p>
           </div>
+        </RevealItem>
 
-          <div className="p-8 rounded-3xl bg-white border border-[#DCE4E0] shadow-sm">
+          <RevealItem y={20} className="h-full">
+          <div className="p-8 rounded-3xl bg-white border border-[#DCE4E0] shadow-sm h-full">
             <div className="w-10 h-10 rounded-full bg-[#074031]/10 flex items-center justify-center text-[#074031] mb-6">
               <Zap className="w-5 h-5 text-[#074031]" />
             </div>
@@ -156,11 +163,13 @@ export default async function AboutPage({ params }: AboutPageProps) {
                 : "Every consignment is verified against factory flash test curves, insulation metrics, and battery internal resistance to ensure long-term durability in Bangladesh solar installations."}
             </p>
           </div>
-        </div>
+        </RevealItem>
+        </RevealGroup>
 
         {/* Visual Proof & Commercial Deployments */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          <div className="rounded-[36px] bg-white border border-[#DCE4E0] p-6 sm:p-8 flex flex-col justify-between">
+        <RevealGroup stagger={0.08} className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+          <RevealItem y={24} className="h-full">
+          <div className="rounded-[36px] bg-white border border-[#DCE4E0] p-6 sm:p-8 flex flex-col justify-between h-full">
             <div className="relative aspect-16/10 w-full rounded-2xl overflow-hidden mb-6 bg-[#F1F4F1]">
               <Image
                 src={settings.businessPhotos?.completedProjects || "/photos/about-commercial-plant.webp"}
@@ -184,8 +193,10 @@ export default async function AboutPage({ params }: AboutPageProps) {
               </p>
             </div>
           </div>
+        </RevealItem>
 
-          <div className="rounded-[36px] bg-white border border-[#DCE4E0] p-6 sm:p-8 flex flex-col justify-between">
+          <RevealItem y={24} className="h-full">
+          <div className="rounded-[36px] bg-white border border-[#DCE4E0] p-6 sm:p-8 flex flex-col justify-between h-full">
             <div className="relative aspect-16/10 w-full rounded-2xl overflow-hidden mb-6 bg-[#F1F4F1]">
               <Image
                 src={settings.businessPhotos?.warehouse || "/photos/about-operations.webp"}
@@ -209,10 +220,11 @@ export default async function AboutPage({ params }: AboutPageProps) {
               </p>
             </div>
           </div>
-        </div>
+        </RevealItem>
+        </RevealGroup>
 
         {/* B2B Credibility & Operations Factsheet */}
-        <div className="p-8 sm:p-12 rounded-[36px] bg-white border border-[#DCE4E0] mb-16">
+        <Reveal y={24} duration={0.65} className="p-8 sm:p-12 rounded-[36px] bg-white border border-[#DCE4E0] mb-16">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
               <span className="text-xs font-mono text-[#62706A] uppercase block mb-1">
@@ -272,10 +284,10 @@ export default async function AboutPage({ params }: AboutPageProps) {
               </p>
             </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Operating Principles */}
-        <div className="p-8 sm:p-12 rounded-[36px] bg-white border border-[#DCE4E0]">
+        <Reveal y={24} duration={0.65} className="p-8 sm:p-12 rounded-[36px] bg-white border border-[#DCE4E0]">
           <h2 className="text-2xl font-bold text-[#074031] mb-6 tracking-tight">
             {isBn ? "আমরা যেভাবে EPC ঠিকাদার ও প্রজেক্ট পরিচালকদের সহায়তা করি" : "How We Support Solar Developers & Contractors"}
           </h2>
@@ -313,7 +325,7 @@ export default async function AboutPage({ params }: AboutPageProps) {
               </span>
             </div>
           </div>
-        </div>
+        </Reveal>
 
       </div>
     </div>

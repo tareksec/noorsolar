@@ -296,11 +296,13 @@ html[lang="bn"],
   border-radius: inherit;
 }
 
-.btn-slide-fill:hover::before {
+.btn-slide-fill:hover::before,
+.btn-slide-fill:focus-visible::before {
   transform: translateY(0);
 }
 
-.btn-slide-fill:hover {
+.btn-slide-fill:hover,
+.btn-slide-fill:focus-visible {
   color: #FFFFFF;
 }
 
@@ -326,11 +328,13 @@ html[lang="bn"],
 }
 
 .btn-slide-fill:hover .btn-arrow-swap .arrow-primary,
+.btn-slide-fill:focus-visible .btn-arrow-swap .arrow-primary,
 .group:hover .btn-arrow-swap .arrow-primary {
   transform: translate(100%, -100%);
 }
 
 .btn-slide-fill:hover .btn-arrow-swap .arrow-secondary,
+.btn-slide-fill:focus-visible .btn-arrow-swap .arrow-secondary,
 .group:hover .btn-arrow-swap .arrow-secondary {
   transform: translate(0, 0);
 }
@@ -347,6 +351,17 @@ html[lang="bn"],
     animation: none !important;
     transform: none !important;
     transition: none !important;
+  }
+  .btn-slide-fill::before {
+    animation: none !important;
+    /* Park the fill off-screen: transform:none would leave it covering the button. */
+    transform: translateY(100%) !important;
+    transition: none !important;
+  }
+  /* No sweep under reduced motion: keep the instant color change readable. Without the dark fill, white text would sit on a light background. */
+  .btn-slide-fill:hover,
+  .btn-slide-fill:focus-visible {
+    color: inherit;
   }
 }
 

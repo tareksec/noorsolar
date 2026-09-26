@@ -128,7 +128,7 @@ export function HomeContactBanner({
                 <button
                   type="submit"
                   data-motion="button-slide"
-                  className="rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold px-5 sm:px-6 py-2.5 sm:py-3 min-h-[44px] text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 shrink-0 shadow-sm transition-all hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
+                  className="btn-slide-fill rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold px-5 sm:px-6 py-2.5 sm:py-3 min-h-[44px] text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 shrink-0 shadow-sm transition-all hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
                 >
                   <span>{isBn ? "পাইকারি কোটেশন নিন" : "Request Wholesale Quote"}</span>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2.5]" />
