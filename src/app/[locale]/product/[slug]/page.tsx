@@ -14,6 +14,7 @@ import { extractProductIdentity } from "@/lib/product-identity";
 import { extractProductLogistics } from "@/lib/product-logistics";
 import { extractProductWarranty } from "@/lib/product-warranty";
 import { SITE_URL } from "@/lib/site-config";
+import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 
 export const dynamic = "force-dynamic";
 
@@ -204,7 +205,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         </nav>
 
         {/* Product Details Hero Card */}
-        <div className="p-6 sm:p-10 lg:p-14 rounded-[36px] bg-white border border-[#DCE4E0] shadow-sm mb-12">
+        <Reveal y={24} duration={0.65}>
+          <div className="p-6 sm:p-10 lg:p-14 rounded-[36px] bg-white border border-[#DCE4E0] shadow-sm mb-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
             
             {/* Left: Product Images / Gallery */}
@@ -403,12 +405,13 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </span>
               </div>
             </div>
-
           </div>
         </div>
+      </Reveal>
 
         {/* Detailed Description & Technical Specifications Table */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-20">
+        <Reveal y={24} duration={0.65}>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-20">
           
           <div className="lg:col-span-5 flex flex-col gap-6">
             <div className="p-8 rounded-3xl bg-white border border-[#DCE4E0]">
@@ -761,10 +764,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               </div>
             )}
           </div>
-
         </div>
+      </Reveal>
 
-        {/* Customer Reviews Section */}
+      {/* Customer Reviews Section */}
+      <Reveal y={24} duration={0.65}>
         <ProductReviewsSection
           productId={product.id}
           productName={product.name}
@@ -773,10 +777,12 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           averageRating={averageRating}
           publicSubmissionEnabled={publicReviewsEnabled}
         />
+      </Reveal>
 
-        {/* Related Products from Same Category */}
-        {related.length > 0 && (
-          <div>
+      {/* Related Products from Same Category */}
+      {related.length > 0 && (
+        <div className="mt-12">
+          <Reveal y={18} duration={0.6}>
             <div className="flex items-center justify-between mb-8">
               <div>
                 <span className="text-xs font-mono uppercase text-[#62706A] block mb-1">
@@ -793,14 +799,17 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 {isBn ? "সম্পূর্ণ ক্যাটাগরি দেখুন" : "View Category"}
               </Link>
             </div>
+          </Reveal>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {related.map((relProduct) => (
-                <ProductCard key={relProduct.id} product={relProduct} />
-              ))}
-            </div>
-          </div>
-        )}
+          <RevealGroup staggerDelay={0.08} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {related.map((relProduct) => (
+              <RevealItem key={relProduct.id} className="h-full">
+                <ProductCard product={relProduct} />
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        </div>
+      )}
 
       </div>
     </div>

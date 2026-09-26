@@ -19,12 +19,6 @@ if (!fs.existsSync(CHROME_PATH)) {
 }
 
 let puppeteer;
-try {
-  puppeteer = require("puppeteer-core");
-} catch (err) {
-  console.error(`FATAL: Could not load puppeteer-core: ${err.message}`);
-  process.exit(1);
-}
 
 const BASE_URL = process.env.BASE_URL || "http://127.0.0.1:3000";
 
@@ -33,6 +27,14 @@ async function sleep(ms) {
 }
 
 async function run() {
+  try {
+    const mod = await import("puppeteer-core");
+    puppeteer = mod.default || mod;
+  } catch (err) {
+    console.error(`FATAL: Could not load puppeteer-core: ${err.message}`);
+    process.exit(1);
+  }
+
   console.log("==================================================");
   console.log("NOOR SOLAR ENERGY — MOTION VERIFICATION SUITE");
   console.log(`Target: ${BASE_URL}`);

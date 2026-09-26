@@ -9,6 +9,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { Reveal } from "@/components/ui/reveal";
 
 interface HeroSectionProps {
   headline?: string;
@@ -93,51 +94,53 @@ export function HeroSection({
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-grow flex flex-col justify-between pt-20 sm:pt-24 lg:pt-28 pb-8 sm:pb-10">
         
         {/* Centered Column: Kicker, Title, Subtitle, CTA Button */}
-        <div className="max-w-4xl mx-auto flex flex-col items-center text-center justify-center my-auto py-2 sm:py-4">
-          {/* Kicker Pill Badge in Brand Solar Gold */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#FEBE16]/30 bg-[#FEBE16]/10 backdrop-blur-md text-[#FEBE16] text-xs sm:text-sm font-medium mb-5 shadow-[0_0_20px_rgba(254,190,22,0.15)]">
-            <Sparkles className="w-4 h-4 text-[#FEBE16] shrink-0" />
-            <span>{isBn ? "সরাসরি B2B সোলার ইকুইপমেন্ট আমদানিকারক" : "Direct B2B Solar Equipment Importer"}</span>
+        <Reveal y={24} duration={0.65} className="w-full my-auto">
+          <div className="max-w-4xl mx-auto flex flex-col items-center text-center justify-center py-2 sm:py-4">
+            {/* Kicker Pill Badge in Brand Solar Gold */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#FEBE16]/30 bg-[#FEBE16]/10 backdrop-blur-md text-[#FEBE16] text-xs sm:text-sm font-medium mb-5 shadow-[0_0_20px_rgba(254,190,22,0.15)]">
+              <Sparkles className="w-4 h-4 text-[#FEBE16] shrink-0" />
+              <span>{isBn ? "সরাসরি B2B সোলার ইকুইপমেন্ট আমদানিকারক" : "Direct B2B Solar Equipment Importer"}</span>
+            </div>
+
+            {/* Headline */}
+            <h1
+              data-motion="hero-headline"
+              className="text-3xl sm:text-5xl lg:text-[3.8rem] xl:text-[4.3rem] font-bold tracking-tight text-white leading-[1.08] mb-5 text-center [text-shadow:_0_2px_12px_rgba(0,0,0,0.9),_0_4px_24px_rgba(0,0,0,0.85)]"
+            >
+              <span className="hero-word-inner">{resolvedHeadline}</span>
+            </h1>
+
+            {/* Subtitle */}
+            <p className="text-sm sm:text-base lg:text-[1.12rem] text-slate-100 leading-relaxed max-w-2xl mb-8 font-medium text-center [text-shadow:_0_2px_8px_rgba(0,0,0,0.95),_0_3px_16px_rgba(0,0,0,0.85)]">
+              {resolvedSubheadline}
+            </p>
+
+            {/* Brand Solar Gold Pill CTA Button + Secondary CTA */}
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <MagneticButton>
+                <Link
+                  href={isBn ? "/bn/quote" : "/quote"}
+                  data-motion="button-slide"
+                  className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-sm sm:text-base shadow-[0_8px_25px_rgba(254,190,22,0.35)] transition-all hover:scale-[1.03] active:scale-[0.98] w-fit"
+                >
+                  <span>{resolvedPrimaryCta}</span>
+                  <span className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#052F25] flex items-center justify-center text-[#FEBE16] group-hover:translate-x-0.5 transition-transform shadow-xs">
+                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+                  </span>
+                </Link>
+              </MagneticButton>
+
+              {resolvedSecondaryCta && (
+                <Link
+                  href={isBn ? "/bn/products" : "/products"}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-white font-semibold text-sm sm:text-base backdrop-blur-md transition-all hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <span>{resolvedSecondaryCta}</span>
+                </Link>
+              )}
+            </div>
           </div>
-
-          {/* Headline */}
-          <h1
-            data-motion="hero-headline"
-            className="text-3xl sm:text-5xl lg:text-[3.8rem] xl:text-[4.3rem] font-bold tracking-tight text-white leading-[1.08] mb-5 text-center [text-shadow:_0_2px_12px_rgba(0,0,0,0.9),_0_4px_24px_rgba(0,0,0,0.85)]"
-          >
-            <span className="hero-word-inner">{resolvedHeadline}</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-sm sm:text-base lg:text-[1.12rem] text-slate-100 leading-relaxed max-w-2xl mb-8 font-medium text-center [text-shadow:_0_2px_8px_rgba(0,0,0,0.95),_0_3px_16px_rgba(0,0,0,0.85)]">
-            {resolvedSubheadline}
-          </p>
-
-          {/* Brand Solar Gold Pill CTA Button + Secondary CTA */}
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <MagneticButton>
-              <Link
-                href={isBn ? "/bn/quote" : "/quote"}
-                data-motion="button-slide"
-                className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-sm sm:text-base shadow-[0_8px_25px_rgba(254,190,22,0.35)] transition-all hover:scale-[1.03] active:scale-[0.98] w-fit"
-              >
-                <span>{resolvedPrimaryCta}</span>
-                <span className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#052F25] flex items-center justify-center text-[#FEBE16] group-hover:translate-x-0.5 transition-transform shadow-xs">
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
-                </span>
-              </Link>
-            </MagneticButton>
-
-            {resolvedSecondaryCta && (
-              <Link
-                href={isBn ? "/bn/products" : "/products"}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-white font-semibold text-sm sm:text-base backdrop-blur-md transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <span>{resolvedSecondaryCta}</span>
-              </Link>
-            )}
-          </div>
-        </div>
+        </Reveal>
 
         {/* ================= BOTTOM ROW: CAPSULE DOCK & FLOATING PROOF CARD ================= */}
         <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-5 pt-4">

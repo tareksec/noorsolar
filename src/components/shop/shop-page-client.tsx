@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect, useSyncExternalStore } from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
 import { Link, useRouter } from "@/i18n/routing";
+import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 import {
   Search,
   SlidersHorizontal,
@@ -843,7 +844,8 @@ export function ShopPageClient({
             </div>
 
             {/* 2. PROMO BANNER GRID (Matching Mockup 2-Column Split) */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-stretch">
+            <Reveal y={24} duration={0.65}>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-stretch">
               
               {/* Large Featured Card (Left ~60-65%): BIG SALE with 3D product visual */}
               <div className="lg:col-span-8 rounded-[28px] sm:rounded-[32px] bg-gradient-to-br from-[#F1F4F1] via-[#F7F8F5] to-[#EBF3EE] p-6 sm:p-8 lg:p-10 relative overflow-hidden flex flex-col sm:flex-row justify-between items-center shadow-xs border border-[#DCE4E0] min-h-[260px]">
@@ -961,29 +963,33 @@ export function ShopPageClient({
                     </div>
                   );
                 })()}
+                </div>
               </div>
-            </div>
+            </Reveal>
 
             {/* 3. "Explore popular categories" SECTION (Matching Mockup 4 Square Cards) */}
+            {/* 3. "Explore popular categories" SECTION (Matching Mockup 4 Square Cards) */}
             <div>
-              <div className="flex items-center justify-between mb-5">
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-4.5 rounded-full bg-[#FEBE16] shrink-0" />
-                  <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-[#074031]">
-                    {isBn ? "জনপ্রিয় পণ্য ক্যাটাগরি" : "Popular Categories"}
-                  </h3>
+              <Reveal y={18} duration={0.6}>
+                <div className="flex items-center justify-between mb-5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-4.5 rounded-full bg-[#FEBE16] shrink-0" />
+                    <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-[#074031]">
+                      {isBn ? "জনপ্রিয় পণ্য ক্যাটাগরি" : "Popular Categories"}
+                    </h3>
+                  </div>
+                  <Link
+                    href="/products"
+                    className="inline-flex items-center min-h-[44px] px-2 text-xs sm:text-sm font-semibold text-[#62706A] hover:text-[#074031] gap-1 transition-colors"
+                  >
+                    <span>{isBn ? "সব দেখুন" : "See all"}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
-                <Link
-                  href="/products"
-                  className="inline-flex items-center min-h-[44px] px-2 text-xs sm:text-sm font-semibold text-[#62706A] hover:text-[#074031] gap-1 transition-colors"
-                >
-                  <span>{isBn ? "সব দেখুন" : "See all"}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
+              </Reveal>
 
               {/* 4 Cards Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+              <RevealGroup staggerDelay={0.06} className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
                 {popularCategoryCards.map((card) => {
                   const matchProduct = products.find(
                     (p) =>
@@ -992,47 +998,48 @@ export function ShopPageClient({
                   );
 
                   return (
-                    <div
-                      key={card.id}
-                      onClick={() => setSelectedCategory(card.slug)}
-                      className="group cursor-pointer rounded-[24px] bg-[#F1F4F1] hover:bg-[#E8EDE9] border border-[#DCE4E0] p-4 sm:p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-md hover:border-[#074031]/30 hover:-translate-y-1 min-h-[190px] sm:min-h-[220px]"
-                    >
-                      {/* Top Badge */}
-                      <div className="flex items-center justify-start">
-                        <span
-                          className={`text-[10px] sm:text-xs font-mono font-bold px-2.5 py-0.5 rounded-full ${card.badgeColor} shadow-2xs`}
+                    <RevealItem key={card.id} className="h-full">
+                      <div
+                        onClick={() => setSelectedCategory(card.slug)}
+                        className="h-full group cursor-pointer rounded-[24px] bg-[#F1F4F1] hover:bg-[#E8EDE9] border border-[#DCE4E0] p-4 sm:p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-md hover:border-[#074031]/30 hover:-translate-y-1 min-h-[190px] sm:min-h-[220px]"
+                      >
+                        {/* Top Badge */}
+                        <div className="flex items-center justify-start">
+                          <span
+                            className={`text-[10px] sm:text-xs font-mono font-bold px-2.5 py-0.5 rounded-full ${card.badgeColor} shadow-2xs`}
+                          >
+                            {card.badge}
+                          </span>
+                        </div>
+
+                        {/* Center Cutout Product Image - Clicking image opens details page */}
+                        <div
+                          onClick={(e) => {
+                            if (matchProduct) {
+                              e.stopPropagation();
+                              router.push(`/product/${matchProduct.slug}`);
+                            }
+                          }}
+                          className="relative w-full h-24 sm:h-28 my-auto flex items-center justify-center cursor-pointer"
+                          title={matchProduct ? (isBn ? `${matchProduct.name} বিস্তারিত দেখুন` : `View ${matchProduct.name}`) : card.title}
                         >
-                          {card.badge}
+                          <Image
+                            src={card.image}
+                            alt={card.alt}
+                            fill
+                            className="object-contain p-2 group-hover:scale-110 transition-transform duration-500 ease-out cursor-pointer"
+                          />
+                        </div>
+
+                        {/* Bottom Label */}
+                        <span className="text-xs sm:text-sm font-bold text-center text-[#17251F] group-hover:text-[#074031] mt-2">
+                          {card.title}
                         </span>
                       </div>
-
-                      {/* Center Cutout Product Image - Clicking image opens details page */}
-                      <div
-                        onClick={(e) => {
-                          if (matchProduct) {
-                            e.stopPropagation();
-                            router.push(`/product/${matchProduct.slug}`);
-                          }
-                        }}
-                        className="relative w-full h-24 sm:h-28 my-auto flex items-center justify-center cursor-pointer"
-                        title={matchProduct ? (isBn ? `${matchProduct.name} বিস্তারিত দেখুন` : `View ${matchProduct.name}`) : card.title}
-                      >
-                        <Image
-                          src={card.image}
-                          alt={card.alt}
-                          fill
-                          className="object-contain p-2 group-hover:scale-110 transition-transform duration-500 ease-out cursor-pointer"
-                        />
-                      </div>
-
-                      {/* Bottom Label */}
-                      <span className="text-xs sm:text-sm font-bold text-center text-[#17251F] group-hover:text-[#074031] mt-2">
-                        {card.title}
-                      </span>
-                    </div>
+                    </RevealItem>
                   );
                 })}
-              </div>
+              </RevealGroup>
             </div>
 
             {/* 4. PRODUCT CATALOG GRID */}
@@ -1058,20 +1065,22 @@ export function ShopPageClient({
                 </div>
               )}
 
-              <div className="flex items-center justify-between mb-5">
-                <h3 className="text-lg sm:text-xl font-bold text-[#074031]">
-                  {showSavedOnly
-                    ? isBn
-                      ? "সংরক্ষিত সরঞ্জাম তালিকা"
-                      : "Saved Equipment List"
-                    : isBn
-                    ? "সরঞ্জাম তালিকা"
-                    : "Equipment Catalog"}
-                  <span className="text-xs font-mono font-normal text-[#62706A] ml-2">
-                    ({filteredProducts.length} {isBn ? "টি পণ্য" : "items"})
-                  </span>
-                </h3>
-              </div>
+              <Reveal y={18} duration={0.6}>
+                <div className="flex items-center justify-between mb-5">
+                  <h3 className="text-lg sm:text-xl font-bold text-[#074031]">
+                    {showSavedOnly
+                      ? isBn
+                        ? "সংরক্ষিত সরঞ্জাম তালিকা"
+                        : "Saved Equipment List"
+                      : isBn
+                      ? "সরঞ্জাম তালিকা"
+                      : "Equipment Catalog"}
+                    <span className="text-xs font-mono font-normal text-[#62706A] ml-2">
+                      ({filteredProducts.length} {isBn ? "টি পণ্য" : "items"})
+                    </span>
+                  </h3>
+                </div>
+              </Reveal>
 
               {filteredProducts.length === 0 ? (
                 <div className="text-center py-12 bg-[#F1F4F1] rounded-3xl border border-[#DCE4E0]">
@@ -1097,7 +1106,8 @@ export function ShopPageClient({
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
+                <Reveal y={24} duration={0.65}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6">
                   {filteredProducts.map((product) => {
                     const primaryImg =
                       product.images[0]?.url || "/demo/category-panels.svg";
@@ -1307,7 +1317,8 @@ export function ShopPageClient({
                       </div>
                     );
                   })}
-                </div>
+                  </div>
+                </Reveal>
               )}
             </div>
 

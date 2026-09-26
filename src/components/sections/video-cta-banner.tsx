@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "@/i18n/routing";
 import { ArrowRight } from "lucide-react";
+import { Reveal } from "@/components/ui/reveal";
 
 interface VideoCtaBannerProps {
   headline?: string;
@@ -49,36 +50,38 @@ export function VideoCtaBanner({
           </video>
 
           {/* Content Box */}
-          <div className="relative z-10 max-w-xl lg:max-w-2xl">
-            {/* Live Indicator / Eyebrow */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#052F25]/75 backdrop-blur-md border border-white/20 text-white text-xs font-mono uppercase tracking-wider mb-6 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-[#FEBE16] animate-pulse" />
-              <span>{isBn ? "স্বয়ংক্রিয় রোবোটিক অ্যাসেম্বলি" : "Automated Robotic Assembly"}</span>
+          <Reveal y={24} duration={0.65} className="relative z-10 max-w-xl lg:max-w-2xl">
+            <div>
+              {/* Live Indicator / Eyebrow */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#052F25]/75 backdrop-blur-md border border-white/20 text-white text-xs font-mono uppercase tracking-wider mb-6 shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-[#FEBE16] animate-pulse" />
+                <span>{isBn ? "স্বয়ংক্রিয় রোবোটিক অ্যাসেম্বলি" : "Automated Robotic Assembly"}</span>
+              </div>
+
+              {/* Main Headline */}
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-extrabold text-white leading-[1.08] tracking-tight mb-5 [text-shadow:_0_3px_14px_rgb(0_0_0_/_95%)]">
+                {headline || defaultHeadline}
+              </h2>
+
+              {/* Subheadline / Information */}
+              <p className="text-sm sm:text-base md:text-lg text-white/95 leading-relaxed max-w-xl mb-8 font-normal [text-shadow:_0_2px_10px_rgb(0_0_0_/_95%)]">
+                {subheadline || defaultSubheadline}
+              </p>
+
+              {/* Action Button: Solar Gold */}
+              <div className="flex flex-wrap items-center gap-4">
+                <Link
+                  href={ctaHref}
+                  className="inline-flex items-center min-h-[44px] gap-3.5 pl-6 pr-2.5 py-2.5 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] active:scale-[0.98] text-[#052F25] font-bold text-sm sm:text-base shadow-[0_8px_24px_-4px_rgba(254,190,22,0.4)] transition-all duration-200 group/btn"
+                >
+                  <span>{ctaText || defaultCtaText}</span>
+                  <span className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#052F25] text-[#FEBE16] flex items-center justify-center group-hover/btn:translate-x-1 transition-all duration-200 shadow-xs">
+                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-current stroke-[2.5]" />
+                  </span>
+                </Link>
+              </div>
             </div>
-
-            {/* Main Headline */}
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-extrabold text-white leading-[1.08] tracking-tight mb-5 [text-shadow:_0_3px_14px_rgb(0_0_0_/_95%)]">
-              {headline || defaultHeadline}
-            </h2>
-
-            {/* Subheadline / Information */}
-            <p className="text-sm sm:text-base md:text-lg text-white/95 leading-relaxed max-w-xl mb-8 font-normal [text-shadow:_0_2px_10px_rgb(0_0_0_/_95%)]">
-              {subheadline || defaultSubheadline}
-            </p>
-
-            {/* Action Button: Solar Gold */}
-            <div className="flex flex-wrap items-center gap-4">
-              <Link
-                href={ctaHref}
-                className="inline-flex items-center min-h-[44px] gap-3.5 pl-6 pr-2.5 py-2.5 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] active:scale-[0.98] text-[#052F25] font-bold text-sm sm:text-base shadow-[0_8px_24px_-4px_rgba(254,190,22,0.4)] transition-all duration-200 group/btn"
-              >
-                <span>{ctaText || defaultCtaText}</span>
-                <span className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#052F25] text-[#FEBE16] flex items-center justify-center group-hover/btn:translate-x-1 transition-all duration-200 shadow-xs">
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-current stroke-[2.5]" />
-                </span>
-              </Link>
-            </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

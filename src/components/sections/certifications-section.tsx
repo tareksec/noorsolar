@@ -11,6 +11,7 @@ import {
   Calendar,
   CalendarClock,
 } from "lucide-react";
+import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 
 interface CertificationsSectionProps {
   certifications?: Certification[];
@@ -42,42 +43,41 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* =============================================================== */}
-        {/* Section Header Matching Mockup                                 */}
-        {/* =============================================================== */}
-        <div className="text-center mb-10 sm:mb-14">
-          {/* Top Pill Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 border border-[#D5E2D1] shadow-2xs mb-4">
-            <span className="w-2 h-2 rounded-full bg-[#107C41]" />
-            <span className="text-xs sm:text-[13px] font-medium text-[#1E3B2B]">
-              {isBn ? "বিদ্যুৎ সাশ্রয়, সবুজ বাংলাদেশ" : "Energy Savings, Green Bangladesh"}
-            </span>
+        {/* Section Header Matching Mockup */}
+        <Reveal y={20} duration={0.6}>
+          <div className="text-center mb-10 sm:mb-14">
+            {/* Top Pill Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 border border-[#D5E2D1] shadow-2xs mb-4">
+              <span className="w-2 h-2 rounded-full bg-[#107C41]" />
+              <span className="text-xs sm:text-[13px] font-medium text-[#1E3B2B]">
+                {isBn ? "বিদ্যুৎ সাশ্রয়, সবুজ বাংলাদেশ" : "Energy Savings, Green Bangladesh"}
+              </span>
+            </div>
+
+            {/* Main Heading */}
+            <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-[#0D4B39] font-serif leading-tight mb-3">
+              {isBn ? "বিএসআরইএ সদস্যপদ" : "BSREA Industry Membership"}
+            </h2>
+
+            {/* Subtitle */}
+            <p className="text-sm sm:text-base text-[#4F685A] max-w-2xl mx-auto leading-relaxed mb-4">
+              {isBn
+                ? "বাংলাদেশ সাসটেইনেবল অ্যান্ড রিনিউয়েবল এনার্জি অ্যাসোসিয়েশন (BSREA) সদস্যপদ সনদপত্র প্রতিষ্ঠানের জন্য।"
+                : "Official documentation of general membership with the Bangladesh Sustainable & Renewable Energy Association (BSREA)."}
+            </p>
+
+            {/* Decorative Divider */}
+            <div className="flex items-center justify-center gap-3 my-2">
+              <span className="w-12 sm:w-16 h-[1px] bg-[#0D4B39]/20" />
+              <span className="text-[#0D4B39] text-xs">🍃</span>
+              <span className="w-12 sm:w-16 h-[1px] bg-[#0D4B39]/20" />
+            </div>
           </div>
+        </Reveal>
 
-          {/* Main Heading */}
-          <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-[#0D4B39] font-serif leading-tight mb-3">
-            {isBn ? "বিএসআরইএ সদস্যপদ" : "BSREA Industry Membership"}
-          </h2>
-
-          {/* Subtitle */}
-          <p className="text-sm sm:text-base text-[#4F685A] max-w-2xl mx-auto leading-relaxed mb-4">
-            {isBn
-              ? "বাংলাদেশ সাসটেইনেবল অ্যান্ড রিনিউয়েবল এনার্জি অ্যাসোসিয়েশন (BSREA) সদস্যপদ সনদপত্র প্রতিষ্ঠানের জন্য।"
-              : "Official documentation of general membership with the Bangladesh Sustainable & Renewable Energy Association (BSREA)."}
-          </p>
-
-          {/* Decorative Divider */}
-          <div className="flex items-center justify-center gap-3 my-2">
-            <span className="w-12 sm:w-16 h-[1px] bg-[#0D4B39]/20" />
-            <span className="text-[#0D4B39] text-xs">🍃</span>
-            <span className="w-12 sm:w-16 h-[1px] bg-[#0D4B39]/20" />
-          </div>
-        </div>
-
-        {/* =============================================================== */}
-        {/* Main Elevated Container Card Matching Mockup                   */}
-        {/* =============================================================== */}
-        <div className="rounded-[32px] sm:rounded-[36px] bg-white border border-[#DCE6D9] shadow-[0_20px_60px_-15px_rgba(7,64,49,0.08)] overflow-hidden p-6 sm:p-8 lg:p-10 max-w-6xl mx-auto">
+        {/* Main Elevated Container Card Matching Mockup */}
+        <Reveal y={28} delay={0.1} duration={0.65}>
+          <div className="rounded-[32px] sm:rounded-[36px] bg-white border border-[#DCE6D9] shadow-[0_20px_60px_-15px_rgba(7,64,49,0.08)] overflow-hidden p-6 sm:p-8 lg:p-10 max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             {/* Left Column: BSREA Artwork Poster with Skyline, Logo & Council Bar */}
             <div className="lg:col-span-5 flex flex-col">
@@ -156,68 +156,76 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
                   Apex Renewable Energy Trade Body in Bangladesh
                 </p>
 
-                {/* 4 Info Cards Grid (2x2) */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-5">
+                {/* 4 Info Cards Grid (2x2) with staggered cascade */}
+                <RevealGroup stagger={0.07} className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-5">
                   {/* Card 1: Organization Name */}
-                  <div className="p-3.5 sm:p-4 rounded-2xl bg-[#F6F9F5] border border-[#E3ECE0] flex items-center gap-3.5">
-                    <div className="w-9 h-9 rounded-xl bg-white border border-[#DCE6D9] flex items-center justify-center text-[#0D4B39] shrink-0 shadow-2xs">
-                      <Building2 className="w-4 h-4" />
+                  <RevealItem y={16}>
+                    <div className="p-3.5 sm:p-4 rounded-2xl bg-[#F6F9F5] border border-[#E3ECE0] flex items-center gap-3.5 h-full">
+                      <div className="w-9 h-9 rounded-xl bg-white border border-[#DCE6D9] flex items-center justify-center text-[#0D4B39] shrink-0 shadow-2xs">
+                        <Building2 className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[11px] font-mono text-[#718073] block uppercase font-medium">
+                          {isBn ? "প্রতিষ্ঠানের নাম" : "Organization Name"}
+                        </span>
+                        <span className="text-sm font-bold text-[#142019]">
+                          {isBn ? "নূর সোলার এনার্জি" : "Noor Solar Energy"}
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-[11px] font-mono text-[#718073] block uppercase font-medium">
-                        {isBn ? "প্রতিষ্ঠানের নাম" : "Organization Name"}
-                      </span>
-                      <span className="text-sm font-bold text-[#142019]">
-                        {isBn ? "নূর সোলার এনার্জি" : "Noor Solar Energy"}
-                      </span>
-                    </div>
-                  </div>
+                  </RevealItem>
 
                   {/* Card 2: Membership Number */}
-                  <div className="p-3.5 sm:p-4 rounded-2xl bg-[#F6F9F5] border border-[#E3ECE0] flex items-center gap-3.5">
-                    <div className="w-9 h-9 rounded-xl bg-white border border-[#DCE6D9] flex items-center justify-center text-[#0D4B39] shrink-0 shadow-2xs">
-                      <FileText className="w-4 h-4" />
+                  <RevealItem y={16}>
+                    <div className="p-3.5 sm:p-4 rounded-2xl bg-[#F6F9F5] border border-[#E3ECE0] flex items-center gap-3.5 h-full">
+                      <div className="w-9 h-9 rounded-xl bg-white border border-[#DCE6D9] flex items-center justify-center text-[#0D4B39] shrink-0 shadow-2xs">
+                        <FileText className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[11px] font-mono text-[#718073] block uppercase font-medium">
+                          Membership Number
+                        </span>
+                        <span className="text-sm font-bold font-mono text-[#142019]">
+                          202640795CRK112
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-[11px] font-mono text-[#718073] block uppercase font-medium">
-                        Membership Number
-                      </span>
-                      <span className="text-sm font-bold font-mono text-[#142019]">
-                        202640795CRK112
-                      </span>
-                    </div>
-                  </div>
+                  </RevealItem>
 
                   {/* Card 3: Membership Date */}
-                  <div className="p-3.5 sm:p-4 rounded-2xl bg-[#F6F9F5] border border-[#E3ECE0] flex items-center gap-3.5">
-                    <div className="w-9 h-9 rounded-xl bg-white border border-[#DCE6D9] flex items-center justify-center text-[#0D4B39] shrink-0 shadow-2xs">
-                      <Calendar className="w-4 h-4" />
+                  <RevealItem y={16}>
+                    <div className="p-3.5 sm:p-4 rounded-2xl bg-[#F6F9F5] border border-[#E3ECE0] flex items-center gap-3.5 h-full">
+                      <div className="w-9 h-9 rounded-xl bg-white border border-[#DCE6D9] flex items-center justify-center text-[#0D4B39] shrink-0 shadow-2xs">
+                        <Calendar className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[11px] font-mono text-[#718073] block uppercase font-medium">
+                          Membership Date
+                        </span>
+                        <span className="text-sm font-bold text-[#142019]">
+                          16 March 2024
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-[11px] font-mono text-[#718073] block uppercase font-medium">
-                        Membership Date
-                      </span>
-                      <span className="text-sm font-bold text-[#142019]">
-                        16 March 2024
-                      </span>
-                    </div>
-                  </div>
+                  </RevealItem>
 
                   {/* Card 4: Valid Until */}
-                  <div className="p-3.5 sm:p-4 rounded-2xl bg-[#F6F9F5] border border-[#E3ECE0] flex items-center gap-3.5">
-                    <div className="w-9 h-9 rounded-xl bg-white border border-[#DCE6D9] flex items-center justify-center text-[#0D4B39] shrink-0 shadow-2xs">
-                      <CalendarClock className="w-4 h-4" />
+                  <RevealItem y={16}>
+                    <div className="p-3.5 sm:p-4 rounded-2xl bg-[#F6F9F5] border border-[#E3ECE0] flex items-center gap-3.5 h-full">
+                      <div className="w-9 h-9 rounded-xl bg-white border border-[#DCE6D9] flex items-center justify-center text-[#0D4B39] shrink-0 shadow-2xs">
+                        <CalendarClock className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[11px] font-mono text-[#718073] block uppercase font-medium">
+                          Valid Until
+                        </span>
+                        <span className="text-sm font-bold text-[#142019]">
+                          15 March 2026
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-[11px] font-mono text-[#718073] block uppercase font-medium">
-                        Valid Until
-                      </span>
-                      <span className="text-sm font-bold text-[#142019]">
-                        15 March 2026
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                  </RevealItem>
+                </RevealGroup>
 
                 {/* Paragraph Note */}
                 <p className="text-xs sm:text-[13.5px] text-[#4F685A] leading-relaxed mb-6 font-normal">
@@ -254,6 +262,7 @@ export function CertificationsSection({ locale }: CertificationsSectionProps) {
             </div>
           </div>
         </div>
+        </Reveal>
       </div>
     </section>
   );

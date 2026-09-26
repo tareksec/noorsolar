@@ -22,12 +22,6 @@ if (!fs.existsSync(CHROME_PATH)) {
 }
 
 let puppeteer;
-try {
-  puppeteer = require("puppeteer-core");
-} catch (err) {
-  console.error(`FATAL: Could not load puppeteer-core: ${err.message}`);
-  process.exit(1);
-}
 
 const BASE_URL = process.env.BASE_URL || "http://127.0.0.1:3000";
 
@@ -48,6 +42,14 @@ const VIEWPORTS = [
 ];
 
 async function run() {
+  try {
+    const mod = await import("puppeteer-core");
+    puppeteer = mod.default || mod;
+  } catch (err) {
+    console.error(`FATAL: Could not load puppeteer-core: ${err.message}`);
+    process.exit(1);
+  }
+
   console.log(`[Image Quality Guard] Target: ${BASE_URL}`);
   console.log(`[Image Quality Guard] Launching Chrome...`);
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "@/i18n/routing";
 import { HardHat, Building2, Store, ArrowRight, Check } from "lucide-react";
+import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 
 interface BuyerSegmentationProps {
   locale?: string;
@@ -82,78 +83,81 @@ export function BuyerSegmentation({ locale }: BuyerSegmentationProps) {
     <section className="py-12 lg:py-16 bg-[#F1F4F1] border-b border-[#DCE4E0]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="max-w-3xl mb-8 lg:mb-10">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="w-2 h-2 rounded-full bg-[#074031] inline-block" />
-            <span className="text-xs font-mono uppercase tracking-wider text-[#62706A] font-semibold">
-              {isBn ? "B2B ক্লায়েন্ট ও ক্রেতা" : "B2B Buyer Segmentation"}
-            </span>
+        <Reveal y={20} duration={0.6}>
+          <div className="max-w-3xl mb-8 lg:mb-10">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-2 h-2 rounded-full bg-[#074031] inline-block" />
+              <span className="text-xs font-mono uppercase tracking-wider text-[#62706A] font-semibold">
+                {isBn ? "B2B ক্লায়েন্ট ও ক্রেতা" : "B2B Buyer Segmentation"}
+              </span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#074031]">
+              {isBn ? "প্রতিটি স্তরের B2B সোলার সংগ্রহে নির্ভরযোগ্য পার্টনার" : "Built for Every Scale of B2B Solar Procurement"}
+            </h2>
+            <p className="mt-2.5 text-xs sm:text-sm text-[#62706A] max-w-2xl leading-relaxed">
+              {isBn
+                ? "সরাসরি আমদানিকারক হিসেবে আমরা বাংলাদেশের EPC ঠিকাদার, বাণিজ্যিক প্রতিষ্ঠান ও আঞ্চলিক ডিলারদের প্রজেক্ট স্কেলে ইকুইপমেন্ট সরবরাহ করি।"
+                : "Direct importer supplying EPC contractors, industrial facilities, and regional wholesale dealers across Bangladesh."}
+            </p>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#074031]">
-            {isBn ? "প্রতিটি স্তরের B2B সোলার সংগ্রহে নির্ভরযোগ্য পার্টনার" : "Built for Every Scale of B2B Solar Procurement"}
-          </h2>
-          <p className="mt-2.5 text-xs sm:text-sm text-[#62706A] max-w-2xl leading-relaxed">
-            {isBn
-              ? "সরাসরি আমদানিকারক হিসেবে আমরা বাংলাদেশের EPC ঠিকাদার, বাণিজ্যিক প্রতিষ্ঠান ও আঞ্চলিক ডিলারদের প্রজেক্ট স্কেলে ইকুইপমেন্ট সরবরাহ করি।"
-              : "Direct importer supplying EPC contractors, industrial facilities, and regional wholesale dealers across Bangladesh."}
-          </p>
-        </div>
+        </Reveal>
 
         {/* 3 Buyer Segmentation Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 items-stretch">
+        <RevealGroup stagger={0.08} className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 items-stretch">
           {segments.map((seg) => {
             const Icon = seg.icon;
             return (
-              <div
-                key={seg.id}
-                className="bg-white rounded-[28px] border border-[#DCE4E0] p-6 sm:p-7 shadow-xs flex flex-col justify-between hover:border-[#074031]/40 transition-all duration-200 group"
-              >
-                <div>
-                  {/* Top Bar: Icon & Badge */}
-                  <div className="flex items-center justify-between gap-2 mb-5">
-                    <div className="w-11 h-11 rounded-2xl bg-[#F1F4F1] group-hover:bg-[#FEBE16] transition-colors flex items-center justify-center text-[#074031] group-hover:text-[#052F25] shrink-0">
-                      <Icon className="w-5 h-5 stroke-[1.8]" />
+              <RevealItem key={seg.id} y={22}>
+                <div
+                  className="bg-white rounded-[28px] border border-[#DCE4E0] p-6 sm:p-7 shadow-xs flex flex-col justify-between hover:border-[#074031]/40 transition-all duration-200 group h-full"
+                >
+                  <div>
+                    {/* Top Bar: Icon & Badge */}
+                    <div className="flex items-center justify-between gap-2 mb-5">
+                      <div className="w-11 h-11 rounded-2xl bg-[#F1F4F1] group-hover:bg-[#FEBE16] transition-colors flex items-center justify-center text-[#074031] group-hover:text-[#052F25] shrink-0">
+                        <Icon className="w-5 h-5 stroke-[1.8]" />
+                      </div>
+                      <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-[#074031]/10 text-[#074031] border border-[#074031]/25">
+                        {seg.badge}
+                      </span>
                     </div>
-                    <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-[#074031]/10 text-[#074031] border border-[#074031]/25">
-                      {seg.badge}
-                    </span>
+
+                    {/* Title & Description */}
+                    <h3 className="text-lg sm:text-xl font-bold text-[#17251F] mb-2 leading-tight">
+                      {seg.title}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-[#62706A] leading-relaxed mb-5">
+                      {seg.description}
+                    </p>
+
+                    {/* Bullet Points */}
+                    <ul className="space-y-2.5 pt-4 border-t border-[#DCE4E0] mb-6">
+                      {seg.points.map((pt, idx) => (
+                        <li key={idx} className="flex items-start gap-2 text-xs sm:text-[13px] text-[#17251F] leading-snug">
+                          <span className="w-4 h-4 rounded-full bg-[#FEBE16]/30 text-[#074031] flex items-center justify-center shrink-0 mt-0.5">
+                            <Check className="w-2.5 h-2.5 stroke-[2.5]" />
+                          </span>
+                          <span>{pt}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
 
-                  {/* Title & Description */}
-                  <h3 className="text-lg sm:text-xl font-bold text-[#17251F] mb-2 leading-tight">
-                    {seg.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-[#62706A] leading-relaxed mb-5">
-                    {seg.description}
-                  </p>
-
-                  {/* Bullet Points */}
-                  <ul className="space-y-2.5 pt-4 border-t border-[#DCE4E0] mb-6">
-                    {seg.points.map((pt, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-xs sm:text-[13px] text-[#17251F] leading-snug">
-                        <span className="w-4 h-4 rounded-full bg-[#FEBE16]/30 text-[#074031] flex items-center justify-center shrink-0 mt-0.5">
-                          <Check className="w-2.5 h-2.5 stroke-[2.5]" />
-                        </span>
-                        <span>{pt}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Card CTA Link */}
+                  <div className="pt-2">
+                    <Link
+                      href={seg.href}
+                      className="inline-flex items-center justify-between w-full px-5 py-3 rounded-full bg-[#074031] hover:bg-[#FEBE16] text-white hover:text-[#052F25] text-xs font-semibold font-mono transition-all duration-200 shadow-xs group/btn"
+                    >
+                      <span>{seg.ctaText}</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
                 </div>
-
-                {/* Card CTA Link */}
-                <div className="pt-2">
-                  <Link
-                    href={seg.href}
-                    className="inline-flex items-center justify-between w-full px-5 py-3 rounded-full bg-[#074031] hover:bg-[#FEBE16] text-white hover:text-[#052F25] text-xs font-semibold font-mono transition-all duration-200 shadow-xs group/btn"
-                  >
-                    <span>{seg.ctaText}</span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </div>
+              </RevealItem>
             );
           })}
-        </div>
+        </RevealGroup>
       </div>
     </section>
   );

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { Mail, ArrowRight } from "lucide-react";
 import { MagneticButton } from "@/components/ui/magnetic-button";
+import { Reveal } from "@/components/ui/reveal";
 
 interface HomeContactBannerProps {
   phoneDisplay?: string;
@@ -56,7 +57,8 @@ export function HomeContactBanner({
           </div>
 
           {/* Foreground Content */}
-          <div className="relative z-10 w-full p-6 sm:p-12 lg:p-16 max-w-2xl">
+          <Reveal y={24} duration={0.65} className="relative z-10 w-full max-w-2xl">
+            <div className="p-6 sm:p-12 lg:p-16">
             
             {/* Logo Lockup */}
             <div className="flex items-center gap-3.5 mb-5 sm:mb-6">
@@ -170,7 +172,8 @@ export function HomeContactBanner({
               </span>
             </div>
 
-          </div>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>

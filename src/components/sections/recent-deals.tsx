@@ -7,6 +7,7 @@ import type { Stat } from "@prisma/client";
 import { Link } from "@/i18n/routing";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import type { TabProduct } from "@/components/sections/home-products-tabs";
+import { Reveal } from "@/components/ui/reveal";
 
 type DealTab = "solar" | "inverter" | "battery" | "other";
 
@@ -131,112 +132,111 @@ export function RecentDeals({
     <section className="relative w-full bg-white py-16 sm:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Dark stats banner — CSS only, zero image bytes */}
-        <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="relative overflow-hidden rounded-[24px] bg-[#0B1F17] px-6 py-10 sm:px-10 sm:py-12"
-        >
-          <div
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(#CEF23E_1px,transparent_1px)] [background-size:26px_26px] opacity-[0.07]"
-            aria-hidden="true"
-          />
-          <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <p className="font-mono text-xs sm:text-sm font-semibold text-[#FEBE16] mb-3">
-                {isBn ? "টেকসই ভবিষ্যতের জন্য শক্তি" : "Powering a sustainable future"}
-              </p>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white leading-tight">
-                {isBn ? (
-                  <>আপনার ব্যবসার জন্য লাইভ পাইকারি ডিল</>
-                ) : (
-                  <>Live wholesale deals for your business</>
-                )}
-              </h2>
-              <p className="mt-3 text-sm sm:text-base text-white/70 leading-relaxed max-w-md">
-                {isBn
-                  ? "রেডি স্টক, কনটেইনার ইনডেন্ট ও প্রজেক্ট-গ্রেড সরবরাহ — সব এক জায়গায়।"
-                  : "Ready stock, container indent and project-grade supply — all in one place."}
-              </p>
+        <Reveal y={24} duration={0.65}>
+          <div className="relative overflow-hidden rounded-[24px] bg-[#0B1F17] px-6 py-10 sm:px-10 sm:py-12">
+            <div
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(#CEF23E_1px,transparent_1px)] [background-size:26px_26px] opacity-[0.07]"
+              aria-hidden="true"
+            />
+            <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+              <div>
+                <p className="font-mono text-xs sm:text-sm font-semibold text-[#FEBE16] mb-3">
+                  {isBn ? "টেকসই ভবিষ্যতের জন্য শক্তি" : "Powering a sustainable future"}
+                </p>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white leading-tight">
+                  {isBn ? (
+                    <>আপনার ব্যবসার জন্য লাইভ পাইকারি ডিল</>
+                  ) : (
+                    <>Live wholesale deals for your business</>
+                  )}
+                </h2>
+                <p className="mt-3 text-sm sm:text-base text-white/70 leading-relaxed max-w-md">
+                  {isBn
+                    ? "রেডি স্টক, কনটেইনার ইনডেন্ট ও প্রজেক্ট-গ্রেড সরবরাহ — সব এক জায়গায়।"
+                    : "Ready stock, container indent and project-grade supply — all in one place."}
+                </p>
+              </div>
+              {stats.length > 0 && (
+                <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-6">
+                  {stats.slice(0, 6).map((s) => (
+                    <div key={s.id} className="border-l border-white/15 pl-4">
+                      <dd className="text-2xl sm:text-3xl font-black font-mono text-[#FEBE16]">
+                        <AnimatedCounter
+                          value={s.value}
+                          prefix={s.prefix ?? ""}
+                          suffix={s.suffix ?? ""}
+                          decimals={Number.isInteger(s.value) ? 0 : 1}
+                        />
+                      </dd>
+                      <dt className="mt-1 text-[11px] sm:text-xs text-white/60 leading-snug">
+                        {isBn ? s.labelBn || s.label : s.label}
+                      </dt>
+                    </div>
+                  ))}
+                </dl>
+              )}
             </div>
-            {stats.length > 0 && (
-              <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-6">
-                {stats.slice(0, 6).map((s) => (
-                  <div key={s.id} className="border-l border-white/15 pl-4">
-                    <dd className="text-2xl sm:text-3xl font-black font-mono text-[#FEBE16]">
-                      <AnimatedCounter
-                        value={s.value}
-                        prefix={s.prefix ?? ""}
-                        suffix={s.suffix ?? ""}
-                        decimals={Number.isInteger(s.value) ? 0 : 1}
-                      />
-                    </dd>
-                    <dt className="mt-1 text-[11px] sm:text-xs text-white/60 leading-snug">
-                      {isBn ? s.labelBn || s.label : s.label}
-                    </dt>
-                  </div>
-                ))}
-              </dl>
-            )}
           </div>
-        </motion.div>
+        </Reveal>
 
         {/* Deals header + tabs */}
-        <div className="mt-12 sm:mt-14 flex flex-col md:flex-row md:items-end md:justify-between gap-5">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-neutral-900">
-              {limit
-                ? isBn
-                  ? `সাম্প্রতিক ${limit}টি ডিল`
-                  : `Recent ${limit} Deals List`
-                : isBn
-                  ? "সব লাইভ ডিল"
-                  : "All Live Deals"}
-            </h2>
-            <p className="mt-2 text-sm text-neutral-500">
-              {isBn
-                ? `${totalCount}টি সক্রিয় পণ্য থেকে সরাসরি`
-                : `Pulled live from ${totalCount} active products`}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2" role="tablist" aria-label={isBn ? "ডিল বিভাগ" : "Deal categories"}>
-            {tabs.map((t) => {
-              const active = t.id === visibleTab;
-              return (
-                <button
-                  key={t.id}
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setActiveTab(t.id)}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold border transition-colors min-h-[40px] ${
-                    active
-                      ? "bg-[#E8590C] border-[#E8590C] text-white shadow-sm"
-                      : "bg-white border-neutral-200 text-neutral-600 hover:border-[#074031]/40 hover:text-[#074031]"
-                  }`}
-                >
-                  {t.label}
-                  <span
-                    className={`font-mono text-[11px] px-1.5 py-0.5 rounded-md ${
-                      active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500"
+        <Reveal y={20} delay={0.1} duration={0.6}>
+          <div className="mt-12 sm:mt-14 flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-neutral-900">
+                {limit
+                  ? isBn
+                    ? `সাম্প্রতিক ${limit}টি ডিল`
+                    : `Recent ${limit} Deals List`
+                  : isBn
+                    ? "সব লাইভ ডিল"
+                    : "All Live Deals"}
+              </h2>
+              <p className="mt-2 text-sm text-neutral-500">
+                {isBn
+                  ? `${totalCount}টি সক্রিয় পণ্য থেকে সরাসরি`
+                  : `Pulled live from ${totalCount} active products`}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2" role="tablist" aria-label={isBn ? "ডিল বিভাগ" : "Deal categories"}>
+              {tabs.map((t) => {
+                const active = t.id === visibleTab;
+                return (
+                  <button
+                    key={t.id}
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setActiveTab(t.id)}
+                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold border transition-colors min-h-[40px] ${
+                      active
+                        ? "bg-[#E8590C] border-[#E8590C] text-white shadow-sm"
+                        : "bg-white border-neutral-200 text-neutral-600 hover:border-[#074031]/40 hover:text-[#074031]"
                     }`}
                   >
-                    {tabData[t.id].length}
-                  </span>
-                </button>
-              );
-            })}
+                    {t.label}
+                    <span
+                      className={`font-mono text-[11px] px-1.5 py-0.5 rounded-md ${
+                        active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500"
+                      }`}
+                    >
+                      {tabData[t.id].length}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </Reveal>
 
         {/* Table */}
-        <motion.div
-          key={visibleTab}
-          initial={reduceMotion ? false : { opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.25 }}
-          className="mt-6 overflow-x-auto rounded-2xl border border-neutral-200"
-        >
+        <Reveal y={24} delay={0.15} duration={0.65}>
+          <motion.div
+            key={visibleTab}
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.25 }}
+            className="mt-6 overflow-x-auto rounded-2xl border border-neutral-200"
+          >
           <table className="w-full min-w-[900px] border-collapse bg-white text-sm">
             <thead>
               <tr className="bg-[#F7F8F5] text-left">
@@ -302,17 +302,20 @@ export function RecentDeals({
             </tbody>
           </table>
         </motion.div>
+        </Reveal>
 
         {showViewAll && (
-          <div className="mt-6 flex justify-center">
-            <Link
-              href="/deals"
-              className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#074031] text-white text-sm font-bold hover:bg-[#0B3D2E] transition-colors min-h-[48px]"
-            >
-              {isBn ? "সব ডিল দেখুন" : "View All Deals"}
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
+          <Reveal y={16} delay={0.2}>
+            <div className="mt-6 flex justify-center">
+              <Link
+                href="/deals"
+                className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#074031] text-white text-sm font-bold hover:bg-[#0B3D2E] transition-colors min-h-[48px]"
+              >
+                {isBn ? "সব ডিল দেখুন" : "View All Deals"}
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+          </Reveal>
         )}
       </div>
     </section>
