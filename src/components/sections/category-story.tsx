@@ -46,9 +46,9 @@ const STORIES_EN: StoryItem[] = [
     icon: Zap,
     previewImage: "/photos/story-panels.webp",
     counters: [
-      { label: "Nominal Max Power (NS-620TOP-BF)", value: 620, prefix: "", suffix: " W", decimals: 0, subtext: "16BB N-Type TOPCon Cell" },
-      { label: "Module Efficiency (NS-620TOP-BF)", value: 22.6, prefix: "", suffix: "%", decimals: 1, subtext: "Dual Glass (2.0+2.0mm)" },
-      { label: "Rear Bifacial Gain", value: 25, prefix: "Up to +", suffix: "%", decimals: 0, subtext: "Tested on Model NS-620TOP-BF" },
+      { label: "Nominal Max Power", value: 620, prefix: "", suffix: " W", decimals: 0, subtext: "16BB N-Type TOPCon Cell" },
+      { label: "Module Efficiency", value: 22.6, prefix: "", suffix: "%", decimals: 1, subtext: "Dual Glass (2.0+2.0mm)" },
+      { label: "Rear Bifacial Gain", value: 25, prefix: "Up to +", suffix: "%", decimals: 0, subtext: "Tested on NS-620TOP-BF" },
     ],
     bullets: [
       "Anti-PID & low temperature coefficient for tropical climate",
@@ -65,8 +65,8 @@ const STORIES_EN: StoryItem[] = [
     icon: BatteryCharging,
     previewImage: "/bettry/500_F_2090872600_mpL6CKZulRNh7R8OMe31iD00cXQpEpR7.jpg",
     counters: [
-      { label: "Pack Energy (NS-BAT-48100R)", value: 5.12, prefix: "", suffix: " kWh", decimals: 2, subtext: "51.2V 100Ah Grade-A Prismatic" },
-      { label: "Cycle Life (NS-BAT-48100R)", value: 6000, prefix: ">", suffix: " Cycles", decimals: 0, subtext: "@ 80% DoD, 25°C Standard" },
+      { label: "Pack Energy", value: 5.12, prefix: "", suffix: " kWh", decimals: 2, subtext: "51.2V 100Ah Grade-A Prismatic" },
+      { label: "Cycle Life", value: 6000, prefix: ">", suffix: " Cycles", decimals: 0, subtext: "@ 80% DoD, 25°C Standard" },
       { label: "Parallel Expansion", value: 15, prefix: "Up to ", suffix: " Units", decimals: 0, subtext: "76.8 kWh Modular Bank" },
     ],
     bullets: [
@@ -84,9 +84,9 @@ const STORIES_EN: StoryItem[] = [
     icon: Cpu,
     previewImage: "/Inverter/solar-inverter-with-battery-storage.jpg",
     counters: [
-      { label: "Output Power (NS-INV-10KH3)", value: 10, prefix: "", suffix: " kW", decimals: 0, subtext: "Three-Phase 380V/400V Grid" },
-      { label: "Peak Efficiency (NS-INV-30KG3)", value: 98.7, prefix: "", suffix: "%", decimals: 1, subtext: "30kW Commercial String" },
-      { label: "UPS Switchover (NS-INV-5000H1)", value: 8, prefix: "< ", suffix: " ms", decimals: 0, subtext: "Instant Automatic Transfer" },
+      { label: "Output Power", value: 10, prefix: "", suffix: " kW", decimals: 0, subtext: "Three-Phase 380V/400V Grid" },
+      { label: "Peak Efficiency", value: 98.7, prefix: "", suffix: "%", decimals: 1, subtext: "30kW Commercial String" },
+      { label: "UPS Switchover", value: 8, prefix: "< ", suffix: " ms", decimals: 0, subtext: "Instant Automatic Transfer" },
     ],
     bullets: [
       "Smart string monitoring and real-time telemetry",
@@ -106,9 +106,9 @@ const STORIES_BN: StoryItem[] = [
     icon: Zap,
     previewImage: "/photos/story-panels.webp",
     counters: [
-      { label: "রেটেড আউটপুট (NS-620TOP-BF)", value: 620, prefix: "", suffix: " W", decimals: 0, subtext: "16BB N-Type TOPCon সেল" },
-      { label: "মডিউল কর্মদক্ষতা (NS-620TOP-BF)", value: 22.6, prefix: "", suffix: "%", decimals: 1, subtext: "ডুয়াল গ্লাস (2.0+2.0mm)" },
-      { label: "বাইফেসিয়াল গেইন", value: 25, prefix: "সর্বোচ্চ +", suffix: "%", decimals: 0, subtext: "মডেল NS-620TOP-BF পরীক্ষিত" },
+      { label: "রেটেড আউটপুট", value: 620, prefix: "", suffix: " W", decimals: 0, subtext: "16BB N-Type TOPCon সেল" },
+      { label: "মডিউল কর্মদক্ষতা", value: 22.6, prefix: "", suffix: "%", decimals: 1, subtext: "ডুয়াল গ্লাস (2.0+2.0mm)" },
+      { label: "বাইফেসিয়াল গেইন", value: 25, prefix: "সর্বোচ্চ +", suffix: "%", decimals: 0, subtext: "মডেল NS-620TOP-BF" },
     ],
     bullets: [
       "অ্যান্টি-PID ও ট্রপিক্যাল আবহাওয়ার জন্য লো-টেম্পারেচার কোফিসিয়েন্ট",
@@ -125,8 +125,8 @@ const STORIES_BN: StoryItem[] = [
     icon: BatteryCharging,
     previewImage: "/bettry/500_F_2090872600_mpL6CKZulRNh7R8OMe31iD00cXQpEpR7.jpg",
     counters: [
-      { label: "প্যাক এনার্জি (NS-BAT-48100R)", value: 5.12, prefix: "", suffix: " kWh", decimals: 2, subtext: "51.2V 100Ah গ্রেড-A প্রিজম্যাটিক সেল" },
-      { label: "সাইকেল লাইফ (NS-BAT-48100R)", value: 6000, prefix: ">", suffix: " সাইকেল", decimals: 0, subtext: "৮০% DoD, ২৫°C স্ট্যান্ডার্ড" },
+      { label: "প্যাক এনার্জি", value: 5.12, prefix: "", suffix: " kWh", decimals: 2, subtext: "51.2V 100Ah গ্রেড-A প্রিজম্যাটিক" },
+      { label: "সাইকেল লাইফ", value: 6000, prefix: ">", suffix: " সাইকেল", decimals: 0, subtext: "৮০% DoD, ২৫°C স্ট্যান্ডার্ড" },
       { label: "প্যারালাল এক্সপ্যানশন", value: 15, prefix: "সর্বোচ্চ ", suffix: " ইউনিট", decimals: 0, subtext: "76.8 kWh মডুলার ব্যাংক" },
     ],
     bullets: [
@@ -144,9 +144,9 @@ const STORIES_BN: StoryItem[] = [
     icon: Cpu,
     previewImage: "/Inverter/solar-inverter-with-battery-storage.jpg",
     counters: [
-      { label: "রেটেড আউটপুট (NS-INV-10KH3)", value: 10, prefix: "", suffix: " kW", decimals: 0, subtext: "থ্রি-ফেজ 380V/400V গ্রিড" },
-      { label: "পিক এফিসিয়েন্সি (NS-INV-30KG3)", value: 98.7, prefix: "", suffix: "%", decimals: 1, subtext: "30kW কমার্শিয়াল স্ট্রিং" },
-      { label: "ইউপিএস সুইচওভার (NS-INV-5000H1)", value: 8, prefix: "< ", suffix: " ms", decimals: 0, subtext: "তাৎক্ষণিক স্বয়ংক্রিয় ট্রান্সফার" },
+      { label: "রেটেড আউটপুট", value: 10, prefix: "", suffix: " kW", decimals: 0, subtext: "থ্রি-ফেজ 380V/400V গ্রিড" },
+      { label: "পিক এফিসিয়েন্সি", value: 98.7, prefix: "", suffix: "%", decimals: 1, subtext: "30kW কমার্শিয়াল স্ট্রিং" },
+      { label: "ইউপিএস সুইচওভার", value: 8, prefix: "< ", suffix: " ms", decimals: 0, subtext: "তাৎক্ষণিক স্বয়ংক্রিয় ট্রান্সফার" },
     ],
     bullets: [
       "স্মার্ট স্ট্রিং মনিটরিং ও রিয়েল-টাইম ক্লাউড টেলিমেট্রি",
@@ -340,7 +340,7 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
                         key={cIdx}
                         className={`rounded-2xl p-3 sm:p-4 backdrop-blur-xs transition-all ${theme.counterBg}`}
                       >
-                        <span className={`text-xs font-mono uppercase block truncate mb-1 opacity-75`}>
+                        <span className={`text-xs font-mono uppercase block mb-1 opacity-75 leading-snug`}>
                           {c.label}
                         </span>
                         <div className="text-xl sm:text-2xl lg:text-3xl font-black font-mono tracking-tight">
@@ -351,7 +351,7 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
                             decimals={c.decimals || 0}
                           />
                         </div>
-                        <span className={`text-xs font-mono mt-1 block truncate ${theme.counterSubtext}`}>
+                        <span className={`text-xs font-mono mt-1 block leading-snug ${theme.counterSubtext}`}>
                           {c.subtext}
                         </span>
                       </div>

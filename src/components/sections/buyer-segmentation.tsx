@@ -82,19 +82,17 @@ export function BuyerSegmentation({ locale }: BuyerSegmentationProps) {
     <section className="py-12 lg:py-16 bg-[#F1F4F1] border-b border-[#DCE4E0]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 lg:mb-10">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="w-2 h-2 rounded-full bg-[#074031] inline-block" />
-              <span className="text-xs font-mono uppercase tracking-wider text-[#62706A] font-semibold">
-                {isBn ? "B2B ক্লায়েন্ট ও ক্রেতা" : "B2B Buyer Segmentation"}
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#074031]">
-              {isBn ? "প্রতিটি স্তরের B2B সোলার সংগ্রহে নির্ভরযোগ্য পার্টনার" : "Built for Every Scale of B2B Solar Procurement"}
-            </h2>
+        <div className="max-w-3xl mb-8 lg:mb-10">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-2 h-2 rounded-full bg-[#074031] inline-block" />
+            <span className="text-xs font-mono uppercase tracking-wider text-[#62706A] font-semibold">
+              {isBn ? "B2B ক্লায়েন্ট ও ক্রেতা" : "B2B Buyer Segmentation"}
+            </span>
           </div>
-          <p className="text-xs sm:text-sm text-[#62706A] max-w-md">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#074031]">
+            {isBn ? "প্রতিটি স্তরের B2B সোলার সংগ্রহে নির্ভরযোগ্য পার্টনার" : "Built for Every Scale of B2B Solar Procurement"}
+          </h2>
+          <p className="mt-2.5 text-xs sm:text-sm text-[#62706A] max-w-2xl leading-relaxed">
             {isBn
               ? "সরাসরি আমদানিকারক হিসেবে আমরা বাংলাদেশের EPC ঠিকাদার, বাণিজ্যিক প্রতিষ্ঠান ও আঞ্চলিক ডিলারদের প্রজেক্ট স্কেলে ইকুইপমেন্ট সরবরাহ করি।"
               : "Direct importer supplying EPC contractors, industrial facilities, and regional wholesale dealers across Bangladesh."}
@@ -116,7 +114,7 @@ export function BuyerSegmentation({ locale }: BuyerSegmentationProps) {
                     <div className="w-11 h-11 rounded-2xl bg-[#F1F4F1] group-hover:bg-[#FEBE16] transition-colors flex items-center justify-center text-[#074031] group-hover:text-[#052F25] shrink-0">
                       <Icon className="w-5 h-5 stroke-[1.8]" />
                     </div>
-                    <span className="text-[11px] font-mono font-medium px-2.5 py-1 rounded-full bg-[#F1F4F1] text-[#074031] border border-[#DCE4E0]">
+                    <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-[#074031]/10 text-[#074031] border border-[#074031]/25">
                       {seg.badge}
                     </span>
                   </div>
@@ -146,7 +144,7 @@ export function BuyerSegmentation({ locale }: BuyerSegmentationProps) {
                 <div className="pt-2">
                   <Link
                     href={seg.href}
-                    className="inline-flex items-center justify-between w-full px-4 py-3 rounded-full bg-[#F1F4F1] hover:bg-[#074031] hover:text-white text-[#074031] text-xs font-semibold font-mono transition-all duration-200 group/btn"
+                    className="inline-flex items-center justify-between w-full px-5 py-3 rounded-full bg-[#074031] hover:bg-[#FEBE16] text-white hover:text-[#052F25] text-xs font-semibold font-mono transition-all duration-200 shadow-xs group/btn"
                   >
                     <span>{seg.ctaText}</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />

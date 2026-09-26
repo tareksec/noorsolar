@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowRight, ArrowUpRight, CheckCircle2, Clock } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock } from "lucide-react";
 import type { Stat } from "@prisma/client";
 import { Link } from "@/i18n/routing";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
@@ -116,9 +116,11 @@ export function RecentDeals({
   const rows = limit ? tabData[visibleTab].slice(0, limit) : tabData[visibleTab];
   const totalCount = products.length;
 
+  const hasBrand = rows.some((p) => p.brand && p.brand.trim() !== "" && p.brand.trim() !== "—");
+
   const columns = [
     isBn ? "পণ্য" : "Product",
-    isBn ? "ব্র্যান্ড" : "Brand",
+    ...(hasBrand ? [isBn ? "ব্র্যান্ড" : "Brand"] : []),
     isBn ? "SKU / মডেল নং" : "SKU / Model No.",
     isBn ? "MOQ" : "MOQ",
     isBn ? "প্রাপ্যতা" : "Availability",
@@ -142,7 +144,7 @@ export function RecentDeals({
           />
           <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
-              <p className="font-mono text-[11px] sm:text-xs font-bold tracking-widest uppercase text-[#FEBE16] mb-3">
+              <p className="font-mono text-xs sm:text-sm font-semibold text-[#FEBE16] mb-3">
                 {isBn ? "টেকসই ভবিষ্যতের জন্য শক্তি" : "Powering a sustainable future"}
               </p>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white leading-tight">
@@ -255,20 +257,22 @@ export function RecentDeals({
             <tbody>
               {rows.map((p) => (
                 <tr key={p.id} className="border-b border-neutral-100 last:border-0 hover:bg-[#F7F8F5]/70 transition-colors">
-                  <td className="px-4 py-3.5 font-semibold text-neutral-900 max-w-[260px]">
+                  <td className="px-4 py-4 font-semibold text-neutral-900 max-w-[260px]">
                     <Link href={`/product/${p.slug}`} className="hover:text-[#074031] hover:underline line-clamp-2">
                       {p.name}
                     </Link>
                   </td>
-                  <td className="px-4 py-3.5 text-neutral-600 whitespace-nowrap">{p.brand || "—"}</td>
-                  <td className="px-4 py-3.5 font-mono text-[13px] text-neutral-600 whitespace-nowrap">
+                  {hasBrand && (
+                    <td className="px-4 py-4 text-neutral-600 whitespace-nowrap">{p.brand || "—"}</td>
+                  )}
+                  <td className="px-4 py-4 font-mono text-xs sm:text-[13px] text-neutral-600 whitespace-nowrap">
                     {p.model || "—"}
                   </td>
-                  <td className="px-4 py-3.5 text-neutral-600 whitespace-nowrap">{p.moq || "—"}</td>
-                  <td className="px-4 py-3.5">
+                  <td className="px-4 py-4 text-neutral-600 whitespace-nowrap">{p.moq || "—"}</td>
+                  <td className="px-4 py-4">
                     <StockBadge status={p.stockStatus} isBn={isBn} />
                   </td>
-                  <td className="px-4 py-3.5 font-bold text-neutral-900 whitespace-nowrap">
+                  <td className="px-4 py-4 font-bold text-neutral-900 whitespace-nowrap">
                     {p.showPrice && p.priceBdt ? (
                       <>BDT {p.priceBdt.toLocaleString()}</>
                     ) : (
@@ -277,20 +281,20 @@ export function RecentDeals({
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-3.5 text-right">
+                  <td className="px-4 py-4 text-right">
                     <Link
                       href={`/product/${p.slug}`}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-[#E8590C] text-[#E8590C] text-[13px] font-bold hover:bg-[#E8590C] hover:text-white transition-colors whitespace-nowrap min-h-[40px]"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#074031] text-white text-xs sm:text-[13px] font-semibold hover:bg-[#FEBE16] hover:text-[#052F25] transition-colors whitespace-nowrap min-h-[40px] shadow-xs"
                     >
-                      {isBn ? "ডিল দেখুন" : "Shop Deal"}
-                      <ArrowUpRight className="w-4 h-4" />
+                      <span>{isBn ? "ডিল দেখুন" : "Shop Deal"}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </td>
                 </tr>
               ))}
               {rows.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-10 text-center text-neutral-400">
+                  <td colSpan={columns.length + 1} className="px-4 py-10 text-center text-neutral-400">
                     {isBn ? "এই বিভাগে এখনো কোনো ডিল নেই।" : "No deals in this category yet."}
                   </td>
                 </tr>

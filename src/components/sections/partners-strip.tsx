@@ -38,7 +38,7 @@ export function PartnersStrip({ partners, locale }: PartnersStripProps) {
   return (
     <section className="py-16 bg-[#F1F4F1] border-y border-[#DCE4E0] overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center">
-        <p className="text-[11px] font-mono uppercase tracking-widest text-[#62706A] font-semibold">
+        <p className="text-xs sm:text-sm font-mono uppercase tracking-widest text-[#62706A] font-semibold">
           {isBn
             ? "সরঞ্জাম ব্র্যান্ডসমূহ ও সরাসরি আমদানি লাইন | Brands We Source"
             : "Brands We Source & Equipment Available"}

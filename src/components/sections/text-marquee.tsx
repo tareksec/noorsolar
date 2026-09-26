@@ -145,49 +145,49 @@ const DirectImporterIcon = ({ className = "w-5 h-5" }: { className?: string }) =
 const MARQUEE_ITEMS: MarqueeItem[] = [
   {
     id: "solar-panels",
-    labelEn: "HIGH-YIELD SOLAR PANELS",
+    labelEn: "High-Yield Solar Panels",
     labelBn: "উচ্চ-ফলনশীল সোলার প্যানেল",
     icon: SolarPanelIcon,
   },
   {
     id: "battery-storage",
-    labelEn: "LITHIUM LIFEPO4 STORAGE",
+    labelEn: "Lithium LiFePO4 Storage",
     labelBn: "লিথিয়াম LiFePO4 স্টোরেজ",
     icon: BatteryIcon,
   },
   {
     id: "inverters",
-    labelEn: "HYBRID & ON-GRID INVERTERS",
+    labelEn: "Hybrid & On-Grid Inverters",
     labelBn: "হাইব্রিড ও অন-গ্রিড ইনভার্টার",
     icon: InverterIcon,
   },
   {
     id: "container-supply",
-    labelEn: "CONTAINER-SCALE SUPPLY",
+    labelEn: "Container-Scale Supply",
     labelBn: "সরাসরি কন্টেইনার সরবরাহ",
     icon: ContainerIcon,
   },
   {
     id: "bulk-wholesale",
-    labelEn: "BULK WHOLESALE BANGLADESH",
+    labelEn: "Bulk Wholesale Bangladesh",
     labelBn: "বাণিজ্যিক পাইকারি রেট",
     icon: DirectImporterIcon,
   },
   {
     id: "industrial-backup",
-    labelEn: "INDUSTRIAL & EPC BACKUP",
+    labelEn: "Industrial & EPC Backup",
     labelBn: "ইন্ডাস্ট্রিয়াল ও ইপিসি ব্যাকআপ",
     icon: IndustrialBackupIcon,
   },
   {
     id: "racking-components",
-    labelEn: "RACKING & DC HARDWARE",
+    labelEn: "Racking & DC Hardware",
     labelBn: "মাউন্টিং র‍্যাকিং ও সরঞ্জাম",
     icon: RackingIcon,
   },
   {
     id: "direct-pricing",
-    labelEn: "DIRECT IMPORTER PRICING",
+    labelEn: "Direct Importer Pricing",
     labelBn: "সরাসরি আমদানিকারক মূল্য",
     icon: DirectImporterIcon,
   },
@@ -267,7 +267,7 @@ export function TextMarquee({ locale }: TextMarqueeProps = {}) {
                   <div className="inline-flex items-center gap-2.5 sm:gap-3 px-5 sm:px-7 text-white transition-opacity hover:opacity-90">
                     {/* Brand Electric Lime Icon */}
                     <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#CEF23E] shrink-0 drop-shadow-[0_0_6px_rgba(206,242,62,0.35)]" />
-                    <span className="text-[11px] sm:text-xs md:text-[13px] font-mono font-bold tracking-[0.14em] sm:tracking-[0.16em] uppercase text-white/95">
+                    <span className="text-xs sm:text-[13px] md:text-sm font-mono font-semibold tracking-wider text-white/95">
                       {label}
                     </span>
                   </div>

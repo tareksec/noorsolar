@@ -234,8 +234,8 @@ export function HeroSection({
                     />
                   </div>
                 </div>
-                <div className="flex flex-col text-[11px] leading-tight">
-                  <span className="text-slate-400">{isBn ? "সরাসরি সরবরাহ" : "Trusted Supply"}</span>
+                <div className="flex flex-col text-xs leading-tight">
+                  <span className="text-slate-300">{isBn ? "সরাসরি সরবরাহ" : "Trusted Supply"}</span>
                   <span className="font-bold text-[#FEBE16]">{isBn ? "বাণিজ্যিক ও প্রজেক্ট ক্লায়েন্ট" : "Commercial & Project Scale"}</span>
                 </div>
               </div>

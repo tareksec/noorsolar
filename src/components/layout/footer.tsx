@@ -8,6 +8,8 @@ import {
   Clock,
   MessageCircle,
   ExternalLink,
+  Sun,
+  ArrowRight,
 } from "lucide-react";
 import { SiteConfig } from "@/lib/site-config";
 
@@ -76,6 +78,10 @@ function TwitterIcon({ className }: { className?: string }) {
   );
 }
 
+const scriptLabel = {
+  fontFamily: "'Segoe Script', 'Bradley Hand', 'Comic Sans MS', cursive",
+} as const;
+
 export function Footer({ settings, showBlog = false, locale }: FooterProps) {
   const currentYear = new Date().getFullYear();
   const isBn = locale === "bn";
@@ -83,369 +89,267 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
   const phoneRaw = (settings.phone || "+8801884611888").replace(/[^0-9+]/g, "");
   const phoneDisplay = settings.phoneDisplay || "+880 1884-611888";
   const email = settings.email || "info@noorsolaren.com";
-  const address = settings.address || (isBn ? "হাউস-৩৮ (ফ্ল্যাট-১এ), রোড-৫/এ, সেক্টর-৫, উত্তরা, ঢাকা-১২৩০, বাংলাদেশ" : "House-38 (Flat-1A), Road-5/A, Sector-5, Uttara, Dhaka-1230, Bangladesh");
-  const hours = settings.hours || (isBn ? "শনি - বৃহস্পতি: সকাল ৯:০০ - সন্ধ্যা ৭:০০ (শুক্রবার বন্ধ)" : "Sat - Thu: 9:00 AM - 7:00 PM (Friday Closed)");
+  const address =
+    settings.address ||
+    (isBn
+      ? "হাউস-৩৮ (ফ্ল্যাট-১এ), রোড-৫/এ, সেক্টর-৫, উত্তরা, ঢাকা-১২৩০"
+      : "House-38 (Flat-1A), Road-5/A, Sector-5, Uttara, Dhaka-1230");
+  const hours =
+    settings.hours ||
+    (isBn ? "শনি – বৃহস্পতি: সকাল ৯টা – সন্ধ্যা ৭টা" : "Sat – Thu: 9:00 AM – 7:00 PM");
   const whatsappNum = (settings.whatsapp || "8801884611888").replace(/[^0-9]/g, "");
   const whatsappDisplay = settings.whatsappDisplay || "+880 1884-611888";
 
+  const socials = [
+    isValidSocialUrl(settings.socials?.facebook) && {
+      href: settings.socials!.facebook!,
+      label: isBn ? "ফেসবুক" : "Facebook",
+      Icon: FacebookIcon,
+    },
+    isValidSocialUrl(settings.socials?.twitter) && {
+      href: settings.socials!.twitter!,
+      label: isBn ? "এক্স" : "X",
+      Icon: TwitterIcon,
+    },
+    isValidSocialUrl(settings.socials?.linkedin) && {
+      href: settings.socials!.linkedin!,
+      label: isBn ? "লিংকডইন" : "LinkedIn",
+      Icon: LinkedinIcon,
+    },
+    isValidSocialUrl(settings.socials?.youtube) && {
+      href: settings.socials!.youtube!,
+      label: isBn ? "ইউটিউব" : "YouTube",
+      Icon: YoutubeIcon,
+    },
+  ].filter(Boolean) as Array<{
+    href: string;
+    label: string;
+    Icon: ({ className }: { className?: string }) => React.JSX.Element;
+  }>;
+
+  const catalogLinks = [
+    { href: "/products?category=solar-panels", label: isBn ? "সোলার প্যানেল" : "Solar Panels" },
+    { href: "/products?category=lithium-batteries", label: isBn ? "লিথিয়াম ব্যাটারি" : "Lithium Batteries" },
+    { href: "/products?category=solar-inverters", label: isBn ? "সোলার ইনভার্টার" : "Solar Inverters" },
+    { href: "/products", label: isBn ? "সব প্রোডাক্ট" : "All Products" },
+    { href: "/quote", label: isBn ? "কোটেশন নিন" : "Request Quote" },
+  ];
+
+  const companyLinks = [
+    { href: "/about", label: isBn ? "আমাদের সম্পর্কে" : "About" },
+    { href: "/contact", label: isBn ? "যোগাযোগ" : "Contact" },
+    { href: "/certifications", label: isBn ? "সার্টিফিকেশন" : "Certifications" },
+    { href: "/#faq", label: "FAQ" },
+    ...(showBlog ? [{ href: "/blog", label: isBn ? "ব্লগ" : "Blog" }] : []),
+  ];
+
   return (
-    <footer className="w-full px-3 sm:px-6 lg:px-8 pb-4 sm:pb-6 pt-8 relative overflow-hidden">
-      <div className="relative z-10 max-w-7xl mx-auto rounded-[36px] sm:rounded-[44px] bg-[#074031] border border-[#0B513E] shadow-[0_16px_40px_rgba(7,64,49,0.25)] overflow-hidden pt-12 sm:pt-16 px-6 sm:px-12 lg:px-16 flex flex-col justify-between text-white">
-        
-        {/* Top Navigation & Contact Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 sm:pb-16 text-left">
-          
-          {/* Col 1: Brand & Contact Info (4 cols) */}
-          <div className="lg:col-span-4 flex flex-col justify-between">
-            <div>
-              {/* Brand Logo */}
-              <div className="mb-5">
-                <Link href="/" className="inline-flex items-center min-h-[44px] group">
-                  <Image
-                    src="/brand/logo-white.png"
-                    alt="Noor Solar Energy"
-                    width={200}
-                    height={50}
-                    className="h-11 w-auto object-contain group-hover:opacity-95 transition-opacity"
-                  />
-                </Link>
-              </div>
-              <p className="text-xs sm:text-[13px] text-white/80 leading-relaxed mb-6 max-w-sm">
-                {isBn
-                  ? "সরাসরি কন্টেইনার স্কেল আমদানিকারক এবং বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল, LiFePO4 ব্যাটারি ও হাইব্রিড ইনভার্টারের পাইকারি B2B সরবরাহকারী।"
-                  : "Direct container-scale importer and bulk B2B wholesale distributor of high-performance solar panels, LiFePO4 batteries, and hybrid inverters across Bangladesh."}
+    <footer className="relative w-full overflow-hidden px-3 pb-3 pt-8 sm:px-6 sm:pt-10 lg:px-8">
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-3 lg:grid-cols-[290px_1fr]">
+        {/* Left — brand card */}
+        <div className="relative flex min-h-[330px] flex-col justify-between overflow-hidden rounded-[22px] bg-gradient-to-b from-[#0B513E] via-[#074031] to-[#052F25] p-6 text-white">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[#FEBE16]/15 blur-2xl"
+          />
+          <Link href="/" className="relative inline-flex w-fit items-center" aria-label="Noor Solar Energy — home">
+            <Image
+              src="/brand/logo-white.png"
+              alt="Noor Solar Energy"
+              width={168}
+              height={42}
+              className="h-9 w-auto object-contain"
+            />
+          </Link>
+
+          <div className="relative">
+            <p className="max-w-[220px] text-[15px] font-medium leading-snug text-white">
+              {isBn ? "স্মার্টার সোলার ডিস্ট্রিবিউশন," : "Smarter solar distribution,"}
+              <span className="block font-normal text-white/60">
+                {isBn ? "বাংলাদেশের জন্য তৈরি।" : "built for Bangladesh."}
+              </span>
+            </p>
+
+            <div className="mt-4 flex items-center gap-1.5 rounded-full border border-white/15 bg-black/25 py-1 pl-2 pr-2.5 text-[11px] text-white/85 w-fit">
+              <Image src="/photos/bsrea-logo.png" alt="BSREA" width={18} height={18} className="h-[18px] w-[18px] object-contain" />
+              <span className="font-medium">{isBn ? "BSREA নিবন্ধিত সদস্য" : "BSREA Registered Member"}</span>
+            </div>
+
+            <div className="mt-5">
+              <p style={scriptLabel} className="text-[13px] italic text-white/70">
+                {isBn ? "যুক্ত থাকুন!" : "Stay in touch!"}
               </p>
-
-              {/* Contact Information List with Icons */}
-              <div className="space-y-3 text-xs sm:text-[13px] text-white/90">
-                
-                {/* Address */}
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-[#052F25] border border-white/15 flex items-center justify-center shrink-0 mt-0.5 text-[#FEBE16]">
-                    <MapPin className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="leading-tight text-white/80">{address}</span>
-                </div>
-
-                {/* Direct Phone */}
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-[#052F25] border border-white/15 flex items-center justify-center shrink-0 text-[#FEBE16]">
-                    <Phone className="w-3.5 h-3.5" />
-                  </div>
+              <div className="mt-2 flex items-center gap-2">
+                {socials.map(({ href, label, Icon }) => (
                   <a
-                    href={`tel:${phoneRaw}`}
-                    className="inline-flex items-center min-h-[44px] font-medium text-white hover:text-[#FEBE16] transition-colors"
-                  >
-                    {phoneDisplay}
-                  </a>
-                </div>
-
-                {/* WhatsApp Support */}
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-[#052F25] border border-white/15 flex items-center justify-center shrink-0 text-[#FEBE16]">
-                    <MessageCircle className="w-3.5 h-3.5" />
-                  </div>
-                  <a
-                    href={`https://wa.me/${whatsappNum}`}
+                    key={href}
+                    href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center min-h-[44px] font-medium text-white hover:text-[#FEBE16] transition-colors"
+                    aria-label={label}
+                    className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-black/45 text-white transition-colors hover:bg-[#FEBE16] hover:text-[#052F25]"
                   >
-                    {whatsappDisplay} <span className="text-xs font-mono text-[#FEBE16]/80">{isBn ? "(হোয়াটসঅ্যাপ ডেস্ক)" : "(WhatsApp Desk)"}</span>
+                    <Icon className="h-4 w-4" />
                   </a>
-                </div>
-
-                {/* Email */}
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-[#052F25] border border-white/15 flex items-center justify-center shrink-0 text-[#FEBE16]">
-                    <Mail className="w-3.5 h-3.5" />
-                  </div>
-                  <a
-                    href={`mailto:${email}`}
-                    className="inline-flex items-center min-h-[44px] font-medium text-white hover:text-[#FEBE16] transition-colors"
-                  >
-                    {email}
-                  </a>
-                </div>
-
-                {/* Hours */}
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-full bg-[#052F25] border border-white/15 flex items-center justify-center shrink-0 text-[#FEBE16]">
-                    <Clock className="w-3.5 h-3.5" />
-                  </div>
-                  <span className="text-xs text-white/70 font-mono">{hours}</span>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          {/* Col 2: Products & Catalog (2.5 cols) */}
-          <div className="lg:col-span-3">
-            <h2 className="font-bold text-sm text-white tracking-tight mb-4">
-              {isBn ? "সরঞ্জাম ক্যাটালগ" : "Equipment Catalog"}
-            </h2>
-            <ul className="space-y-1 text-xs sm:text-sm text-white/75">
-              <li>
-                <Link
-                  href="/products?category=solar-panels"
-                  className="hover:text-[#FEBE16] hover:translate-x-1 inline-flex items-center gap-1.5 min-h-[44px] transition-all"
-                >
-                  <span>{isBn ? "এন-টাইপ TOPCon প্যানেল (585W–620W)" : "N-Type TOPCon Panels (585W–620W)"}</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products?category=lithium-batteries"
-                  className="hover:text-[#FEBE16] hover:translate-x-1 inline-flex items-center gap-1.5 min-h-[44px] transition-all"
-                >
-                  <span>{isBn ? "LiFePO4 স্টোরেজ ব্যাংক (48V / 51.2V)" : "LiFePO4 Storage Banks (48V / 51.2V)"}</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products?category=solar-inverters"
-                  className="hover:text-[#FEBE16] hover:translate-x-1 inline-flex items-center gap-1.5 min-h-[44px] transition-all"
-                >
-                  <span>{isBn ? "হাইব্রিড ও থ্রি-ফেজ ইনভার্টার" : "Hybrid & Three-Phase Inverters"}</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products"
-                  className="hover:text-[#FEBE16] hover:translate-x-1 inline-flex items-center gap-1.5 min-h-[44px] transition-all"
-                >
-                  <span>{isBn ? "সম্পূর্ণ পাইকারি ইনভেন্টরি দেখুন" : "Browse Full Wholesale Inventory"}</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/quote"
-                  className="hover:text-[#E4A900] hover:translate-x-1 inline-flex items-center gap-1.5 min-h-[44px] transition-all font-semibold text-[#FEBE16]"
-                >
-                  <span>{isBn ? "অনলাইন কোটেশন নিন →" : "Request a Solar Quote →"}</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 3: Company & Information (2.5 cols) */}
-          <div className="lg:col-span-2">
-            <h2 className="font-bold text-sm text-white tracking-tight mb-4">
-              {isBn ? "কোম্পানি" : "Company"}
-            </h2>
-            <ul className="space-y-1 text-xs sm:text-sm text-white/75">
-              <li>
-                <Link href="/about" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors">
-                  {isBn ? "নূর সোলার এনার্জি পরিচিতি" : "About Noor Solar Energy"}
-                </Link>
-              </li>
-              <li>
-                <Link href="/#process" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors">
-                  {isBn ? "অর্ডার প্রক্রিয়া" : "Ordering Process"}
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors">
-                  {isBn ? "সেলস ডেস্কে যোগাযোগ" : "Contact Sales Desk"}
-                </Link>
-              </li>
-              <li>
-                <Link href="/quote" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors">
-                  {isBn ? "অনলাইন কোটেশন" : "Online Quotation"}
-                </Link>
-              </li>
-              <li>
-                <Link href="/#faq" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors">
-                  {isBn ? "প্রশ্নোত্তর ও সহায়তা" : "FAQ & Support"}
-                </Link>
-              </li>
-              <li>
-                <Link href="/certifications" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors font-medium">
-                  {isBn ? "সার্টিফিকেশন ও মানদণ্ড" : "Certifications & Standards"}
-                </Link>
-              </li>
-              {showBlog && (
-                <li>
-                  <Link href="/blog" className="hover:text-[#FEBE16] inline-flex items-center min-h-[44px] transition-colors font-medium">
-                    {isBn ? "কারিগরি ব্লগ" : "Technical Blog"}
-                  </Link>
-                </li>
-              )}
-            </ul>
-          </div>
-
-          {/* Col 4: Industry Certification & Membership (3 cols) */}
-          <div className="lg:col-span-3">
-            <h2 className="font-bold text-sm text-white tracking-tight mb-4">
-              {isBn ? "শিল্প সমিতি সদস্যপদ" : "Industry Membership"}
-            </h2>
-
-            {/* BSREA Member Badge Card */}
-            <div className="p-4 rounded-2xl bg-[#052F25] border border-white/15 mb-6 shadow-2xs">
-              <div className="flex items-center gap-3 mb-2.5">
-                <div className="w-10 h-10 rounded-xl bg-[#074031] border border-white/10 flex items-center justify-center shrink-0">
-                  <Image
-                    src="/photos/bsrea-logo.png"
-                    alt={isBn ? "বিএসআরইএ লোগো" : "BSREA Logo"}
-                    width={36}
-                    height={36}
-                    className="object-contain"
-                  />
-                </div>
-                <div>
-                  <span className="text-xs font-bold text-white block leading-tight">
-                    {isBn ? "BSREA নিবন্ধিত সদস্য" : "BSREA Registered Member"}
-                  </span>
-                  <span className="text-xs font-mono text-white/60">
-                    No. 20260915GEN113
-                  </span>
-                </div>
-              </div>
-
-              <a
-                href="https://drive.google.com/file/d/1GR4hILXnDjJblqNmrxRNnWH_M7It4Md2/view?usp=sharing"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#FEBE16] hover:text-[#E4A900] transition-colors underline underline-offset-2 min-h-[44px]"
-              >
-                <span>{isBn ? "অফিসিয়াল সনদ দেখুন" : "View Official Certificate"}</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            </div>
-
-              {/* Social Channels with Verified Profile Icon Buttons */}
-              <h3 className="text-xs font-mono font-semibold text-white mb-2.5">
-                {isBn ? "যুক্ত থাকুন" : "Connect With Us"}
-              </h3>
-              <div className="flex items-center gap-2.5 flex-wrap">
-                {isValidSocialUrl(settings.socials?.facebook) && (
-                  <a
-                    href={settings.socials!.facebook!}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={isBn ? "ফেসবুকে নূর সোলার এনার্জি অনুসরণ করুন" : "Follow Noor Solar Energy on Facebook"}
-                    className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#052F25] hover:bg-[#FEBE16] hover:text-[#052F25] border border-white/15 text-white flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
-                  >
-                    <FacebookIcon className="w-5 h-5" />
-                  </a>
-                )}
-
-                {isValidSocialUrl(settings.socials?.linkedin) && (
-                  <a
-                    href={settings.socials!.linkedin!}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={isBn ? "লিংকডইনে নূর সোলার এনার্জির সাথে যুক্ত হন" : "Connect with Noor Solar Energy on LinkedIn"}
-                    className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#052F25] hover:bg-[#FEBE16] hover:text-[#052F25] border border-white/15 text-white flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
-                  >
-                    <LinkedinIcon className="w-5 h-5" />
-                  </a>
-                )}
-
+                ))}
                 <a
                   href={`https://wa.me/${whatsappNum}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={isBn ? "হোয়াটসঅ্যাপে নূর সোলার এনার্জির সাথে চ্যাট করুন" : "Chat with Noor Solar Energy on WhatsApp"}
-                  className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#052F25] hover:bg-[#FEBE16] hover:text-[#052F25] border border-white/15 text-white flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
+                  aria-label="WhatsApp"
+                  className="flex h-9 w-9 items-center justify-center rounded-[10px] bg-black/45 text-white transition-colors hover:bg-[#FEBE16] hover:text-[#052F25]"
                 >
-                  <MessageCircle className="w-5 h-5" />
+                  <MessageCircle className="h-4 w-4" />
                 </a>
-
-                {isValidSocialUrl(settings.socials?.youtube) && (
-                  <a
-                    href={settings.socials!.youtube!}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={isBn ? "ইউটিউবে নূর সোলার এনার্জির ভিডিও দেখুন" : "Watch Noor Solar Energy on YouTube"}
-                    className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#052F25] hover:bg-[#FEBE16] hover:text-[#052F25] border border-white/15 text-white flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
-                  >
-                    <YoutubeIcon className="w-5 h-5" />
-                  </a>
-                )}
-
-                {isValidSocialUrl(settings.socials?.twitter) && (
-                  <a
-                    href={settings.socials!.twitter!}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={isBn ? "এক্সে নূর সোলার এনার্জি অনুসরণ করুন" : "Follow Noor Solar Energy on X"}
-                    className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-[#052F25] hover:bg-[#FEBE16] hover:text-[#052F25] border border-white/15 text-white flex items-center justify-center transition-all hover:scale-105 shadow-2xs"
-                  >
-                    <TwitterIcon className="w-5 h-5" />
-                  </a>
-                )}
               </div>
             </div>
-
           </div>
-
-        {/* Sub-Footer Copyright, Legal & Developer Credits */}
-        <div className="py-4 sm:py-5 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] font-mono text-white/60">
-          <div className="flex items-center gap-4 flex-wrap justify-center md:justify-start">
-            <span>&copy; {currentYear} {isBn ? "নূর সোলার এনার্জি। সর্বস্বত্ব সংরক্ষিত।" : "Noor Solar Energy. All rights reserved."}</span>
-          </div>
-
-          {/* Developer Credit */}
-          <div className="flex items-center gap-2 text-white/70 flex-wrap justify-center">
-            <span>{isBn ? "ডেভেলপমেন্ট:" : "Developed by:"}</span>
-            <a
-              href="https://artxdev.tech/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#FEBE16] hover:underline font-semibold transition-colors"
-            >
-              artxdev.tech
-            </a>
-            <span className="text-white/30">•</span>
-            <a
-              href="https://www.linkedin.com/in/mdtarek404/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-white hover:text-[#FEBE16] transition-colors"
-              title="MD Tarek | LinkedIn"
-            >
-              <LinkedinIcon className="w-3.5 h-3.5 text-[#0A66C2] bg-white rounded-[2px]" />
-              <span className="font-medium underline decoration-white/30 hover:decoration-[#FEBE16]">MD Tarek</span>
-            </a>
-          </div>
-
-          <nav aria-label="Legal" className="flex items-center gap-4 flex-wrap justify-center md:justify-end">
-            <Link href="/contact" className="hover:text-[#FEBE16] inline-flex items-center justify-center px-1 min-h-[36px] transition-colors">
-              {isBn ? "বাণিজ্যিক শর্তাবলী" : "Wholesale Terms"}
-            </Link>
-            <span>&bull;</span>
-            <span className="inline-flex items-center min-h-[36px]">{isBn ? "বাংলাদেশের B2B শিল্পের জন্য নিবেদিত" : "Made for B2B Bangladesh"}</span>
-          </nav>
         </div>
 
-        {/* Bottom Brand Watermark — theme-matched to Noor Solar emerald green */}
-        <div className="relative w-[calc(100%+3rem)] sm:w-[calc(100%+6rem)] lg:w-[calc(100%+8rem)] -mx-6 sm:-mx-12 lg:-mx-16 bg-[#052F25] border-t border-[#0B513E]/40 select-none pointer-events-none pt-6 sm:pt-10 lg:pt-12 overflow-hidden">
-          <div className="flex items-center justify-start gap-2 sm:gap-4 lg:gap-5 px-6 sm:px-12 lg:px-16 translate-y-[28%] sm:translate-y-[30%]">
-            {/* 4-Point Star */}
-            <svg
-              viewBox="0 0 100 100"
-              fill="currentColor"
-              className="w-[0.65em] h-[0.65em] text-[#0A5E48] shrink-0"
-              style={{ fontSize: "clamp(4rem, 16vw, 14rem)" }}
-              aria-hidden="true"
-            >
-              <path d="M50 0C50 27.614 27.614 50 0 50C27.614 50 50 72.386 50 100C50 72.386 72.386 50 100 50C72.386 50 50 27.614 50 0Z" />
-            </svg>
-
-            {/* Brand Name */}
-            <span
-              className="font-semibold whitespace-nowrap select-none leading-none text-[clamp(4rem,16vw,14rem)] tracking-[-0.02em] text-[#0A5E48]"
-              style={{
-                fontFamily: "'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif",
-              }}
-            >
-              Noor Solar
+        {/* Right — links + contact + CTA card */}
+        <div className="relative overflow-hidden rounded-[22px] bg-[#F1F4F1] p-6 sm:p-8">
+          {/* Floating badge */}
+          <div className="absolute right-6 top-0 hidden flex-col items-center sm:flex">
+            <div className="flex h-16 w-16 rotate-6 items-center justify-center rounded-[18px] bg-gradient-to-br from-[#FEBE16] to-[#0B513E] text-white shadow-[0_10px_24px_rgba(7,64,49,0.3)]">
+              <Sun className="h-8 w-8" strokeWidth={2.2} />
+            </div>
+            <span style={scriptLabel} className="mt-1 -rotate-6 text-xs italic text-[#62706A]">
+              {isBn ? "রোদে ভরসা?" : "Feeling sunny?"}
             </span>
           </div>
-        </div>
 
+          <div className="grid gap-8 sm:grid-cols-3 sm:pr-24">
+            <nav aria-label={isBn ? "ক্যাটালগ" : "Catalog"}>
+              <p style={scriptLabel} className="text-sm italic text-[#62706A]">
+                {isBn ? "ক্যাটালগ" : "Navigation"}
+              </p>
+              <ul className="mt-3 space-y-0.5">
+                {catalogLinks.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      className="inline-flex items-center py-1 text-[13px] font-medium text-[#17251F] transition-colors hover:text-[#0B513E]"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <nav aria-label={isBn ? "কোম্পানি" : "Company"}>
+              <p style={scriptLabel} className="text-sm italic text-[#62706A]">
+                {isBn ? "কোম্পানি" : "Company"}
+              </p>
+              <ul className="mt-3 space-y-0.5">
+                {companyLinks.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      className="inline-flex items-center py-1 text-[13px] font-medium text-[#17251F] transition-colors hover:text-[#0B513E]"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  <a
+                    href="https://drive.google.com/file/d/1GR4hILXnDjJblqNmrxRNnWH_M7It4Md2/view?usp=sharing"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 py-1 text-[13px] font-medium text-[#17251F] transition-colors hover:text-[#0B513E]"
+                  >
+                    {isBn ? "অফিসিয়াল সনদ" : "Official Certificate"}
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </li>
+              </ul>
+            </nav>
+
+            <div>
+              <p style={scriptLabel} className="text-sm italic text-[#62706A]">
+                {isBn ? "যোগাযোগ" : "Contact"}
+              </p>
+              <ul className="mt-3 space-y-2 text-[13px] text-[#17251F]">
+                <li>
+                  <a href={`tel:${phoneRaw}`} className="flex items-center gap-2 font-medium hover:text-[#0B513E]">
+                    <Phone className="h-3.5 w-3.5 shrink-0 text-[#0B513E]" />
+                    {phoneDisplay}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={`https://wa.me/${whatsappNum}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 font-medium hover:text-[#0B513E]"
+                  >
+                    <MessageCircle className="h-3.5 w-3.5 shrink-0 text-[#0B513E]" />
+                    {whatsappDisplay}
+                  </a>
+                </li>
+                <li>
+                  <a href={`mailto:${email}`} className="flex items-center gap-2 hover:text-[#0B513E]">
+                    <Mail className="h-3.5 w-3.5 shrink-0 text-[#0B513E]" />
+                    <span className="break-all">{email}</span>
+                  </a>
+                </li>
+                <li className="flex items-start gap-2 text-[#62706A]">
+                  <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#0B513E]" />
+                  <span className="leading-snug">{address}</span>
+                </li>
+                <li className="flex items-center gap-2 text-xs text-[#62706A]">
+                  <Clock className="h-3.5 w-3.5 shrink-0 text-[#0B513E]" />
+                  {hours}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-8 flex flex-col gap-4 border-t border-[#17251F]/8 pt-5 sm:flex-row sm:items-end sm:justify-between">
+            <p className="text-xs text-[#62706A]">
+              © {currentYear} {isBn ? "নূর সোলার এনার্জি। সর্বস্বত্ব সংরক্ষিত।" : "Noor Solar Energy. All rights reserved."}{" "}
+              <span className="text-[#62706A]/60">•</span>{" "}
+              <a href="https://artxdev.tech/" target="_blank" rel="noopener noreferrer" className="hover:text-[#0B513E] hover:underline">
+                artxdev.tech
+              </a>
+            </p>
+
+            <div className="sm:text-right">
+              <p className="text-[15px] leading-snug text-[#17251F]">
+                <span className="block text-[#62706A]">{isBn ? "সোলার এগিয়ে যাচ্ছে।" : "Solar moves fast."}</span>
+                <span className="font-semibold">{isBn ? "নূরের সাথে এগিয়ে থাকুন।" : "Stay ahead with Noor."}</span>
+              </p>
+              <form action="/quote" method="get" className="mt-2.5 flex w-full max-w-[320px] items-center gap-1 rounded-full bg-white p-1 pl-4 shadow-[0_2px_10px_rgba(7,64,49,0.06)] sm:ml-auto">
+                <label htmlFor="footer-quote-email" className="sr-only">
+                  {isBn ? "ইমেইল ঠিকানা" : "Email address"}
+                </label>
+                <input
+                  id="footer-quote-email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder={isBn ? "ইমেইল ঠিকানা লিখুন" : "Enter email address"}
+                  className="w-full bg-transparent text-[13px] text-[#17251F] placeholder:text-[#62706A]/70 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#17251F] px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-[#0B513E]"
+                >
+                  {isBn ? "কোটেশন" : "Subscribe"}
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Giant watermark */}
+      <div aria-hidden="true" className="pointer-events-none relative z-0 mx-auto max-w-7xl select-none overflow-hidden">
+        <p className="translate-y-[24%] whitespace-nowrap text-center font-display text-[clamp(3.5rem,14.5vw,12rem)] font-bold leading-none tracking-[-0.02em] text-[#17251F]/5">
+          Noor Solar
+        </p>
       </div>
     </footer>
   );

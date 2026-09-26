@@ -57,7 +57,7 @@ export function VideoCtaBanner({
             </div>
 
             {/* Main Headline */}
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-extrabold text-white leading-[1.08] tracking-tight uppercase mb-5 [text-shadow:_0_3px_14px_rgb(0_0_0_/_95%)]">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-extrabold text-white leading-[1.08] tracking-tight mb-5 [text-shadow:_0_3px_14px_rgb(0_0_0_/_95%)]">
               {headline || defaultHeadline}
             </h2>
 

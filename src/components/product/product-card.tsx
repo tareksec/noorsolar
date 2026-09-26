@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import { AppImage as Image } from "@/components/ui/app-image";
 import { Link, useRouter } from "@/i18n/routing";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight, ArrowRight, MessageSquare, Clock, CheckCircle2 } from "lucide-react";
+import { ArrowRight, MessageSquare, Clock, CheckCircle2 } from "lucide-react";
 import { isPointerFine, prefersReducedMotion as checkReducedMotion } from "@/lib/motion";
 
 interface ProductCardProps {
@@ -199,9 +199,9 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         {previewSpecs.length > 0 && (
           <div className="mt-2 pt-2 sm:mt-3 sm:pt-3 border-t border-[#DCE4E0] flex flex-col gap-1 sm:gap-1.5">
             {previewSpecs.map((spec, i) => (
-              <div key={i} className="flex items-center justify-between text-[10px] sm:text-xs">
-                <span className="text-[#62706A] truncate pr-1 sm:pr-2">{spec.label}</span>
-                <span className="font-mono font-medium text-[#17251F] shrink-0">
+              <div key={i} className="flex items-center justify-between text-xs gap-2">
+                <span className="text-[#62706A] pr-1 sm:pr-2 line-clamp-1 leading-tight flex-1">{spec.label}</span>
+                <span className="font-mono font-medium text-[#17251F] shrink-0 text-right">
                   {spec.value}
                 </span>
               </div>
@@ -210,67 +210,51 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         )}
 
         {/* Wholesale / MOQ Visibility */}
-        <div className="mt-1.5 pt-1.5 sm:mt-2.5 sm:pt-2.5 border-t border-[#DCE4E0] flex items-center justify-between text-[10px] sm:text-[11px] font-mono">
+        <div className="mt-1.5 pt-1.5 sm:mt-2.5 sm:pt-2.5 border-t border-[#DCE4E0] flex items-center justify-between text-xs font-mono">
           <span className="text-[#62706A]">
-            {product.moq ? (isBn ? "MOQ:" : "MOQ:") : (isBn ? "স্কেল:" : "Scale:")}
+            MOQ:
           </span>
-          <span className="font-semibold text-[#17251F] truncate max-w-[90px] sm:max-w-[170px]">
+          <span className="font-semibold text-[#17251F] truncate max-w-[120px] sm:max-w-[180px]">
             {product.moq || (isBn ? "১ প্যালেট" : "1 Pallet")}
           </span>
         </div>
       </div>
 
       {/* Card Action Footer */}
-      <div className="pt-2.5 sm:pt-3 border-t border-[#DCE4E0] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-auto">
-        <div>
+      <div className="pt-2.5 sm:pt-3 border-t border-[#DCE4E0] flex items-center justify-between gap-3 mt-auto">
+        <div className="flex-1 min-w-0">
           {product.showPrice && product.priceBdt ? (
             <div className="flex flex-col">
-              <span className="text-[9px] sm:text-[10px] font-mono uppercase text-[#62706A]">
+              <span className="text-[10px] sm:text-xs font-mono uppercase text-[#62706A]">
                 {isBn ? "পাইকারি মূল্য" : "Wholesale"}
               </span>
               <span className="text-xs sm:text-sm font-mono font-bold text-[#17251F]">
                 BDT {product.priceBdt.toLocaleString()}
               </span>
-              <span className="hidden sm:block text-[9px] font-mono text-[#62706A]">
+              <span className="hidden sm:block text-xs font-mono text-[#62706A]">
                 {isBn ? "কন্টেইনার অর্ডারে বিশেষ দর" : "Container pricing on request"}
               </span>
             </div>
           ) : (
             <div className="flex flex-col">
-              <span className="text-[10px] sm:text-xs font-mono font-medium text-[#17251F]">
+              <span className="text-xs sm:text-sm font-mono font-medium text-[#17251F]">
                 {isBn ? "কোটেশনে দর" : "Quote Pricing"}
               </span>
-              <span className="hidden sm:block text-[9px] font-mono text-[#62706A]">
+              <span className="hidden sm:block text-xs font-mono text-[#62706A]">
                 {isBn ? "কন্টেইনার অর্ডারে বিশেষ দর" : "Container pricing on request"}
               </span>
             </div>
           )}
         </div>
 
-        <div className="flex items-center gap-1.5 w-full sm:w-auto">
-          <Link
-            href={`/product/${product.slug}`}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              router.push(`/product/${product.slug}`);
-            }}
-            className="hidden sm:flex w-11 h-11 min-w-[44px] min-h-[44px] rounded-full text-[#62706A] hover:text-[#074031] hover:bg-[#F1F4F1] transition-colors items-center justify-center cursor-pointer shrink-0"
-            title={isBn ? "প্রযুক্তিগত বিবরণ দেখুন" : "View Technical Details"}
-            aria-label={isBn ? `${product.name}-এর বিবরণ দেখুন` : `View details for ${product.name}`}
-          >
-            <span className="btn-arrow-swap">
-              <ArrowUpRight className="w-4 h-4 arrow-primary" />
-              <ArrowUpRight className="w-4 h-4 arrow-secondary" />
-            </span>
-          </Link>
-
+        <div className="shrink-0">
           <Link
             href={`/quote?product=${product.slug}`}
             onClick={(e) => e.stopPropagation()}
-            className="w-full sm:w-auto px-2.5 sm:px-3.5 py-1.5 min-h-[34px] sm:min-h-[44px] inline-flex items-center justify-center rounded-full bg-[#074031] text-white text-[11px] sm:text-xs font-medium tracking-tight transition-all duration-200 hover:bg-[#FEBE16] hover:text-[#052F25] active:scale-95 text-center"
+            className="px-4 py-2 min-h-[40px] sm:min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-full bg-[#074031] text-white text-xs sm:text-sm font-semibold tracking-tight transition-all duration-200 hover:bg-[#FEBE16] hover:text-[#052F25] active:scale-95 text-center shadow-xs"
           >
-            {isBn ? "কোটেশন" : "Quote"}
+            <MessageSquare className="w-3.5 h-3.5" />
+            <span>{isBn ? "কোটেশন" : "Quote"}</span>
           </Link>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import Image from "next/image";
-import { FileText, SlidersHorizontal, CheckSquare, Truck } from "lucide-react";
+import { FileText, SlidersHorizontal, CheckSquare, Truck, Check } from "lucide-react";
 import { prefersReducedMotion } from "@/lib/motion";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 
@@ -434,7 +434,7 @@ export function OrderingSteps({
           </p>
 
           {/* Real-time active step status pill on scroll */}
-          <div className="process-title-reveal inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#074031] text-white text-xs font-mono shadow-sm">
+          <div className="process-title-reveal inline-flex items-center justify-center min-w-[280px] sm:min-w-[340px] text-center gap-2.5 px-5 py-2 rounded-full bg-[#074031] text-white text-xs font-mono shadow-sm transition-all duration-300">
             <span className="w-2 h-2 rounded-full bg-[#FEBE16] animate-pulse" />
             <span className="font-bold text-[#FEBE16]">
               {activeStepIdx < 0
@@ -462,6 +462,7 @@ export function OrderingSteps({
             {displaySteps.map((step, idx) => {
               const Icon = step.icon;
               const isActive = activeStepIdx === idx;
+              const isPassed = idx < activeStepIdx;
 
               return (
                 <div
@@ -484,10 +485,16 @@ export function OrderingSteps({
                       className={`process-badge absolute -top-1 -left-1 sm:-top-2 sm:-left-2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full border-2 border-white flex items-center justify-center font-mono font-bold text-xs sm:text-[13px] shadow-sm select-none transition-all duration-300 ${
                         isActive
                           ? "bg-[#FEBE16] text-[#052F25] scale-110 shadow-[0_0_12px_rgba(254,190,22,0.8)]"
+                          : isPassed
+                          ? "bg-[#108958] text-white"
                           : "bg-[#074031] text-[#FEBE16]"
                       }`}
                     >
-                      {step.num}
+                      {isPassed ? (
+                        <Check className="w-4 h-4 stroke-[3]" />
+                      ) : (
+                        step.num
+                      )}
                     </div>
 
                     {/* Circular Photo */}
@@ -495,6 +502,8 @@ export function OrderingSteps({
                       className={`process-circle relative w-36 h-36 sm:w-40 sm:h-40 lg:w-44 lg:h-44 rounded-full overflow-hidden border-[3px] bg-[#F1F4F1] shadow-xs transition-all duration-500 md:group-hover:-translate-y-2 will-change-transform ${
                         isActive
                           ? "border-[#FEBE16] shadow-[0_12px_32px_rgba(254,190,22,0.35)] ring-4 ring-[#FEBE16]/30"
+                          : isPassed
+                          ? "border-[#108958] opacity-95"
                           : "border-[#DCE4E0] opacity-85 hover:opacity-100 hover:border-[#FEBE16]"
                       }`}
                     >
@@ -517,7 +526,11 @@ export function OrderingSteps({
                   <div className="process-step-content max-w-[260px] mx-auto">
                     <h3
                       className={`text-lg sm:text-[19px] font-bold tracking-tight mb-2.5 transition-colors ${
-                        isActive ? "text-[#074031] scale-102" : "text-[#17251F] group-hover:text-[#074031]"
+                        isActive
+                          ? "text-[#074031] scale-102"
+                          : isPassed
+                          ? "text-[#108958]"
+                          : "text-[#17251F] group-hover:text-[#074031]"
                       }`}
                     >
                       {step.title}
@@ -629,15 +642,19 @@ export function OrderingSteps({
                 key={idx}
                 type="button"
                 onClick={() => handleStepClick(idx)}
-                className={`h-2 rounded-full transition-all duration-500 cursor-pointer ${
-                  activeStepIdx === idx
-                    ? "w-8 bg-[#FEBE16]"
-                    : idx < activeStepIdx
-                    ? "w-3 bg-[#108958]"
-                    : "w-2 bg-[#DCE4E0]"
-                }`}
+                className="p-2 min-w-[32px] min-h-[32px] flex items-center justify-center cursor-pointer group/dot focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#074031] rounded-full"
                 aria-label={`Go to step ${idx + 1}`}
-              />
+              >
+                <span
+                  className={`h-2 rounded-full transition-all duration-500 block ${
+                    activeStepIdx === idx
+                      ? "w-8 bg-[#FEBE16]"
+                      : idx < activeStepIdx
+                      ? "w-3 bg-[#108958]"
+                      : "w-2 bg-[#DCE4E0] group-hover/dot:bg-[#074031]/50"
+                  }`}
+                />
+              </button>
             ))}
           </div>
           <span className="text-[#108958] font-bold">

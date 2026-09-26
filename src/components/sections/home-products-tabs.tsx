@@ -170,6 +170,7 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
                     id={`tab-${tab.id}`}
                     aria-selected={isActive}
                     aria-controls={`panel-${tab.id}`}
+                    aria-label={isBn ? `${tab.fullLabel} (${tab.count}টি পণ্য)` : `${tab.fullLabel} (${tab.count} products)`}
                     onClick={() => setActiveTab(tab.id)}
                     className={`relative flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-7 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#074031] whitespace-nowrap ${
                       isActive ? "text-white" : "text-[#4A5550] hover:text-[#17251F] hover:bg-[#F1F4F1]/60"
@@ -184,7 +185,7 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
                       />
                     )}
 
-                    <span className="relative z-10 flex items-center gap-2">
+                    <span className="relative z-10 flex items-center gap-1.5">
                       <IconComponent
                         className={`w-4 h-4 transition-colors ${
                           isActive ? "text-[#FEBE16]" : "text-[#62706A]"
@@ -193,10 +194,11 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
                       <span>{tab.label}</span>
                       {tab.count > 0 && (
                         <span
-                          className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-medium transition-colors ${
+                          aria-hidden="true"
+                          className={`ml-1.5 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-mono font-bold transition-all shadow-xs ${
                             isActive
-                              ? "bg-white/20 text-[#FEBE16] border border-white/20"
-                              : "bg-[#F1F4F1] text-[#62706A]"
+                              ? "bg-[#FEBE16] text-[#052F25]"
+                              : "bg-[#E2E8E4] text-[#17251F] border border-[#CBD5D0]"
                           }`}
                         >
                           {tab.count}
