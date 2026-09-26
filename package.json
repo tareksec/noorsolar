@@ -13,6 +13,7 @@
     "check:mobile": "node scripts/check-mobile.js",
     "check:images": "node scripts/check-images.js",
     "check:motion": "node scripts/check-motion.js",
+    "check:provide-steps": "node scripts/check-provide-steps.js",
     "check:admin": "node scripts/check-admin.js",
     "check:i18n": "node scripts/check-i18n.js",
     "seed:demo": "npx tsx prisma/seed.ts --demo-only"
