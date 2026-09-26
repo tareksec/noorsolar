@@ -1,315 +1,452 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { MapPin, ArrowRight, ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
+import { motion } from "framer-motion";
+import { MapPin, ArrowRight, ChevronLeft, ChevronRight, ShieldCheck, Sparkles } from "lucide-react";
 
 interface BuyerSegmentationProps {
   locale?: string;
 }
 
-export function BuyerSegmentation({ locale = "en" }: BuyerSegmentationProps) {
+export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
   const isBn = locale === "bn";
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const [scrollRange, setScrollRange] = useState(0);
-  const [activeSlide, setActiveSlide] = useState(0);
+  const toBnNumber = (num: number) => {
+    if (!isBn) return num < 10 ? `0${num}` : `${num}`;
+    const bnDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+    return num.toString().replace(/\d/g, (d) => bnDigits[parseInt(d, 10)]);
+  };
 
   const segments = [
     {
       id: "epc",
-      year: isBn ? "২০২৬ – প্রজেক্ট ইনডেন্ট ও বাল্ক সাপ্লাই" : "2026 – Project Indent & Supply",
+      tabLabel: isBn ? "সোলার EPC" : "Solar EPC",
+      badge: isBn ? "বাল্ক ইনডেন্ট" : "Bulk Indent",
+      year: isBn ? "২০২৬ • প্রজেক্ট ইনডেন্ট ও বাল্ক সাপ্লাই" : "2026 • Project Indent & Bulk Supply",
       title: isBn ? "সোলার EPC ও ইনস্টলার" : "Solar EPCs & Installers",
-      subtitle: isBn ? "কন্টেইনার ইনডেন্ট ও প্রজেক্ট ইকুইপমেন্ট" : "Container Indent & Project Supply",
-      location: isBn ? "চট্টগ্রাম পোর্ট ও ঢাকা সেন্ট্রাল ডিপো" : "Chittagong Port & Dhaka Depot",
+      subtitle: isBn
+        ? "সরাসরি কন্টেইনার ইনডেন্ট ও বৃহৎ প্রজেক্টের সম্পূর্ণ ইকুইপমেন্ট সমাধান।"
+        : "Direct container indents and end-to-end solar project supply.",
+      location: isBn ? "চট্টগ্রাম পোর্ট ও ঢাকা সেন্ট্রাল ডিপো" : "Chittagong Port & Dhaka Central Depot",
       metrics: isBn ? "১ প্যালেট থেকে মেগা-ইনডেন্ট" : "1 Pallet to Mega Indent",
       href: "/quote?segment=epc",
       image: "/photos/b2b-container-indent.webp",
     },
     {
       id: "commercial",
-      year: isBn ? "২০২৬ – ফ্যাক্টরি ও বাণিজ্যিক রুফটপ" : "2025 – Commercial & Industrial",
-      title: isBn ? "ইন্ডাস্ট্রিয়াল ও কমার্শিয়াল বায়ার" : "Commercial & Industrial",
-      subtitle: isBn ? "হাই-ভোল্টেজ BESS ও ইনভার্টার" : "High-Voltage BESS & Inverters",
-      location: isBn ? "গাজীপুর, নারায়ণগঞ্জ ও সারা দেশ" : "Nationwide Industrial Delivery",
+      tabLabel: isBn ? "ইন্ডাস্ট্রিয়াল" : "Commercial",
+      badge: isBn ? "ফ্যাক্টরি ও রুফটপ" : "Factory & Rooftop",
+      year: isBn ? "২০২৬ • ফ্যাক্টরি ও বাণিজ্যিক রুফটপ" : "2026 • Commercial & Industrial",
+      title: isBn ? "ইন্ডাস্ট্রিয়াল ও কমার্শিয়াল বায়ার" : "Commercial & Industrial Buyers",
+      subtitle: isBn
+        ? "হাই-ভোল্টেজ BESS ব্যাটারি স্টোরেজ ও বাণিজ্যিক হাইব্রিড ইনভার্টার।"
+        : "High-voltage BESS battery storage & commercial hybrid inverters.",
+      location: isBn ? "গাজীপুর, নারায়ণগঞ্জ ও সারা দেশ" : "Gazipur, Narayanganj & Nationwide",
       metrics: isBn ? "MW স্কেল হাই-ভোল্টেজ স্টোরেজ" : "MW Scale Storage Systems",
       href: "/quote?segment=commercial",
       image: "/photos/about-commercial-plant.webp",
     },
     {
       id: "resellers",
-      year: isBn ? "২০২৬ – পাইকারি ডিলার নেটওয়ার্ক" : "2026 – Wholesale Dealer Network",
+      tabLabel: isBn ? "ডিলার ও রিসেলার" : "Dealers",
+      badge: isBn ? "ডিপো স্টক" : "Depot Stock",
+      year: isBn ? "২০২৬ • পাইকারি ডিলার নেটওয়ার্ক" : "2026 • Wholesale Dealer Network",
       title: isBn ? "সোলার ডিলার ও রিসেলার" : "Dealers & Resellers",
-      subtitle: isBn ? "রেডি ডিপো স্টক ও ভলিউম মার্জিন" : "Ready Depot Stock & Margins",
+      subtitle: isBn
+        ? "রেডি ডিপো স্টক, দ্রুততম ডেলিভারি ও সেরা পাইকারি মার্জিন সুবিধা।"
+        : "Ready central warehouse stock, prompt delivery, and wholesale margins.",
       location: isBn ? "ঢাকা সেন্ট্রাল ওয়্যারহাউস হাব" : "Dhaka Central Warehouse Hub",
-      metrics: isBn ? "১ প্যালেট থেকে সেন্ট্রাল ডিপো স্টক" : "1 Pallet Ready Warehouse Stock",
+      metrics: isBn ? "রেডি স্টক থেকে তাৎক্ষণিক ডেলিভারি" : "Ready Warehouse Stock Delivery",
       href: "/quote?segment=reseller",
       image: "/photos/b2b-warehouse-stock.webp",
     },
     {
       id: "utility",
-      year: isBn ? "২০২৬ – ইউটিলিটি স্কেল গ্রিড সাপ্লাই" : "2026 – Utility Scale Projects",
+      tabLabel: isBn ? "ইউটিলিটি পার্ক" : "Utility Scale",
+      badge: isBn ? "গ্রিড স্কেল" : "Grid Scale",
+      year: isBn ? "২০২৬ • ইউটিলিটি স্কেল গ্রিড সাপ্লাই" : "2026 • Utility Scale Grid Supply",
       title: isBn ? "ইউটিলিটি ও সোলার পার্ক" : "Utility Scale Solar Parks",
-      subtitle: isBn ? "মেগা ইনডেন্ট ও সেন্ট্রাল ইনভার্টার" : "Mega Indent & Central Inverters",
-      location: isBn ? "সরাসরি পোর্ট-টু-সাইট লজিস্টিকস" : "Direct Port-to-Site Logistics",
+      subtitle: isBn
+        ? "মেগা ইনডেন্ট, সেন্ট্রাল ইনভার্টার ও সরাসরি পোর্ট-টু-সাইট লজিস্টিকস।"
+        : "Mega indent, central inverters, and direct port-to-site logistics.",
+      location: isBn ? "সরাসরি পোর্ট-টু-সাইট ডেলিভারি" : "Direct Port-to-Site Logistics",
       metrics: isBn ? "টিয়ার-১ সার্টিফাইড ইকুইপমেন্ট" : "Tier-1 Certified Consignments",
       href: "/quote?segment=utility",
       image: "/photos/hero-solar-field.webp",
     },
   ];
 
-  // Measure scrollable track width dynamically across all device widths
+  // Scroll to a specific card smoothly
+  const scrollToCard = useCallback((index: number) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const cards = container.querySelectorAll<HTMLElement>("[data-segment-card]");
+    if (cards[index]) {
+      const targetCard = cards[index];
+      const containerRect = container.getBoundingClientRect();
+      const cardRect = targetCard.getBoundingClientRect();
+
+      // Center the card in container view on larger screens, left-aligned on mobile
+      const isMobile = window.innerWidth < 768;
+      const offset = isMobile
+        ? targetCard.offsetLeft - container.offsetLeft - 16
+        : targetCard.offsetLeft - container.offsetLeft - (containerRect.width - cardRect.width) / 2;
+
+      container.scrollTo({
+        left: Math.max(0, offset),
+        behavior: "smooth",
+      });
+      setActiveIndex(index);
+    }
+  }, []);
+
+  const handleArrowNav = (direction: "left" | "right") => {
+    const nextIndex =
+      direction === "left"
+        ? Math.max(0, activeIndex - 1)
+        : Math.min(segments.length - 1, activeIndex + 1);
+    scrollToCard(nextIndex);
+  };
+
+  // Sync activeIndex with user touch or trackpad scrolling
   useEffect(() => {
-    const calculateRange = () => {
-      if (trackRef.current && sectionRef.current) {
-        const trackWidth = trackRef.current.scrollWidth;
-        const viewportWidth = window.innerWidth;
-        const endPad = viewportWidth < 640 ? 24 : viewportWidth < 1024 ? 40 : 64;
-        const distance = Math.max(0, trackWidth - viewportWidth + endPad);
-        setScrollRange(distance);
-      }
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    let timeoutId: NodeJS.Timeout;
+    const handleScroll = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (!container) return;
+        const cards = container.querySelectorAll<HTMLElement>("[data-segment-card]");
+        if (!cards.length) return;
+
+        const containerLeft = container.scrollLeft;
+        const containerMid = containerLeft + container.clientWidth / 2;
+
+        let closestIndex = 0;
+        let minDiff = Infinity;
+
+        cards.forEach((card, idx) => {
+          const cardMid = card.offsetLeft + card.offsetWidth / 2;
+          const diff = Math.abs(containerMid - cardMid);
+          if (diff < minDiff) {
+            minDiff = diff;
+            closestIndex = idx;
+          }
+        });
+
+        setActiveIndex(closestIndex);
+      }, 60);
     };
 
-    calculateRange();
-    window.addEventListener("resize", calculateRange);
-    const t1 = setTimeout(calculateRange, 200);
-    const t2 = setTimeout(calculateRange, 800);
+    container.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
-      window.removeEventListener("resize", calculateRange);
-      clearTimeout(t1);
-      clearTimeout(t2);
+      clearTimeout(timeoutId);
+      container.removeEventListener("scroll", handleScroll);
     };
   }, [segments.length]);
 
-  // Framer Motion pinned scroll (works on all devices: mobile, tablet, desktop)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 110,
-    damping: 26,
-    mass: 0.6,
-    restDelta: 0.001,
-  });
-
-  const x = useTransform(smoothProgress, [0, 1], [0, -scrollRange]);
-
-  // Update active slide index based on scroll position
-  useEffect(() => {
-    return scrollYProgress.on("change", (latest) => {
-      const index = Math.min(
-        segments.length - 1,
-        Math.max(0, Math.floor(latest * segments.length + 0.15))
-      );
-      setActiveSlide(index);
-    });
-  }, [scrollYProgress, segments.length]);
-
-  const scrollToSlide = (index: number) => {
-    if (sectionRef.current) {
-      const top = sectionRef.current.offsetTop;
-      const height = sectionRef.current.offsetHeight - window.innerHeight;
-      const targetScroll = top + (index / (segments.length - 1)) * height;
-      window.scrollTo({ top: targetScroll, behavior: "smooth" });
-    }
-  };
-
-  // Touch swipe support (allows user to swipe left/right directly on touch screens)
-  const touchStartX = useRef<number | null>(null);
-  const touchStartY = useRef<number | null>(null);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null || touchStartY.current === null) return;
-    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
-    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
-
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
-      if (deltaX < 0) {
-        scrollToSlide(Math.min(segments.length - 1, activeSlide + 1));
-      } else {
-        scrollToSlide(Math.max(0, activeSlide - 1));
-      }
-    }
-    touchStartX.current = null;
-    touchStartY.current = null;
-  };
-
   return (
-    <section
-      ref={sectionRef}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      className="relative h-[300vh] sm:h-[280vh] w-full bg-[#F7F8F5] text-[#17251F] overflow-clip"
-    >
-      <div className="sticky top-0 h-[100dvh] w-full flex flex-col justify-between pt-5 sm:pt-7 lg:pt-10 pb-5 sm:pb-8 lg:pb-12 px-4 sm:px-6 lg:px-12 overflow-hidden select-none">
-        {/* Top Header: Eyebrow + Title & Description + Controls */}
-        <div className="max-w-7xl mx-auto w-full shrink-0">
-          {/* Eyebrow */}
-          <div className="flex items-center gap-2 mb-1.5 sm:mb-2.5">
-            <span className="w-2.5 h-2.5 rounded-full border border-[#074031] flex items-center justify-center">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FEBE16]" />
-            </span>
-            <span className="text-[11px] sm:text-xs font-mono font-bold tracking-widest text-[#074031] uppercase">
-              {isBn ? "আমাদের প্রজেক্ট ও সেগমেন্ট" : "Our Projects & Segments"}
-            </span>
-          </div>
-
-          {/* Title & Description Row with Prev/Next Controls */}
-          <div className="flex items-end justify-between gap-4 lg:gap-12">
-            <div className="max-w-xl">
-              <h2 className="text-xl sm:text-3xl lg:text-[42px] font-black tracking-tight text-[#17251F] leading-[1.1]">
-                {isBn ? "সম্পূর্ণ সোলার প্রকিউরমেন্ট সলিউশন" : "Complete Solar Procurement Solutions"}
-              </h2>
-
-              <div className="hidden sm:block border-l-2 border-[#FEBE16] pl-3 sm:pl-4 mt-2">
-                <p className="text-xs sm:text-sm text-[#62706A] leading-relaxed">
-                  {isBn
-                    ? "বাংলাদেশের EPC ঠিকাদার, বাণিজ্যিক প্রতিষ্ঠান ও আঞ্চলিক পাইকারি ডিলারদের জন্য নির্ভরযোগ্য সোলার ইকুইপমেন্ট ও কন্টেইনার সরবরাহ।"
-                    : "Everything you need to supply commercial solar installations, EPC project indents, and wholesale distribution across Bangladesh."}
-                </p>
-              </div>
+    <section className="py-14 sm:py-20 lg:py-24 bg-[#F7F8F5] text-[#17251F] border-b border-[#DCE4E0] relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* ========================================================
+            SECTION HEADER
+            ======================================================== */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12 mb-8 sm:mb-10">
+          <div>
+            {/* Eyebrow */}
+            <div className="flex items-center gap-2 mb-2.5">
+              <span className="w-2.5 h-2.5 rounded-full border border-[#074031] flex items-center justify-center">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FEBE16]" />
+              </span>
+              <span className="text-xs font-mono font-bold tracking-widest text-[#074031] uppercase">
+                {isBn ? "আমাদের প্রজেক্ট ও সেগমেন্ট" : "Our Projects & Segments"}
+              </span>
             </div>
 
-            {/* Navigation Arrow Controls (Visible and accessible on all screen sizes) */}
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={() => scrollToSlide(Math.max(0, activeSlide - 1))}
-                disabled={activeSlide === 0}
-                aria-label={isBn ? "পূর্ববর্তী স্লাইড" : "Previous slide"}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#DCE4E0] bg-white hover:bg-[#F1F4F1] text-[#074031] disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center transition-colors shadow-xs cursor-pointer"
-              >
-                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => scrollToSlide(Math.min(segments.length - 1, activeSlide + 1))}
-                disabled={activeSlide === segments.length - 1}
-                aria-label={isBn ? "পরবর্তী স্লাইড" : "Next slide"}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#DCE4E0] bg-white hover:bg-[#F1F4F1] text-[#074031] disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center transition-colors shadow-xs cursor-pointer"
-              >
-                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-              </button>
+            {/* Title */}
+            <h2 className="text-2xl sm:text-4xl lg:text-[40px] font-black tracking-tight text-[#17251F] leading-[1.12]">
+              {isBn ? (
+                <>
+                  সম্পূর্ণ সোলার <br className="hidden sm:inline" />
+                  প্রকিউরমেন্ট সলিউশন
+                </>
+              ) : (
+                <>
+                  Complete Solar <br className="hidden sm:inline" />
+                  Procurement Solutions
+                </>
+              )}
+            </h2>
+          </div>
+
+          {/* Right Description & Controls */}
+          <div className="flex flex-col sm:flex-row sm:items-center lg:items-end gap-5 lg:gap-8">
+            <div className="border-l-2 border-[#FEBE16] pl-4 max-w-md">
+              <p className="text-xs sm:text-sm text-[#62706A] leading-relaxed">
+                {isBn
+                  ? "বাংলাদেশের EPC কন্ট্রাক্টর, বাণিজ্যিক কারখানা ও পাইকারি ডিলারদের জন্য বিশ্বস্ত সোলার ইকুইপমেন্ট ও সরাসরি কন্টেইনার সরবরাহ।"
+                  : "Reliable tier-1 equipment supply, container indents, and wholesale logistics for contractors and solar businesses in Bangladesh."}
+              </p>
+            </div>
+
+            {/* Prev / Next Buttons & Counter */}
+            <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
+              <span className="text-xs font-mono font-semibold text-[#62706A]">
+                <strong className="text-[#074031] text-sm">{toBnNumber(activeIndex + 1)}</strong> / {toBnNumber(segments.length)}
+              </span>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => handleArrowNav("left")}
+                  disabled={activeIndex === 0}
+                  aria-label={isBn ? "পূর্ববর্তী সেগমেন্ট" : "Previous segment"}
+                  className="w-9 h-9 rounded-full border border-[#DCE4E0] bg-white hover:bg-[#F1F4F1] text-[#074031] disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center transition-colors shadow-xs cursor-pointer"
+                >
+                  <ChevronLeft className="w-4 h-4 stroke-[2.5]" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleArrowNav("right")}
+                  disabled={activeIndex === segments.length - 1}
+                  aria-label={isBn ? "পরবর্তী সেগমেন্ট" : "Next segment"}
+                  className="w-9 h-9 rounded-full border border-[#DCE4E0] bg-white hover:bg-[#F1F4F1] text-[#074031] disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center transition-colors shadow-xs cursor-pointer"
+                >
+                  <ChevronRight className="w-4 h-4 stroke-[2.5]" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Cards Track (Translates horizontally with scroll & touch swipe) */}
-        <div className="relative w-full my-auto overflow-visible py-2">
-          <motion.div
-            ref={trackRef}
-            style={{ x }}
-            className="flex items-center gap-4 sm:gap-6 will-change-transform pl-4 sm:pl-6 lg:pl-12"
-          >
-            {segments.map((seg) => (
+        {/* ========================================================
+            ANIMATED TAB PILLS (Framer Motion layoutId active pill)
+            ======================================================== */}
+        <div className="mb-6 sm:mb-8 overflow-x-auto scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 p-1.5 rounded-full bg-white border border-[#DCE4E0] shadow-xs">
+            {segments.map((seg, idx) => {
+              const isActive = activeIndex === idx;
+              return (
+                <button
+                  key={seg.id}
+                  type="button"
+                  onClick={() => scrollToCard(idx)}
+                  className={`relative shrink-0 px-3.5 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-colors duration-200 cursor-pointer ${
+                    isActive ? "text-[#052F25] font-bold" : "text-[#62706A] hover:text-[#17251F]"
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeSegmentPill"
+                      className="absolute inset-0 rounded-full bg-[#FEBE16] shadow-sm shadow-[#FEBE16]/25"
+                      transition={{ type: "spring", stiffness: 450, damping: 32 }}
+                    />
+                  )}
+                  <span className="relative z-10 flex items-center gap-1.5 sm:gap-2">
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                        isActive ? "bg-[#074031]" : "bg-[#62706A]/40"
+                      }`}
+                    />
+                    <span>{seg.tabLabel}</span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================
+          HORIZONTAL SHOWCASE TRACK (Smooth, Touch-friendly, Responsive)
+          ======================================================== */}
+      <div
+        ref={scrollContainerRef}
+        style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-x pan-y" }}
+        className="flex items-stretch gap-5 lg:gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 sm:px-6 lg:px-[calc((100vw-1280px)/2+2rem)] pb-4 pt-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {segments.map((seg, idx) => {
+          const isActive = activeIndex === idx;
+
+          return (
+            <div
+              key={seg.id}
+              data-segment-card
+              className="shrink-0 snap-center transition-all duration-300"
+            >
+              {/* ----------------------------------------------------
+                  DESKTOP CARD (Screens >= 768px: Wide 2-Column Poster)
+                  ---------------------------------------------------- */}
               <div
-                key={seg.id}
-                className="w-[84vw] max-w-[340px] sm:w-[440px] md:w-[680px] lg:w-[760px] h-[380px] sm:h-[410px] md:h-[350px] lg:h-[380px] shrink-0 rounded-[24px] sm:rounded-[28px] overflow-hidden flex flex-col md:flex-row bg-white border border-[#DCE4E0] shadow-xl md:shadow-2xl shadow-[#052F25]/[0.08] group transition-shadow"
+                className={`hidden md:flex flex-row w-[700px] lg:w-[800px] h-[360px] lg:h-[380px] rounded-[28px] overflow-hidden bg-white border transition-all duration-300 group ${
+                  isActive
+                    ? "border-[#074031]/40 shadow-2xl shadow-[#052F25]/[0.10] scale-[1.01]"
+                    : "border-[#DCE4E0] shadow-md shadow-[#052F25]/[0.04] opacity-90 hover:opacity-100"
+                }`}
               >
-                {/* Left/Top Column: Signature Deep Brand Green (#074031) */}
-                <div className="w-full md:w-[44%] shrink-0 bg-gradient-to-br from-[#074031] via-[#052F25] to-[#04241C] p-5 sm:p-6 lg:p-8 flex flex-col justify-between relative overflow-hidden text-white">
-                  {/* Subtle Solar Radial Glow Overlay */}
+                {/* Left Column: Brand Deep Green Gradient */}
+                <div className="w-[48%] bg-gradient-to-br from-[#074031] via-[#052F25] to-[#04241C] p-6 lg:p-7 flex flex-col justify-between text-white relative overflow-hidden select-none">
+                  {/* Subtle Solar Ambient Glow */}
                   <div
-                    className="absolute -top-12 -left-12 w-48 h-48 rounded-full pointer-events-none opacity-20"
+                    className="absolute -top-14 -left-14 w-48 h-48 rounded-full pointer-events-none opacity-20"
                     style={{
                       background: "radial-gradient(circle, #FEBE16 0%, transparent 70%)",
                     }}
                   />
 
-                  {/* Top Tag: Solar Gold Accent + Metrics Pill */}
+                  {/* Top Tags */}
                   <div className="relative z-10 flex items-center justify-between gap-2">
-                    <h4 className="text-[#FEBE16] text-[11px] sm:text-xs lg:text-[13px] font-mono font-bold tracking-wider uppercase">
+                    <span className="text-[#FEBE16] text-xs font-mono font-bold tracking-wider uppercase">
                       {seg.year}
-                    </h4>
-                    <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FEBE16]/15 border border-[#FEBE16]/30 text-[#FEBE16] text-[10px] sm:text-[11px] font-mono font-semibold">
-                      <ShieldCheck className="w-3 h-3 stroke-[2.5]" />
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-[#FEBE16]/15 border border-[#FEBE16]/30 text-[#FEBE16] text-[10px] font-mono font-semibold">
+                      {seg.badge}
+                    </span>
+                  </div>
+
+                  {/* Center Content */}
+                  <div className="relative z-10 my-auto py-1">
+                    <h3 className="text-2xl lg:text-[25px] font-black tracking-tight text-white leading-tight mb-2">
+                      {seg.title}
+                    </h3>
+                    <p className="text-xs lg:text-sm text-white/80 leading-relaxed mb-3">
+                      {seg.subtitle}
+                    </p>
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/90 text-xs font-mono">
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#FEBE16]" />
                       <span>{seg.metrics}</span>
                     </div>
                   </div>
 
-                  {/* Middle: Crisp White Title + Light Mint/Silver Subtitle */}
-                  <div className="my-auto py-2 relative z-10">
-                    <h3 className="text-xl sm:text-2xl lg:text-[27px] font-black tracking-tight leading-tight text-white mb-1.5">
-                      {seg.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm font-medium text-white/75 leading-snug line-clamp-2">
-                      {seg.subtitle}
-                    </p>
-                  </div>
-
-                  {/* Bottom: Location & Solar Gold CTA */}
-                  <div className="pt-2.5 border-t border-white/15 flex items-center justify-between gap-2 relative z-10">
-                    <div className="flex items-center gap-1.5 text-white/90 text-xs lg:text-[13px] font-medium truncate">
+                  {/* Bottom Location & Action Button */}
+                  <div className="relative z-10 pt-3 border-t border-white/15 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 text-white/85 text-xs font-medium truncate">
                       <MapPin className="w-3.5 h-3.5 shrink-0 text-[#FEBE16]" />
                       <span className="truncate">{seg.location}</span>
                     </div>
 
                     <Link
                       href={seg.href}
-                      className="w-8 h-8 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] flex items-center justify-center shrink-0 transition-all shadow-md shadow-[#FEBE16]/25 group/btn"
-                      title={isBn ? "কোটেশন নিন" : "Request Quote"}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] text-xs font-bold transition-all shadow-md shadow-[#FEBE16]/25 group/btn cursor-pointer shrink-0"
                     >
-                      <ArrowRight className="w-4 h-4 stroke-[2.5] group-hover/btn:translate-x-0.5 transition-transform" />
+                      <span>{isBn ? "কোটেশন নিন" : "Get Quote"}</span>
+                      <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] group-hover/btn:translate-x-0.5 transition-transform" />
                     </Link>
                   </div>
                 </div>
 
-                {/* Right/Bottom Column: Full-Bleed Photograph */}
-                <div className="w-full md:w-[56%] h-44 sm:h-52 md:h-full relative overflow-hidden bg-[#F1F4F1]">
+                {/* Right Column: Full-Bleed Real Equipment Photography */}
+                <div className="w-[52%] h-full relative overflow-hidden bg-[#F1F4F1]">
                   <Image
                     src={seg.image}
                     alt={seg.title}
                     fill
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    sizes="(max-width: 768px) 84vw, (min-width: 1024px) 450px, 350px"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                    sizes="(min-width: 1024px) 450px, 380px"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#052F25]/40 via-transparent to-transparent opacity-60" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#052F25]/45 via-transparent to-transparent opacity-60" />
                 </div>
               </div>
-            ))}
-          </motion.div>
-        </div>
 
-        {/* Bottom Bar: Indicators & Slide Counter */}
-        <div className="max-w-7xl mx-auto w-full flex items-center justify-between gap-4 shrink-0 pt-1">
-          {/* Dots */}
-          <div className="flex items-center gap-2">
-            {segments.map((_, dotIdx) => (
-              <button
-                key={dotIdx}
-                type="button"
-                onClick={() => scrollToSlide(dotIdx)}
-                aria-label={`Jump to segment ${dotIdx + 1}`}
-                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                  activeSlide === dotIdx
-                    ? "w-7 sm:w-8 bg-[#074031]"
-                    : "w-2 bg-[#DCE4E0] hover:bg-[#62706A]"
+              {/* ----------------------------------------------------
+                  MOBILE CARD (Screens < 768px: Rich Vertical Layout)
+                  ---------------------------------------------------- */}
+              <div
+                className={`flex md:hidden flex-col w-[85vw] max-w-[340px] rounded-[24px] overflow-hidden bg-white border transition-all duration-300 ${
+                  isActive
+                    ? "border-[#074031]/40 shadow-xl shadow-[#052F25]/[0.08]"
+                    : "border-[#DCE4E0] shadow-md shadow-[#052F25]/[0.03]"
                 }`}
-              />
-            ))}
-          </div>
+              >
+                {/* Top Image Banner with Badges & Location Overlay */}
+                <div className="relative h-44 w-full overflow-hidden bg-[#F1F4F1]">
+                  <Image
+                    src={seg.image}
+                    alt={seg.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 85vw, 340px"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#052F25]/85 via-[#052F25]/25 to-transparent" />
 
-          {/* Slide counter & Scroll Hint */}
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-mono font-bold text-[#074031]">
-              {activeSlide + 1} / {segments.length}
-            </span>
-            <p className="text-xs font-mono text-[#62706A] flex items-center gap-1.5">
-              <span>{isBn ? "স্ক্রোল করে দেখুন" : "Scroll to explore"}</span>
-              <span className="inline-block text-[#FEBE16] font-bold animate-pulse">→</span>
-            </p>
-          </div>
+                  {/* Badges on Image */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
+                    <span className="px-2.5 py-1 rounded-full bg-[#052F25]/85 backdrop-blur-md border border-white/20 text-[#FEBE16] text-[10px] font-mono font-bold tracking-wider uppercase">
+                      {seg.badge}
+                    </span>
+                    <span className="px-2.5 py-1 rounded-full bg-[#FEBE16] text-[#052F25] text-[10px] font-mono font-bold shadow-xs">
+                      {seg.metrics}
+                    </span>
+                  </div>
+
+                  {/* Location Pin Tag on Image Bottom */}
+                  <div className="absolute bottom-2.5 left-3 right-3 flex items-center gap-1.5 text-white text-[11px] font-medium drop-shadow-sm truncate">
+                    <MapPin className="w-3.5 h-3.5 text-[#FEBE16] shrink-0" />
+                    <span className="truncate">{seg.location}</span>
+                  </div>
+                </div>
+
+                {/* Card Body */}
+                <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-white">
+                  <div>
+                    <span className="text-[11px] font-mono font-bold text-[#074031] uppercase tracking-wider block mb-1">
+                      {seg.year}
+                    </span>
+                    <h3 className="text-lg font-black tracking-tight text-[#17251F] leading-snug mb-1.5">
+                      {seg.title}
+                    </h3>
+                    <p className="text-xs text-[#62706A] leading-relaxed mb-4">
+                      {seg.subtitle}
+                    </p>
+                  </div>
+
+                  <Link
+                    href={seg.href}
+                    className="w-full py-2.5 px-4 rounded-xl bg-[#074031] hover:bg-[#0B513E] active:bg-[#04241C] text-white flex items-center justify-center gap-2 text-xs font-bold transition-colors shadow-xs cursor-pointer"
+                  >
+                    <span>{isBn ? "কোটেশন নিন" : "Request Quote"}</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-[#FEBE16] stroke-[2.5]" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+        {/* End of track spacer */}
+        <div className="w-2 shrink-0" aria-hidden="true" />
+      </div>
+
+      {/* ========================================================
+          BOTTOM PAGINATION DOTS
+          ======================================================== */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          {segments.map((_, dotIdx) => (
+            <button
+              key={dotIdx}
+              type="button"
+              onClick={() => scrollToCard(dotIdx)}
+              aria-label={`Jump to segment ${dotIdx + 1}`}
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                activeIndex === dotIdx
+                  ? "w-8 bg-[#074031]"
+                  : "w-2 bg-[#DCE4E0] hover:bg-[#62706A]"
+              }`}
+            />
+          ))}
         </div>
+
+        <p className="text-xs font-mono text-[#62706A] flex items-center gap-1.5">
+          <span>{isBn ? "সোয়াইপ করে সম্পূর্ণ দেখুন" : "Swipe to explore all"}</span>
+          <span className="text-[#FEBE16] font-bold">→</span>
+        </p>
       </div>
     </section>
   );
