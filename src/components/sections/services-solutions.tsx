@@ -211,6 +211,9 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
   // Fast-scroll capture state: true position lock + gesture accumulator.
   const lockYRef = useRef<number | null>(null);
   const suppressLockRef = useRef(false);
+  const lockExpiryTimerRef = useRef<number | null>(null);
+  const isLockListeningRef = useRef(false);
+  const releaseLockRef = useRef<() => void>(() => {});
   const accumRef = useRef(0);
   const accumTimerRef = useRef<number | null>(null);
   const touchStartRef = useRef<{ y: number } | null>(null);
@@ -231,6 +234,7 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
   }, [active]);
 
   const jumpTo = useCallback((index: number) => {
+    releaseLockRef.current();
     if (index === activeRef.current) return;
     setDirection(index > activeRef.current ? 1 : -1);
     setActive(index);
@@ -254,6 +258,7 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
 
     const STEP_THRESHOLD = 24; // accumulated px per step (one notch still steps at once)
     const COOLDOWN_MS = 550;
+    const LOCK_EXPIRY_MS = 1100;
     const TOUCH_STEP_PX = 40;
 
     const isDesktopWidth = () => window.innerWidth >= 768;
@@ -268,12 +273,73 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
     const canAdvance = (dir: 1 | -1) =>
       dir > 0 ? activeRef.current < items.length - 1 : activeRef.current > 0;
 
-    const engageLock = () => {
-      lockYRef.current = window.scrollY;
+    // True position lock: snaps back in-flight Lenis glides while actively
+    // holding a step interaction.
+    const handleScrollLock = () => {
+      if (suppressLockRef.current) return;
+      if (lockYRef.current === null) {
+        detachScrollLock();
+        return;
+      }
+      // Never snap if section is not in the active capture zone or on mobile
+      if (!isDesktopWidth() || !inCaptureZone()) {
+        releaseLock();
+        return;
+      }
+      const y = window.scrollY;
+      const diff = Math.abs(y - lockYRef.current);
+      // Beyond normal glide drift (e.g. user jumped/navigated/dragged): release immediately
+      if (diff > 120) {
+        releaseLock();
+        return;
+      }
+      if (diff > 2) {
+        window.scrollTo(0, lockYRef.current);
+      }
+    };
+
+    const detachScrollLock = () => {
+      if (isLockListeningRef.current) {
+        window.removeEventListener("scroll", handleScrollLock, { capture: true });
+        isLockListeningRef.current = false;
+      }
+    };
+
+    const attachScrollLock = () => {
+      if (!isLockListeningRef.current) {
+        window.addEventListener("scroll", handleScrollLock, {
+          capture: true,
+          passive: true,
+        });
+        isLockListeningRef.current = true;
+      }
     };
 
     const releaseLock = () => {
       lockYRef.current = null;
+      if (lockExpiryTimerRef.current) {
+        window.clearTimeout(lockExpiryTimerRef.current);
+        lockExpiryTimerRef.current = null;
+      }
+      detachScrollLock();
+    };
+
+    releaseLockRef.current = releaseLock;
+
+    const engageLock = (customY?: number) => {
+      if (!isDesktopWidth() || !inCaptureZone()) {
+        releaseLock();
+        return;
+      }
+      lockYRef.current = typeof customY === "number" ? customY : window.scrollY;
+      attachScrollLock();
+
+      if (lockExpiryTimerRef.current) {
+        window.clearTimeout(lockExpiryTimerRef.current);
+      }
+      lockExpiryTimerRef.current = window.setTimeout(() => {
+        releaseLock();
+      }, LOCK_EXPIRY_MS);
     };
 
     const stepTo = (dir: 1 | -1, rect: DOMRect) => {
@@ -297,8 +363,8 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
         suppressLockRef.current = true;
         window.scrollTo({ top: target, behavior: "smooth" });
         const timer = window.setTimeout(() => {
-          lockYRef.current = window.scrollY;
           suppressLockRef.current = false;
+          engageLock();
         }, 600);
         timersRef.current.push(timer);
       } else {
@@ -447,43 +513,25 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
       capture(dir);
     };
 
-    // True position lock: snaps back ANY page movement while engaged —
-    // in-flight Lenis glides from before entering the zone, sub-threshold
-    // trackpad momentum, or scrollbar drags. Scroll events don't bubble, so a
-    // window capture-phase listener observes every one of them.
-    const handleScrollLock = () => {
-      if (suppressLockRef.current) return;
-      if (lockYRef.current === null) return;
-      if (!isDesktopWidth()) {
-        releaseLock();
-        return;
-      }
-      const y = window.scrollY;
-      if (Math.abs(y - lockYRef.current) > 2) {
-        window.scrollTo(0, lockYRef.current);
-      }
-    };
-
     el.addEventListener("wheel", handleWheel, { passive: false });
     el.addEventListener("touchstart", handleTouchStart, { passive: true });
     el.addEventListener("touchmove", handleTouchMove, { passive: false });
     el.addEventListener("touchend", handleTouchEnd, { passive: true });
     window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("scroll", handleScrollLock, {
-      capture: true,
-      passive: true,
-    });
+
     return () => {
       el.removeEventListener("wheel", handleWheel);
       el.removeEventListener("touchstart", handleTouchStart);
       el.removeEventListener("touchmove", handleTouchMove);
       el.removeEventListener("touchend", handleTouchEnd);
       window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("scroll", handleScrollLock, { capture: true });
+      detachScrollLock();
       if (accumTimerRef.current) window.clearTimeout(accumTimerRef.current);
+      if (lockExpiryTimerRef.current) window.clearTimeout(lockExpiryTimerRef.current);
       timersRef.current.forEach((t) => window.clearTimeout(t));
       timersRef.current = [];
       releaseLock();
+      releaseLockRef.current = () => {};
     };
   }, [items.length, reduceMotion]);
 
