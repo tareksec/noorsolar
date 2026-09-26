@@ -77,6 +77,20 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
         descriptionBn: "বাংলাদেশের শীর্ষস্থানীয় সোলার সরঞ্জাম আমদানিকারক",
       },
       {
+        name: "Projects & Proof",
+        nameBn: "প্রকল্প রেফারেন্স",
+        href: "/projects",
+        description: "Verified commercial rooftop & industrial MW references",
+        descriptionBn: "বাণিজ্যিক ছাদ ও শিল্প কারখানার বাস্তব প্রকল্প রেফারেন্স",
+      },
+      {
+        name: "Client Reviews",
+        nameBn: "গ্রাহক মতামত",
+        href: "/reviews",
+        description: "Verified testimonials from factory & commercial buyers",
+        descriptionBn: "বাণিজ্যিক ও শিল্প ক্রেতাদের বাস্তব অভিজ্ঞতা ও মূল্যায়ন",
+      },
+      {
         name: "Certifications",
         nameBn: "সার্টিফিকেশন ও অনুমোদন",
         href: "/certifications",

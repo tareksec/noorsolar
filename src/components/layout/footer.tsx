@@ -136,6 +136,8 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
   ];
 
   const companyLinks = [
+    { href: "/projects", label: isBn ? "প্রকল্প রেফারেন্স" : "Projects & Proof" },
+    { href: "/reviews", label: isBn ? "গ্রাহক মতামত" : "Client Reviews" },
     { href: "/about", label: isBn ? "আমাদের সম্পর্কে" : "About" },
     { href: "/contact", label: isBn ? "যোগাযোগ" : "Contact" },
     { href: "/certifications", label: isBn ? "সার্টিফিকেশন" : "Certifications" },
