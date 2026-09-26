@@ -1,21 +1,16 @@
 import localFont from "next/font/local";
-import { Inter, JetBrains_Mono } from "next/font/google";
 
-export const inter = Inter({
+// Inter and JetBrains Mono are loaded via CSS (@import in globals.css)
+// This avoids next/font/google internal module resolution failures under Turbopack in Next.js 16.
+export const inter = {
   variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
-  weight: ["400", "500", "600", "700"],
-});
+  className: "font-sans",
+};
 
-export const jetbrainsMono = JetBrains_Mono({
+export const jetbrainsMono = {
   variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-  display: "swap",
-  preload: false,
-  weight: ["400", "500"],
-});
+  className: "font-mono",
+};
 
 // Scoutie Sans variable font from Google Fonts (weights 200..800, normal & italic)
 export const scoutieSans = localFont({
