@@ -4,16 +4,27 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { motion } from "framer-motion";
-import { MapPin, ArrowRight, ChevronLeft, ChevronRight, ShieldCheck, Sparkles } from "lucide-react";
+import { MapPin, ArrowRight, ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
 
 interface BuyerSegmentationProps {
   locale?: string;
 }
 
+/* ------------------------------------------------------------------ */
+/*  Shared transition presets                                          */
+/* ------------------------------------------------------------------ */
+const smoothEase = [0.22, 1, 0.36, 1] as const;
+
 export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
   const isBn = locale === "bn";
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+  const hasMovedRef = useRef(false);
 
   const toBnNumber = (num: number) => {
     if (!isBn) return num < 10 ? `0${num}` : `${num}`;
@@ -38,14 +49,14 @@ export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
     },
     {
       id: "commercial",
-      tabLabel: isBn ? "ইন্ডাস্ট্রিয়াল" : "Commercial",
+      tabLabel: isBn ? "ইন্ডাস্ট্রিয়াল" : "Commercial",
       badge: isBn ? "ফ্যাক্টরি ও রুফটপ" : "Factory & Rooftop",
       year: isBn ? "২০২৬ • ফ্যাক্টরি ও বাণিজ্যিক রুফটপ" : "2026 • Commercial & Industrial",
-      title: isBn ? "ইন্ডাস্ট্রিয়াল ও কমার্শিয়াল বায়ার" : "Commercial & Industrial Buyers",
+      title: isBn ? "ইন্ডাস্ট্রিয়াল ও কমার্শিয়াল বায়ার" : "Commercial & Industrial Buyers",
       subtitle: isBn
         ? "হাই-ভোল্টেজ BESS ব্যাটারি স্টোরেজ ও বাণিজ্যিক হাইব্রিড ইনভার্টার।"
         : "High-voltage BESS battery storage & commercial hybrid inverters.",
-      location: isBn ? "গাজীপুর, নারায়ণগঞ্জ ও সারা দেশ" : "Gazipur, Narayanganj & Nationwide",
+      location: isBn ? "গাজীপুর, নারায়ণগঞ্জ ও সারা দেশ" : "Gazipur, Narayanganj & Nationwide",
       metrics: isBn ? "MW স্কেল হাই-ভোল্টেজ স্টোরেজ" : "MW Scale Storage Systems",
       href: "/quote?segment=commercial",
       image: "/photos/about-commercial-plant.webp",
@@ -59,7 +70,7 @@ export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
       subtitle: isBn
         ? "রেডি ডিপো স্টক, দ্রুততম ডেলিভারি ও সেরা পাইকারি মার্জিন সুবিধা।"
         : "Ready central warehouse stock, prompt delivery, and wholesale margins.",
-      location: isBn ? "ঢাকা সেন্ট্রাল ওয়্যারহাউস হাব" : "Dhaka Central Warehouse Hub",
+      location: isBn ? "ঢাকা সেন্ট্রাল ওয়্যারহাউস হাব" : "Dhaka Central Warehouse Hub",
       metrics: isBn ? "রেডি স্টক থেকে তাৎক্ষণিক ডেলিভারি" : "Ready Warehouse Stock Delivery",
       href: "/quote?segment=reseller",
       image: "/photos/b2b-warehouse-stock.webp",
@@ -80,7 +91,7 @@ export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
     },
   ];
 
-  // Scroll to a specific card smoothly
+  // Scroll to a specific card smoothly and center it
   const scrollToCard = useCallback((index: number) => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -91,11 +102,8 @@ export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
       const containerRect = container.getBoundingClientRect();
       const cardRect = targetCard.getBoundingClientRect();
 
-      // Center the card in container view on larger screens, left-aligned on mobile
-      const isMobile = window.innerWidth < 768;
-      const offset = isMobile
-        ? targetCard.offsetLeft - container.offsetLeft - 16
-        : targetCard.offsetLeft - container.offsetLeft - (containerRect.width - cardRect.width) / 2;
+      const offset =
+        targetCard.offsetLeft - container.offsetLeft - (containerRect.width - cardRect.width) / 2;
 
       container.scrollTo({
         left: Math.max(0, offset),
@@ -113,27 +121,28 @@ export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
     scrollToCard(nextIndex);
   };
 
-  // Sync activeIndex with user touch or trackpad scrolling
+  // Sync activeIndex with scroll position using RAF for ultra-smooth updates
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    let timeoutId: NodeJS.Timeout;
+    let rafId: number;
     const handleScroll = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
         if (!container) return;
         const cards = container.querySelectorAll<HTMLElement>("[data-segment-card]");
         if (!cards.length) return;
 
-        const containerLeft = container.scrollLeft;
-        const containerMid = containerLeft + container.clientWidth / 2;
+        const containerRect = container.getBoundingClientRect();
+        const containerMid = containerRect.left + containerRect.width / 2;
 
         let closestIndex = 0;
         let minDiff = Infinity;
 
         cards.forEach((card, idx) => {
-          const cardMid = card.offsetLeft + card.offsetWidth / 2;
+          const cardRect = card.getBoundingClientRect();
+          const cardMid = cardRect.left + cardRect.width / 2;
           const diff = Math.abs(containerMid - cardMid);
           if (diff < minDiff) {
             minDiff = diff;
@@ -141,24 +150,74 @@ export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
           }
         });
 
-        setActiveIndex(closestIndex);
-      }, 60);
+        setActiveIndex((prev) => (prev !== closestIndex ? closestIndex : prev));
+      });
     };
 
     container.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
-      clearTimeout(timeoutId);
+      cancelAnimationFrame(rafId);
       container.removeEventListener("scroll", handleScroll);
     };
-  }, [segments.length]);
+  }, []);
+
+  // Desktop mouse drag to scroll
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    isDraggingRef.current = true;
+    hasMovedRef.current = false;
+    startXRef.current = e.pageX - container.offsetLeft;
+    scrollLeftRef.current = container.scrollLeft;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDraggingRef.current) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    e.preventDefault();
+    const x = e.pageX - container.offsetLeft;
+    const walk = (x - startXRef.current) * 1.4;
+    if (Math.abs(walk) > 6) {
+      hasMovedRef.current = true;
+    }
+    container.scrollLeft = scrollLeftRef.current - walk;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    isDraggingRef.current = false;
+  };
+
+  // Auto-scroll tab into view on mobile when activeIndex changes
+  useEffect(() => {
+    const tabsContainer = tabsContainerRef.current;
+    if (!tabsContainer) return;
+    const tabWrapper = tabsContainer.firstElementChild as HTMLElement;
+    if (!tabWrapper) return;
+    const activeTabBtn = tabWrapper.children[activeIndex] as HTMLElement;
+    if (activeTabBtn) {
+      const targetScroll =
+        activeTabBtn.offsetLeft - (tabsContainer.offsetWidth - activeTabBtn.offsetWidth) / 2;
+      tabsContainer.scrollTo({
+        left: Math.max(0, targetScroll),
+        behavior: "smooth",
+      });
+    }
+  }, [activeIndex]);
 
   return (
     <section className="py-14 sm:py-20 lg:py-24 bg-[#F7F8F5] text-[#17251F] border-b border-[#DCE4E0] relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ========================================================
-            SECTION HEADER
+            SECTION HEADER — Entrance animation
             ======================================================== */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12 mb-8 sm:mb-10">
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: smoothEase }}
+          className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12 mb-8 sm:mb-10"
+        >
           <div>
             {/* Eyebrow */}
             <div className="flex items-center gap-2 mb-2.5">
@@ -199,7 +258,8 @@ export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
             {/* Prev / Next Buttons & Counter */}
             <div className="flex items-center gap-3 shrink-0 self-start sm:self-auto">
               <span className="text-xs font-mono font-semibold text-[#62706A]">
-                <strong className="text-[#074031] text-sm">{toBnNumber(activeIndex + 1)}</strong> / {toBnNumber(segments.length)}
+                <strong className="text-[#074031] text-sm">{toBnNumber(activeIndex + 1)}</strong> /{" "}
+                {toBnNumber(segments.length)}
               </span>
 
               <div className="flex items-center gap-1.5">
@@ -224,12 +284,19 @@ export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* ========================================================
-            ANIMATED TAB PILLS (Framer Motion layoutId active pill)
+            ANIMATED TAB PILLS — with Framer Motion layoutId spring
             ======================================================== */}
-        <div className="mb-6 sm:mb-8 overflow-x-auto scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+        <motion.div
+          ref={tabsContainerRef}
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5, ease: smoothEase, delay: 0.1 }}
+          className="mb-6 sm:mb-8 overflow-x-auto scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0"
+        >
           <div className="inline-flex items-center gap-1.5 sm:gap-2 p-1.5 rounded-full bg-white border border-[#DCE4E0] shadow-xs">
             {segments.map((seg, idx) => {
               const isActive = activeIndex === idx;
@@ -261,172 +328,202 @@ export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
               );
             })}
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* ========================================================
-          HORIZONTAL SHOWCASE TRACK (Smooth, Touch-friendly, Responsive)
+          HORIZONTAL SHOWCASE TRACK — Framer Motion Animated Cards
           ======================================================== */}
-      <div
-        ref={scrollContainerRef}
-        style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-x pan-y" }}
-        className="flex items-stretch gap-5 lg:gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 sm:px-6 lg:px-[calc((100vw-1280px)/2+2rem)] pb-4 pt-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ duration: 0.6, ease: smoothEase, delay: 0.15 }}
+        className="w-full relative"
       >
-        {segments.map((seg, idx) => {
-          const isActive = activeIndex === idx;
+        <div
+          ref={scrollContainerRef}
+          data-lenis-prevent
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUpOrLeave}
+          onMouseLeave={handleMouseUpOrLeave}
+          style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-x pan-y" }}
+          className="flex items-stretch gap-4 sm:gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 sm:px-6 lg:px-[calc((100vw-1280px)/2+2rem)] pb-4 pt-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden cursor-grab active:cursor-grabbing select-none"
+        >
+          {segments.map((seg, idx) => {
+            const isActive = activeIndex === idx;
 
-          return (
-            <div
-              key={seg.id}
-              data-segment-card
-              className="shrink-0 snap-center transition-all duration-300"
-            >
-              {/* ----------------------------------------------------
-                  DESKTOP CARD (Screens >= 768px: Wide 2-Column Poster)
-                  ---------------------------------------------------- */}
+            return (
               <div
-                className={`hidden md:flex flex-row w-[700px] lg:w-[800px] h-[360px] lg:h-[380px] rounded-[28px] overflow-hidden bg-white border transition-all duration-300 group ${
-                  isActive
-                    ? "border-[#074031]/40 shadow-2xl shadow-[#052F25]/[0.10] scale-[1.01]"
-                    : "border-[#DCE4E0] shadow-md shadow-[#052F25]/[0.04] opacity-90 hover:opacity-100"
-                }`}
+                key={seg.id}
+                data-segment-card
+                className="shrink-0 snap-center"
               >
-                {/* Left Column: Brand Deep Green Gradient */}
-                <div className="w-[48%] bg-gradient-to-br from-[#074031] via-[#052F25] to-[#04241C] p-6 lg:p-7 flex flex-col justify-between text-white relative overflow-hidden select-none">
-                  {/* Subtle Solar Ambient Glow */}
-                  <div
-                    className="absolute -top-14 -left-14 w-48 h-48 rounded-full pointer-events-none opacity-20"
-                    style={{
-                      background: "radial-gradient(circle, #FEBE16 0%, transparent 70%)",
-                    }}
-                  />
+                {/* ============================================
+                    DESKTOP CARD (>= 768px): 2-column poster
+                    ============================================ */}
+                <motion.div
+                  animate={{
+                    scale: isActive ? 1 : 0.96,
+                    opacity: isActive ? 1 : 0.78,
+                  }}
+                  whileHover={{ y: -3 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                  className="hidden md:flex flex-row w-[700px] lg:w-[800px] h-[360px] lg:h-[380px] rounded-[28px] overflow-hidden bg-white border group transition-shadow duration-300"
+                  style={{
+                    borderColor: isActive ? "rgba(7,64,49,0.35)" : "#DCE4E0",
+                    boxShadow: isActive
+                      ? "0 22px 50px -12px rgba(5,47,37,0.2), 0 0 0 1.5px rgba(254,190,22,0.65)"
+                      : "0 4px 16px -4px rgba(5,47,37,0.06)",
+                  }}
+                >
+                  {/* Left Column */}
+                  <div className="w-[48%] bg-gradient-to-br from-[#074031] via-[#052F25] to-[#04241C] p-6 lg:p-7 flex flex-col justify-between text-white relative overflow-hidden select-none">
+                    <div
+                      className="absolute -top-14 -left-14 w-48 h-48 rounded-full pointer-events-none opacity-20"
+                      style={{
+                        background: "radial-gradient(circle, #FEBE16 0%, transparent 70%)",
+                      }}
+                    />
 
-                  {/* Top Tags */}
-                  <div className="relative z-10 flex items-center justify-between gap-2">
-                    <span className="text-[#FEBE16] text-xs font-mono font-bold tracking-wider uppercase">
-                      {seg.year}
-                    </span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-[#FEBE16]/15 border border-[#FEBE16]/30 text-[#FEBE16] text-[10px] font-mono font-semibold">
-                      {seg.badge}
-                    </span>
-                  </div>
+                    <div className="relative z-10 flex items-center justify-between gap-2">
+                      <span className="text-[#FEBE16] text-xs font-mono font-bold tracking-wider uppercase">
+                        {seg.year}
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#FEBE16]/15 border border-[#FEBE16]/30 text-[#FEBE16] text-[10px] font-mono font-semibold">
+                        {seg.badge}
+                      </span>
+                    </div>
 
-                  {/* Center Content */}
-                  <div className="relative z-10 my-auto py-1">
-                    <h3 className="text-2xl lg:text-[25px] font-black tracking-tight text-white leading-tight mb-2">
-                      {seg.title}
-                    </h3>
-                    <p className="text-xs lg:text-sm text-white/80 leading-relaxed mb-3">
-                      {seg.subtitle}
-                    </p>
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/90 text-xs font-mono">
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#FEBE16]" />
-                      <span>{seg.metrics}</span>
+                    <div className="relative z-10 my-auto py-1">
+                      <h3 className="text-2xl lg:text-[25px] font-black tracking-tight text-white leading-tight mb-2">
+                        {seg.title}
+                      </h3>
+                      <p className="text-xs lg:text-sm text-white/80 leading-relaxed mb-3">
+                        {seg.subtitle}
+                      </p>
+                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-white/90 text-xs font-mono">
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#FEBE16]" />
+                        <span>{seg.metrics}</span>
+                      </div>
+                    </div>
+
+                    <div className="relative z-10 pt-3 border-t border-white/15 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 text-white/85 text-xs font-medium truncate">
+                        <MapPin className="w-3.5 h-3.5 shrink-0 text-[#FEBE16]" />
+                        <span className="truncate">{seg.location}</span>
+                      </div>
+
+                      <Link
+                        href={seg.href}
+                        onClick={(e) => {
+                          if (hasMovedRef.current) e.preventDefault();
+                        }}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] text-xs font-bold transition-all shadow-md shadow-[#FEBE16]/25 group/btn cursor-pointer shrink-0"
+                      >
+                        <span>{isBn ? "কোটেশন নিন" : "Get Quote"}</span>
+                        <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] group-hover/btn:translate-x-0.5 transition-transform" />
+                      </Link>
                     </div>
                   </div>
 
-                  {/* Bottom Location & Action Button */}
-                  <div className="relative z-10 pt-3 border-t border-white/15 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5 text-white/85 text-xs font-medium truncate">
-                      <MapPin className="w-3.5 h-3.5 shrink-0 text-[#FEBE16]" />
+                  {/* Right Column: Photo */}
+                  <div className="w-[52%] h-full relative overflow-hidden bg-[#F1F4F1]">
+                    <Image
+                      src={seg.image}
+                      alt={seg.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      sizes="(min-width: 1024px) 450px, 380px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#052F25]/45 via-transparent to-transparent opacity-60" />
+                  </div>
+                </motion.div>
+
+                {/* ============================================
+                    MOBILE CARD (< 768px): Vertical layout
+                    ============================================ */}
+                <motion.div
+                  animate={{
+                    scale: isActive ? 1 : 0.95,
+                    opacity: isActive ? 1 : 0.85,
+                  }}
+                  transition={{ type: "spring", stiffness: 350, damping: 28 }}
+                  className="flex md:hidden flex-col w-[84vw] max-w-[340px] rounded-[24px] overflow-hidden bg-white border transition-shadow duration-300"
+                  style={{
+                    borderColor: isActive ? "rgba(7,64,49,0.3)" : "#DCE4E0",
+                    boxShadow: isActive
+                      ? "0 16px 40px -10px rgba(5,47,37,0.18), 0 0 0 1.5px rgba(254,190,22,0.6)"
+                      : "0 2px 10px -2px rgba(5,47,37,0.05)",
+                  }}
+                >
+                  {/* Image Banner */}
+                  <div className="relative h-44 w-full overflow-hidden bg-[#F1F4F1]">
+                    <Image
+                      src={seg.image}
+                      alt={seg.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 84vw, 340px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#052F25]/85 via-[#052F25]/25 to-transparent" />
+
+                    <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
+                      <span className="px-2.5 py-1 rounded-full bg-[#052F25]/85 backdrop-blur-md border border-white/20 text-[#FEBE16] text-[10px] font-mono font-bold tracking-wider uppercase">
+                        {seg.badge}
+                      </span>
+                      <span className="px-2.5 py-1 rounded-full bg-[#FEBE16] text-[#052F25] text-[10px] font-mono font-bold shadow-xs">
+                        {seg.metrics}
+                      </span>
+                    </div>
+
+                    <div className="absolute bottom-2.5 left-3 right-3 flex items-center gap-1.5 text-white text-[11px] font-medium drop-shadow-sm truncate">
+                      <MapPin className="w-3.5 h-3.5 text-[#FEBE16] shrink-0" />
                       <span className="truncate">{seg.location}</span>
+                    </div>
+                  </div>
+
+                  {/* Card Body */}
+                  <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-white">
+                    <div>
+                      <span className="text-[11px] font-mono font-bold text-[#074031] uppercase tracking-wider block mb-1">
+                        {seg.year}
+                      </span>
+                      <h3 className="text-lg font-black tracking-tight text-[#17251F] leading-snug mb-1.5">
+                        {seg.title}
+                      </h3>
+                      <p className="text-xs text-[#62706A] leading-relaxed mb-4">
+                        {seg.subtitle}
+                      </p>
                     </div>
 
                     <Link
                       href={seg.href}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] text-xs font-bold transition-all shadow-md shadow-[#FEBE16]/25 group/btn cursor-pointer shrink-0"
+                      className="w-full py-2.5 px-4 rounded-xl bg-[#074031] hover:bg-[#0B513E] active:bg-[#04241C] text-white flex items-center justify-center gap-2 text-xs font-bold transition-colors shadow-xs cursor-pointer"
                     >
-                      <span>{isBn ? "কোটেশন নিন" : "Get Quote"}</span>
-                      <ArrowRight className="w-3.5 h-3.5 stroke-[2.5] group-hover/btn:translate-x-0.5 transition-transform" />
+                      <span>{isBn ? "কোটেশন নিন" : "Request Quote"}</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-[#FEBE16] stroke-[2.5]" />
                     </Link>
                   </div>
-                </div>
-
-                {/* Right Column: Full-Bleed Real Equipment Photography */}
-                <div className="w-[52%] h-full relative overflow-hidden bg-[#F1F4F1]">
-                  <Image
-                    src={seg.image}
-                    alt={seg.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                    sizes="(min-width: 1024px) 450px, 380px"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#052F25]/45 via-transparent to-transparent opacity-60" />
-                </div>
+                </motion.div>
               </div>
-
-              {/* ----------------------------------------------------
-                  MOBILE CARD (Screens < 768px: Rich Vertical Layout)
-                  ---------------------------------------------------- */}
-              <div
-                className={`flex md:hidden flex-col w-[85vw] max-w-[340px] rounded-[24px] overflow-hidden bg-white border transition-all duration-300 ${
-                  isActive
-                    ? "border-[#074031]/40 shadow-xl shadow-[#052F25]/[0.08]"
-                    : "border-[#DCE4E0] shadow-md shadow-[#052F25]/[0.03]"
-                }`}
-              >
-                {/* Top Image Banner with Badges & Location Overlay */}
-                <div className="relative h-44 w-full overflow-hidden bg-[#F1F4F1]">
-                  <Image
-                    src={seg.image}
-                    alt={seg.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 640px) 85vw, 340px"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#052F25]/85 via-[#052F25]/25 to-transparent" />
-
-                  {/* Badges on Image */}
-                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-                    <span className="px-2.5 py-1 rounded-full bg-[#052F25]/85 backdrop-blur-md border border-white/20 text-[#FEBE16] text-[10px] font-mono font-bold tracking-wider uppercase">
-                      {seg.badge}
-                    </span>
-                    <span className="px-2.5 py-1 rounded-full bg-[#FEBE16] text-[#052F25] text-[10px] font-mono font-bold shadow-xs">
-                      {seg.metrics}
-                    </span>
-                  </div>
-
-                  {/* Location Pin Tag on Image Bottom */}
-                  <div className="absolute bottom-2.5 left-3 right-3 flex items-center gap-1.5 text-white text-[11px] font-medium drop-shadow-sm truncate">
-                    <MapPin className="w-3.5 h-3.5 text-[#FEBE16] shrink-0" />
-                    <span className="truncate">{seg.location}</span>
-                  </div>
-                </div>
-
-                {/* Card Body */}
-                <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-white">
-                  <div>
-                    <span className="text-[11px] font-mono font-bold text-[#074031] uppercase tracking-wider block mb-1">
-                      {seg.year}
-                    </span>
-                    <h3 className="text-lg font-black tracking-tight text-[#17251F] leading-snug mb-1.5">
-                      {seg.title}
-                    </h3>
-                    <p className="text-xs text-[#62706A] leading-relaxed mb-4">
-                      {seg.subtitle}
-                    </p>
-                  </div>
-
-                  <Link
-                    href={seg.href}
-                    className="w-full py-2.5 px-4 rounded-xl bg-[#074031] hover:bg-[#0B513E] active:bg-[#04241C] text-white flex items-center justify-center gap-2 text-xs font-bold transition-colors shadow-xs cursor-pointer"
-                  >
-                    <span>{isBn ? "কোটেশন নিন" : "Request Quote"}</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-[#FEBE16] stroke-[2.5]" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-        {/* End of track spacer */}
-        <div className="w-2 shrink-0" aria-hidden="true" />
-      </div>
+            );
+          })}
+          <div className="w-2 shrink-0" aria-hidden="true" />
+        </div>
+      </motion.div>
 
       {/* ========================================================
-          BOTTOM PAGINATION DOTS
+          BOTTOM PAGINATION DOTS & HINT
           ======================================================== */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 flex items-center justify-between">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.4, ease: "easeOut" as const, delay: 0.25 }}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 flex items-center justify-between"
+      >
         <div className="flex items-center gap-2">
           {segments.map((_, dotIdx) => (
             <button
@@ -447,7 +544,7 @@ export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
           <span>{isBn ? "সোয়াইপ করে সম্পূর্ণ দেখুন" : "Swipe to explore all"}</span>
           <span className="text-[#FEBE16] font-bold">→</span>
         </p>
-      </div>
+      </motion.div>
     </section>
   );
 }
