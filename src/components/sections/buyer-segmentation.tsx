@@ -1,164 +1,372 @@
-import React from "react";
+"use client";
+
+import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import { HardHat, Building2, Store, ArrowRight, Check } from "lucide-react";
-import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { MapPin, ArrowRight, ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
 
 interface BuyerSegmentationProps {
   locale?: string;
 }
 
-export function BuyerSegmentation({ locale }: BuyerSegmentationProps) {
+export function BuyerSegmentation({ locale = "en" }: BuyerSegmentationProps) {
   const isBn = locale === "bn";
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const mobileScrollRef = useRef<HTMLDivElement>(null);
+
+  const [scrollRange, setScrollRange] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const segments = [
     {
       id: "epc",
-      icon: HardHat,
-      title: isBn ? "সোলার EPC ও ইনস্টলেশন ঠিকাদার" : "Solar EPCs & Installers",
-      badge: isBn ? "প্রজেক্ট প্রকিউরমেন্ট" : "Project Procurement",
-      description: isBn
-        ? "বাণিজ্যিক ও ইউটিলিটি স্কেল সোলার প্রজেক্টের জন্য সরাসরি কন্টেইনার ও প্রজেক্ট লট ইকুইপমেন্ট সরবরাহ।"
-        : "Engineered equipment procurement and technical matching for commercial & utility projects.",
-      points: isBn
-        ? [
-            "প্রজেক্টভিত্তিক ইকুইপমেন্ট সংগ্রহ ও কন্টেইনার ইনডেন্ট",
-            "রেডি স্টক থেকে ১ প্যালেট বা বাল্ক ভলিউম সরবরাহ",
-            "অফিসিয়াল টেকনিক্যাল ডেটাশিট ও স্পেসিফিকেশন সাপোর্ট",
-          ]
-        : [
-            "Project procurement & container indent",
-            "Pallet and bulk volume supply",
-            "Technical product matching & datasheets",
-          ],
-      ctaText: isBn ? "প্রজেক্ট কোটেশন নিন" : "Request Project Quote",
+      year: isBn ? "২০২৬ – প্রজেক্ট ইনডেন্ট ও বাল্ক সাপ্লাই" : "2026 – Project Indent & Supply",
+      title: isBn ? "সোলার EPC ও ইনস্টলার" : "Solar EPCs & Installers",
+      subtitle: isBn ? "কন্টেইনার ইনডেন্ট ও প্রজেক্ট ইকুইপমেন্ট" : "Container Indent & Project Supply",
+      location: isBn ? "চট্টগ্রাম পোর্ট ও ঢাকা সেন্ট্রাল ডিপো" : "Chittagong Port & Dhaka Depot",
+      metrics: isBn ? "১ প্যালেট থেকে মেগা-ইনডেন্ট" : "1 Pallet to Mega Indent",
       href: "/quote?segment=epc",
+      image: "/photos/b2b-container-indent.webp",
     },
     {
       id: "commercial",
-      icon: Building2,
-      title: isBn ? "বাণিজ্যিক ও শিল্প প্রতিষ্ঠান (C&I)" : "Industrial & Commercial Buyers",
-      badge: isBn ? "কারখানা ও বাণিজ্যিক রুফটপ" : "Factory & Commercial",
-      description: isBn
-        ? "কারখানার রুফটপ ও বাণিজ্যিক স্থাপনার জন্য উচ্চ ক্ষমতাসম্পন্ন সোলার প্যানেল, ইনভার্টার ও স্টোরেজ।"
-        : "Direct equipment supply for factory rooftops, industrial facilities, and commercial storage.",
-      points: isBn
-        ? [
-            "শিল্প কারখানার রুফটপ সোলার ইকুইপমেন্ট সরবরাহ",
-            "হাই-ভোল্টেজ LiFePO4 ব্যাটারি এনার্জি স্টোরেজ (BESS)",
-            "কমার্শিয়াল ইনভার্টার ও গ্রিড সিঙ্ক্রোনাইজেশন ইকুইপমেন্ট",
-          ]
-        : [
-            "Factory & commercial solar procurement",
-            "High-voltage LiFePO4 battery storage",
-            "Inverter and project equipment supply",
-          ],
-      ctaText: isBn ? "বাণিজ্যিক কোটেশন নিন" : "Request Commercial Quote",
+      year: isBn ? "২০২৬ – ফ্যাক্টরি ও বাণিজ্যিক রুফটপ" : "2025 – Commercial & Industrial",
+      title: isBn ? "ইন্ডাস্ট্রিয়াল ও কমার্শিয়াল বায়ার" : "Commercial & Industrial",
+      subtitle: isBn ? "হাই-ভোল্টেজ BESS ও ইনভার্টার" : "High-Voltage BESS & Inverters",
+      location: isBn ? "গাজীপুর, নারায়ণগঞ্জ ও সারা দেশ" : "Nationwide Industrial Delivery",
+      metrics: isBn ? "MW স্কেল হাই-ভোল্টেজ স্টোরেজ" : "MW Scale Storage Systems",
       href: "/quote?segment=commercial",
+      image: "/photos/about-commercial-plant.webp",
     },
     {
       id: "resellers",
-      icon: Store,
+      year: isBn ? "২০২৬ – পাইকারি ডিলার নেটওয়ার্ক" : "2026 – Wholesale Dealer Network",
       title: isBn ? "সোলার ডিলার ও রিসেলার" : "Dealers & Resellers",
-      badge: isBn ? "পাইকারি রি-সাপ্লাই" : "Wholesale & Volume",
-      description: isBn
-        ? "সারাদেশের সোলার ইকুইপমেন্ট বিক্রেতা ও ডিলারদের জন্য নিয়মিত ডিপো স্টক ও আকর্ষণীয় পাইকারি মূল্য।"
-        : "Reliable wholesale inventory, repeat pallet supply, and volume pricing for regional trade.",
-      points: isBn
-        ? [
-            "১ প্যালেট থেকে সরাসরি পাইকারি ক্রয়ের সুবিধা",
-            "ঢাকা সেন্ট্রাল ডিপো থেকে নিয়মিত রিপিট সাপ্লাই",
-            "প্রতিযোগিতামূলক B2B মার্জিন ও দ্রুত ডেলিভারি",
-          ]
-        : [
-            "Wholesale purchasing from 1 pallet",
-            "Repeat supply from ready warehouse inventory",
-            "Volume enquiries & competitive wholesale margins",
-          ],
-      ctaText: isBn ? "ডিলার কোটেশন নিন" : "Inquire for Dealership",
+      subtitle: isBn ? "রেডি ডিপো স্টক ও ভলিউম মার্জিন" : "Ready Depot Stock & Margins",
+      location: isBn ? "ঢাকা সেন্ট্রাল ওয়্যারহাউস হাব" : "Dhaka Central Warehouse Hub",
+      metrics: isBn ? "১ প্যালেট থেকে সেন্ট্রাল ডিপো স্টক" : "1 Pallet Ready Warehouse Stock",
       href: "/quote?segment=reseller",
+      image: "/photos/b2b-warehouse-stock.webp",
+    },
+    {
+      id: "utility",
+      year: isBn ? "২০২৬ – ইউটিলিটি স্কেল গ্রিড সাপ্লাই" : "2026 – Utility Scale Projects",
+      title: isBn ? "ইউটিলিটি ও সোলার পার্ক" : "Utility Scale Solar Parks",
+      subtitle: isBn ? "মেগা ইনডেন্ট ও সেন্ট্রাল ইনভার্টার" : "Mega Indent & Central Inverters",
+      location: isBn ? "সরাসরি পোর্ট-টু-সাইট লজিস্টিকস" : "Direct Port-to-Site Logistics",
+      metrics: isBn ? "টিয়ার-১ সার্টিফাইড ইকুইপমেন্ট" : "Tier-1 Certified Consignments",
+      href: "/quote?segment=utility",
+      image: "/photos/hero-solar-field.webp",
     },
   ];
 
+  // Measure scrollable track width dynamically
+  useEffect(() => {
+    const calculateRange = () => {
+      if (trackRef.current) {
+        const trackWidth = trackRef.current.scrollWidth;
+        const viewportWidth = window.innerWidth;
+        const distance = Math.max(0, trackWidth - viewportWidth + 80);
+        setScrollRange(distance);
+      }
+    };
+
+    calculateRange();
+    window.addEventListener("resize", calculateRange);
+    return () => window.removeEventListener("resize", calculateRange);
+  }, []);
+
+  // Framer Motion pinned scroll on desktop
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 24,
+    restDelta: 0.001,
+  });
+
+  const x = useTransform(smoothProgress, [0, 1], [0, -scrollRange]);
+
+  // Update active slide based on scroll
+  useEffect(() => {
+    return scrollYProgress.on("change", (latest) => {
+      const index = Math.min(
+        segments.length - 1,
+        Math.floor(latest * segments.length)
+      );
+      setActiveSlide(index);
+    });
+  }, [scrollYProgress, segments.length]);
+
+  const scrollToSlide = (index: number) => {
+    if (sectionRef.current) {
+      const top = sectionRef.current.offsetTop;
+      const height = sectionRef.current.offsetHeight - window.innerHeight;
+      const targetScroll = top + (index / (segments.length - 1)) * height;
+      window.scrollTo({ top: targetScroll, behavior: "smooth" });
+    }
+  };
+
   return (
-    <section className="py-12 lg:py-16 bg-[#F1F4F1] border-b border-[#DCE4E0]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <Reveal y={20} duration={0.6}>
-          <div className="max-w-3xl mb-8 lg:mb-10">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="w-2 h-2 rounded-full bg-[#074031] inline-block" />
-              <span className="text-xs font-mono uppercase tracking-wider text-[#62706A] font-semibold">
-                {isBn ? "B2B ক্লায়েন্ট ও ক্রেতা" : "B2B Buyer Segmentation"}
+    <div className="relative w-full bg-[#F7F8F5] text-[#17251F] overflow-clip">
+      {/* ========================================================
+          DESKTOP PINNED HORIZONTAL SCROLL (Solar Noor Brand Theme)
+          ======================================================== */}
+      <section
+        ref={sectionRef}
+        className="hidden md:block relative h-[280vh] w-full"
+      >
+        <div className="sticky top-0 h-screen w-full flex flex-col justify-between pt-8 lg:pt-10 pb-20 lg:pb-24 px-6 lg:px-12 overflow-hidden">
+          {/* Top Header: Eyebrow + 2-Column Title & Description */}
+          <div className="max-w-7xl mx-auto w-full shrink-0">
+            {/* Eyebrow */}
+            <div className="flex items-center gap-2 mb-2.5">
+              <span className="w-2.5 h-2.5 rounded-full border border-[#074031] flex items-center justify-center">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FEBE16]" />
+              </span>
+              <span className="text-xs font-mono font-bold tracking-widest text-[#074031] uppercase">
+                {isBn ? "আমাদের প্রজেক্ট ও সেগমেন্ট" : "Our Projects & Segments"}
               </span>
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-[#074031]">
-              {isBn ? "প্রতিটি স্তরের B2B সোলার সংগ্রহে নির্ভরযোগ্য পার্টনার" : "Built for Every Scale of B2B Solar Procurement"}
-            </h2>
-            <p className="mt-2.5 text-xs sm:text-sm text-[#62706A] max-w-2xl leading-relaxed">
-              {isBn
-                ? "সরাসরি আমদানিকারক হিসেবে আমরা বাংলাদেশের EPC ঠিকাদার, বাণিজ্যিক প্রতিষ্ঠান ও আঞ্চলিক ডিলারদের প্রজেক্ট স্কেলে ইকুইপমেন্ট সরবরাহ করি।"
-                : "Direct importer supplying EPC contractors, industrial facilities, and regional wholesale dealers across Bangladesh."}
-            </p>
-          </div>
-        </Reveal>
 
-        {/* 3 Buyer Segmentation Cards */}
-        <RevealGroup stagger={0.08} className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 items-stretch">
-          {segments.map((seg) => {
-            const Icon = seg.icon;
-            return (
-              <RevealItem key={seg.id} y={22}>
+            {/* Title & Description Row */}
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-12">
+              <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-black tracking-tight text-[#17251F] leading-[1.08] max-w-xl">
+                {isBn ? (
+                  <>
+                    সম্পূর্ণ সোলার <br />
+                    প্রকিউরমেন্ট সলিউশন
+                  </>
+                ) : (
+                  <>
+                    Complete Solar <br />
+                    Procurement Solutions
+                  </>
+                )}
+              </h2>
+
+              <div className="flex items-center gap-6">
+                <div className="border-l-2 border-[#FEBE16] pl-4 sm:pl-5 max-w-md">
+                  <p className="text-xs sm:text-sm text-[#62706A] leading-relaxed">
+                    {isBn
+                      ? "বাংলাদেশের EPC ঠিকাদার, বাণিজ্যিক প্রতিষ্ঠান ও আঞ্চলিক পাইকারি ডিলারদের জন্য নির্ভরযোগ্য সোলার ইকুইপমেন্ট ও কন্টেইনার সরবরাহ।"
+                      : "Everything you need to supply commercial solar installations, EPC project indents, and wholesale distribution across Bangladesh."}
+                  </p>
+                </div>
+
+                {/* Arrow Controls */}
+                <div className="hidden xl:flex items-center gap-2 pl-4">
+                  <button
+                    onClick={() => scrollToSlide(Math.max(0, activeSlide - 1))}
+                    disabled={activeSlide === 0}
+                    aria-label="Previous slide"
+                    className="w-10 h-10 rounded-full border border-[#DCE4E0] bg-white hover:bg-[#F1F4F1] text-[#074031] disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center transition-colors shadow-xs"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() =>
+                      scrollToSlide(Math.min(segments.length - 1, activeSlide + 1))
+                    }
+                    disabled={activeSlide === segments.length - 1}
+                    aria-label="Next slide"
+                    className="w-10 h-10 rounded-full border border-[#DCE4E0] bg-white hover:bg-[#F1F4F1] text-[#074031] disabled:opacity-30 disabled:pointer-events-none flex items-center justify-center transition-colors shadow-xs"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Cards Track (Translates horizontally with scroll) */}
+          <div className="relative w-full my-auto overflow-visible">
+            <motion.div
+              ref={trackRef}
+              style={{ x }}
+              className="flex items-center gap-6 will-change-transform pl-4 lg:pl-12"
+            >
+              {segments.map((seg) => (
                 <div
-                  className="bg-white rounded-[28px] border border-[#DCE4E0] p-6 sm:p-7 shadow-xs flex flex-col justify-between hover:border-[#074031]/40 transition-all duration-200 group h-full"
+                  key={seg.id}
+                  className="w-[680px] lg:w-[760px] h-[340px] lg:h-[375px] shrink-0 rounded-[28px] overflow-hidden flex flex-row bg-white border border-[#DCE4E0] shadow-2xl shadow-[#052F25]/[0.08] group"
                 >
-                  <div>
-                    {/* Top Bar: Icon & Badge */}
-                    <div className="flex items-center justify-between gap-2 mb-5">
-                      <div className="w-11 h-11 rounded-2xl bg-[#F1F4F1] group-hover:bg-[#FEBE16] transition-colors flex items-center justify-center text-[#074031] group-hover:text-[#052F25] shrink-0">
-                        <Icon className="w-5 h-5 stroke-[1.8]" />
-                      </div>
-                      <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-[#074031]/10 text-[#074031] border border-[#074031]/25">
-                        {seg.badge}
-                      </span>
+                  {/* Left Column: Signature Deep Brand Green (#074031) */}
+                  <div className="w-[45%] lg:w-[44%] shrink-0 bg-gradient-to-br from-[#074031] via-[#052F25] to-[#04241C] p-6 lg:p-8 flex flex-col justify-between select-none relative overflow-hidden">
+                    {/* Subtle Solar Radial Glow Overlay */}
+                    <div
+                      className="absolute -top-12 -left-12 w-48 h-48 rounded-full pointer-events-none opacity-20"
+                      style={{
+                        background: "radial-gradient(circle, #FEBE16 0%, transparent 70%)",
+                      }}
+                    />
+
+                    {/* Top Tag: Solar Gold Accent */}
+                    <div className="relative z-10">
+                      <h4 className="text-[#FEBE16] text-xs lg:text-[13px] font-mono font-bold tracking-wider uppercase">
+                        {seg.year}
+                      </h4>
                     </div>
 
-                    {/* Title & Description */}
-                    <h3 className="text-lg sm:text-xl font-bold text-[#17251F] mb-2 leading-tight">
-                      {seg.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-[#62706A] leading-relaxed mb-5">
-                      {seg.description}
-                    </p>
+                    {/* Middle: Crisp White Title + Light Mint/Silver Subtitle */}
+                    <div className="my-auto py-1.5 relative z-10">
+                      <h3 className="text-2xl lg:text-[27px] font-black tracking-tight leading-tight text-white mb-1.5">
+                        {seg.title}
+                      </h3>
+                      <p className="text-xs lg:text-sm font-medium text-white/75 leading-snug">
+                        {seg.subtitle}
+                      </p>
 
-                    {/* Bullet Points */}
-                    <ul className="space-y-2.5 pt-4 border-t border-[#DCE4E0] mb-6">
-                      {seg.points.map((pt, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-xs sm:text-[13px] text-[#17251F] leading-snug">
-                          <span className="w-4 h-4 rounded-full bg-[#FEBE16]/30 text-[#074031] flex items-center justify-center shrink-0 mt-0.5">
-                            <Check className="w-2.5 h-2.5 stroke-[2.5]" />
-                          </span>
-                          <span>{pt}</span>
-                        </li>
-                      ))}
-                    </ul>
+                      {/* Pill Badge */}
+                      <div className="mt-3.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FEBE16]/15 border border-[#FEBE16]/30 text-[#FEBE16] text-[11px] font-mono font-semibold">
+                        <ShieldCheck className="w-3.5 h-3.5 stroke-[2.5]" />
+                        <span>{seg.metrics}</span>
+                      </div>
+                    </div>
+
+                    {/* Bottom: Location & Solar Gold CTA */}
+                    <div className="pt-2.5 border-t border-white/15 flex items-center justify-between gap-2 relative z-10">
+                      <div className="flex items-center gap-1.5 text-white/90 text-xs lg:text-[13px] font-medium truncate">
+                        <MapPin className="w-3.5 h-3.5 shrink-0 text-[#FEBE16]" />
+                        <span className="truncate">{seg.location}</span>
+                      </div>
+
+                      <Link
+                        href={seg.href}
+                        className="w-8 h-8 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] flex items-center justify-center shrink-0 transition-all shadow-md shadow-[#FEBE16]/25 group/btn"
+                        title={isBn ? "কোটেশন নিন" : "Request Quote"}
+                      >
+                        <ArrowRight className="w-4 h-4 stroke-[2.5] group-hover/btn:translate-x-0.5 transition-transform" />
+                      </Link>
+                    </div>
                   </div>
 
-                  {/* Card CTA Link */}
-                  <div className="pt-2">
-                    <Link
-                      href={seg.href}
-                      className="inline-flex items-center justify-between w-full px-5 py-3 rounded-full bg-[#074031] hover:bg-[#FEBE16] text-white hover:text-[#052F25] text-xs font-semibold font-mono transition-all duration-200 shadow-xs group/btn"
-                    >
-                      <span>{seg.ctaText}</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
-                    </Link>
+                  {/* Right Column: Full-Bleed High-Res Photograph */}
+                  <div className="w-[55%] lg:w-[56%] h-full relative overflow-hidden bg-[#F1F4F1]">
+                    <Image
+                      src={seg.image}
+                      alt={seg.title}
+                      fill
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      sizes="(min-width: 1024px) 450px, 350px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#052F25]/40 via-transparent to-transparent opacity-60" />
                   </div>
                 </div>
-              </RevealItem>
-            );
-          })}
-        </RevealGroup>
-      </div>
-    </section>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Bottom Bar: Indicators & Segment Pills */}
+          <div className="max-w-7xl mx-auto w-full flex items-center justify-between gap-4 shrink-0 pt-2">
+            {/* Dots */}
+            <div className="flex items-center gap-2">
+              {segments.map((_, dotIdx) => (
+                <button
+                  key={dotIdx}
+                  onClick={() => scrollToSlide(dotIdx)}
+                  aria-label={`Jump to segment ${dotIdx + 1}`}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    activeSlide === dotIdx
+                      ? "w-8 bg-[#074031]"
+                      : "w-2 bg-[#DCE4E0] hover:bg-[#62706A]"
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Scroll Hint */}
+            <p className="text-xs font-mono text-[#62706A] flex items-center gap-2">
+              <span>{isBn ? "স্ক্রোল করে আরও দেখুন" : "Scroll vertically to explore"}</span>
+              <span className="inline-block text-[#FEBE16] animate-pulse">→</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================
+          MOBILE / TABLET TOUCH-FRIENDLY HORIZONTAL CAROUSEL
+          ======================================================== */}
+      <section className="md:hidden py-12 px-4 sm:px-6">
+        {/* Header */}
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="w-2.5 h-2.5 rounded-full border border-[#074031] flex items-center justify-center">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FEBE16]" />
+            </span>
+            <span className="text-xs font-mono font-bold tracking-wider text-[#074031] uppercase">
+              {isBn ? "আমাদের প্রজেক্ট ও সেগমেন্ট" : "Our Projects & Segments"}
+            </span>
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-[#17251F] leading-tight mb-3">
+            {isBn ? "সম্পূর্ণ সোলার প্রকিউরমেন্ট সমাধান" : "Complete Solar Procurement Solutions"}
+          </h2>
+
+          <div className="border-l-2 border-[#FEBE16] pl-3">
+            <p className="text-xs sm:text-sm text-[#62706A] leading-relaxed">
+              {isBn
+                ? "বাংলাদেশের EPC ঠিকাদার, বাণিজ্যিক প্রতিষ্ঠান ও আঞ্চলিক ডিলারদের জন্য নির্ভরযোগ্য ইকুইপমেন্ট সাপ্লাই।"
+                : "Everything you need to supply commercial solar installations and regional wholesale trade."}
+            </p>
+          </div>
+        </div>
+
+        {/* Horizontal Swipeable Track */}
+        <div
+          ref={mobileScrollRef}
+          className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 -mx-4 px-4 scrollbar-none"
+        >
+          {segments.map((seg) => (
+            <div
+              key={seg.id}
+              className="w-[88vw] max-w-[360px] shrink-0 snap-center rounded-[24px] overflow-hidden flex flex-col bg-white border border-[#DCE4E0] shadow-xl shadow-[#052F25]/[0.05]"
+            >
+              {/* Top: Brand Deep Green Info Panel */}
+              <div className="bg-gradient-to-br from-[#074031] to-[#052F25] p-6 flex flex-col justify-between select-none">
+                <h4 className="text-[#FEBE16] text-xs font-mono font-bold mb-3">{seg.year}</h4>
+
+                <h3 className="text-xl font-black tracking-tight text-white mb-1">
+                  {seg.title}
+                </h3>
+                <p className="text-xs font-medium text-white/75 mb-3">
+                  {seg.subtitle}
+                </p>
+
+                <div className="pt-3 border-t border-white/15 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 text-white/90 text-xs font-medium truncate">
+                    <MapPin className="w-3.5 h-3.5 shrink-0 text-[#FEBE16]" />
+                    <span className="truncate">{seg.location}</span>
+                  </div>
+
+                  <Link
+                    href={seg.href}
+                    className="w-7 h-7 rounded-full bg-[#FEBE16] text-[#052F25] flex items-center justify-center shrink-0 shadow-xs"
+                  >
+                    <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Bottom: Image */}
+              <div className="h-48 relative overflow-hidden bg-[#F1F4F1]">
+                <Image
+                  src={seg.image}
+                  alt={seg.title}
+                  fill
+                  className="object-cover"
+                  sizes="360px"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }
