@@ -10,8 +10,6 @@ import {
 } from "motion/react";
 import {
   ArrowRight,
-  Plus,
-  Minus,
   CheckCircle2,
   Sparkles,
 } from "lucide-react";
