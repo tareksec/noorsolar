@@ -99,7 +99,7 @@ export default async function QuotePage({ params }: QuotePageProps) {
   };
 
   return (
-    <div className="pt-28 sm:pt-36 pb-20 bg-[#F7F8F5] min-h-screen text-[#17251F]">
+    <div className="pt-8 md:pt-36 pb-20 bg-[#F7F8F5] min-h-screen text-[#17251F]">
       {/* Schema.org Structured Data */}
       <script
         type="application/ld+json"

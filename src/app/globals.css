@@ -564,3 +564,11 @@ p, h1, h2, h3, h4, h5, h6, span, a, li {
   overflow-wrap: break-word;
 }
 
+/* Themed mobile glass dock - matches emerald + gold brand (top pill, footer card) */
+.mobile-dock {
+  background: linear-gradient(180deg, rgba(11, 81, 62, 0.94), rgba(5, 47, 37, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 32px rgba(5, 47, 37, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+}

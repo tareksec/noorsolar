@@ -1,10 +1,10 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { routing, Locale } from "@/i18n/routing";
 import { inter, jetbrainsMono, scoutieSans, tiroBangla } from "@/lib/fonts";
-import { Header } from "@/components/layout/header";
+import { Header, MobileTopBar } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { WhatsAppButton } from "@/components/layout/whatsapp-button";
 import { BackToTop } from "@/components/layout/back-to-top";
@@ -139,6 +139,9 @@ export default async function LocaleLayout({
                 showBlog={showBlog}
                 currentLocale={locale}
               />
+              </div>
+              <div className="md:hidden">
+                <MobileTopBar />
               </div>
               <main className="flex-grow pb-32 lg:pb-0 flex flex-col">
                 <RouteTransition>{children}</RouteTransition>

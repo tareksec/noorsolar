@@ -101,7 +101,7 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
   const isBn = locale === "bn";
 
   return (
-    <div className="pt-24 pb-20 sm:pb-32 bg-[#F7F8F5] min-h-screen">
+    <div className="pt-8 md:pt-24 pb-20 sm:pb-32 bg-[#F7F8F5] min-h-screen">
       {/* Schema.org Article structured data */}
       <script
         type="application/ld+json"

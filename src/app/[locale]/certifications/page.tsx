@@ -91,7 +91,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
   const isBn = locale === "bn";
 
   return (
-    <div className="pt-28 sm:pt-36 pb-24 bg-[#F7F8F5] min-h-screen">
+    <div className="pt-8 md:pt-36 pb-24 bg-[#F7F8F5] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Navigation Breadcrumb */}

@@ -93,7 +93,7 @@ export default async function BlogIndexPage({ params, searchParams }: BlogIndexP
   ];
 
   return (
-    <div className="pt-24 pb-20 sm:pb-32 bg-[#F7F8F5] min-h-screen">
+    <div className="pt-8 md:pt-24 pb-20 sm:pb-32 bg-[#F7F8F5] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">

@@ -23,6 +23,7 @@ export interface GlassDockProps extends React.HTMLAttributes<HTMLDivElement> {
 // Attempt to register MorphSVGPlugin if available. 
 if (typeof window !== "undefined") {
     try {
+        // MorphSVGPlugin is optional; absence is handled by the catch below.
         import("gsap/MorphSVGPlugin").then((plugin) => {
             gsap.registerPlugin(plugin.MorphSVGPlugin);
         }).catch(e => {
@@ -476,8 +477,8 @@ export const GlassDock = React.forwardRef<HTMLDivElement, GlassDockProps>(
                                 <motion.div
                                     whileTap={{ scale: 0.95 }}
                                     animate={{
-                                        scale: isHovered ? 1.1 : 1,
-                                        y: isHovered ? -3 : 0,
+                                        scale: isHovered || isRouteActive ? 1.12 : 1,
+                                        y: isHovered ? -3 : isRouteActive ? -1 : 0,
                                     }}
                                     transition={{ type: 'spring', stiffness: 300, damping: 24 }}
                                 >
@@ -496,10 +497,10 @@ export const GlassDock = React.forwardRef<HTMLDivElement, GlassDockProps>(
                                             className={cn(
                                                 'h-[22px] w-[22px] transition-colors duration-200',
                                                 isRouteActive
-                                                    ? 'text-[#0B513E]'
+                                                    ? 'text-[#FEBE16] drop-shadow-[0_0_6px_rgba(254,190,22,0.55)]'
                                                     : isHovered
-                                                      ? 'text-neutral-900 dark:text-white'
-                                                      : 'text-neutral-500 dark:text-neutral-400'
+                                                      ? 'text-white'
+                                                      : 'text-white/60'
                                             )}
                                         />
                                     ) : null}
