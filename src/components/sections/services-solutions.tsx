@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Link } from "@/i18n/routing";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 import {
   ArrowRight,
   CheckCircle2,
@@ -190,13 +190,15 @@ const ITEMS_BN: ProvideItem[] = [
 
 /* ------------------------------------------------------------------ */
 /* ------------------------------------------------------------------ */
-/*  Desktop 3-Column Card Component                                    */
+/*  Desktop Skiper-104 Animated Card Component                        */
 /* ------------------------------------------------------------------ */
 
 interface Skiper104CardProps {
   item: ProvideItem;
   index: number;
   total: number;
+  scrollYProgress: MotionValue<number>;
+  activeStep: number;
   isBn: boolean;
 }
 
@@ -204,39 +206,87 @@ function Skiper104DesktopCard({
   item,
   index,
   total,
+  scrollYProgress,
+  activeStep,
   isBn,
 }: Skiper104CardProps) {
   const IconComponent = item.icon;
 
+  // Stagger intervals across scroll:
+  // Card 0: starts visible so there is never an empty screen!
+  // Card 1: animates in between scroll 0.18 and 0.48
+  // Card 2: animates in between scroll 0.52 and 0.82
+  const start = index === 0 ? 0 : index === 1 ? 0.18 : 0.52;
+  const end = index === 0 ? 0.2 : index === 1 ? 0.48 : 0.82;
+
+  const progressRatio = (progress: number) => {
+    if (index === 0) return 1;
+    if (progress >= end) return 1;
+    if (progress <= start) return 0.25; // Subtle preview opacity so cards aren't missing
+    return 0.25 + 0.75 * ((progress - start) / (end - start));
+  };
+
+  const yImage = useTransform(scrollYProgress, (p) => {
+    if (index === 0) return 0;
+    const r = progressRatio(p);
+    return 28 * (1 - r);
+  });
+
+  const yText = useTransform(scrollYProgress, (p) => {
+    if (index === 0) return 0;
+    const r = progressRatio(p);
+    return -28 * (1 - r);
+  });
+
+  const scaleBadge = useTransform(scrollYProgress, (p) => {
+    if (index === 0) return 1;
+    const r = progressRatio(p);
+    return 0.85 + 0.25 * r;
+  });
+
+  const opacity = useTransform(scrollYProgress, (p) => {
+    return progressRatio(p);
+  });
+
+  const isCurrentStep = activeStep === index;
+  const isPastStep = activeStep > index;
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: index * 0.12 }}
-      className="relative z-10 flex flex-col gap-4 xl:gap-5 group/card"
-    >
+    <div className="relative z-10 flex flex-col gap-3.5 xl:gap-4 group/card">
       {/* 1. Top Content Card */}
-      <div className="flex flex-col h-[205px] justify-between rounded-2xl bg-white dark:bg-[#131915] border border-[#E2E8DF] dark:border-white/10 p-5 shadow-[0_4px_24px_rgba(7,64,49,0.06)] group-hover/card:border-[#108958]/40 group-hover/card:shadow-[0_8px_30px_rgba(7,64,49,0.1)] transition-all">
+      <motion.div
+        style={{ y: yText, opacity }}
+        className={`flex flex-col h-[185px] xl:h-[195px] justify-between rounded-2xl bg-white dark:bg-[#131915] border p-4 xl:p-5 shadow-[0_4px_24px_rgba(7,64,49,0.06)] transition-all ${
+          isCurrentStep
+            ? "border-[#108958] dark:border-[#22C55E]/50 shadow-[0_8px_30px_rgba(7,64,49,0.12)] ring-1 ring-[#108958]/20"
+            : "border-[#E2E8DF] dark:border-white/10 hover:border-[#108958]/30"
+        }`}
+      >
         <div>
           {/* Header Row: Icon + Title */}
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-[#E8F5E9] dark:bg-[#108958]/20 flex items-center justify-center text-[#108958] dark:text-[#22C55E] flex-shrink-0 group-hover/card:bg-[#108958] group-hover/card:text-white transition-colors">
-              <IconComponent className="w-5 h-5 stroke-[2.2]" />
+            <div
+              className={`w-9 h-9 xl:w-10 xl:h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
+                isCurrentStep
+                  ? "bg-[#108958] text-white"
+                  : "bg-[#E8F5E9] dark:bg-[#108958]/20 text-[#108958] dark:text-[#22C55E]"
+              }`}
+            >
+              <IconComponent className="w-4 h-4 xl:w-5 xl:h-5 stroke-[2.2]" />
             </div>
-            <h3 className="text-base sm:text-lg font-bold text-[#074031] dark:text-white leading-snug line-clamp-1">
+            <h3 className="text-sm xl:text-base font-bold text-[#074031] dark:text-white leading-snug line-clamp-1">
               {item.title}
             </h3>
           </div>
 
           {/* Description */}
-          <p className="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed line-clamp-2">
+          <p className="text-[11px] xl:text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed line-clamp-2">
             {item.description}
           </p>
         </div>
 
         {/* 4 Technical Specs Micro-Grid with Icons */}
-        <div className="pt-2.5 border-t border-neutral-100 dark:border-white/10 grid grid-cols-4 gap-1 text-center">
+        <div className="pt-2 border-t border-neutral-100 dark:border-white/10 grid grid-cols-4 gap-1 text-center">
           {item.specs.map((sp, i) => {
             const SpecIcon = sp.icon;
             return (
@@ -245,28 +295,44 @@ function Skiper104DesktopCard({
                 <span className="text-[9px] text-neutral-500 dark:text-neutral-400 font-medium truncate w-full">
                   {sp.label}
                 </span>
-                <span className="text-[11px] font-bold text-neutral-900 dark:text-white truncate w-full mt-0.5">
+                <span className="text-[10px] xl:text-[11px] font-bold text-neutral-900 dark:text-white truncate w-full mt-0.5">
                   {sp.val}
                 </span>
               </div>
             );
           })}
         </div>
-      </div>
+      </motion.div>
 
-      {/* 2. Step Badge (Centered on Timeline) */}
+      {/* 2. Step Badge (On Timeline) */}
       <div className="relative flex items-center justify-center h-8">
-        <div className="z-10 flex size-8 items-center justify-center rounded-lg bg-[#074031] dark:bg-[#108958] text-[#FEBE16] dark:text-white font-mono text-xs font-bold shadow-md border border-[#FEBE16]/40 dark:border-white/20 group-hover/card:scale-110 group-hover/card:bg-[#FEBE16] group-hover/card:text-[#074031] transition-all">
+        <motion.div
+          style={{ scale: scaleBadge }}
+          className={`z-10 flex size-8 items-center justify-center rounded-lg font-mono text-xs font-bold shadow-md transition-all ${
+            isCurrentStep || isPastStep
+              ? "bg-[#074031] dark:bg-[#108958] text-[#FEBE16] dark:text-white border border-[#FEBE16] shadow-[0_0_12px_rgba(254,190,22,0.35)]"
+              : "bg-white dark:bg-[#131915] text-neutral-400 dark:text-neutral-500 border border-neutral-300 dark:border-white/20"
+          }`}
+        >
           {item.stepNum}
-        </div>
+        </motion.div>
       </div>
 
       {/* 3. Bottom Visual Showcase + CTA */}
-      <div className="flex flex-col gap-3">
-        <div className="group/img relative flex h-48 xl:h-52 w-full items-center justify-center rounded-2xl overflow-hidden bg-white dark:bg-[#131915] border border-[#E2E8DF] dark:border-white/10 group-hover/card:border-[#108958]/40 shadow-[0_4px_24px_rgba(7,64,49,0.06)]">
+      <motion.div
+        style={{ y: yImage, opacity }}
+        className="flex flex-col gap-2.5 xl:gap-3"
+      >
+        <div
+          className={`group/img relative flex h-40 xl:h-48 w-full items-center justify-center rounded-2xl overflow-hidden bg-white dark:bg-[#131915] border shadow-[0_4px_24px_rgba(7,64,49,0.06)] transition-all ${
+            isCurrentStep
+              ? "border-[#108958] dark:border-[#22C55E]/50 shadow-[0_8px_30px_rgba(7,64,49,0.12)]"
+              : "border-[#E2E8DF] dark:border-white/10"
+          }`}
+        >
           {/* Background Watermark Lettering */}
           <span
-            className="absolute -top-2 -left-2 font-mono font-black italic text-[110px] xl:text-[130px] text-[#074031]/5 dark:text-white/5 select-none pointer-events-none leading-none z-0"
+            className="absolute -top-2 -left-2 font-mono font-black italic text-[95px] xl:text-[115px] text-[#074031]/5 dark:text-white/5 select-none pointer-events-none leading-none z-0"
             aria-hidden="true"
           >
             {item.watermark}
@@ -278,7 +344,7 @@ function Skiper104DesktopCard({
             alt={item.imageAlt}
             fill
             sizes="(max-width: 1280px) 33vw, 400px"
-            className="object-cover transition-transform duration-700 group-hover/card:scale-105"
+            className="object-cover transition-transform duration-700 group-hover/img:scale-105"
             priority={index === 0}
           />
 
@@ -306,11 +372,11 @@ function Skiper104DesktopCard({
           </div>
 
           {/* Stylized Typography Overlay */}
-          <div className="absolute bottom-3 left-3 z-10 flex items-baseline gap-2">
+          <div className="absolute bottom-2.5 left-2.5 z-10 flex items-baseline gap-2">
             <span className="font-mono text-2xl xl:text-3xl text-white font-bold tracking-tight drop-shadow-md">
               {item.displayChar}
             </span>
-            <span className="font-mono text-[10px] font-semibold text-white/90 uppercase tracking-widest bg-black/50 px-2 py-0.5 rounded backdrop-blur-xs border border-white/10">
+            <span className="font-mono text-[9px] xl:text-[10px] font-semibold text-white/90 uppercase tracking-widest bg-black/50 px-2 py-0.5 rounded backdrop-blur-xs border border-white/10">
               {item.code}
             </span>
           </div>
@@ -319,7 +385,7 @@ function Skiper104DesktopCard({
         {/* CTA Link */}
         <Link
           href={item.link}
-          className="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-[#074031] dark:bg-[#108958] text-white font-bold text-xs hover:bg-[#0B513E] dark:hover:bg-[#0E7A4E] transition-colors min-h-[40px] shadow-xs group/cta"
+          className="inline-flex items-center justify-between w-full px-3.5 py-2 rounded-xl bg-[#074031] dark:bg-[#108958] text-white font-bold text-xs hover:bg-[#0B513E] dark:hover:bg-[#0E7A4E] transition-colors min-h-[38px] shadow-xs group/cta"
         >
           <span>
             {isBn
@@ -328,8 +394,8 @@ function Skiper104DesktopCard({
           </span>
           <ArrowRight className="w-4 h-4 ml-2 transition-transform text-[#FEBE16] group-hover/cta:translate-x-1" />
         </Link>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 
@@ -347,11 +413,34 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
     locale === "bn" || pathname.startsWith("/bn/") || pathname === "/bn";
   const items = isBn ? ITEMS_BN : ITEMS_EN;
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  const [activeStep, setActiveStep] = useState(0);
+
+  useEffect(() => {
+    return scrollYProgress.on("change", (latest) => {
+      if (latest < 0.35) {
+        setActiveStep(0);
+      } else if (latest < 0.70) {
+        setActiveStep(1);
+      } else {
+        setActiveStep(2);
+      }
+    });
+  }, [scrollYProgress]);
+
+  // Brand progress line that expands across step 1 -> step 2 -> step 3
+  const lineWidth = useTransform(scrollYProgress, [0, 1], ["20%", "100%"]);
+
   return (
     <section
       id="services-solutions"
       aria-label="We Provide - Core Supply Lineup"
-      className="relative w-full bg-[#F8F9F5] dark:bg-[#0B0F0D] border-y border-[#E2E8DF] dark:border-white/10 py-12 lg:py-16"
+      className="relative w-full bg-[#F8F9F5] dark:bg-[#0B0F0D] border-y border-[#E2E8DF] dark:border-white/10"
     >
       {/* Background Grid Pattern */}
       <div
@@ -362,60 +451,73 @@ export function ServicesSolutions({ locale }: ServicesSolutionsProps = {}) {
       </div>
 
       {/* ============================================================ */}
-      {/* DESKTOP (3-Column Interactive Showcase)                      */}
+      {/* DESKTOP SKIPER-104 (Interactive Scroll-Driven Animation)     */}
       {/* ============================================================ */}
-      <div className="hidden lg:block relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="w-full mb-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#074031] dark:text-white leading-[1.1]">
-                {isBn ? "আমরা যা সরবরাহ করি" : "WE PROVIDE"}
-              </h2>
-              {/* Yellow/Gold Accent Underline */}
-              <div className="w-14 h-1 bg-[#FEBE16] rounded-full mt-2.5 mb-3" />
-              <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-300 max-w-2xl leading-relaxed">
-                {isBn
-                  ? "টেকসই ভবিষ্যতের জন্য নির্ভরযোগ্য সোলার এনার্জি সমাধান। আমরা সরবরাহ করি উচ্চমানের সোলার প্যানেল, আধুনিক ইনভার্টার এবং শিল্প-উদ্যোগের জন্য শক্তিশালী এনার্জি স্টোরেজ সিস্টেম।"
-                  : "Reliable solar energy solutions for a sustainable future. We supply premium solar panels, modern inverters, and heavy-duty energy storage systems for commercial and industrial use."}
-              </p>
+      <div className="hidden lg:block relative z-10 w-full">
+        {/* Scroll Track: 230vh gives smooth, deliberate animation without feeling stuck */}
+        <div ref={containerRef} className="h-[230vh] w-full relative">
+          {/* Sticky Viewport Container - compact sizing fits perfectly inside laptop viewports */}
+          <div className="sticky top-0 h-screen w-full flex flex-col justify-center max-w-7xl mx-auto px-6 lg:px-8 py-4 xl:py-6 overflow-hidden">
+            {/* Section Header */}
+            <div className="w-full mb-4 xl:mb-6">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                  <h2 className="text-2xl sm:text-3xl xl:text-4xl font-black tracking-tight text-[#074031] dark:text-white leading-[1.1]">
+                    {isBn ? "আমরা যা সরবরাহ করি" : "WE PROVIDE"}
+                  </h2>
+                  {/* Yellow/Gold Accent Underline */}
+                  <div className="w-12 h-1 bg-[#FEBE16] rounded-full mt-1.5 mb-2" />
+                  <p className="text-xs xl:text-sm text-neutral-600 dark:text-neutral-300 max-w-2xl leading-relaxed">
+                    {isBn
+                      ? "টেকসই ভবিষ্যতের জন্য নির্ভরযোগ্য সোলার এনার্জি সমাধান। আমরা সরবরাহ করি উচ্চমানের সোলার প্যানেল, আধুনিক ইনভার্টার এবং শিল্প-উদ্যোগের জন্য শক্তিশালী এনার্জি স্টোরেজ সিস্টেম।"
+                      : "Reliable solar energy solutions for a sustainable future. We supply premium solar panels, modern inverters, and heavy-duty energy storage systems for commercial and industrial use."}
+                  </p>
+                </div>
+
+                {/* Right Header Badges / Features with Live Active Step Counter */}
+                <div className="flex items-center gap-3 font-medium text-xs text-neutral-600 dark:text-neutral-300 pb-1">
+                  <span className="text-neutral-300 dark:text-white/20">|</span>
+                  <span>{isBn ? "বিশ্বস্ত পণ্য" : "Trusted Products"}</span>
+                  <span className="text-neutral-300 dark:text-white/20">|</span>
+                  <span>{isBn ? "দীর্ঘমেয়াদী সমাধান" : "Long-term Solutions"}</span>
+                  <span className="text-neutral-300 dark:text-white/20">|</span>
+                  <span className="font-mono font-bold text-[#108958] dark:text-[#22C55E] bg-[#E8F5E9] dark:bg-[#108958]/20 px-2 py-0.5 rounded">
+                    [ {items[activeStep].number} / {isBn ? "০৩" : "03"} ]
+                  </span>
+                </div>
+              </div>
             </div>
 
-            {/* Right Header Badges / Features */}
-            <div className="flex items-center gap-3 font-medium text-xs text-neutral-600 dark:text-neutral-300 pb-1">
-              <span className="text-neutral-300 dark:text-white/20">|</span>
-              <span>{isBn ? "বিশ্বস্ত পণ্য" : "Trusted Products"}</span>
-              <span className="text-neutral-300 dark:text-white/20">|</span>
-              <span>{isBn ? "দীর্ঘমেয়াদী সমাধান" : "Long-term Solutions"}</span>
-              <span className="text-neutral-300 dark:text-white/20">|</span>
-              <span className="font-mono font-bold text-[#108958] dark:text-[#22C55E]">
-                [ 03 / {isBn ? "০৩" : "03"} ]
-              </span>
+            {/* Skiper-104 Animated Cards Grid */}
+            <div
+              className="relative grid gap-5 xl:gap-7 w-full items-start"
+              style={{
+                gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))`,
+              }}
+            >
+              {/* Background Gray Track Line */}
+              <div className="absolute top-[215px] xl:top-[225px] left-0 h-[2px] w-full bg-[#E2E8DF] dark:bg-white/15 z-0" />
+
+              {/* Dynamic Brand Animated Progress Line */}
+              <motion.div
+                style={{ width: lineWidth }}
+                className="absolute top-[215px] xl:top-[225px] left-0 h-[3px] bg-gradient-to-r from-[#108958] via-[#0B513E] to-[#FEBE16] z-0 shadow-sm"
+              />
+
+              {/* Cards */}
+              {items.map((item, idx) => (
+                <Skiper104DesktopCard
+                  key={item.id}
+                  item={item}
+                  index={idx}
+                  total={items.length}
+                  scrollYProgress={scrollYProgress}
+                  activeStep={activeStep}
+                  isBn={isBn}
+                />
+              ))}
             </div>
           </div>
-        </div>
-
-        {/* 3-Column Animated Cards Grid */}
-        <div
-          className="relative grid gap-6 xl:gap-8 w-full items-start"
-          style={{
-            gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))`,
-          }}
-        >
-          {/* Continuous Connecting Line Behind Badges */}
-          <div className="absolute top-[236px] left-12 right-12 h-[2px] bg-[#E2E8DF] dark:bg-white/15 z-0" />
-          <div className="absolute top-[236px] left-12 right-12 h-[2px] bg-gradient-to-r from-[#108958] via-[#0B513E] to-[#FEBE16] z-0 opacity-60" />
-
-          {/* Cards */}
-          {items.map((item, idx) => (
-            <Skiper104DesktopCard
-              key={item.id}
-              item={item}
-              index={idx}
-              total={items.length}
-              isBn={isBn}
-            />
-          ))}
         </div>
       </div>
 
