@@ -171,12 +171,12 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         </Link>
 
         {/* Stock Status Badge (Top-Left Pill) */}
-        <div className="absolute top-3 left-3 z-10 pointer-events-none">
+        <div className="absolute top-2.5 sm:top-3 left-2.5 sm:left-3 z-10 pointer-events-none">
           {getStockBadge(product.stockStatus)}
         </div>
 
-        {/* Category Tag (Top-Right Pill) */}
-        <div className="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-mono font-semibold uppercase tracking-wider text-slate-600 shadow-xs border border-white/70 pointer-events-none">
+        {/* Category Tag (Top-Right Pill) - hidden on mobile to avoid overlapping with stock status badge */}
+        <div className="hidden sm:block absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-mono font-semibold uppercase tracking-wider text-slate-600 shadow-xs border border-white/70 pointer-events-none">
           {categoryName}
         </div>
       </div>
@@ -184,12 +184,12 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
       {/* Product Information */}
       <div className="flex flex-col flex-grow pt-3.5 pb-1">
         {/* Model Code */}
-        <span className="text-[11px] font-mono font-medium tracking-wider text-slate-400 uppercase mb-1 block">
+        <span className="text-[11px] font-mono font-medium tracking-wider text-slate-400 uppercase mb-1 block truncate">
           {product.model || product.brand || "NS-SERIES"}
         </span>
 
         {/* Title */}
-        <h2 className="text-[15px] sm:text-[17px] font-bold leading-snug tracking-tight text-slate-900 group-hover:text-[#063328] transition-colors line-clamp-2 min-h-[42px] sm:min-h-[46px] flex items-start">
+        <h2 className="text-[14px] sm:text-[17px] font-bold leading-normal sm:leading-snug tracking-tight text-slate-900 group-hover:text-[#063328] transition-colors line-clamp-2 min-h-[44px] sm:min-h-[46px] flex items-start">
           <Link
             href={`/product/${product.slug}`}
             onClick={(e) => {
@@ -219,15 +219,15 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             return (
               <div
                 key={i}
-                className="flex items-center justify-between text-xs sm:text-[13px] gap-2"
+                className="flex items-center justify-between text-xs sm:text-[13px] gap-2 min-w-0"
               >
-                <div className="flex items-center gap-1.5 text-slate-500 min-w-0 pr-1">
+                <div className="flex items-center gap-1.5 text-slate-500 min-w-0 flex-1">
                   <SpecIcon className="w-3.5 h-3.5 text-emerald-600 shrink-0 stroke-[2.2]" />
-                  <span className="leading-tight font-normal whitespace-nowrap">
+                  <span className="leading-normal font-normal truncate" title={spec.label}>
                     {spec.label}
                   </span>
                 </div>
-                <span className="font-bold text-slate-900 shrink-0 text-right font-mono sm:font-sans">
+                <span className="font-bold text-slate-900 shrink-0 text-right font-mono sm:font-sans ml-2">
                   {spec.value}
                 </span>
               </div>
@@ -235,55 +235,31 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           })}
 
           {/* MOQ Row */}
-          <div className="flex items-center justify-between text-xs sm:text-[13px] gap-2 pt-0.5">
-            <div className="flex items-center gap-1.5 text-slate-500 min-w-0 pr-1">
+          <div className="flex items-center justify-between text-xs sm:text-[13px] gap-2 pt-0.5 min-w-0">
+            <div className="flex items-center gap-1.5 text-slate-500 min-w-0 flex-1">
               <Package className="w-3.5 h-3.5 text-emerald-600 shrink-0 stroke-[2.2]" />
-              <span className="leading-tight font-normal">
+              <span className="leading-normal font-normal truncate">
                 {isBn ? "ন্যূনতম অর্ডার" : "MOQ"}
               </span>
             </div>
-            <span className="font-bold text-slate-900 shrink-0 text-right font-mono sm:font-sans truncate max-w-[150px] sm:max-w-[190px]">
+            <span className="font-bold text-slate-900 shrink-0 text-right font-mono sm:font-sans truncate max-w-[110px] sm:max-w-[190px] ml-2">
               {product.moq || (isBn ? "৩৬ পিস (১ প্যালেট)" : "36 pcs (1 Pallet)")}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Card Action Footer */}
-      <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 mt-auto">
-        <div className="flex-1 min-w-0">
-          {product.showPrice && product.priceBdt ? (
-            <div className="flex flex-col">
-              <span className="text-xs sm:text-[13px] font-bold text-slate-900 leading-tight">
-                BDT {product.priceBdt.toLocaleString()}
-              </span>
-              <span className="text-[11px] text-slate-400 leading-tight mt-0.5 truncate block">
-                {isBn ? "কন্টেইনার অর্ডারে বিশেষ দর" : "Container pricing on request"}
-              </span>
-            </div>
-          ) : (
-            <div className="flex flex-col">
-              <span className="text-xs sm:text-[13px] font-bold text-slate-900 leading-tight">
-                {isBn ? "কোটেশন মূল্য" : "Quote Pricing"}
-              </span>
-              <span className="text-[11px] text-slate-400 leading-tight mt-0.5 truncate block">
-                {isBn ? "কন্টেইনার অর্ডারে বিশেষ দর" : "Container pricing on request"}
-              </span>
-            </div>
-          )}
-        </div>
-
-        <div className="shrink-0">
-          <Link
-            href={`/quote?product=${product.slug}`}
-            onClick={(e) => e.stopPropagation()}
-            className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#063328] hover:bg-[#04241C] text-white text-xs font-medium inline-flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-xs"
-          >
-            <MessageSquare className="w-3.5 h-3.5" />
-            <span>{isBn ? "কোটেশন" : "Quote"}</span>
-            <ArrowRight className="w-3.5 h-3.5 ml-0.5" />
-          </Link>
-        </div>
+      {/* Card Action Footer: Full-Width Highlighted Quote Button */}
+      <div className="pt-3 border-t border-slate-100 mt-auto">
+        <Link
+          href={`/quote?product=${product.slug}`}
+          onClick={(e) => e.stopPropagation()}
+          className="w-full py-2.5 px-4 rounded-xl sm:rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] text-xs sm:text-[13px] font-bold inline-flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] shadow-xs hover:shadow-md cursor-pointer"
+        >
+          <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-[#052F25]" />
+          <span>{isBn ? "কোটেশন নিন" : "Request Quote"}</span>
+          <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-0.5 shrink-0 text-[#052F25]" />
+        </Link>
       </div>
     </div>
   );

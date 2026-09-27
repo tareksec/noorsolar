@@ -156,25 +156,32 @@ export function RecentDeals({
                     : "Ready stock, container indent and project-grade supply — all in one place."}
                 </p>
               </div>
-              {stats.length > 0 && (
                 <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-6">
-                  {stats.slice(0, 6).map((s) => (
-                    <div key={s.id} className="border-l border-white/15 pl-4">
-                      <dd className="text-2xl sm:text-3xl font-black font-mono text-[#FEBE16]">
-                        <AnimatedCounter
-                          value={s.value}
-                          prefix={s.prefix ?? ""}
-                          suffix={s.suffix ?? ""}
-                          decimals={Number.isInteger(s.value) ? 0 : 1}
-                        />
-                      </dd>
-                      <dt className="mt-1 text-[11px] sm:text-xs text-white/60 leading-snug">
-                        {isBn ? s.labelBn || s.label : s.label}
-                      </dt>
-                    </div>
-                  ))}
+                  <div className="border-l border-white/15 pl-4">
+                    <dd className="text-2xl sm:text-3xl font-black font-mono text-[#FEBE16]">
+                      <AnimatedCounter value={totalCount > 0 ? totalCount : 15} suffix="+" />
+                    </dd>
+                    <dt className="mt-1 text-[11px] sm:text-xs text-white/60 leading-snug">
+                      {isBn ? "লাইভ পাইকারি ডিল" : "Live Wholesale Deals"}
+                    </dt>
+                  </div>
+                  <div className="border-l border-white/15 pl-4">
+                    <dd className="text-2xl sm:text-3xl font-black font-mono text-[#FEBE16]">
+                      <AnimatedCounter value={1} suffix={isBn ? " প্যালেট" : " Pallet"} />
+                    </dd>
+                    <dt className="mt-1 text-[11px] sm:text-xs text-white/60 leading-snug">
+                      {isBn ? "সর্বনিম্ন MOQ সুবিধা" : "Minimum Order MOQ"}
+                    </dt>
+                  </div>
+                  <div className="border-l border-white/15 pl-4">
+                    <dd className="text-2xl sm:text-3xl font-black font-mono text-[#FEBE16]">
+                      <AnimatedCounter value={100} suffix="%" />
+                    </dd>
+                    <dt className="mt-1 text-[11px] sm:text-xs text-white/60 leading-snug">
+                      {isBn ? "আমদানিকৃত আসল পণ্য" : "Direct Factory Origin"}
+                    </dt>
+                  </div>
                 </dl>
-              )}
             </div>
           </div>
         </Reveal>
