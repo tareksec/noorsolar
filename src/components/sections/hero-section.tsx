@@ -45,7 +45,7 @@ export function HeroSection({
   const resolvedSecondaryCta = secondaryCta || defaultSecondaryCta;
 
   return (
-    <section className="relative w-full px-0 sm:px-4 lg:px-6 pb-0 sm:pb-4 lg:pb-6 pt-0 bg-white">
+    <section className="relative w-full px-0 sm:px-4 lg:px-6 pb-0 sm:pb-4 lg:pb-6 pt-0 bg-white overflow-x-clip">
       <div className="relative w-full min-h-svh sm:min-h-[calc(100vh-1.5rem)] lg:min-h-[calc(100vh-2rem)] flex flex-col justify-between overflow-hidden rounded-none sm:rounded-3xl lg:rounded-[36px] border-0 sm:border-[3px] border-white shadow-[0_20px_50px_rgba(0,0,0,0.18)] ring-1 ring-black/5 bg-[#052F25] text-white">
         
         {/* ================= INVERTED U / ARCH NOTCH CRADLE FOR NAVBAR ================= */}
@@ -144,40 +144,40 @@ export function HeroSection({
         <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-5 pt-4">
           
           {/* Bottom-Left: 3-Item Frosted Capsule Dock with Solar Gold Accents */}
-          <div className="inline-flex flex-wrap sm:flex-nowrap items-center gap-4 sm:gap-6 p-2.5 sm:p-3 px-5 sm:px-6 rounded-2xl bg-[#052F25]/75 backdrop-blur-xl border border-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+          <div className="inline-flex flex-wrap sm:flex-nowrap items-center gap-3 sm:gap-6 p-2.5 sm:p-3 px-4 sm:px-6 rounded-2xl bg-[#052F25]/75 backdrop-blur-xl border border-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.3)] max-w-full">
             {/* Item 1: Container & Bulk Wholesale */}
-            <div data-motion="hero-glass" className="flex items-center gap-3 pr-4 sm:pr-6 sm:border-r border-white/10">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#FEBE16]/40 bg-[#FEBE16]/10 flex items-center justify-center text-[#FEBE16] shrink-0">
+            <div data-motion="hero-glass" className="flex items-center gap-3 pr-3 sm:pr-6 sm:border-r border-white/10 min-w-0">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#FEBE16]/40 bg-[#FEBE16]/10 flex items-center justify-center text-[#FEBE16] shrink-0">
                 <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
+              <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-normal sm:whitespace-nowrap">
                 {isBn ? "কন্টেইনার ও প্যালেট বাল্ক সরবরাহ" : "Container & Bulk Wholesale"}
               </span>
             </div>
 
             {/* Item 2: Certified Solar Equipment */}
-            <div data-motion="hero-glass" className="flex items-center gap-3 pr-4 sm:pr-6 sm:border-r border-white/10">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#FEBE16]/40 bg-[#FEBE16]/10 flex items-center justify-center text-[#FEBE16] shrink-0">
+            <div data-motion="hero-glass" className="flex items-center gap-3 pr-3 sm:pr-6 sm:border-r border-white/10 min-w-0">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#FEBE16]/40 bg-[#FEBE16]/10 flex items-center justify-center text-[#FEBE16] shrink-0">
                 <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
+              <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-normal sm:whitespace-nowrap">
                 {isBn ? "১০০% আসল ও টিয়ার-১ সার্টিফাইড ইকুইপমেন্ট" : "Certified Solar Equipment"}
               </span>
             </div>
 
             {/* Item 3: Nationwide Project Supply */}
-            <div data-motion="hero-glass" className="flex items-center gap-3">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#FEBE16]/40 bg-[#FEBE16]/10 flex items-center justify-center text-[#FEBE16] shrink-0">
+            <div data-motion="hero-glass" className="flex items-center gap-3 min-w-0">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#FEBE16]/40 bg-[#FEBE16]/10 flex items-center justify-center text-[#FEBE16] shrink-0">
                 <Headset className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-nowrap">
+              <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-normal sm:whitespace-nowrap">
                 {isBn ? "সারা দেশে দ্রুত ও নিরাপদ ডেলিভারি" : "Nationwide Project Supply"}
               </span>
             </div>
           </div>
 
           {/* Bottom-Right: Floating Proof & Verified Rating Card with Solar Gold Checked Badge */}
-          <div data-motion="hero-glass" className="relative group p-3 sm:p-4 rounded-2xl bg-[#052F25]/80 backdrop-blur-xl border border-white/15 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex items-center gap-4 max-w-md">
+          <div data-motion="hero-glass" className="relative group p-3 sm:p-4 rounded-2xl bg-[#052F25]/80 backdrop-blur-xl border border-white/15 shadow-[0_20px_40px_rgba(0,0,0,0.4)] flex items-center gap-4 max-w-md w-full sm:w-auto">
             {/* Left: Thumbnail of Solar Inverter / Storage System */}
             <div className="relative w-32 h-24 sm:w-36 sm:h-28 rounded-xl overflow-hidden shrink-0 bg-slate-800 border border-white/10">
               <Image

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
@@ -15,6 +15,13 @@ import { SITE_URL } from "@/lib/site-config";
 import { getSiteSettings } from "@/lib/data/settings";
 import { hasVisibleBlogPosts } from "@/lib/data/blog";
 import "../globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#052F25",
+};
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -125,13 +132,13 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       suppressHydrationWarning
-      className={fontClasses}
+      className={`${fontClasses} max-w-full overflow-x-clip`}
     >
       <head />
-      <body suppressHydrationWarning className="min-h-screen bg-[#F7F8F5] text-[#17251F] antialiased selection:bg-[#FEBE16] selection:text-[#052F25]">
+      <body suppressHydrationWarning className="min-h-screen bg-[#F7F8F5] text-[#17251F] antialiased selection:bg-[#FEBE16] selection:text-[#052F25] max-w-full overflow-x-clip">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SmoothScrollProvider>
-            <div className="flex flex-col min-h-screen bg-[#F7F8F5]">
+            <div className="flex flex-col min-h-screen bg-[#F7F8F5] w-full max-w-full overflow-x-clip">
               <div className="hidden md:block">
               <Header
                 phoneDisplay={settings.phoneDisplay}
@@ -143,7 +150,7 @@ export default async function LocaleLayout({
               <div className="md:hidden">
                 <MobileTopBar />
               </div>
-              <main className="flex-grow pb-32 lg:pb-0 flex flex-col">
+              <main className="flex-grow pb-32 lg:pb-0 flex flex-col w-full max-w-full overflow-x-clip">
                 <RouteTransition>{children}</RouteTransition>
               </main>
               <Footer settings={settings} showBlog={showBlog} locale={locale} />

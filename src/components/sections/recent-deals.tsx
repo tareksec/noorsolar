@@ -214,16 +214,18 @@ export function RecentDeals({
                     role="tab"
                     aria-selected={active}
                     onClick={() => setActiveTab(t.id)}
-                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold border transition-colors min-h-[40px] ${
+                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold border transition-all min-h-[40px] cursor-pointer ${
                       active
-                        ? "bg-[#E8590C] border-[#E8590C] text-white shadow-sm"
-                        : "bg-white border-neutral-200 text-neutral-600 hover:border-[#074031]/40 hover:text-[#074031]"
+                        ? "bg-[#074031] border-[#074031] text-white shadow-sm"
+                        : "bg-white border-[#DCE4E0] text-[#62706A] hover:border-[#074031]/50 hover:text-[#074031]"
                     }`}
                   >
-                    {t.label}
+                    <span>{t.label}</span>
                     <span
-                      className={`font-mono text-[11px] px-1.5 py-0.5 rounded-md ${
-                        active ? "bg-white/20 text-white" : "bg-neutral-100 text-neutral-500"
+                      className={`font-mono text-[11px] px-2 py-0.5 rounded-full font-bold transition-colors ${
+                        active
+                          ? "bg-[#FEBE16] text-[#052F25]"
+                          : "bg-[#F1F4F1] text-[#62706A]"
                       }`}
                     >
                       {tabData[t.id].length}
@@ -236,13 +238,13 @@ export function RecentDeals({
         </Reveal>
 
         {/* Table */}
-        <Reveal y={24} delay={0.15} duration={0.65}>
+        <Reveal y={24} delay={0.15} duration={0.65} className="w-full max-w-full min-w-0">
           <motion.div
             key={visibleTab}
             initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.25 }}
-            className="mt-6 overflow-x-auto rounded-2xl border border-neutral-200"
+            className="mt-6 w-full max-w-full min-w-0 overflow-x-auto rounded-2xl border border-neutral-200"
           >
           <table className="w-full min-w-[900px] border-collapse bg-white text-sm">
             <thead>
@@ -313,13 +315,13 @@ export function RecentDeals({
 
         {showViewAll && (
           <Reveal y={16} delay={0.2}>
-            <div className="mt-6 flex justify-center">
+            <div className="mt-8 flex justify-center">
               <Link
                 href="/deals"
-                className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#074031] text-white text-sm font-bold hover:bg-[#0B3D2E] transition-colors min-h-[48px]"
+                className="group inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#074031] text-white text-sm font-bold hover:bg-[#0B513E] transition-all shadow-sm hover:shadow-md min-h-[48px]"
               >
-                {isBn ? "সব ডিল দেখুন" : "View All Deals"}
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                <span>{isBn ? "সব ডিল দেখুন" : "View All Deals"}</span>
+                <ArrowRight className="w-4 h-4 text-[#FEBE16] transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </Reveal>

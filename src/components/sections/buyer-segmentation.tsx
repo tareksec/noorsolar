@@ -363,7 +363,7 @@ export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
         {/* ========================================================
             HORIZONTAL SCROLL TRACK (Framer Motion style={{ x }})
             ======================================================== */}
-        <div className="relative w-full my-auto overflow-visible select-none">
+        <div className="relative w-full my-auto overflow-hidden select-none">
           <motion.div
             ref={trackRef}
             style={{ x }}
