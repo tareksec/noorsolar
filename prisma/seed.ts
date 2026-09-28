@@ -9,7 +9,13 @@ import { sampleBlogPosts } from "./seed-blog";
 
 const prisma = new PrismaClient();
 
-function getProductImagePath(slug: string, view: "front" | "angled" | "detail", defaultSvg: string): string {
+function getProductImagePath(slug: string, view: string, defaultSvg: string): string {
+  if (defaultSvg && !defaultSvg.endsWith(".svg")) {
+    const directPath = path.join(process.cwd(), "public", defaultSvg.replace(/^\//, ""));
+    if (fs.existsSync(directPath)) {
+      return defaultSvg;
+    }
+  }
   const photoExts = [".webp", ".jpg", ".jpeg", ".png"];
   for (const ext of photoExts) {
     const relPath = `/demo/products/${slug}-${view}${ext}`;
@@ -210,8 +216,8 @@ async function main() {
         moqBn: (pRec.moqBn as string) || null,
         leadTime: p.leadTime,
         leadTimeBn: (pRec.leadTimeBn as string) || null,
-        priceBdt: null,
-        showPrice: false,
+        priceBdt: typeof pRec.priceBdt === "number" ? (pRec.priceBdt as number) : null,
+        showPrice: typeof pRec.showPrice === "boolean" ? (pRec.showPrice as boolean) : false,
         datasheetUrl: null,
         isFeatured: p.isFeatured,
         isActive: true,
@@ -225,10 +231,10 @@ async function main() {
     });
 
     // Images
-    const views = ["front", "angled", "detail"] as const;
+    const views = ["front", "angled", "detail", "compact", "showcase"] as const;
     for (let i = 0; i < p.images.length; i++) {
       const img = p.images[i] as { url: string; alt: string; altBn?: string | null; sortOrder: number };
-      const view = views[i] || "front";
+      const view = views[i] || `view-${i}`;
       const resolvedUrl = getProductImagePath(p.slug, view, img.url);
       await prisma.productImage.create({
         data: {
@@ -236,7 +242,7 @@ async function main() {
           url: resolvedUrl,
           alt: img.alt,
           altBn: img.altBn || null,
-          sortOrder: img.sortOrder,
+          sortOrder: img.sortOrder ?? i,
         },
       });
     }

@@ -78,7 +78,11 @@ if (dbUrl && dbUrl.startsWith("mysql://")) {
     runCommand("npx tsx prisma/seed.ts", "Seeding database with categories, products, and admin");
   }
 } else {
-  console.log("ℹ️ Using local SQLite database.");
+  console.log("ℹ️ Using local SQLite database. Ensuring schema & seed...");
+  const pushed = runCommand("npx prisma db push --skip-generate", "Syncing SQLite database schema");
+  if (pushed) {
+    runCommand("npx tsx prisma/seed.ts", "Seeding database with categories, products, and admin");
+  }
 }
 
 console.log("✨ Hostinger setup finished. Proceeding to build...");

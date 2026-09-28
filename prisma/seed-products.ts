@@ -21,22 +21,34 @@ export const demoProducts = [
     "sortOrder": 0,
     "images": [
       {
-        "url": "/demo/products/portable-power-station-1000w-front.jpg",
-        "alt": "Portable Power Station 1000W front view",
+        "url": "/demo/products/portable-power-station-1000w-front.webp",
+        "alt": "Portable Power Station 1000W / 1024Wh front view",
         "sortOrder": 0,
         "altBn": "পোর্টেবল পাওয়ার স্টেশন ১০০০W সামনের দৃশ্য"
       },
       {
         "url": "/demo/products/portable-power-station-1000w-angled.jpg",
-        "alt": "Portable Power Station 1000W angled view",
+        "alt": "Modern Portable Power Station with handle angled view",
         "sortOrder": 1,
-        "altBn": "পোর্টেবল পাওয়ার স্টেশন ১০০০W কোণাকুণি দৃশ্য"
+        "altBn": "মডার্ন পোর্টেবল পাওয়ার স্টেশন কোণাকুণি দৃশ্য"
       },
       {
-        "url": "/demo/products/portable-power-station-1000w-detail.jpg",
-        "alt": "Portable Power Station 1000W control panel detail",
+        "url": "/demo/products/portable-power-station-1000w-detail.webp",
+        "alt": "Portable Power Station multi-port AC & DC output panel detail",
         "sortOrder": 2,
-        "altBn": "পোর্টেবল পাওয়ার স্টেশন ১০০০W কন্ট্রোল প্যানেল"
+        "altBn": "পোর্টেবল পাওয়ার স্টেশন মাল্টি-পোর্ট আউটপুট ও ডিসপ্লে"
+      },
+      {
+        "url": "/demo/products/portable-power-station-1000w-compact.webp",
+        "alt": "Compact Portable Power Station backup unit",
+        "sortOrder": 3,
+        "altBn": "কমপ্যাক্ট পোর্টেবল পাওয়ার স্টেশন ইউনিট"
+      },
+      {
+        "url": "/demo/products/portable-power-station-1000w-showcase.webp",
+        "alt": "Portable Power Station retail and field display",
+        "sortOrder": 4,
+        "altBn": "পোর্টেবল পাওয়ার স্টেশন ফিল্ড ও রিটেল ডিসপ্লে"
       }
     ],
     "specs": [
