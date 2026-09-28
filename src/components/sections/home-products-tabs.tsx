@@ -178,18 +178,18 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
             </h2>
 
             {/* Subtitle */}
-            <p className="mt-2.5 sm:mt-3 text-xs sm:text-[15px] text-slate-500 max-w-2xl mx-auto leading-relaxed">
+            <p className="mt-2.5 sm:mt-3 text-xs sm:text-[15px] text-slate-500 max-w-2xl mx-auto leading-relaxed px-2">
               {isBn
-                ? "বাণিজ্যিক ও শিল্প প্রকল্পের জন্য উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল, লিথিয়াম ব্যাটারি এবং হাইব্রিড ইনভার্টার।"
-                : "Directly imported Tier-1 commercial solar modules, high-density LiFePO4 storage, and intelligent solar inverters with official warranty."}
+                ? "বাণিজ্যিক ও শিল্প প্রকল্পের জন্য উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল, লিথিয়াম ব্যাটারি, ইনভার্টার এবং পোর্টেবল পাওয়ার স্টেশন।"
+                : "Directly imported Tier-1 commercial solar modules, high-density LiFePO4 storage, intelligent solar inverters, and portable power stations."}
             </p>
 
-            {/* 3 Tabs: Solar, Battery, Inverter */}
-            <div className="mt-6 sm:mt-8 flex justify-center overflow-x-auto scrollbar-none px-1">
+            {/* 4 Tabs: Solar, Battery, Inverter, Portable Power (Responsive for Mobile) */}
+            <div className="mt-6 sm:mt-8 w-full overflow-x-auto scrollbar-none py-1.5 px-1 flex justify-start sm:justify-center touch-pan-x">
               <div
                 role="tablist"
                 aria-label={isBn ? "পণ্য বিভাগ" : "Product Categories"}
-                className="inline-flex items-center p-1 sm:p-1.5 rounded-full bg-white border border-slate-100/90 shadow-[0_2px_14px_rgba(0,0,0,0.04)] max-w-full"
+                className="inline-flex items-center p-1 sm:p-1.5 rounded-full bg-white border border-slate-200/90 shadow-[0_2px_14px_rgba(0,0,0,0.06)] min-w-max mx-auto"
               >
                 {tabsConfig.map((tab) => {
                   const isActive = activeTab === tab.id;
@@ -204,7 +204,7 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
                       aria-controls={`panel-${tab.id}`}
                       aria-label={isBn ? `${tab.fullLabel} (${tab.count}টি পণ্য)` : `${tab.fullLabel} (${tab.count} products)`}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`relative flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#074031] whitespace-nowrap ${
+                      className={`relative flex items-center gap-1 sm:gap-2 px-2.5 xs:px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#074031] whitespace-nowrap shrink-0 ${
                         isActive ? "text-white" : "text-slate-600 hover:text-slate-900"
                       }`}
                     >
@@ -217,16 +217,25 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
                         />
                       )}
 
-                      <span className="relative z-10 flex items-center gap-2">
+                      <span className="relative z-10 flex items-center gap-1 sm:gap-2">
                         <IconComponent
-                          className={`w-4 h-4 transition-colors ${
+                          className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-colors shrink-0 ${
                             isActive ? "text-[#FEBE16]" : "text-slate-500"
                           }`}
                         />
-                        <span>{tab.label}</span>
+                        <span>
+                          {tab.id === "portable" ? (
+                            <>
+                              <span className="sm:hidden">{isBn ? "পোর্টেবল" : "Portable"}</span>
+                              <span className="hidden sm:inline">{tab.label}</span>
+                            </>
+                          ) : (
+                            tab.label
+                          )}
+                        </span>
                         {tab.badge && (
                           <span
-                            className={`ml-0.5 px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold tracking-wide uppercase ${
+                            className={`ml-0.5 px-1 sm:px-1.5 py-0.2 rounded-full text-[9px] sm:text-[10px] font-mono font-bold tracking-wide uppercase ${
                               isActive
                                 ? "bg-[#FEBE16] text-[#063328]"
                                 : "bg-emerald-600 text-white shadow-xs"
@@ -238,7 +247,7 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
                         {tab.count > 0 && (
                           <span
                             aria-hidden="true"
-                            className={`ml-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-mono font-bold transition-all ${
+                            className={`ml-0.5 sm:ml-1 inline-flex items-center justify-center min-w-[18px] sm:min-w-[20px] h-4.5 sm:h-5 px-1 sm:px-1.5 rounded-full text-[10px] sm:text-[11px] font-mono font-bold transition-all ${
                               isActive
                                 ? "bg-[#FEBE16] text-[#063328]"
                                 : "bg-slate-100 text-slate-600"

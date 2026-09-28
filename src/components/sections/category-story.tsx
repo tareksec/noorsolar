@@ -255,6 +255,23 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
       ctaBtn: "bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25]",
       indexPill: "bg-white/10 text-[#FEBE16] border border-white/15",
     },
+    {
+      // Card 4: Portable Power Stations (Modern Amber/Gold Accent Theme)
+      sectionBg: "bg-[#09221B] text-white",
+      gridColor: "bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)]",
+      roundedClass: "rounded-tr-2xl rounded-tl-2xl sm:rounded-tr-[40px] sm:rounded-tl-[40px]",
+      shadowClass: "shadow-[0_-30px_70px_rgba(0,0,0,0.55)]",
+      borderClass: "border-t border-[#FEBE16]/30",
+      tagBg: "bg-[#FEBE16]/20 text-[#FEBE16] border border-[#FEBE16]/40",
+      imageBorder: "border-[#FEBE16]/20 bg-white/5",
+      counterBg: "bg-white/[0.08] border border-[#FEBE16]/20 text-white",
+      counterSubtext: "text-[#FEBE16]/80",
+      bulletCheck: "bg-[#FEBE16] text-[#052F25]",
+      bulletText: "text-white/90",
+      bodyText: "text-white/80",
+      ctaBtn: "bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25]",
+      indexPill: "bg-[#FEBE16]/15 text-[#FEBE16] border border-[#FEBE16]/30",
+    },
   ];
 
   return (
@@ -284,7 +301,7 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
                   <div className="inline-flex items-center gap-2 mb-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#FEBE16] animate-pulse" />
                     <span className="text-xs font-mono uppercase tracking-wider opacity-75">
-                      {isBn ? "প্রোডাক্ট স্টোরি • তিনটি মূল ক্যাটাগরি" : "Scroll Story • Three Core Categories"}
+                      {isBn ? "প্রোডাক্ট স্টোরি • নূর সোলার লাইনআপ" : "Scroll Story • Noor Solar Lineup"}
                     </span>
                   </div>
                   <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight">
