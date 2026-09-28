@@ -125,6 +125,502 @@ export const demoProducts = [
     ]
   },
   {
+    "slug": "ecoflow-river-2-256wh",
+    "categorySlug": "portable-power-stations",
+    "name": "EcoFlow RIVER 2 Portable Power Station (256Wh / 300W)",
+    "nameBn": "ইকোফ্লো রিভার ২ পোর্টেবল পাওয়ার স্টেশন (২৫৬Wh / ৩০০W)",
+    "shortDescription": "Ultra-fast charging 256Wh LiFePO4 portable power station with 300W AC pure sine wave output, 60-min full recharge, and 3000+ cycle life.",
+    "shortDescriptionBn": "৬০ মিনিটে ১০০% ফাস্ট রিচার্জ সুবিধাযুক্ত ২৫৬Wh LiFePO4 পোর্টেবল পাওয়ার স্টেশন, ৩০০W পিওর সাইন ওয়েভ আউটপুট এবং ৩০০০+ সাইকেল লাইফ।",
+    "description": "The EcoFlow RIVER 2 is an ultra-portable and lightweight 3.5kg powerhouse featuring durable LiFePO4 battery chemistry with over 3,000 charge cycles.\n\nWith EcoFlow's patented X-Stream charging technology, recharge from 0-100% in just 60 minutes via standard wall outlet or under 3 hours via 110W solar panels. Features 300W pure sine wave AC output (up to 600W X-Boost), USB-C fast charging, and smart Wi-Fi/Bluetooth app control for outdoor camping, emergency backup, and mobile professionals.",
+    "descriptionBn": "ইকোফ্লো রিভার ২ মাত্র ৩.৫ কেজি ওজনের একটি শক্তিশালী ও সহজে বহনযোগ্য পাওয়ার স্টেশন যাতে রয়েছে ৩,০০০+ সাইকেল লাইফ সম্পন্ন দীর্ঘস্থায়ী LiFePO4 ব্যাটারি।\n\nপেটেন্টেড X-Stream প্রযুক্তির সাহায্যে এটি সাধারণ ওয়াল সকেটে মাত্র ৬০ মিনিটে সম্পূর্ণ চার্জ হয়ে যায় এবং ১১০W সোলার প্যানেল দিয়ে ৩ ঘণ্টারও কম সময়ে চার্জ করা সম্ভব। রয়েছে ৩০০W পিওর সাইন ওয়েভ এসি আউটপুট, ইউএসবি-সি ফাস্ট চার্জিং এবং স্মার্ট মোবাইল অ্যাপ কন্ট্রোল।",
+    "brand": "EcoFlow",
+    "model": "RIVER 2 (256Wh)",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit (Ready Stock)",
+    "moqBn": "১ ইউনিট (রেডি স্টক)",
+    "leadTime": "Immediate warehouse delivery",
+    "leadTimeBn": "রেডি স্টক থেকে তাৎক্ষণিক সরবরাহ",
+    "priceBdt": 38000,
+    "showPrice": true,
+    "isFeatured": true,
+    "sortOrder": 1,
+    "images": [
+      {
+        "url": "/demo/products/ecoflow-river-2-front.webp",
+        "alt": "EcoFlow RIVER 2 256Wh 300W Portable Power Station Front",
+        "sortOrder": 0,
+        "altBn": "ইকোফ্লো রিভার ২ ২৫৬Wh ৩০০W পোর্টেবল পাওয়ার স্টেশন সামনের দৃশ্য"
+      },
+      {
+        "url": "/demo/products/ecoflow-river-2-angle.webp",
+        "alt": "EcoFlow RIVER 2 Portable Power Station Angle View",
+        "sortOrder": 1,
+        "altBn": "ইকোফ্লো রিভার ২ পোর্টেবল পাওয়ার স্টেশন কোণাকুণি দৃশ্য"
+      }
+    ],
+    "specs": [
+      {
+        "label": "Battery Capacity",
+        "value": "256 Wh (LiFePO4)",
+        "sortOrder": 1,
+        "labelBn": "ব্যাটারি ক্যাপাসিটি",
+        "valueBn": "২৫৬ Wh (LiFePO4)"
+      },
+      {
+        "label": "AC Inverter Output",
+        "value": "300W continuous (Surge 600W, Pure Sine Wave)",
+        "sortOrder": 2,
+        "labelBn": "এসি ইনভার্টার আউটপুট",
+        "valueBn": "৩০০W অবিচ্ছিন্ন (সার্জ ৬০০W, পিওর সাইন ওয়েভ)"
+      },
+      {
+        "label": "Fast Recharge Time",
+        "value": "60 minutes (0-100% via AC Wall Outlet)",
+        "sortOrder": 3,
+        "labelBn": "ফাস্ট রিচার্জ সময়",
+        "valueBn": "৬০ মিনিট (০-১০০% এসি ওয়াল সকেট)"
+      },
+      {
+        "label": "Solar Charging Input",
+        "value": "11-30V 8A, 110W Max MPPT",
+        "sortOrder": 4,
+        "labelBn": "সোলার চার্জিং ইনপুট",
+        "valueBn": "১১-৩০V ৮A, ১১০W সর্বোচ্চ MPPT"
+      },
+      {
+        "label": "Lifecycles",
+        "value": "3,000+ cycles to 80%+ capacity (10 years)",
+        "sortOrder": 5,
+        "labelBn": "ব্যাটারি লাইফসাইকেল",
+        "valueBn": "৩০০০+ সাইকেল (১০ বছর আয়ু)"
+      },
+      {
+        "label": "Weight",
+        "value": "3.5 kg (7.7 lbs)",
+        "sortOrder": 6,
+        "labelBn": "ওজন",
+        "valueBn": "৩.৫ কেজি"
+      },
+      {
+        "label": "App Connectivity",
+        "value": "Wi-Fi & Bluetooth Smart App Monitoring",
+        "sortOrder": 7,
+        "labelBn": "অ্যাপ কানেক্টিভিটি",
+        "valueBn": "ওয়াইফাই ও ব্লুটুথ স্মার্ট অ্যাপ মনিটরিং"
+      }
+    ]
+  },
+  {
+    "slug": "ugreen-powerroam-gs1200",
+    "categorySlug": "portable-power-stations",
+    "name": "UGREEN PowerRoam GS1200 Portable Power Station (1024Wh / 1200W)",
+    "nameBn": "ইউগ্রিন পাওয়াররোম GS1200 পোর্টেবল পাওয়ার স্টেশন (১০২৪Wh / ১২০০W)",
+    "shortDescription": "Premium 1024Wh LiFePO4 power station with 1200W AC output (U-Turbo 2500W), 13 ports, 50-minute fast charging, and mobile app monitoring.",
+    "shortDescriptionBn": "১২০০W এসি আউটপুট (U-Turbo ২৫০০W), ১৩টি পোর্ট, ৫০ মিনিটে ৮০% ফাস্ট চার্জিং এবং মোবাইল অ্যাপ কন্ট্রোলসহ ১০২৪Wh LiFePO4 পাওয়ার স্টেশন।",
+    "description": "Co-engineered with BYD, the UGREEN PowerRoam GS1200 features EV-grade LiFePO4 battery chemistry with a 10-year service life.\n\nDelivers 1200W continuous output with U-Turbo technology powering heavy appliances up to 2500W. Features PowerZip ultra-fast recharge reaching 80% in just 50 minutes. Equipped with 13 versatile output ports, advanced BMS 0.1s short-circuit isolation, and app remote control via Wi-Fi and Bluetooth.",
+    "descriptionBn": "BYD-এর সহযোগিতায় উন্নত ইভি-গ্রেড LiFePO4 ব্যাটারিসহ তৈরি ইউগ্রিন পাওয়াররোম GS1200 যা ১০ বছরের দীর্ঘস্থায়ী সার্ভিস নিশ্চিত করে।\n\nএটিতে রয়েছে ১২০০W অবিচ্ছিন্ন আউটপুট এবং U-Turbo প্রযুক্তির মাধ্যমে ২৫০০W পর্যন্ত ভারী যন্ত্রপাতি চালানোর সুবিধা। মাত্র ৫০ মিনিটে ৮০% চার্জ হয়। ১৩টি বিভিন্ন ধরনের আউটপুট পোর্ট ও মোবাইল অ্যাপের সাহায্যে দূর থেকেও সবকিছু নিয়ন্ত্রণ করা সম্ভব।",
+    "brand": "UGREEN",
+    "model": "GS1200 (1024Wh)",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit (Ready Stock)",
+    "moqBn": "১ ইউনিট (রেডি স্টক)",
+    "leadTime": "Immediate warehouse delivery",
+    "leadTimeBn": "রেডি স্টক থেকে তাৎক্ষণিক সরবরাহ",
+    "priceBdt": 88000,
+    "showPrice": true,
+    "isFeatured": true,
+    "sortOrder": 2,
+    "images": [
+      {
+        "url": "/demo/products/ugreen-powerroam-1200w.webp",
+        "alt": "UGREEN PowerRoam GS1200 1024Wh 1200W Portable Power Station",
+        "sortOrder": 0,
+        "altBn": "ইউগ্রিন পাওয়াররোম GS1200 ১০২৪Wh ১২০০W পোর্টেবল পাওয়ার স্টেশন"
+      }
+    ],
+    "specs": [
+      {
+        "label": "Battery Capacity",
+        "value": "1024 Wh (EV-grade LiFePO4)",
+        "sortOrder": 1,
+        "labelBn": "ব্যাটারি ক্যাপাসিটি",
+        "valueBn": "১০২৪ Wh (উন্নত LiFePO4)"
+      },
+      {
+        "label": "AC Inverter Output",
+        "value": "1200W Pure Sine Wave (U-Turbo 2500W)",
+        "sortOrder": 2,
+        "labelBn": "এসি ইনভার্টার আউটপুট",
+        "valueBn": "১২০০W পিওর সাইন ওয়েভ (ইউ-টার্বো ২৫০০W)"
+      },
+      {
+        "label": "Fast Charging",
+        "value": "0 to 80% in 50 mins (PowerZip AC)",
+        "sortOrder": 3,
+        "labelBn": "ফাস্ট চার্জিং",
+        "valueBn": "৫০ মিনিটে ৮০% ফাস্ট চার্জ"
+      },
+      {
+        "label": "Solar Recharging",
+        "value": "400W Max MPPT (12-48V, full charge in 3-4 hrs)",
+        "sortOrder": 4,
+        "labelBn": "সোলার চার্জিং",
+        "valueBn": "৪০০W সর্বোচ্চ MPPT (৩-৪ ঘণ্টায় ফুল চার্জ)"
+      },
+      {
+        "label": "Output Ports",
+        "value": "13 Ports (6x AC, 2x USB-C 100W, 2x USB-A 22.5W, 2x DC5521, 1x Car Port)",
+        "sortOrder": 5,
+        "labelBn": "আউটপুট পোর্ট সংখ্যা",
+        "valueBn": "১৩টি পোর্ট (৬x এসি, ২x ১০০W টাইপ-সি, ইত্যাদি)"
+      },
+      {
+        "label": "Lifecycles",
+        "value": "3,000+ cycles to 80% (10 Years Lifespan)",
+        "sortOrder": 6,
+        "labelBn": "লাইফসাইকেল",
+        "valueBn": "৩০০০+ সাইকেল (১০ বছর স্থায়ী)"
+      }
+    ]
+  },
+  {
+    "slug": "modern-portable-power-station-1500w",
+    "categorySlug": "portable-power-stations",
+    "name": "Pro Series 1500W Heavy-Duty Portable Power Station (1440Wh)",
+    "nameBn": "প্রো সিরিজ ১৫০০W হেভি-ডিউটি পোর্টেবল পাওয়ার স্টেশন (১৪৪০Wh)",
+    "shortDescription": "Heavy-duty 1440Wh LiFePO4 energy storage generator with 1500W continuous output, rugged carry handle, dual AC sockets, and LCD smart telemetry.",
+    "shortDescriptionBn": "১৫০০W পাওয়ার আউটপুট, মজবুত হ্যান্ডেল, ডুয়াল এসি সকেট এবং এলসিডি ডিসপ্লে সমৃদ্ধ ১৪৪০Wh হেভি-ডিউটি LiFePO4 পাওয়ার স্টেশন।",
+    "description": "The Pro Series 1500W is a heavy-duty portable solar generator built for critical emergency backup, worksites, and off-grid setups.\n\nBoasts 1440Wh LiFePO4 storage capacity and a 1500W pure sine wave inverter capable of running refrigerators, medical devices, power drills, and desktop workstations. Features a durable ergonomic handle, large backlit telemetry LCD showing real-time load, and 500W high-voltage solar charging.",
+    "descriptionBn": "প্রো সিরিজ ১৫০০W একটি হেভি-ডিউটি পোর্টেবল সোলার জেনারেটর যা জরুরি ব্যাকআপ, ওয়ার্কসাইট এবং অফ-গ্রিড ব্যবহারের জন্য আদর্শ।\n\nএতে রয়েছে ১৪৪০Wh LiFePO4 স্টোরেজ এবং ১৫০০W পিওর সাইন ওয়েভ ইনভার্টার যার মাধ্যমে ফ্রিজ, মেডিকেল যন্ত্রপাতি ও পাওয়ার টুলস অনায়াসে চলে। বড় ব্যাকলিট এলসিডি ডিসপ্লেতে লোড ও চার্জের রিয়েল-টাইম তথ্য দেখা যায়।",
+    "brand": "Noor Solar Energy",
+    "model": "NS-PPS-1500",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit (Ready Stock)",
+    "moqBn": "১ ইউনিট (রেডি স্টক)",
+    "leadTime": "Immediate warehouse delivery",
+    "leadTimeBn": "রেডি স্টক থেকে তাৎক্ষণিক সরবরাহ",
+    "priceBdt": 115000,
+    "showPrice": true,
+    "isFeatured": true,
+    "sortOrder": 3,
+    "images": [
+      {
+        "url": "/demo/products/pro-series-1500w-station.jpg",
+        "alt": "Pro Series 1500W Heavy-Duty Portable Power Station 1440Wh",
+        "sortOrder": 0,
+        "altBn": "প্রো সিরিজ ১৫০০W হেভি-ডিউটি পোর্টেবল পাওয়ার স্টেশন ১৪৪০Wh"
+      }
+    ],
+    "specs": [
+      {
+        "label": "Battery Capacity",
+        "value": "1440 Wh (LiFePO4 Chemistry)",
+        "sortOrder": 1,
+        "labelBn": "ব্যাটারি ক্যাপাসিটি",
+        "valueBn": "১৪৪০ Wh (LiFePO4 ব্যাটারি)"
+      },
+      {
+        "label": "AC Continuous Output",
+        "value": "1500W (Peak Surge 3000W)",
+        "sortOrder": 2,
+        "labelBn": "এসি আউটপুট",
+        "valueBn": "১৫০০W (পিক সার্জ ৩০০০W)"
+      },
+      {
+        "label": "Solar MPPT Input",
+        "value": "12-60V / 500W Max Solar Input",
+        "sortOrder": 3,
+        "labelBn": "সোলার MPPT ইনপুট",
+        "valueBn": "১২-৬০V / ৫০০W সর্বোচ্চ সোলার ইনপুট"
+      },
+      {
+        "label": "Cycle Life",
+        "value": "3,500+ cycles to 80% capacity",
+        "sortOrder": 4,
+        "labelBn": "সাইকেল লাইফ",
+        "valueBn": "৩৫০০+ সাইকেল (৮০% পর্যন্ত)"
+      },
+      {
+        "label": "AC Inverter",
+        "value": "Pure Sine Wave (< 3% THD)",
+        "sortOrder": 5,
+        "labelBn": "ইনভার্টার টাইপ",
+        "valueBn": "পিওর সাইন ওয়েভ (< ৩% THD)"
+      }
+    ]
+  },
+  {
+    "slug": "mp10-mini-portable-solar-generator",
+    "categorySlug": "portable-power-stations",
+    "name": "MP-10 Mini Portable Solar Generator & Power Pack (150W / 160Wh)",
+    "nameBn": "এমপি-১০ মিনি পোর্টেবল সোলার জেনারেটর ও পাওয়ার প্যাক (১৫০W / ১৬০Wh)",
+    "shortDescription": "Compact and ultra-portable 160Wh solar generator pack with 150W output, multi-voltage DC outputs, USB quick charge, and LED torch for camping & backup.",
+    "shortDescriptionBn": "ক্যাম্পিং, ভ্রমণ ও জরুরি লাইটিংয়ের জন্য ১৫০W আউটপুট, মাল্টি-ভোল্টেজ ডিসি ও ইউএসবি কুইক চার্জ সুবিধাযুক্ত ১৬০Wh মিনি সোলার জেনারেটর।",
+    "description": "The MP-10 is an ultra-compact and budget-friendly mini portable solar generator weighing only 1.8kg.\n\nEngineered for outdoor travelers, field engineers, and rural emergency lighting, it features 160Wh lithium energy storage, 150W output, multiple 12V DC ports for DC fans and bulbs, dual USB-A quick charge, and compatibility with 30W-60W folding solar panels.",
+    "descriptionBn": "এমপি-১০ একটি অত্যন্ত কমপ্যাক্ট এবং সাশ্রয়ী মিনি পোর্টেবল সোলার জেনারেটর যার ওজন মাত্র ১.৮ কেজি।\n\nআউটডোর ট্রাভেলার ও জরুরি লাইটিংয়ের জন্য এতে রয়েছে ১৬০Wh লিথিয়াম স্টোরেজ, ১৫০W আউটপুট, ডিসি ফ্যান ও বাল্বের জন্য ১২V পোর্ট এবং ৩০W-৬০W সোলার প্যানেল সংযোগের সুবিধা।",
+    "brand": "Noor Solar Energy",
+    "model": "MP-10 Mini",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit (Ready Stock)",
+    "moqBn": "১ ইউনিট (রেডি স্টক)",
+    "leadTime": "Immediate warehouse delivery",
+    "leadTimeBn": "রেডি স্টক থেকে তাৎক্ষণিক সরবরাহ",
+    "priceBdt": 18500,
+    "showPrice": true,
+    "isFeatured": false,
+    "sortOrder": 4,
+    "images": [
+      {
+        "url": "/demo/products/mp10-mini-power-pack.webp",
+        "alt": "MP-10 Mini Portable Solar Generator and Power Pack 160Wh",
+        "sortOrder": 0,
+        "altBn": "এমপি-১০ মিনি পোর্টেবল সোলার জেনারেটর ও পাওয়ার প্যাক ১৬০Wh"
+      }
+    ],
+    "specs": [
+      {
+        "label": "Battery Capacity",
+        "value": "160 Wh High-Density Lithium",
+        "sortOrder": 1,
+        "labelBn": "ব্যাটারি ক্যাপাসিটি",
+        "valueBn": "১৬০ Wh হাই-ডেনসিটি লিথিয়াম"
+      },
+      {
+        "label": "Power Output",
+        "value": "150W Modified Sine Wave (Surge 200W)",
+        "sortOrder": 2,
+        "labelBn": "পাওয়ার আউটপুট",
+        "valueBn": "১৫০W (সার্জ ২০০W)"
+      },
+      {
+        "label": "DC Outputs",
+        "value": "4x 12V/10A DC ports + 2x USB QC3.0",
+        "sortOrder": 3,
+        "labelBn": "ডিসি আউটপুট",
+        "valueBn": "৪x ১২V/১০A ডিসি পোর্ট + ২x USB QC৩.০"
+      },
+      {
+        "label": "Solar Compatibility",
+        "value": "18V / 30W-60W Solar Panel Input",
+        "sortOrder": 4,
+        "labelBn": "সোলার কানেক্টিভিটি",
+        "valueBn": "১৮V / ৩০W-৬০W সোলার প্যানেল"
+      },
+      {
+        "label": "Weight",
+        "value": "1.8 kg (Backpack Ready)",
+        "sortOrder": 5,
+        "labelBn": "ওজন",
+        "valueBn": "১.৮ কেজি (সহজে বহনযোগ্য)"
+      }
+    ]
+  },
+  {
+    "slug": "mp3s-portable-solar-power-generator",
+    "categorySlug": "portable-power-stations",
+    "name": "MP-3S Compact Portable Solar Power Station (300W / 288Wh)",
+    "nameBn": "এমপি-৩এস কমপ্যাক্ট পোর্টেবল সোলার পাওয়ার স্টেশন (৩০০W / ২৮৮Wh)",
+    "shortDescription": "All-in-one 288Wh solar generator with 300W AC pure sine wave inverter, emergency LED floodlight, foldable carry handle, and MPPT solar charging.",
+    "shortDescriptionBn": "৩০০W পিওর সাইন ওয়েভ ইনভার্টার, জরুরি এলইডি লাইট এবং ফোল্ডিং হ্যান্ডেলযুক্ত ২৮৮Wh অল-ইন-ওয়ান পোর্টেবল সোলার জেনারেটর।",
+    "description": "The MP-3S is an all-in-one 288Wh solar generator featuring a 300W AC pure sine wave inverter for sensitive electronics, laptops, CPAP machines, and TV monitors.\n\nEquipped with a built-in multi-mode LED emergency light, foldable carry handle, MPPT solar charge controller, and intelligent thermal ventilation system.",
+    "descriptionBn": "এমপি-৩এস একটি অল-ইন-ওয়ান ২৮৮Wh সোলার জেনারেটর যাতে রয়েছে ল্যাপটপ, টিভি ও অন্যান্য ডিভাইসের জন্য ৩০০W পিওর সাইন ওয়েভ ইনভার্টার।\n\nএতে রয়েছে বিল্ট-ইন মাল্টি-মোড এলইডি এমার্জেন্সি লাইট, ফোল্ডিং হ্যান্ডেল এবং উন্নত MPPT সোলার চার্জ কন্ট্রোলার।",
+    "brand": "Noor Solar Energy",
+    "model": "MP-3S",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit (Ready Stock)",
+    "moqBn": "১ ইউনিট (রেডি স্টক)",
+    "leadTime": "Immediate warehouse delivery",
+    "leadTimeBn": "রেডি স্টক থেকে তাৎক্ষণিক সরবরাহ",
+    "priceBdt": 32000,
+    "showPrice": true,
+    "isFeatured": false,
+    "sortOrder": 5,
+    "images": [
+      {
+        "url": "/demo/products/mp3s-portable-solar-generator.webp",
+        "alt": "MP-3S Compact Portable Solar Power Station 300W 288Wh",
+        "sortOrder": 0,
+        "altBn": "এমপি-৩এস কমপ্যাক্ট পোর্টেবল সোলার পাওয়ার স্টেশন ৩০০W ২৮৮Wh"
+      }
+    ],
+    "specs": [
+      {
+        "label": "Battery Capacity",
+        "value": "288 Wh LiFePO4",
+        "sortOrder": 1,
+        "labelBn": "ব্যাটারি ক্যাপাসিটি",
+        "valueBn": "২৮৮ Wh LiFePO4"
+      },
+      {
+        "label": "AC Output",
+        "value": "300W Pure Sine Wave (Surge 600W)",
+        "sortOrder": 2,
+        "labelBn": "এসি আউটপুট",
+        "valueBn": "৩০০W পিওর সাইন ওয়েভ (সার্জ ৬০০W)"
+      },
+      {
+        "label": "Lighting",
+        "value": "5W High-Lumen Emergency Floodlight",
+        "sortOrder": 3,
+        "labelBn": "জরুরি লাইটিং",
+        "valueBn": "৫W হাই-লুমেন এমার্জেন্সি ফ্লাডলাইট"
+      },
+      {
+        "label": "Solar Input",
+        "value": "12-24V / 80W Max MPPT Solar Recharging",
+        "sortOrder": 4,
+        "labelBn": "সোলার চার্জিং",
+        "valueBn": "১২-২৪V / ৮০W সর্বোচ্চ MPPT সোলার"
+      },
+      {
+        "label": "Weight",
+        "value": "3.2 kg",
+        "sortOrder": 5,
+        "labelBn": "ওজন",
+        "valueBn": "৩.২ কেজি"
+      }
+    ]
+  },
+  {
+    "slug": "sl63-industrial-portable-power-station",
+    "categorySlug": "portable-power-stations",
+    "name": "SL63 Heavy-Duty Outdoor Portable Power Station (600W / 512Wh)",
+    "nameBn": "এসএল৬৩ হেভি-ডিউটি আউটডোর পোর্টেবল পাওয়ার স্টেশন (৬০০W / ৫১২Wh)",
+    "shortDescription": "Ruggedized 512Wh LiFePO4 power station delivering 600W continuous pure sine wave power, ideal for fieldwork, medical refrigeration, and drone battery charging.",
+    "shortDescriptionBn": "মাঠপর্যায়ের কাজ, ড্রোন চার্জিং ও জরুরি ব্যাকআপের জন্য ৬০০W অবিচ্ছিন্ন পিওর সাইন ওয়েভ এবং ৫১২Wh LiFePO4 হেভি-ডিউটি পাওয়ার স্টেশন।",
+    "description": "Built for industrial technicians, field surveys, and emergency response, the SL63 delivers 600W continuous pure sine wave AC power from a 512Wh LiFePO4 core.\n\nFeatures dual 220V AC outlets, USB-C 60W Power Delivery, 200W solar fast recharging, and heavy-duty shock-absorbing chassis for harsh outdoor operations.",
+    "descriptionBn": "মাঠপর্যায়ের কাজ ও জরুরি সেবার জন্য তৈরি এসএল৬৩ পাওয়ার স্টেশনে রয়েছে ৫১২Wh LiFePO4 কোর এবং ৬০০W অবিচ্ছিন্ন পিওর সাইন ওয়েভ এসি পাওয়ার।\n\nএটিতে রয়েছে ডুয়াল ২২০V এসি সকেট, ৬০W ইউএসবি-সি পাওয়ার ডেলিভারি এবং ২০০W সোলার ফাস্ট চার্জিং সুবিধা।",
+    "brand": "Noor Solar Energy",
+    "model": "SL63-L2",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit (Ready Stock)",
+    "moqBn": "১ ইউনিট (রেডি স্টক)",
+    "leadTime": "Immediate warehouse delivery",
+    "leadTimeBn": "রেডি স্টক থেকে তাৎক্ষণিক সরবরাহ",
+    "priceBdt": 52000,
+    "showPrice": true,
+    "isFeatured": true,
+    "sortOrder": 6,
+    "images": [
+      {
+        "url": "/demo/products/sl63-heavy-duty-600w.webp",
+        "alt": "SL63 Heavy-Duty Outdoor Portable Power Station 600W 512Wh",
+        "sortOrder": 0,
+        "altBn": "এসএল৬৩ হেভি-ডিউটি আউটডোর পোর্টেবল পাওয়ার স্টেশন ৬০০W ৫১২Wh"
+      }
+    ],
+    "specs": [
+      {
+        "label": "Battery Capacity",
+        "value": "512 Wh (LiFePO4 Chemistry)",
+        "sortOrder": 1,
+        "labelBn": "ব্যাটারি ক্যাপাসিটি",
+        "valueBn": "৫১২ Wh (LiFePO4 ব্যাটারি)"
+      },
+      {
+        "label": "AC Continuous Output",
+        "value": "600W Pure Sine Wave (Surge 1200W)",
+        "sortOrder": 2,
+        "labelBn": "এসি আউটপুট",
+        "valueBn": "৬০০W পিওর সাইন ওয়েভ (সার্জ ১২০০W)"
+      },
+      {
+        "label": "Solar Charging",
+        "value": "12-30V / 200W Max MPPT Solar Input",
+        "sortOrder": 3,
+        "labelBn": "সোলার চার্জিং",
+        "valueBn": "১২-৩০V / ২০০W সর্বোচ্চ MPPT সোলার ইনপুট"
+      },
+      {
+        "label": "Lifecycles",
+        "value": "3,000+ cycles to 80% capacity",
+        "sortOrder": 4,
+        "labelBn": "লাইফসাইকেল",
+        "valueBn": "৩০০০+ সাইকেল (৮০% পর্যন্ত)"
+      },
+      {
+        "label": "Weight",
+        "value": "6.2 kg",
+        "sortOrder": 5,
+        "labelBn": "ওজন",
+        "valueBn": "৬.২ কেজি"
+      }
+    ]
+  },
+  {
+    "slug": "commercial-multi-station-2400w",
+    "categorySlug": "portable-power-stations",
+    "name": "Commercial Series 2400W High-Capacity Power Station (2048Wh)",
+    "nameBn": "কমার্শিয়াল সিরিজ ২৪০০W হাই-ক্যাপাসিটি পাওয়ার স্টেশন (২০৪৮Wh)",
+    "shortDescription": "Utility-grade 2048Wh expandable LiFePO4 station engineered for commercial backup, emergency medical equipment, heavy power tools, and mobile workshops.",
+    "shortDescriptionBn": "ভারী পাওয়ার টুলস, কমার্শিয়াল ব্যাকআপ ও মোবাইল ওয়ার্কশপের জন্য তৈরি ২০৪৮Wh এক্সপ্যান্ডেবল LiFePO4 ও ২৪০০W হাই-আউটপুট পাওয়ার স্টেশন।",
+    "description": "The Commercial Series 2400W is a flagship expandable portable power station engineered for demanding industrial, commercial, and emergency infrastructure.\n\nEquipped with 2048Wh automotive-grade LiFePO4 cells (expandable up to 8192Wh with add-on battery packs), a massive 2400W pure sine wave inverter (4800W surge), dual 500W MPPT solar controllers (1000W total solar input), and ultra-fast <15ms UPS automatic transfer.",
+    "descriptionBn": "কমার্শিয়াল সিরিজ ২৪০০W একটি ফ্ল্যাগশিপ পোর্টেবল পাওয়ার স্টেশন যা ভারী ইন্ডাস্ট্রিয়াল ও বাণিজ্যিক ব্যাকআপের জন্য বিশেষভাবে প্রস্তুত।\n\nএতে রয়েছে ২০৪৮Wh অটোমোটিভ-গ্রেড LiFePO4 সেল (অতিরিক্ত ব্যাটারি যোগ করে ৮১৯২Wh পর্যন্ত বাড়ানো যায়), ২৪০০W পিওর সাইন ওয়েভ ইনভার্টার (সার্জ ৪৮০০W), ১০০০W ডুয়াল MPPT সোলার ইনপুট এবং <১৫ms অতি দ্রুত ইউপিএস সুইচওভার।",
+    "brand": "Noor Solar Energy",
+    "model": "NS-PPS-2400-COMM",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit (Ready Stock)",
+    "moqBn": "১ ইউনিট (রেডি স্টক)",
+    "leadTime": "Immediate warehouse delivery",
+    "leadTimeBn": "রেডি স্টক থেকে তাৎক্ষণিক সরবরাহ",
+    "priceBdt": 165000,
+    "showPrice": true,
+    "isFeatured": true,
+    "sortOrder": 7,
+    "images": [
+      {
+        "url": "/demo/products/commercial-station-2400w.webp",
+        "alt": "Commercial Series 2400W High-Capacity Power Station 2048Wh",
+        "sortOrder": 0,
+        "altBn": "কমার্শিয়াল সিরিজ ২৪০০W হাই-ক্যাপাসিটি পাওয়ার স্টেশন ২০৪৮Wh"
+      }
+    ],
+    "specs": [
+      {
+        "label": "Battery Capacity",
+        "value": "2048 Wh (Expandable up to 8.19 kWh)",
+        "sortOrder": 1,
+        "labelBn": "ব্যাটারি ক্যাপাসিটি",
+        "valueBn": "২০৪৮ Wh (৮.১৯ kWh পর্যন্ত বাড়ানো সম্ভব)"
+      },
+      {
+        "label": "AC Continuous Output",
+        "value": "2400W Pure Sine Wave (Surge 4800W)",
+        "sortOrder": 2,
+        "labelBn": "এসি আউটপুট",
+        "valueBn": "২৪০০W পিওর সাইন ওয়েভ (সার্জ ৪৮০০W)"
+      },
+      {
+        "label": "Solar Recharging",
+        "value": "1000W Dual MPPT Solar Input (12-150V)",
+        "sortOrder": 3,
+        "labelBn": "সোলার রিচার্জিং",
+        "valueBn": "১০০০W ডুয়াল MPPT সোলার ইনপুট"
+      },
+      {
+        "label": "UPS Transfer Time",
+        "value": "< 15 ms Zero Interruption Transfer",
+        "sortOrder": 4,
+        "labelBn": "ইউপিএস ট্রান্সফার সময়",
+        "valueBn": "< ১৫ মিলি-সেকেন্ড"
+      },
+      {
+        "label": "Lifecycles",
+        "value": "3,500+ cycles to 80% (10+ years)",
+        "sortOrder": 5,
+        "labelBn": "লাইফসাইকেল",
+        "valueBn": "৩৫০০+ সাইকেল (১০+ বছর)"
+      },
+      {
+        "label": "Weight",
+        "value": "22.5 kg (With Heavy-Duty Roll Wheels)",
+        "sortOrder": 6,
+        "labelBn": "ওজন",
+        "valueBn": "২২.৫ কেজি (হেভি-ডিউটি চাকাযুক্ত)"
+      }
+    ]
+  },
+  {
     "slug": "n-type-topcon-bifacial-module-620w",
     "categorySlug": "solar-panels",
     "name": "N-Type TOPCon Bifacial Module 620W",

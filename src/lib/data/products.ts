@@ -161,14 +161,16 @@ export async function ensurePortableStationInDb(): Promise<void> {
       console.log("✅ [DB Auto-Sync] Category portable-power-stations created.");
     }
 
-    // 2. Ensure product in DB
-    const existing = await db.product.findUnique({
-      where: { slug: "portable-power-station-1000w" },
-    });
+    if (!cat) return;
 
-    if (!existing && cat) {
-      const demoItem = demoProducts.find((p) => p.slug === "portable-power-station-1000w");
-      if (demoItem) {
+    // 2. Ensure all portable power station products exist in DB
+    const stationDemoItems = demoProducts.filter((p) => p.categorySlug === "portable-power-stations");
+    for (const demoItem of stationDemoItems) {
+      const existing = await db.product.findUnique({
+        where: { slug: demoItem.slug },
+      });
+
+      if (!existing) {
         const pRec = demoItem as Record<string, unknown>;
         const created = await db.product.create({
           data: {
@@ -180,8 +182,8 @@ export async function ensurePortableStationInDb(): Promise<void> {
             shortDescriptionBn: (pRec.shortDescriptionBn as string) || null,
             description: demoItem.description,
             descriptionBn: (pRec.descriptionBn as string) || null,
-            brand: demoItem.brand || "Noor Solar",
-            model: demoItem.model || "NS-PPS-1000",
+            brand: demoItem.brand || "Noor Solar Energy",
+            model: demoItem.model || "NS-PPS",
             stockStatus: demoItem.stockStatus || "IN_STOCK",
             moq: demoItem.moq || "1 unit (Ready Stock)",
             moqBn: (pRec.moqBn as string) || "১ ইউনিট (রেডি স্টক)",
@@ -190,10 +192,10 @@ export async function ensurePortableStationInDb(): Promise<void> {
             priceBdt: typeof pRec.priceBdt === "number" ? pRec.priceBdt : 75000,
             showPrice: true,
             datasheetUrl: null,
-            isFeatured: true,
+            isFeatured: Boolean(demoItem.isFeatured),
             isActive: true,
             isDemo: true,
-            sortOrder: 0,
+            sortOrder: typeof demoItem.sortOrder === "number" ? demoItem.sortOrder : 0,
             metaTitle: (pRec.metaTitle as string) || null,
             metaTitleBn: (pRec.metaTitleBn as string) || null,
             metaDescription: (pRec.metaDescription as string) || null,
@@ -217,7 +219,7 @@ export async function ensurePortableStationInDb(): Promise<void> {
             },
           },
         });
-        console.log("✅ [DB Auto-Sync] Product portable-power-station-1000w inserted into DB -> ID:", created.id);
+        console.log(`✅ [DB Auto-Sync] Product ${demoItem.slug} inserted into DB -> ID:`, created.id);
       }
     }
   } catch (err) {
@@ -256,14 +258,16 @@ export async function getFeaturedProducts(locale?: string) {
       products = [...products, ...additional];
     }
 
-    // CRITICAL: Ensure portable power station is ALWAYS featured and prominently placed at top
-    if (!products.some((p) => p.slug === "portable-power-station-1000w")) {
-      const fbStation = getFallbackDemoProducts().find((p) => p.slug === "portable-power-station-1000w");
-      if (fbStation) {
-        products = [fbStation as unknown as (typeof products)[0], ...products];
+    // CRITICAL: Ensure featured portable power stations are ALWAYS included at top
+    const featuredStations = getFallbackDemoProducts().filter(
+      (p) => p.categoryId === "portable-power-stations" && p.isFeatured
+    );
+    for (const fStation of [...featuredStations].reverse()) {
+      if (!products.some((p) => p.slug === fStation.slug)) {
+        products.unshift(fStation as unknown as (typeof products)[0]);
       }
-      ensurePortableStationInDb().catch(() => {});
     }
+    ensurePortableStationInDb().catch(() => {});
 
     if (products.length === 0) {
       const fallbackList = getFallbackDemoProducts();
@@ -319,19 +323,25 @@ export async function getAllProducts(options?: {
       options.categorySlug === "all" ||
       options.categorySlug === "portable-power-stations";
 
-    // If query matches portable power station keywords
-    const matchesStationQuery =
-      !options?.query ||
-      /portable|power|station|1000w|পোর্টেবল|স্টেশন/i.test(options.query);
-
-    if (isStationCategory && matchesStationQuery) {
-      if (!products.some((p) => p.slug === "portable-power-station-1000w")) {
-        const fbStation = getFallbackDemoProducts().find((p) => p.slug === "portable-power-station-1000w");
-        if (fbStation) {
-          products = [fbStation as unknown as (typeof products)[0], ...products];
+    if (isStationCategory) {
+      const stationDemoList = getFallbackDemoProducts().filter(
+        (p) => p.categoryId === "portable-power-stations"
+      );
+      for (const fbStation of stationDemoList) {
+        if (!products.some((p) => p.slug === fbStation.slug)) {
+          if (
+            !options?.query ||
+            new RegExp(options.query, "i").test(
+              `${fbStation.name} ${fbStation.description} ${fbStation.nameBn || ""}`
+            )
+          ) {
+            products.push(fbStation as unknown as (typeof products)[0]);
+          }
         }
-        ensurePortableStationInDb().catch(() => {});
       }
+      // Keep sorted by sortOrder
+      products.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+      ensurePortableStationInDb().catch(() => {});
     }
 
     if (products.length === 0) {
@@ -367,7 +377,7 @@ export async function getProductBySlug(slug: string, locale?: string) {
     if (!product) {
       const fallback = getFallbackDemoProducts().find((p) => p.slug === slug);
       if (fallback) {
-        if (slug === "portable-power-station-1000w") {
+        if (fallback.categoryId === "portable-power-stations") {
           ensurePortableStationInDb().catch(() => {});
         }
         const related = getFallbackDemoProducts()
@@ -449,10 +459,16 @@ export async function getProductsByCategory(categorySlug: string, locale?: strin
       },
     });
 
-    if (categorySlug === "portable-power-stations" && products.length === 0) {
-      ensurePortableStationInDb().catch(() => {});
+    if (categorySlug === "portable-power-stations") {
       const fallbackList = getFallbackDemoProducts().filter((p) => p.categoryId === categorySlug);
-      return fallbackList.map((p) => localizeProduct(p, locale));
+      for (const fb of fallbackList) {
+        if (!products.some((p) => p.slug === fb.slug)) {
+          products.push(fb as unknown as (typeof products)[0]);
+        }
+      }
+      products.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+      ensurePortableStationInDb().catch(() => {});
+      return products.map((p) => localizeProduct(p, locale));
     }
 
     if (products.length === 0) {

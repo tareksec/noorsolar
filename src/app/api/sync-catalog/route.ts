@@ -17,8 +17,8 @@ export async function GET() {
       },
     });
 
-    const product = await db.product.findUnique({
-      where: { slug: "portable-power-station-1000w" },
+    const products = await db.product.findMany({
+      where: { category: { slug: "portable-power-stations" } },
       include: {
         images: true,
         specs: true,
@@ -34,14 +34,17 @@ export async function GET() {
       stats: {
         totalProducts,
         totalCategories,
+        portableStationsInDb: products.length,
       },
-      portablePowerStation: {
+      portablePowerStations: {
         categoryExists: Boolean(category),
         categoryDetails: category,
-        productExists: Boolean(product),
-        productSlug: product?.slug,
-        productImagesCount: product?.images?.length ?? 0,
-        productSpecsCount: product?.specs?.length ?? 0,
+        products: products.map((p) => ({
+          slug: p.slug,
+          name: p.name,
+          imagesCount: p.images.length,
+          specsCount: p.specs.length,
+        })),
       },
     });
   } catch (error) {
