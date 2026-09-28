@@ -1,0 +1,5 @@
+{
+  "build": {
+    "memory_limit": 4096
+  }
+}
