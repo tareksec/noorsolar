@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
+import { ensurePortableStationInDb, getFallbackDemoProducts } from "./products";
 
-const fallbackCategories = [
+export const fallbackCategories = [
   {
     id: "cat-panels",
     slug: "solar-panels",
@@ -67,7 +68,25 @@ export async function getCategories(locale?: string) {
       },
     });
 
-    const activeCategories = categories.length > 0 ? categories : fallbackCategories;
+    let activeCategories = [...categories];
+
+    // Ensure all fallback categories (especially portable-power-stations) exist
+    for (const fb of fallbackCategories) {
+      if (!activeCategories.some((c) => c.slug === fb.slug)) {
+        activeCategories.push({
+          ...fb,
+          _count: { products: 1 },
+        } as unknown as (typeof categories)[0]);
+        // Trigger background DB auto-sync
+        ensurePortableStationInDb().catch(() => {});
+      }
+    }
+
+    if (activeCategories.length === 0) {
+      activeCategories = fallbackCategories as unknown as typeof categories;
+    } else {
+      activeCategories.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    }
 
     if (locale !== "bn") return activeCategories;
 
@@ -87,10 +106,9 @@ export async function getCategories(locale?: string) {
   }
 }
 
-
 export async function getCategoryBySlug(slug: string, locale?: string) {
   try {
-    const category = await db.category.findUnique({
+    let category = await db.category.findUnique({
       where: { slug, isActive: true },
       include: {
         products: {
@@ -104,7 +122,23 @@ export async function getCategoryBySlug(slug: string, locale?: string) {
       },
     });
 
-    if (!category || locale !== "bn") return category;
+    if (!category) {
+      const fbCat = fallbackCategories.find((c) => c.slug === slug);
+      if (fbCat) {
+        const catProducts = getFallbackDemoProducts().filter((p) => p.categoryId === slug);
+        category = {
+          ...fbCat,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          products: catProducts,
+        } as unknown as typeof category;
+        ensurePortableStationInDb().catch(() => {});
+      }
+    }
+
+    if (!category) return null;
+
+    if (locale !== "bn") return category;
 
     return {
       ...category,
@@ -132,6 +166,40 @@ export async function getCategoryBySlug(slug: string, locale?: string) {
     };
   } catch (error) {
     console.warn(`getCategoryBySlug: failed to fetch slug ${slug}`, error);
+    const fbCat = fallbackCategories.find((c) => c.slug === slug);
+    if (fbCat) {
+      const catProducts = getFallbackDemoProducts().filter((p) => p.categoryId === slug);
+      const category = {
+        ...fbCat,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        products: catProducts,
+      };
+
+      if (locale !== "bn") return category;
+      return {
+        ...category,
+        name: category.nameBn?.trim() || category.name,
+        description: category.descriptionBn?.trim() || category.description,
+        products: category.products.map((p) => ({
+          ...p,
+          name: p.nameBn?.trim() || p.name,
+          shortDescription: p.shortDescriptionBn?.trim() || p.shortDescription,
+          description: p.descriptionBn?.trim() || p.description,
+          moq: p.moqBn?.trim() || p.moq,
+          leadTime: p.leadTimeBn?.trim() || p.leadTime,
+          images: p.images?.map((img) => ({
+            ...img,
+            alt: img.altBn?.trim() || img.alt,
+          })),
+          specs: p.specs?.map((s) => ({
+            ...s,
+            label: s.labelBn?.trim() || s.label,
+            value: s.valueBn?.trim() || s.value,
+          })),
+        })),
+      };
+    }
     return null;
   }
 }

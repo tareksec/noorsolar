@@ -49,6 +49,27 @@ function sanitizeDbUrl(raw) {
   return url;
 }
 
+if (!process.env.DATABASE_URL) {
+  const envCandidates = [
+    path.join(__dirname, "..", ".env"),
+    path.join(__dirname, "..", ".env.production"),
+    path.join(__dirname, "..", ".env.local"),
+  ];
+  for (const envFile of envCandidates) {
+    if (fs.existsSync(envFile)) {
+      try {
+        const text = fs.readFileSync(envFile, "utf8");
+        const match = text.match(/^\s*DATABASE_URL\s*=\s*(["']?)(.*?)\1\s*$/m);
+        if (match && match[2]) {
+          process.env.DATABASE_URL = match[2];
+          console.log(`📦 Loaded DATABASE_URL from ${path.basename(envFile)}`);
+          break;
+        }
+      } catch {}
+    }
+  }
+}
+
 if (process.env.DATABASE_URL) {
   process.env.DATABASE_URL = sanitizeDbUrl(process.env.DATABASE_URL);
 }
