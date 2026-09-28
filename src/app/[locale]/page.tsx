@@ -74,7 +74,27 @@ export async function generateMetadata({
       url: isBn ? "/" : "/en",
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
-      images: [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Noor Solar Energy" }],
+      siteName: isBn ? "নূর সোলার এনার্জি" : "Noor Solar Energy",
+      images: [
+        {
+          url: `${siteUrl}/opengraph-image.png`,
+          secureUrl: `${siteUrl}/opengraph-image.png`,
+          width: 1200,
+          height: 630,
+          alt: isBn ? "নূর সোলার এনার্জি" : "Noor Solar Energy",
+          type: "image/png",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: isBn
+        ? "নূর সোলার এনার্জি — ইন্ডাস্ট্রিয়াল সোলার প্যানেল, ব্যাটারি ও ইনভার্টার"
+        : "Noor Solar Energy — Industrial Solar Panels, Storage & Inverters",
+      description: isBn
+        ? "বাংলাদেশে কন্টেইনার-স্কেল পাইকারি সরবরাহকারী: কমার্শিয়াল সোলার প্যানেল, LiFePO4 ব্যাটারি ও ইনভার্টার।"
+        : "Direct importer and container-scale wholesale supplier of commercial-grade solar panels, LiFePO4 batteries, and inverters in Bangladesh.",
+      images: [`${siteUrl}/opengraph-image.png`],
     },
   };
 }

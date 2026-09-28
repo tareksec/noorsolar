@@ -58,6 +58,8 @@ model Product {
   metaTitleBn        String?
   metaDescription    String?        
   metaDescriptionBn  String?        
+  erpProductId       String?         // ERP ID or Item code mapping
+  erpSyncedAt        DateTime?       // Timestamp of last ERP sync
   images             ProductImage[]
   specs              ProductSpec[]
   quotes             QuoteRequest[]
@@ -88,18 +90,34 @@ model ProductSpec {
 }
 
 model QuoteRequest {
+  id                String   @id @default(cuid())
+  productId         String?
+  product           Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  name              String
+  company           String?
+  phone             String
+  email             String?
+  quantity          String?
+  location          String?
+  message           String? 
+  status            String   @default("NEW") // NEW | CONTACTED | CLOSED
+  erpQuoteId        String?  // Reference or Order/Lead ID in ERP
+  erpSyncStatus     String?  @default("PENDING") // PENDING | SYNCED | FAILED
+  erpSyncedAt       DateTime?
+  erpTrackingStatus String?  // Production / Shipment tracking status from ERP
+  trackingNumber    String?  // Tracking or invoice number from ERP
+  note              String? 
+  createdAt         DateTime @default(now())
+}
+
+model ErpSyncLog {
   id        String   @id @default(cuid())
-  productId String?
-  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
-  name      String
-  company   String?
-  phone     String
-  email     String?
-  quantity  String?
-  location  String?
-  message   String? 
-  status    String   @default("NEW") // NEW | CONTACTED | CLOSED
-  note      String? 
+  entity    String   // QUOTE | PRODUCT | WEBHOOK
+  entityId  String?
+  action    String   // SEND_QUOTE | UPDATE_PRODUCT | UPDATE_STATUS | WEBHOOK_RECEIVED
+  status    String   // SUCCESS | FAILED
+  payload   String?  // JSON stringified payload
+  response  String?  // JSON stringified response or error
   createdAt DateTime @default(now())
 }
 

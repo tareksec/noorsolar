@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { quoteRequestSchema } from "@/lib/validation";
+import { sendQuoteToERP } from "@/lib/erp";
 
 export type QuoteActionResult = {
   success: boolean;
@@ -83,7 +84,7 @@ export async function submitQuoteRequest(
       : (data.message || null);
 
     // Save to database
-    await db.quoteRequest.create({
+    const newQuote = await db.quoteRequest.create({
       data: {
         name: data.name,
         phone: data.phone,
@@ -94,8 +95,57 @@ export async function submitQuoteRequest(
         location: data.location || null,
         message: compiledMessage,
         status: "NEW",
+        erpSyncStatus: "PENDING",
+      },
+      include: {
+        product: {
+          select: {
+            id: true,
+            slug: true,
+            name: true,
+            model: true,
+            erpProductId: true,
+          },
+        },
       },
     });
+
+    // Real-time sync to ERP
+    try {
+      const erpResult = await sendQuoteToERP({
+        id: newQuote.id,
+        name: newQuote.name,
+        company: newQuote.company,
+        phone: newQuote.phone,
+        email: newQuote.email,
+        quantity: newQuote.quantity,
+        location: newQuote.location,
+        message: newQuote.message,
+        createdAt: newQuote.createdAt,
+        productId: newQuote.productId,
+        product: newQuote.product,
+      });
+
+      if (erpResult.success) {
+        await db.quoteRequest.update({
+          where: { id: newQuote.id },
+          data: {
+            erpSyncStatus: "SYNCED",
+            erpQuoteId: erpResult.erpQuoteId || null,
+            erpSyncedAt: new Date(),
+          },
+        });
+      } else {
+        await db.quoteRequest.update({
+          where: { id: newQuote.id },
+          data: {
+            erpSyncStatus: "FAILED",
+          },
+        });
+      }
+    } catch (syncErr) {
+      console.error("[ERP Sync Exception in submitQuoteRequest]:", syncErr);
+    }
 
     revalidatePath("/admin/quotes");
     revalidatePath("/admin");

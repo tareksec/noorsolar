@@ -216,15 +216,15 @@ export function RecentDeals({
                     onClick={() => setActiveTab(t.id)}
                     className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold border transition-all min-h-[40px] cursor-pointer ${
                       active
-                        ? "bg-[#074031] border-[#074031] text-white shadow-sm"
-                        : "bg-white border-[#DCE4E0] text-[#62706A] hover:border-[#074031]/50 hover:text-[#074031]"
+                        ? "bg-[#FEBE16] border-[#FEBE16] text-[#052F25] shadow-sm hover:bg-[#E4A900]"
+                        : "bg-white border-[#DCE4E0] text-[#62706A] hover:border-[#FEBE16] hover:text-[#052F25]"
                     }`}
                   >
                     <span>{t.label}</span>
                     <span
                       className={`font-mono text-[11px] px-2 py-0.5 rounded-full font-bold transition-colors ${
                         active
-                          ? "bg-[#FEBE16] text-[#052F25]"
+                          ? "bg-[#052F25] text-[#FEBE16]"
                           : "bg-[#F1F4F1] text-[#62706A]"
                       }`}
                     >
@@ -293,7 +293,7 @@ export function RecentDeals({
                   <td className="px-4 py-4 text-right">
                     <Link
                       href={`/product/${p.slug}`}
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#074031] text-white text-xs sm:text-[13px] font-semibold hover:bg-[#FEBE16] hover:text-[#052F25] transition-colors whitespace-nowrap min-h-[40px] shadow-xs"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#FEBE16] text-[#052F25] text-xs sm:text-[13px] font-bold hover:bg-[#E4A900] transition-colors whitespace-nowrap min-h-[40px] shadow-xs"
                     >
                       <span>{isBn ? "ডিল দেখুন" : "Shop Deal"}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -318,10 +318,10 @@ export function RecentDeals({
             <div className="mt-8 flex justify-center">
               <Link
                 href="/deals"
-                className="group inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#074031] text-white text-sm font-bold hover:bg-[#0B513E] transition-all shadow-sm hover:shadow-md min-h-[48px]"
+                className="group inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#FEBE16] text-[#052F25] text-sm font-bold hover:bg-[#E4A900] transition-all shadow-sm hover:shadow-md min-h-[48px]"
               >
                 <span>{isBn ? "সব ডিল দেখুন" : "View All Deals"}</span>
-                <ArrowRight className="w-4 h-4 text-[#FEBE16] transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="w-4 h-4 text-[#052F25] transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </Reveal>
