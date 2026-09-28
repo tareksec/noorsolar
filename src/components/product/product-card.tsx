@@ -26,6 +26,7 @@ interface ProductCardProps {
     moq?: string | null;
     priceBdt?: number | null;
     showPrice: boolean;
+    isFeatured?: boolean;
     images: Array<{ url: string; alt: string }>;
     specs: Array<{ label: string; value: string }>;
     category?: { name: string; slug: string } | null;
@@ -69,6 +70,9 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
   const getProductImage = () => {
     const slug = (product.slug || product.model || "").toLowerCase();
+    if (slug.includes("portable") || slug.includes("power-station") || slug.includes("pps")) {
+      return product.images[0]?.url || "/demo/products/portable-power-station-1000w-front.jpg";
+    }
     if (slug.includes("620")) return "/solar-images/panel-620w.jpg";
     if (slug.includes("585")) return "/solar-images/panel-585w.jpg";
     if (slug.includes("550")) return "/solar-images/panel-550w.jpg";
@@ -175,9 +179,16 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           {getStockBadge(product.stockStatus)}
         </div>
 
-        {/* Category Tag (Top-Right Pill) - hidden on mobile to avoid overlapping with stock status badge */}
-        <div className="hidden sm:block absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-mono font-semibold uppercase tracking-wider text-slate-600 shadow-xs border border-white/70 pointer-events-none">
-          {categoryName}
+        {/* Category Tag & Featured Pill (Top-Right Pill) */}
+        <div className="absolute top-2.5 sm:top-3 right-2.5 sm:right-3 z-10 flex items-center gap-1.5 pointer-events-none">
+          {product.isFeatured && (
+            <span className="px-2 py-0.5 sm:py-1 rounded-full bg-[#074031] text-[#FEBE16] text-[10px] font-mono font-bold uppercase tracking-wider shadow-xs border border-[#FEBE16]/30">
+              {isBn ? "ফিচার্ড" : "FEATURED"}
+            </span>
+          )}
+          <span className="hidden sm:inline-block px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-mono font-semibold uppercase tracking-wider text-slate-600 shadow-xs border border-white/70">
+            {categoryName}
+          </span>
         </div>
       </div>
 

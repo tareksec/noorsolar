@@ -37,6 +37,18 @@ const fallbackCategories = [
     isActive: true,
     _count: { products: 5 },
   },
+  {
+    id: "cat-power-stations",
+    slug: "portable-power-stations",
+    name: "Portable Power Station",
+    nameBn: "পোর্টেবল পাওয়ার স্টেশন",
+    description: "High-capacity LiFePO4 portable power stations with pure sine wave AC output, fast solar recharge, and UPS backup.",
+    descriptionBn: "আউটডোর ও জরুরি ব্যাকআপের জন্য পিওর সাইন ওয়েভ এসি আউটপুট ও সোলার রিচার্জ সুবিধাযুক্ত LiFePO4 পোর্টেবল পাওয়ার স্টেশন।",
+    image: "/photos/cat-portable-power-station.jpg",
+    sortOrder: 3,
+    isActive: true,
+    _count: { products: 1 },
+  },
 ];
 
 export async function getCategories(locale?: string) {

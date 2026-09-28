@@ -128,6 +128,19 @@ const SPEC_SUGGESTIONS: Record<string, string[]> = {
     "Tilt Angle Range",
     "Applicable Roof Type",
   ],
+  "portable-power-stations": [
+    "Battery Capacity (Wh)",
+    "Rated AC Output (W)",
+    "Peak Surge Output (W)",
+    "AC Output Voltage (V)",
+    "Solar Input (W / V)",
+    "Cell Chemistry",
+    "Cycle Life",
+    "Recharge Time",
+    "USB Ports / PD",
+    "Weight (kg)",
+    "Product Warranty",
+  ],
 };
 
 const initialState: ProductActionResult = {

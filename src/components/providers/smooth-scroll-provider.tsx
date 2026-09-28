@@ -66,7 +66,7 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
   }, []);
 
   return (
-    <div ref={containerRef} data-motion="smooth-scroll" className="w-full">
+    <div ref={containerRef} data-motion="smooth-scroll" className="w-full" suppressHydrationWarning>
       {children}
     </div>
   );

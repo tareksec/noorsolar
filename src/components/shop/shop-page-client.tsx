@@ -292,6 +292,15 @@ export function ShopPageClient({
       image: "/demo/inverter-30kw-ongrid-front.svg",
       alt: "Solar Accessories",
     },
+    {
+      id: "portable-power-stations",
+      slug: "portable-power-stations",
+      badge: isBn ? "নতুন" : "HOT NEW",
+      badgeColor: "bg-[#074031] text-[#FEBE16] font-bold shadow-xs",
+      title: isBn ? "পোর্টেবল পাওয়ার" : "Portable Power",
+      image: "/photos/cat-portable-power-station.jpg",
+      alt: "Portable Power Station",
+    },
   ];
 
   return (

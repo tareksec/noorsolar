@@ -1,5 +1,118 @@
 export const demoProducts = [
   {
+    "slug": "portable-power-station-1000w",
+    "categorySlug": "portable-power-stations",
+    "name": "Portable Power Station 1000W / 1024Wh",
+    "nameBn": "পোর্টেবল পাওয়ার স্টেশন ১০০০W / ১০২৪Wh",
+    "shortDescription": "High-capacity 1024Wh LiFePO4 portable power station with 1000W pure sine wave AC output, MPPT solar fast charging, and UPS emergency backup.",
+    "shortDescriptionBn": "১০০০W পিওর সাইন ওয়েভ এসি আউটপুট, সোলার ফাস্ট চার্জিং এবং ১০২৪Wh LiFePO4 ব্যাটারিসহ পোর্টেবল পাওয়ার স্টেশন।",
+    "description": "Designed for off-grid operations, emergency backup, mobile fieldwork, and outdoor power, this 1000W portable power station features durable LiFePO4 battery chemistry with over 3,000 charge cycles.\n\nEquipped with dual AC 220V/230V pure sine wave outlets, USB-C 100W PD fast charging, car lighter port, and high-speed MPPT solar input capable of recharging from 0 to 80% in under 1.5 hours. Built-in intelligent BMS protects against over-voltage, overload, and temperature spikes.",
+    "descriptionBn": "অফ-গ্রিড কার্যক্রম, জরুরি বিদ্যুৎ ব্যাকআপ এবং ভ্রাম্যমাণ কাজের জন্য তৈরি এই ১০০০W পোর্টেবল পাওয়ার স্টেশনে রয়েছে ৩,০০০+ সাইকেল লাইফ সমৃদ্ধ উন্নত LiFePO4 ব্যাটারি।\n\nএটিতে রয়েছে ডুয়াল ২২০V পিওর সাইন ওয়েভ এসি সকেট, ১০০W USB-C ফাস্ট চার্জিং এবং উন্নত MPPT সোলার কন্ট্রোলার যা মাত্র ১.৫ ঘণ্টায় ৮০% চার্জ নিশ্চিত করে। ইন্টেলিজেন্ট BMS সুরক্ষা যেকোনো ওভারলোড ও উচ্চ তাপমাত্রায় সম্পূর্ণ সুরক্ষা প্রদান করে।",
+    "brand": "Noor Solar",
+    "model": "NS-PPS-1000",
+    "stockStatus": "IN_STOCK",
+    "moq": "1 unit (Ready Stock)",
+    "moqBn": "১ ইউনিট (রেডি স্টক)",
+    "leadTime": "Immediate warehouse delivery",
+    "leadTimeBn": "রেডি স্টক থেকে তাৎক্ষণিক সরবরাহ",
+    "priceBdt": 75000,
+    "showPrice": true,
+    "isFeatured": true,
+    "sortOrder": 0,
+    "images": [
+      {
+        "url": "/demo/products/portable-power-station-1000w-front.jpg",
+        "alt": "Portable Power Station 1000W front view",
+        "sortOrder": 0,
+        "altBn": "পোর্টেবল পাওয়ার স্টেশন ১০০০W সামনের দৃশ্য"
+      },
+      {
+        "url": "/demo/products/portable-power-station-1000w-angled.jpg",
+        "alt": "Portable Power Station 1000W angled view",
+        "sortOrder": 1,
+        "altBn": "পোর্টেবল পাওয়ার স্টেশন ১০০০W কোণাকুণি দৃশ্য"
+      },
+      {
+        "url": "/demo/products/portable-power-station-1000w-detail.jpg",
+        "alt": "Portable Power Station 1000W control panel detail",
+        "sortOrder": 2,
+        "altBn": "পোর্টেবল পাওয়ার স্টেশন ১০০০W কন্ট্রোল প্যানেল"
+      }
+    ],
+    "specs": [
+      {
+        "label": "Battery Capacity",
+        "value": "1024 Wh (LiFePO4)",
+        "sortOrder": 1,
+        "labelBn": "ব্যাটারি ক্যাপাসিটি",
+        "valueBn": "১০২৪ Wh (LiFePO4)"
+      },
+      {
+        "label": "Rated AC Output",
+        "value": "1000W (Surge 2000W)",
+        "sortOrder": 2,
+        "labelBn": "রেটেড এসি আউটপুট",
+        "valueBn": "১০০০W (সার্জ ২০০০W)"
+      },
+      {
+        "label": "Output Voltage",
+        "value": "220V - 240V ~ 50Hz (Pure Sine Wave)",
+        "sortOrder": 3,
+        "labelBn": "আউটপুট ভোল্টেজ",
+        "valueBn": "২২০V - ২৪০V ~ ৫০Hz (পিওর সাইন ওয়েভ)"
+      },
+      {
+        "label": "Solar Charging Input",
+        "value": "12V-60V Max 400W (Built-in MPPT)",
+        "sortOrder": 4,
+        "labelBn": "সোলার চার্জিং ইনপুট",
+        "valueBn": "১২V-৬০V সর্বোচ্চ ৪০০W (বিল্ট-ইন MPPT)"
+      },
+      {
+        "label": "Cycle Life",
+        "value": "3,000+ Cycles to 80% Capacity",
+        "sortOrder": 5,
+        "labelBn": "সাইকেল লাইফ",
+        "valueBn": "৩,০০০+ সাইকেল (৮০% ক্যাপাসিটি)"
+      },
+      {
+        "label": "Fast Recharging",
+        "value": "0 to 80% in 1.2 Hours (AC Wall + Solar)",
+        "sortOrder": 6,
+        "labelBn": "দ্রুত রিচার্জিং",
+        "valueBn": "১.২ ঘণ্টায় ০ থেকে ৮০% (এসি + সোলার)"
+      },
+      {
+        "label": "USB Ports",
+        "value": "2x USB-C (100W PD), 2x USB-A (18W QC)",
+        "sortOrder": 7,
+        "labelBn": "ইউএসবি পোর্ট",
+        "valueBn": "২x USB-C (১০০W PD), ২x USB-A (১৮W QC)"
+      },
+      {
+        "label": "UPS Switchover",
+        "value": "< 20 ms",
+        "sortOrder": 8,
+        "labelBn": "ইউপিএস সুইচওভার সময়",
+        "valueBn": "< ২০ মিলি-সেকেন্ড"
+      },
+      {
+        "label": "Weight",
+        "value": "11.5 kg",
+        "sortOrder": 9,
+        "labelBn": "ওজন",
+        "valueBn": "১১.৫ কেজি"
+      },
+      {
+        "label": "Warranty",
+        "value": "3 Years Official Noor Solar Warranty",
+        "sortOrder": 10,
+        "labelBn": "ওয়ারেন্টি",
+        "valueBn": "৩ বছর অফিসিয়াল নূর সোলার ওয়ারেন্টি"
+      }
+    ]
+  },
+  {
     "slug": "n-type-topcon-bifacial-module-620w",
     "categorySlug": "solar-panels",
     "name": "N-Type TOPCon Bifacial Module 620W",

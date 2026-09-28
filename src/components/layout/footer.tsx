@@ -131,6 +131,7 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
     { href: "/products?category=solar-panels", label: isBn ? "সোলার প্যানেল" : "Solar Panels" },
     { href: "/products?category=lithium-batteries", label: isBn ? "লিথিয়াম ব্যাটারি" : "Lithium Batteries" },
     { href: "/products?category=solar-inverters", label: isBn ? "সোলার ইনভার্টার" : "Solar Inverters" },
+    { href: "/products?category=portable-power-stations", label: isBn ? "পোর্টেবল পাওয়ার স্টেশন" : "Portable Power Stations" },
     { href: "/products", label: isBn ? "সব প্রোডাক্ট" : "All Products" },
     { href: "/quote", label: isBn ? "কোটেশন নিন" : "Request Quote" },
   ];

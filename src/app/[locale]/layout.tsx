@@ -144,11 +144,60 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={`${fontClasses} max-w-full overflow-x-clip`}
     >
-      <head />
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function purgeExtensionInjections() {
+                  try {
+                    var selectors = [
+                      '#rankseo-toolbar',
+                      '.rankseo-pos-top',
+                      '[id^="rankseo"]',
+                      '[class*="rankseo"]',
+                      'grammarly-extension',
+                      'grammarly-popups'
+                    ];
+                    for (var s = 0; s < selectors.length; s++) {
+                      var found = document.querySelectorAll(selectors[s]);
+                      for (var i = 0; i < found.length; i++) {
+                        if (found[i] && found[i].parentNode) {
+                          found[i].parentNode.removeChild(found[i]);
+                        }
+                      }
+                    }
+                    if (document.body && document.body.hasAttribute('cz-shortcut-listen')) {
+                      document.body.removeAttribute('cz-shortcut-listen');
+                    }
+                  } catch (e) {}
+                }
+                purgeExtensionInjections();
+                if (typeof MutationObserver !== 'undefined') {
+                  var observer = new MutationObserver(function() {
+                    purgeExtensionInjections();
+                  });
+                  observer.observe(document.documentElement, {
+                    childList: true,
+                    subtree: true
+                  });
+                  window.addEventListener('DOMContentLoaded', purgeExtensionInjections);
+                  window.addEventListener('load', function() {
+                    purgeExtensionInjections();
+                    setTimeout(function() {
+                      observer.disconnect();
+                    }, 4000);
+                  });
+                }
+              })();
+            `,
+          }}
+        />
+      </head>
       <body suppressHydrationWarning className="min-h-screen bg-[#F7F8F5] text-[#17251F] antialiased selection:bg-[#FEBE16] selection:text-[#052F25] max-w-full overflow-x-clip">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SmoothScrollProvider>
-            <div className="flex flex-col min-h-screen bg-[#F7F8F5] w-full max-w-full overflow-x-clip">
+            <div suppressHydrationWarning className="flex flex-col min-h-screen bg-[#F7F8F5] w-full max-w-full overflow-x-clip">
               <div className="hidden md:block">
               <Header
                 phoneDisplay={settings.phoneDisplay}

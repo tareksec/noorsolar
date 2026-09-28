@@ -92,12 +92,16 @@ function getFallbackDemoProducts() {
           ? "Solar Panels"
           : p.categorySlug === "lithium-batteries"
           ? "Lithium Batteries"
+          : p.categorySlug === "portable-power-stations"
+          ? "Portable Power Station"
           : "Solar Inverters",
       nameBn:
         p.categorySlug === "solar-panels"
           ? "সোলার প্যানেল"
           : p.categorySlug === "lithium-batteries"
           ? "লিথিয়াম ব্যাটারি"
+          : p.categorySlug === "portable-power-stations"
+          ? "পোর্টেবল পাওয়ার স্টেশন"
           : "সোলার ইনভার্টার",
       description: null,
       descriptionBn: null,

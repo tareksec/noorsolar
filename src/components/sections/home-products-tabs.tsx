@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Sun, BatteryCharging, Cpu, ArrowRight, ShieldCheck, Truck, Award } from "lucide-react";
+import { Sun, BatteryCharging, Cpu, ArrowRight, ShieldCheck, Truck, Award, Zap } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { ProductCard } from "@/components/product/product-card";
 import { Reveal } from "@/components/ui/reveal";
@@ -29,17 +29,17 @@ interface HomeProductsTabsProps {
   locale?: string;
 }
 
-type TabType = "solar" | "battery" | "inverter";
+type TabType = "solar" | "battery" | "inverter" | "portable";
 
 export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsTabsProps) {
   const isBn = locale === "bn";
   const [activeTab, setActiveTab] = useState<TabType>("solar");
 
-  // Filter products by the 3 specified tabs
+  // Filter products by the specified tabs
   const tabData = useMemo(() => {
     const solarList = products.filter((p) => {
       const slug = p.category?.slug || p.categorySlug || p.categoryId || "";
-      if (slug.includes("inverter") || slug.includes("batter")) return false;
+      if (slug.includes("inverter") || slug.includes("batter") || slug.includes("portable") || slug.includes("station")) return false;
       return (
         slug === "solar-panels" ||
         slug.includes("solar-panel") ||
@@ -53,6 +53,7 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
 
     const batteryList = products.filter((p) => {
       const slug = p.category?.slug || p.categorySlug || p.categoryId || "";
+      if (slug.includes("portable") || slug.includes("station")) return false;
       return (
         slug === "lithium-batteries" ||
         slug.includes("batter") ||
@@ -73,10 +74,22 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
       );
     });
 
+    const portableList = products.filter((p) => {
+      const slug = p.category?.slug || p.categorySlug || p.categoryId || "";
+      return (
+        slug === "portable-power-stations" ||
+        slug.includes("portable") ||
+        slug.includes("station") ||
+        p.slug.includes("portable") ||
+        p.slug.includes("power-station")
+      );
+    });
+
     return {
       solar: solarList,
       battery: batteryList,
       inverter: inverterList,
+      portable: portableList,
     };
   }, [products]);
 
@@ -88,6 +101,7 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
       icon: Sun,
       categorySlug: "solar-panels",
       count: tabData.solar.length,
+      badge: null,
     },
     {
       id: "battery" as TabType,
@@ -96,6 +110,7 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
       icon: BatteryCharging,
       categorySlug: "lithium-batteries",
       count: tabData.battery.length,
+      badge: null,
     },
     {
       id: "inverter" as TabType,
@@ -104,6 +119,16 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
       icon: Cpu,
       categorySlug: "solar-inverters",
       count: tabData.inverter.length,
+      badge: null,
+    },
+    {
+      id: "portable" as TabType,
+      label: isBn ? "পোর্টেবল পাওয়ার" : "Portable Power",
+      fullLabel: isBn ? "পোর্টেবল পাওয়ার স্টেশন" : "Portable Power Stations",
+      icon: Zap,
+      categorySlug: "portable-power-stations",
+      count: tabData.portable.length,
+      badge: isBn ? "নতুন" : "NEW",
     },
   ];
 
@@ -199,6 +224,17 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
                           }`}
                         />
                         <span>{tab.label}</span>
+                        {tab.badge && (
+                          <span
+                            className={`ml-0.5 px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold tracking-wide uppercase ${
+                              isActive
+                                ? "bg-[#FEBE16] text-[#063328]"
+                                : "bg-emerald-600 text-white shadow-xs"
+                            }`}
+                          >
+                            {tab.badge}
+                          </span>
+                        )}
                         {tab.count > 0 && (
                           <span
                             aria-hidden="true"

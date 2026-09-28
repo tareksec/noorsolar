@@ -117,6 +117,28 @@ const ITEMS_EN: ProvideItem[] = [
     watermark: "ESS",
     displayChar: "03",
   },
+  {
+    id: "portable-power-stations",
+    number: "04",
+    stepNum: 4,
+    code: "PPS-GEN // 04",
+    badge: "NEW RELEASE",
+    icon: Zap,
+    title: "LiFePO4 Portable Power Stations",
+    description:
+      "Reliable, plug-and-play portable solar generators with 1000W AC pure sine wave output, fast solar recharge, and UPS backup.",
+    specs: [
+      { icon: Battery, label: "Battery Capacity", val: "1024 Wh LiFePO4" },
+      { icon: Zap, label: "AC Output", val: "1000W Pure Sine" },
+      { icon: ShieldCheck, label: "Cycle Life", val: "3000+ Cycles" },
+      { icon: RefreshCw, label: "Fast Recharge", val: "0-80% in 1.2h" },
+    ],
+    imageUrl: "/photos/cat-portable-power-station.jpg",
+    imageAlt: "Portable power stations and solar generators for mobile energy and emergency backup",
+    link: "/category/portable-power-stations",
+    watermark: "PPS",
+    displayChar: "04",
+  },
 ];
 
 const ITEMS_BN: ProvideItem[] = [
@@ -185,6 +207,28 @@ const ITEMS_BN: ProvideItem[] = [
     link: "/category/lithium-batteries",
     watermark: "ESS",
     displayChar: "০৩",
+  },
+  {
+    id: "portable-power-stations",
+    number: "০৪",
+    stepNum: 4,
+    code: "পোর্টেবল PPS // ০৪",
+    badge: "নতুন সংযোজন",
+    icon: Zap,
+    title: "LiFePO4 পোর্টেবল পাওয়ার স্টেশন",
+    description:
+      "জরুরি ব্যাকআপ, আউটডোর ও ভ্রাম্যমাণ কাজের জন্য ১০০০W পিওর সাইন ওয়েভ এবং দ্রুত সোলার রিচার্জ সুবিধাযুক্ত পোর্টেবল পাওয়ার স্টেশন।",
+    specs: [
+      { icon: Battery, label: "ব্যাটারি ক্যাপাসিটি", val: "১০২৪ Wh LiFePO4" },
+      { icon: Zap, label: "এসি আউটপুট", val: "১০০০W পিওর সাইন" },
+      { icon: ShieldCheck, label: "সাইকেল লাইফ", val: "৩০০০+ সাইকেল" },
+      { icon: RefreshCw, label: "ফাস্ট রিচার্জ", val: "১.২ ঘণ্টায় ৮০%" },
+    ],
+    imageUrl: "/photos/cat-portable-power-station.jpg",
+    imageAlt: "মোবাইল ও ইমার্জেন্সি বিদ্যুৎ সুবিধার জন্য পোর্টেবল পাওয়ার স্টেশন",
+    link: "/category/portable-power-stations",
+    watermark: "PPS",
+    displayChar: "০৪",
   },
 ];
 

@@ -123,6 +123,17 @@ async function main() {
       image: "/photos/cat-solar-inverters.webp",
       sortOrder: 3,
     },
+    {
+      slug: "portable-power-stations",
+      name: "Portable Power Station",
+      nameBn: "পোর্টেবল পাওয়ার স্টেশন",
+      description:
+        "High-capacity LiFePO4 portable power stations with pure sine wave AC output, fast solar recharge, and UPS backup for emergency & mobile power.",
+      descriptionBn:
+        "আউটডোর ও জরুরি বিদ্যুৎ ব্যাকআপের জন্য পিওর সাইন ওয়েভ এসি আউটপুট ও সোলার রিচার্জ সুবিধাযুক্ত আধুনিক LiFePO4 পোর্টেবল পাওয়ার স্টেশন।",
+      image: "/photos/cat-portable-power-station.jpg",
+      sortOrder: 4,
+    },
   ];
 
   const categories: Record<string, string> = {};
