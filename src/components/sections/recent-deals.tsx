@@ -8,6 +8,7 @@ import { Link } from "@/i18n/routing";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import type { TabProduct } from "@/components/sections/home-products-tabs";
 import { Reveal } from "@/components/ui/reveal";
+import { StaggerText } from "@/components/ui/stagger-text";
 
 type DealTab = "solar" | "inverter" | "battery" | "other";
 
@@ -144,11 +145,9 @@ export function RecentDeals({
                   {isBn ? "টেকসই ভবিষ্যতের জন্য শক্তি" : "Powering a sustainable future"}
                 </p>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white leading-tight">
-                  {isBn ? (
-                    <>আপনার ব্যবসার জন্য লাইভ পাইকারি ডিল</>
-                  ) : (
-                    <>Live wholesale deals for your business</>
-                  )}
+                  <StaggerText delay={0.1} divideBy="word">
+                    {isBn ? "আপনার ব্যবসার জন্য লাইভ পাইকারি ডিল" : "Live wholesale deals for your business"}
+                  </StaggerText>
                 </h2>
                 <p className="mt-3 text-sm sm:text-base text-white/70 leading-relaxed max-w-md">
                   {isBn

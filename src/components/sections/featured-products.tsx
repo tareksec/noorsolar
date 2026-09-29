@@ -5,6 +5,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { ProductCard } from "@/components/product/product-card";
 import { Reveal } from "@/components/ui/reveal";
+import { StaggerText } from "@/components/ui/stagger-text";
 
 export interface FeaturedProduct {
   id: string;
@@ -79,7 +80,9 @@ export function FeaturedProducts({ products = [], locale = "en" }: FeaturedProdu
                 </span>
               </div>
               <h2 className="text-2xl sm:text-3xl lg:text-[2.5rem] font-bold tracking-tight text-[#074031] leading-tight">
-                {isBn ? "প্রজেক্ট-গ্রেড সরঞ্জাম, স্টকে প্রস্তুত" : "Project-Grade Equipment, Ready in Stock"}
+                <StaggerText delay={0.1} divideBy="word">
+                  {isBn ? "প্রজেক্ট-গ্রেড সরঞ্জাম, স্টকে প্রস্তুত" : "Project-Grade Equipment, Ready in Stock"}
+                </StaggerText>
               </h2>
               <p className="mt-2 text-xs sm:text-sm text-[#62706A] leading-relaxed">
                 {isBn

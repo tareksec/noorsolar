@@ -11,6 +11,7 @@ import {
   useMotionValueEvent,
 } from "framer-motion";
 import { MapPin, ArrowRight, ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
+import { StaggerText } from "@/components/ui/stagger-text";
 
 interface BuyerSegmentationProps {
   locale?: string;
@@ -264,17 +265,9 @@ export function BuyerSegmentation({ locale = "bn" }: BuyerSegmentationProps) {
 
               {/* Title */}
               <h2 className="text-2xl sm:text-3xl lg:text-[38px] font-black tracking-tight text-[#17251F] leading-[1.1]">
-                {isBn ? (
-                  <>
-                    সম্পূর্ণ সোলার <br className="hidden sm:inline" />
-                    প্রকিউরমেন্ট সলিউশন
-                  </>
-                ) : (
-                  <>
-                    Complete Solar <br className="hidden sm:inline" />
-                    Procurement Solutions
-                  </>
-                )}
+                <StaggerText delay={0.1} divideBy="word">
+                  {isBn ? "সম্পূর্ণ সোলার প্রকিউরমেন্ট সলিউশন" : "Complete Solar Procurement Solutions"}
+                </StaggerText>
               </h2>
             </div>
 

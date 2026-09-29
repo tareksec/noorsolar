@@ -79,7 +79,10 @@ function TwitterIcon({ className }: { className?: string }) {
 }
 
 const scriptLabel = {
-  fontFamily: "'Segoe Script', 'Bradley Hand', 'Comic Sans MS', cursive",
+  fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif",
+  letterSpacing: "0.08em",
+  textTransform: "uppercase" as const,
+  fontWeight: 600,
 } as const;
 
 export function Footer({ settings, showBlog = false, locale }: FooterProps) {
@@ -377,13 +380,13 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
         </div>
       </div>
 
-      {/* Giant watermark — Discord style bold typography directly below footer cards */}
+      {/* Giant watermark — Architectural luxury brand signature */}
       <div
         aria-hidden="true"
-        className="pointer-events-none relative z-0 mx-auto max-w-7xl select-none overflow-hidden -mt-3 sm:-mt-6 lg:-mt-10 pb-2"
+        className="pointer-events-none relative z-0 mx-auto max-w-7xl select-none overflow-hidden -mt-4 sm:-mt-8 lg:-mt-12 pb-4 sm:pb-6"
       >
-        <p className="whitespace-nowrap text-center font-display text-[clamp(3.8rem,17vw,13.5rem)] font-black leading-none tracking-[-0.04em] text-[#074031]/15 select-none">
-          Noor Solar
+        <p className="whitespace-nowrap text-center font-display text-[clamp(3.5rem,16.5vw,13rem)] font-black uppercase leading-none tracking-[-0.03em] bg-gradient-to-b from-[#074031]/20 via-[#074031]/10 to-transparent dark:from-white/15 dark:via-white/5 dark:to-transparent bg-clip-text text-transparent select-none">
+          NOOR SOLAR
         </p>
       </div>
     </footer>

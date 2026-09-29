@@ -6,6 +6,7 @@ import { Sun, BatteryCharging, Cpu, ArrowRight, ShieldCheck, Truck, Award, Zap }
 import { Link } from "@/i18n/routing";
 import { ProductCard } from "@/components/product/product-card";
 import { Reveal } from "@/components/ui/reveal";
+import { StaggerText } from "@/components/ui/stagger-text";
 
 export interface TabProduct {
   id: string;
@@ -174,7 +175,9 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
 
             {/* Section Main Title: "Products" */}
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#083327] leading-tight">
-              {isBn ? "পণ্যসমূহ" : "Products"}
+              <StaggerText delay={0.1} divideBy="word">
+                {isBn ? "পণ্যসমূহ" : "Products"}
+              </StaggerText>
             </h2>
 
             {/* Subtitle */}

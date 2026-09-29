@@ -3,13 +3,66 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  Clock,
-  Headset,
+  ChevronRight,
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { HeroTextReveal } from "@/components/ui/hero-text-reveal";
+import { FlipFadeText } from "@/components/ui/flip-fade-text";
+import { StaggerText } from "@/components/ui/stagger-text";
+
+// ================= CRISP WHITE ICONS FOR CIRCULAR CATEGORY BADGES =================
+function SolarPanelRoundIcon({ className = "w-5 h-5 text-white" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="5" width="18" height="11" rx="1.8" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.8" />
+      <line x1="3" y1="10.5" x2="21" y2="10.5" stroke="currentColor" strokeWidth="1.6" />
+      <line x1="9" y1="5" x2="9" y2="16" stroke="currentColor" strokeWidth="1.6" />
+      <line x1="15" y1="5" x2="15" y2="16" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M7.5 19.5L12 16L16.5 19.5" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="19" cy="4" r="2" fill="currentColor" />
+    </svg>
+  );
+}
+
+function BatteryStorageRoundIcon({ className = "w-5 h-5 text-white" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4" y="5.5" width="16" height="14" rx="2.5" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.8" />
+      <rect x="7.5" y="3" width="3" height="2.5" rx="0.6" fill="currentColor" />
+      <rect x="13.5" y="3" width="3" height="2.5" rx="0.6" fill="currentColor" />
+      <path d="M12.5 8.5L9.5 13H14.5L11.5 16.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function InverterRoundIcon({ className = "w-5 h-5 text-white" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="2.5" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="12" cy="11" r="3.8" fill="currentColor" fillOpacity="0.25" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M10 11C10.5 9.2 11.2 9.2 12 11C12.8 12.8 13.5 12.8 14 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <circle cx="8" cy="17" r="1.1" fill="currentColor" />
+      <circle cx="12" cy="17" r="1.1" fill="currentColor" />
+      <circle cx="16" cy="17" r="1.1" fill="currentColor" />
+    </svg>
+  );
+}
+
+function PortablePowerRoundIcon({ className = "w-5 h-5 text-white" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8.5 6V3.5C8.5 2.8 9.1 2.2 9.8 2.2H14.2C14.9 2.2 15.5 2.8 15.5 3.5V6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <rect x="3.5" y="6" width="17" height="14.5" rx="2.5" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.8" />
+      <rect x="6.5" y="8.5" width="11" height="4.5" rx="1" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M12.5 9.5L10.5 10.8H13.5L11.5 12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="8" cy="16.5" r="1.3" fill="currentColor" />
+      <circle cx="12" cy="16.5" r="1.3" fill="currentColor" />
+      <rect x="15" y="15.5" width="2.5" height="1.8" rx="0.4" fill="currentColor" />
+    </svg>
+  );
+}
 
 interface HeroSectionProps {
   headline?: string;
@@ -101,12 +154,14 @@ export function HeroSection({
             <span>{isBn ? "✨ সরাসরি আমদানিকারক • বিশ্বস্ত B2B সোলার পার্টনার" : "Direct B2B Solar Equipment Importer"}</span>
           </div>
 
-          {/* Headline */}
+          {/* Headline with StaggerText */}
           <h1
             data-motion="hero-headline"
             className="text-3xl sm:text-5xl lg:text-[3.8rem] xl:text-[4.3rem] font-bold tracking-tight text-white leading-[1.08] mb-5 text-center [text-shadow:_0_2px_12px_rgba(0,0,0,0.9),_0_4px_24px_rgba(0,0,0,0.85)]"
           >
-            <HeroTextReveal text={resolvedHeadline} />
+            <StaggerText delay={0.1} divideBy="word">
+              {resolvedHeadline}
+            </StaggerText>
           </h1>
 
           {/* Subtitle */}
@@ -140,40 +195,90 @@ export function HeroSection({
           </div>
         </div>
 
-        {/* ================= BOTTOM ROW: CAPSULE DOCK & FLOATING PROOF CARD ================= */}
-        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-5 pt-4">
+        {/* ================= BOTTOM ROW: 4 CATEGORY CARDS & FLOATING PROOF CARD ================= */}
+        <div className="flex flex-col xl:flex-row items-start xl:items-end justify-between gap-4 pt-4">
           
-          {/* Bottom-Left: 3-Item Frosted Capsule Dock with Solar Gold Accents */}
-          <div className="inline-flex flex-wrap sm:flex-nowrap items-center gap-3 sm:gap-6 p-2.5 sm:p-3 px-4 sm:px-6 rounded-2xl bg-[#052F25]/75 backdrop-blur-xl border border-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.3)] max-w-full">
-            {/* Item 1: Container & Bulk Wholesale */}
-            <div data-motion="hero-glass" className="flex items-center gap-3 pr-3 sm:pr-6 sm:border-r border-white/10 min-w-0">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#FEBE16]/40 bg-[#FEBE16]/10 flex items-center justify-center text-[#FEBE16] shrink-0">
-                <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
+          {/* 4 Core Category Cards matching user reference: Solid Round Badges + White Card + "SHOP NOW >" */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 w-full xl:w-auto">
+            {/* Category 1: Solar Panels (Solar Gold Badge) */}
+            <Link
+              href={isBn ? "/products?category=solar-panels" : "/en/products?category=solar-panels"}
+              data-motion="hero-glass"
+              className="group flex items-center gap-2.5 sm:gap-3 p-2.5 sm:px-3.5 sm:py-3 rounded-xl sm:rounded-2xl bg-white/95 hover:bg-white text-[#074031] shadow-[0_8px_25px_rgba(0,0,0,0.18)] hover:shadow-[0_12px_32px_rgba(7,64,49,0.3)] hover:-translate-y-0.5 border border-white/80 transition-all duration-300 min-w-0"
+            >
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-[#FEBE16] to-[#E4A900] flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                <SolarPanelRoundIcon className="w-5 h-5 text-[#052F25]" />
               </div>
-              <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-normal sm:whitespace-nowrap">
-                {isBn ? "কন্টেইনার ও প্যালেট বাল্ক সরবরাহ" : "Container & Bulk Wholesale"}
-              </span>
-            </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs sm:text-sm font-bold text-[#074031] group-hover:text-[#108958] transition-colors leading-tight truncate">
+                  {isBn ? "সোলার প্যানেল" : "Solar Panels"}
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[#108958] group-hover:text-[#074031] tracking-wider uppercase flex items-center gap-0.5 mt-0.5 transition-colors">
+                  <span>{isBn ? "এখন কিনুন" : "SHOP NOW"}</span>
+                  <ChevronRight className="w-3 h-3 text-[#FEBE16] stroke-[3] group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </div>
+            </Link>
 
-            {/* Item 2: Certified Solar Equipment */}
-            <div data-motion="hero-glass" className="flex items-center gap-3 pr-3 sm:pr-6 sm:border-r border-white/10 min-w-0">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#FEBE16]/40 bg-[#FEBE16]/10 flex items-center justify-center text-[#FEBE16] shrink-0">
-                <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
+            {/* Category 2: Lithium Batteries (Emerald Green Badge) */}
+            <Link
+              href={isBn ? "/products?category=lithium-batteries" : "/en/products?category=lithium-batteries"}
+              data-motion="hero-glass"
+              className="group flex items-center gap-2.5 sm:gap-3 p-2.5 sm:px-3.5 sm:py-3 rounded-xl sm:rounded-2xl bg-white/95 hover:bg-white text-[#074031] shadow-[0_8px_25px_rgba(0,0,0,0.18)] hover:shadow-[0_12px_32px_rgba(7,64,49,0.3)] hover:-translate-y-0.5 border border-white/80 transition-all duration-300 min-w-0"
+            >
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-[#108958] to-[#074031] flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                <BatteryStorageRoundIcon className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-normal sm:whitespace-nowrap">
-                {isBn ? "১০০% আসল ও টিয়ার-১ সার্টিফাইড ইকুইপমেন্ট" : "Certified Solar Equipment"}
-              </span>
-            </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs sm:text-sm font-bold text-[#074031] group-hover:text-[#108958] transition-colors leading-tight truncate">
+                  {isBn ? "লিথিয়াম ব্যাটারি" : "Lithium Batteries"}
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[#108958] group-hover:text-[#074031] tracking-wider uppercase flex items-center gap-0.5 mt-0.5 transition-colors">
+                  <span>{isBn ? "এখন কিনুন" : "SHOP NOW"}</span>
+                  <ChevronRight className="w-3 h-3 text-[#FEBE16] stroke-[3] group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </div>
+            </Link>
 
-            {/* Item 3: Nationwide Project Supply */}
-            <div data-motion="hero-glass" className="flex items-center gap-3 min-w-0">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-[#FEBE16]/40 bg-[#FEBE16]/10 flex items-center justify-center text-[#FEBE16] shrink-0">
-                <Headset className="w-4 h-4 sm:w-5 sm:h-5" />
+            {/* Category 3: Solar Inverters (Industrial Forest + Gold Badge) */}
+            <Link
+              href={isBn ? "/products?category=solar-inverters" : "/en/products?category=solar-inverters"}
+              data-motion="hero-glass"
+              className="group flex items-center gap-2.5 sm:gap-3 p-2.5 sm:px-3.5 sm:py-3 rounded-xl sm:rounded-2xl bg-white/95 hover:bg-white text-[#074031] shadow-[0_8px_25px_rgba(0,0,0,0.18)] hover:shadow-[0_12px_32px_rgba(7,64,49,0.3)] hover:-translate-y-0.5 border border-white/80 transition-all duration-300 min-w-0"
+            >
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-[#074031] to-[#0B513E] flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-300 border border-[#FEBE16]/20">
+                <InverterRoundIcon className="w-5 h-5 text-[#FEBE16]" />
               </div>
-              <span className="text-xs sm:text-sm font-semibold text-slate-100 whitespace-normal sm:whitespace-nowrap">
-                {isBn ? "সারা দেশে দ্রুত ও নিরাপদ ডেলিভারি" : "Nationwide Project Supply"}
-              </span>
-            </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs sm:text-sm font-bold text-[#074031] group-hover:text-[#108958] transition-colors leading-tight truncate">
+                  {isBn ? "সোলার ইনভার্টার" : "Solar Inverters"}
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[#108958] group-hover:text-[#074031] tracking-wider uppercase flex items-center gap-0.5 mt-0.5 transition-colors">
+                  <span>{isBn ? "এখন কিনুন" : "SHOP NOW"}</span>
+                  <ChevronRight className="w-3 h-3 text-[#FEBE16] stroke-[3] group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </div>
+            </Link>
+
+            {/* Category 4: Portable Power Stations (Warm Solar Amber Badge) */}
+            <Link
+              href={isBn ? "/products?category=portable-power-stations" : "/en/products?category=portable-power-stations"}
+              data-motion="hero-glass"
+              className="group flex items-center gap-2.5 sm:gap-3 p-2.5 sm:px-3.5 sm:py-3 rounded-xl sm:rounded-2xl bg-white/95 hover:bg-white text-[#074031] shadow-[0_8px_25px_rgba(0,0,0,0.18)] hover:shadow-[0_12px_32px_rgba(7,64,49,0.3)] hover:-translate-y-0.5 border border-white/80 transition-all duration-300 min-w-0"
+            >
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-[#F59E0B] to-[#D97706] flex items-center justify-center shrink-0 shadow-sm group-hover:scale-105 transition-transform duration-300">
+                <PortablePowerRoundIcon className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs sm:text-sm font-bold text-[#074031] group-hover:text-[#108958] transition-colors leading-tight truncate">
+                  {isBn ? "পোর্টেবল পাওয়ার" : "Portable Power"}
+                </span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-[#108958] group-hover:text-[#074031] tracking-wider uppercase flex items-center gap-0.5 mt-0.5 transition-colors">
+                  <span>{isBn ? "এখন কিনুন" : "SHOP NOW"}</span>
+                  <ChevronRight className="w-3 h-3 text-[#FEBE16] stroke-[3] group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </div>
+            </Link>
           </div>
 
           {/* Bottom-Right: Floating Proof & Verified Rating Card with Solar Gold Checked Badge */}
