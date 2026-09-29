@@ -185,11 +185,11 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
             </p>
 
             {/* 4 Tabs: Solar, Battery, Inverter, Portable Power (Responsive for Mobile) */}
-            <div className="mt-6 sm:mt-8 w-full overflow-x-auto scrollbar-none py-1.5 px-1 flex justify-start sm:justify-center touch-pan-x">
+            <div className="mt-6 sm:mt-8 w-full overflow-x-auto scrollbar-none py-1.5 px-0.5 sm:px-1 flex justify-center touch-pan-x">
               <div
                 role="tablist"
                 aria-label={isBn ? "পণ্য বিভাগ" : "Product Categories"}
-                className="inline-flex items-center p-1 sm:p-1.5 rounded-full bg-white border border-slate-200/90 shadow-[0_2px_14px_rgba(0,0,0,0.06)] min-w-max mx-auto"
+                className="inline-flex items-center p-0.5 sm:p-1.5 rounded-full bg-white border border-slate-200/90 shadow-[0_2px_14px_rgba(0,0,0,0.06)] mx-auto max-w-full"
               >
                 {tabsConfig.map((tab) => {
                   const isActive = activeTab === tab.id;
@@ -204,7 +204,7 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
                       aria-controls={`panel-${tab.id}`}
                       aria-label={isBn ? `${tab.fullLabel} (${tab.count}টি পণ্য)` : `${tab.fullLabel} (${tab.count} products)`}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`relative flex items-center gap-1 sm:gap-2 px-2.5 xs:px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#074031] whitespace-nowrap shrink-0 ${
+                      className={`relative flex items-center gap-0.5 min-[380px]:gap-1 sm:gap-2 px-1.5 min-[380px]:px-2.5 sm:px-6 py-1.5 sm:py-2.5 rounded-full text-[11px] min-[380px]:text-xs sm:text-sm font-medium transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#074031] whitespace-nowrap shrink-0 ${
                         isActive ? "text-white" : "text-slate-600 hover:text-slate-900"
                       }`}
                     >
@@ -217,9 +217,9 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
                         />
                       )}
 
-                      <span className="relative z-10 flex items-center gap-1 sm:gap-2">
+                      <span className="relative z-10 flex items-center gap-0.5 min-[380px]:gap-1 sm:gap-2">
                         <IconComponent
-                          className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-colors shrink-0 ${
+                          className={`w-3 h-3 min-[380px]:w-3.5 min-[380px]:h-3.5 sm:w-4 sm:h-4 transition-colors shrink-0 ${
                             isActive ? "text-[#FEBE16]" : "text-slate-500"
                           }`}
                         />
@@ -235,7 +235,7 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
                         </span>
                         {tab.badge && (
                           <span
-                            className={`ml-0.5 px-1 sm:px-1.5 py-0.2 rounded-full text-[9px] sm:text-[10px] font-mono font-bold tracking-wide uppercase ${
+                            className={`ml-0.5 hidden min-[340px]:inline-block px-1 sm:px-1.5 py-0.5 sm:py-0.2 rounded-full text-[8.5px] sm:text-[10px] font-mono font-bold tracking-wide uppercase leading-none ${
                               isActive
                                 ? "bg-[#FEBE16] text-[#063328]"
                                 : "bg-emerald-600 text-white shadow-xs"
@@ -247,7 +247,7 @@ export function HomeProductsTabs({ products = [], locale = "en" }: HomeProductsT
                         {tab.count > 0 && (
                           <span
                             aria-hidden="true"
-                            className={`ml-0.5 sm:ml-1 inline-flex items-center justify-center min-w-[18px] sm:min-w-[20px] h-4.5 sm:h-5 px-1 sm:px-1.5 rounded-full text-[10px] sm:text-[11px] font-mono font-bold transition-all ${
+                            className={`ml-0.5 sm:ml-1 inline-flex items-center justify-center min-w-[16px] sm:min-w-[20px] h-4 sm:h-5 px-1 sm:px-1.5 rounded-full text-[9.5px] sm:text-[11px] font-mono font-bold transition-all ${
                               isActive
                                 ? "bg-[#FEBE16] text-[#063328]"
                                 : "bg-slate-100 text-slate-600"

@@ -264,27 +264,94 @@ async function main() {
   }
   console.log(`✓ Seeded ${demoProducts.length} demo products.`);
 
-  // 5. Seed Sample Trust Content (all isSample=true)
+  // 5. Seed Sample Trust Content (Idempotent: update if exists by unique natural key, create if missing)
   console.log("Seeding sample trust content (stats, certifications, partners, testimonials, FAQs)...");
   
   for (const stat of sampleStats) {
-    await prisma.stat.create({ data: stat });
+    const existing = await prisma.stat.findFirst({
+      where: { label: stat.label },
+    });
+    if (existing) {
+      await prisma.stat.update({
+        where: { id: existing.id },
+        data: stat,
+      });
+    } else {
+      await prisma.stat.create({ data: stat });
+    }
+  }
+
+  // Deduplicate any existing duplicate stats
+  const allDbStats = await prisma.stat.findMany({ orderBy: { createdAt: "asc" } });
+  const seenStats = new Set<string>();
+  const duplicateStatIds: string[] = [];
+  for (const s of allDbStats) {
+    const key = s.label.trim().toLowerCase();
+    if (seenStats.has(key)) {
+      duplicateStatIds.push(s.id);
+    } else {
+      seenStats.add(key);
+    }
+  }
+  if (duplicateStatIds.length > 0) {
+    await prisma.stat.deleteMany({ where: { id: { in: duplicateStatIds } } });
+    console.log(`✓ Pruned ${duplicateStatIds.length} duplicate stats.`);
   }
 
   for (const cert of sampleCertifications) {
-    await prisma.certification.create({ data: cert });
+    const existing = await prisma.certification.findFirst({
+      where: { name: cert.name },
+    });
+    if (existing) {
+      await prisma.certification.update({
+        where: { id: existing.id },
+        data: cert,
+      });
+    } else {
+      await prisma.certification.create({ data: cert });
+    }
   }
 
   for (const partner of samplePartners) {
-    await prisma.partner.create({ data: partner });
+    const existing = await prisma.partner.findFirst({
+      where: { name: partner.name },
+    });
+    if (existing) {
+      await prisma.partner.update({
+        where: { id: existing.id },
+        data: partner,
+      });
+    } else {
+      await prisma.partner.create({ data: partner });
+    }
   }
 
   for (const testimonial of sampleTestimonials) {
-    await prisma.testimonial.create({ data: testimonial });
+    const existing = await prisma.testimonial.findFirst({
+      where: { authorName: testimonial.authorName },
+    });
+    if (existing) {
+      await prisma.testimonial.update({
+        where: { id: existing.id },
+        data: testimonial,
+      });
+    } else {
+      await prisma.testimonial.create({ data: testimonial });
+    }
   }
 
   for (const faq of sampleFaqs) {
-    await prisma.faqItem.create({ data: faq });
+    const existing = await prisma.faqItem.findFirst({
+      where: { question: faq.question },
+    });
+    if (existing) {
+      await prisma.faqItem.update({
+        where: { id: existing.id },
+        data: faq,
+      });
+    } else {
+      await prisma.faqItem.create({ data: faq });
+    }
   }
 
   // 6. Seed Sample Educational Blog Posts (isSample=true, PUBLISHED)

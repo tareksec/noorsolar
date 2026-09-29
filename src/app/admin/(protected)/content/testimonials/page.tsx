@@ -6,10 +6,32 @@ import { TestimonialsClient } from '@/components/admin/content/testimonials-clie
 import { sampleTestimonials } from '../../../../../../prisma/seed-content';
 
 export default async function AdminTestimonialsPage() {
-  let [items, summary] = await Promise.all([
-    db.testimonial.findMany({ orderBy: { sortOrder: 'asc' } }),
-    getLiveSampleContentSummary(),
-  ]);
+  const rawItems = await db.testimonial.findMany({ orderBy: { sortOrder: 'asc' } });
+
+  const seenAuthors = new Set<string>();
+  const duplicateIds: string[] = [];
+  let items: typeof rawItems = [];
+
+  for (const item of rawItems) {
+    const key = item.authorName.trim().toLowerCase();
+    if (seenAuthors.has(key)) {
+      duplicateIds.push(item.id);
+    } else {
+      seenAuthors.add(key);
+      items.push(item);
+    }
+  }
+
+  if (duplicateIds.length > 0) {
+    try {
+      await db.testimonial.deleteMany({
+        where: { id: { in: duplicateIds } },
+      });
+      console.log(`[AdminTestimonialsPage] Pruned ${duplicateIds.length} duplicate testimonials.`);
+    } catch (err) {
+      console.error('[AdminTestimonialsPage] Failed to prune duplicate testimonials:', err);
+    }
+  }
 
   if (items.length === 0 && sampleTestimonials.length > 0) {
     try {
@@ -36,6 +58,8 @@ export default async function AdminTestimonialsPage() {
       console.warn("Failed to auto-seed testimonials in admin:", e);
     }
   }
+
+  const summary = await getLiveSampleContentSummary();
 
   return (
     <div className='space-y-6'>
