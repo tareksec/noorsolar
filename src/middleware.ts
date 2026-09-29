@@ -10,7 +10,7 @@ const encodedKey = new TextEncoder().encode(secretKey);
 
 const handleI18nRouting = createMiddleware(routing);
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Protect /admin routes (except /admin/login)
@@ -48,7 +48,7 @@ export async function proxy(request: NextRequest) {
   return handleI18nRouting(request);
 }
 
-export default proxy;
+export default middleware;
 
 export const config = {
   // Match all request paths except:
