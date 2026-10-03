@@ -156,7 +156,7 @@ export default async function HomePage({
 
   const orgJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["Organization", "WholesaleStore"],
     name: "Noor Solar Energy",
     alternateName: "নূর সোলার এনার্জি",
     url: siteUrl,
@@ -164,15 +164,44 @@ export default async function HomePage({
     image: `${siteUrl}/brand/logo-default.png`,
     description:
       settings.description ||
-      "Direct importer and bulk wholesale supplier of solar equipment in Bangladesh.",
+      "Direct importer and bulk wholesale supplier of Tier-1 solar panels, LiFePO4 batteries, and solar inverters in Bangladesh.",
     email: settings.email || "info@noorsolaren.com",
     telephone: settings.phone || "+8801884611888",
+    priceRange: "$$$",
     address: {
       "@type": "PostalAddress",
       streetAddress: settings.address || "House-38 (Flat-1A), Road-5/A, Sector-5, Uttara, Dhaka-1230, Bangladesh",
       addressLocality: "Uttara, Dhaka",
+      addressRegion: "Dhaka Division",
       postalCode: "1230",
       addressCountry: "BD",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 23.8698,
+      longitude: 90.3985,
+    },
+    areaServed: [
+      { "@type": "Country", name: "Bangladesh" },
+      { "@type": "City", name: "Dhaka" },
+      { "@type": "City", name: "Chittagong" },
+      { "@type": "City", name: "Gazipur" },
+      { "@type": "City", name: "Narayanganj" },
+      { "@type": "City", name: "Savar" },
+    ],
+    knowsAbout: [
+      "Solar Panel Supplier Bangladesh",
+      "Tier-1 N-Type TOPCon Solar Modules",
+      "LiFePO4 Lithium Solar Battery Storage",
+      "Commercial & Industrial Solar Inverters",
+      "Net Metering Solar Solutions Bangladesh",
+      "Solar EPC Equipment Procurement",
+      "সোলার প্যানেল এর দাম ২০২৬",
+      "সোলার প্যানেল প্রাইস ইন বাংলাদেশ",
+    ],
+    memberOf: {
+      "@type": "Organization",
+      name: "Bangladesh Solar and Renewable Energy Association (BSREA)",
     },
     contactPoint: {
       "@type": "ContactPoint",

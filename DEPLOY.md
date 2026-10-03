@@ -1,6 +1,6 @@
 # NOOR SOLAR ENERGY — PRODUCTION DEPLOYMENT GUIDE (HOSTINGER NODE.JS)
 
-This guide provides complete, step-by-step instructions for deploying Noor Solar Energy (`noorsolaren.com`) on **Hostinger Business or Cloud Hosting** using the built-in **Node.js Web App** manager (Node.js LTS 20.x or 22.x).
+This guide provides complete, step-by-step instructions for deploying Noor Solar Energy (`noorsolaren.com`) on **Hostinger Business or Cloud Hosting** using the built-in **Node.js Web App** manager (Node.js LTS 20.x).
 
 > [!IMPORTANT]
 > **Owner Responsibility Notice:**
@@ -13,7 +13,7 @@ This guide provides complete, step-by-step instructions for deploying Noor Solar
 ## 1. Prerequisites & Hostinger Environment Verification
 
 Hostinger supports Node.js applications natively on Business Web Hosting and Cloud Hosting tiers via hPanel:
-- **Verified Node.js versions:** Node.js 20.x LTS or Node.js 22.x LTS.
+- **Verified Node.js versions:** Node.js 20.x LTS (required — matches `engines` in `package.json`; builds fail on 22.x).
 - **Deployment methods supported:**
   1. **GitHub Integration (Automated Deployments):** Connects directly to your GitHub repository and automatically pulls and rebuilds when you push to `main`.
   2. **Uploaded ZIP File (Manual File Manager Deployment):** Uploading a clean `.zip` archive via Hostinger File Manager.
@@ -52,7 +52,7 @@ Your persistent paths will be:
 2. Go to **Websites** → Select or add `noorsolaren.com` (or your temporary staging subdomain).
 3. Navigate to **Advanced** → **Node.js**.
 4. Click **Create Application** (or Edit Application):
-   - **Node.js Version:** Select **Node.js 20.x** or **Node.js 22.x**.
+   - **Node.js Version:** Select **Node.js 20.x** (required — matches `engines` in `package.json`; builds fail on 22.x).
    - **Application Root:** Set to your site root (e.g. `public_html` or `/domains/noorsolaren.com/public_html`).
    - **Application Startup File:** Set to `node_modules/next/dist/bin/next` (with argument `start` in scripts) or create a root `server.js` wrapper if required by your specific hPanel prompt.
    - **Build Command:** `npm ci && npm run build`

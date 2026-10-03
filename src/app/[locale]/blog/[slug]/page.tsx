@@ -74,14 +74,25 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
   }
 
   const { post, related } = data;
+  const isBn = locale === "bn";
 
-  // Schema.org Article JSON-LD
+  // Schema.org Article JSON-LD (GEO & AI Engine Enhanced)
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
     description: post.excerpt || post.title,
     image: post.coverImage ? [post.coverImage] : [],
+    inLanguage: isBn ? "bn-BD" : "en-US",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}${isBn ? "/bn" : ""}/blog/${post.slug}`,
+    },
+    spatialCoverage: {
+      "@type": "Place",
+      name: "Bangladesh",
+    },
+    keywords: post.tags || undefined,
     datePublished: post.publishedAt ? new Date(post.publishedAt).toISOString() : undefined,
     dateModified: new Date(post.updatedAt).toISOString(),
     author: {
@@ -98,8 +109,6 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
       },
     },
   };
-
-  const isBn = locale === "bn";
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
