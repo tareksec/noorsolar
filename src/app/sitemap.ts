@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { SITE_URL } from "@/lib/site-config";
 import { demoProducts } from "../../prisma/seed-products";
 import { sampleBlogPosts } from "../../prisma/seed-blog";
+import { sampleProjects } from "../../prisma/seed-content";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = SITE_URL;
@@ -18,6 +19,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/blog",
     "/deals",
     "/equipment",
+    "/projects",
+    "/reviews",
   ];
 
   const now = new Date();
@@ -221,6 +224,60 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           },
         });
       }
+    }
+
+    // Projects
+    let projects: Array<{ slug: string; updatedAt: Date }> = [];
+    try {
+      projects = await db.project.findMany({
+        where: {
+          isPublished: true,
+          ...(hideSample ? { isSample: false } : {}),
+        },
+        select: { slug: true, updatedAt: true },
+      });
+    } catch {
+      // DB offline fallback
+    }
+
+    if (projects.length === 0) {
+      projects = sampleProjects.map((p) => ({
+        slug: p.slug,
+        updatedAt: now,
+      }));
+    }
+
+    for (const proj of projects) {
+      const enUrl = `${siteUrl}/projects/${proj.slug}`;
+      const bnUrl = `${siteUrl}/bn/projects/${proj.slug}`;
+
+      entries.push({
+        url: enUrl,
+        lastModified: proj.updatedAt,
+        changeFrequency: "monthly",
+        priority: 0.8,
+        alternates: {
+          languages: {
+            en: enUrl,
+            bn: bnUrl,
+            "x-default": enUrl,
+          },
+        },
+      });
+
+      entries.push({
+        url: bnUrl,
+        lastModified: proj.updatedAt,
+        changeFrequency: "monthly",
+        priority: 0.8,
+        alternates: {
+          languages: {
+            en: enUrl,
+            bn: bnUrl,
+            "x-default": enUrl,
+          },
+        },
+      });
     }
 
     return entries;

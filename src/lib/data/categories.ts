@@ -107,9 +107,16 @@ export async function getCategories(locale?: string) {
 }
 
 export async function getCategoryBySlug(slug: string, locale?: string) {
+  const normalizedSlug =
+    slug === "solar-batteries"
+      ? "lithium-batteries"
+      : slug === "solar-energy-storage-system"
+      ? "energy-storage"
+      : slug;
+
   try {
     let category = await db.category.findUnique({
-      where: { slug, isActive: true },
+      where: { slug: normalizedSlug, isActive: true },
       include: {
         products: {
           where: { isActive: true },
@@ -122,10 +129,40 @@ export async function getCategoryBySlug(slug: string, locale?: string) {
       },
     });
 
+    if (!category && normalizedSlug === "energy-storage") {
+      const lithiumCat = await db.category.findUnique({
+        where: { slug: "lithium-batteries", isActive: true },
+        include: {
+          products: {
+            where: { isActive: true },
+            orderBy: { sortOrder: "asc" },
+            include: {
+              images: { orderBy: { sortOrder: "asc" } },
+              specs: { orderBy: { sortOrder: "asc" } },
+            },
+          },
+        },
+      });
+
+      if (lithiumCat) {
+        category = {
+          ...lithiumCat,
+          id: "cat-storage",
+          slug: "energy-storage",
+          name: "Solar Energy Storage",
+          nameBn: "সোলার এনার্জি স্টোরেজ",
+          description:
+            "High-capacity commercial LiFePO4 battery energy storage systems (BESS) for industrial peak shaving and backup in Bangladesh.",
+          descriptionBn:
+            "বাংলাদেশে শিল্প কারখানায় নিরবচ্ছিন্ন বিদ্যুৎ ও পিক শেভিংয়ের জন্য উচ্চ-ক্ষমতাসম্পন্ন LiFePO4 এনার্জি স্টোরেজ সিস্টেম (BESS)।",
+        };
+      }
+    }
+
     if (!category) {
-      const fbCat = fallbackCategories.find((c) => c.slug === slug);
+      const fbCat = fallbackCategories.find((c) => c.slug === normalizedSlug || c.slug === slug);
       if (fbCat) {
-        const catProducts = getFallbackDemoProducts().filter((p) => p.categoryId === slug);
+        const catProducts = getFallbackDemoProducts().filter((p) => p.categoryId === fbCat.slug || p.categoryId === slug);
         category = {
           ...fbCat,
           createdAt: new Date(),
