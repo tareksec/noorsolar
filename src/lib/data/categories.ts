@@ -37,6 +37,18 @@ const fallbackCategories = [
     isActive: true,
     _count: { products: 5 },
   },
+  {
+    id: "cat-storage",
+    slug: "energy-storage",
+    name: "Solar Energy Storage",
+    nameBn: "সোলার এনার্জি স্টোরেজ",
+    description: "Commercial LiFePO4 battery systems and BESS solutions engineered for peak-shaving and uninterrupted solar backup.",
+    descriptionBn: "বাণিজ্যিক ও শিল্প প্রতিষ্ঠানে নিরবচ্ছিন্ন ব্যাকআপের জন্য উচ্চ-ক্ষমতার LiFePO4 ব্যাটারি ও BESS স্টোরেজ সমাধান।",
+    image: "/photos/cat-lithium-batteries.webp",
+    sortOrder: 3,
+    isActive: true,
+    _count: { products: 4 },
+  },
 ];
 
 export async function getCategories(locale?: string) {
@@ -77,9 +89,16 @@ export async function getCategories(locale?: string) {
 
 
 export async function getCategoryBySlug(slug: string, locale?: string) {
+  const normalizedSlug =
+    slug === "solar-batteries"
+      ? "lithium-batteries"
+      : slug === "solar-energy-storage-system"
+      ? "energy-storage"
+      : slug;
+
   try {
-    const category = await db.category.findUnique({
-      where: { slug, isActive: true },
+    let category = await db.category.findUnique({
+      where: { slug: normalizedSlug, isActive: true },
       include: {
         products: {
           where: { isActive: true },
@@ -91,6 +110,36 @@ export async function getCategoryBySlug(slug: string, locale?: string) {
         },
       },
     });
+
+    if (!category && normalizedSlug === "energy-storage") {
+      const lithiumCat = await db.category.findUnique({
+        where: { slug: "lithium-batteries", isActive: true },
+        include: {
+          products: {
+            where: { isActive: true },
+            orderBy: { sortOrder: "asc" },
+            include: {
+              images: { orderBy: { sortOrder: "asc" } },
+              specs: { orderBy: { sortOrder: "asc" } },
+            },
+          },
+        },
+      });
+
+      if (lithiumCat) {
+        category = {
+          ...lithiumCat,
+          id: "cat-storage",
+          slug: "energy-storage",
+          name: "Solar Energy Storage",
+          nameBn: "সোলার এনার্জি স্টোরেজ",
+          description:
+            "High-capacity commercial LiFePO4 battery energy storage systems (BESS) for industrial peak shaving and backup in Bangladesh.",
+          descriptionBn:
+            "বাংলাদেশে শিল্প কারখানায় নিরবচ্ছিন্ন বিদ্যুৎ ও পিক শেভিংয়ের জন্য উচ্চ-ক্ষমতাসম্পন্ন LiFePO4 এনার্জি স্টোরেজ সিস্টেম (BESS)।",
+        };
+      }
+    }
 
     if (!category || locale !== "bn") return category;
 

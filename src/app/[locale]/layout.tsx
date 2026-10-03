@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
@@ -39,15 +39,15 @@ export async function generateMetadata({
   return {
     title: {
       default: isBn
-        ? "à¦¨à§‚à¦° à¦¸à§‹à¦²à¦¾à¦° à¦à¦¨à¦¾à¦°à§à¦œà¦¿ â€” à¦¸à§‹à¦²à¦¾à¦° à¦ªà§à¦¯à¦¾à¦¨à§‡à¦², à¦¬à§à¦¯à¦¾à¦Ÿà¦¾à¦°à¦¿ à¦“ à¦‡à¦¨à¦­à¦¾à¦°à§à¦Ÿà¦¾à¦° à¦ªà¦¾à¦‡à¦•à¦¾à¦°à¦¿ à¦¸à¦°à¦¬à¦°à¦¾à¦¹à¦•à¦¾à¦°à§€"
-        : "Noor Solar Energy â€” Solar Panels, Batteries & Inverters Wholesale",
+        ? "সোলার প্যানেল সরবরাহকারী বাংলাদেশ | সোলার ব্যাটারি ও ইনভার্টার পাইকারি — নূর সোলার এনার্জি"
+        : "Solar Panel Supplier Bangladesh | Solar Battery & Inverter Wholesale — Noor Solar Energy",
       template: isBn
-        ? "%s | à¦¨à§‚à¦° à¦¸à§‹à¦²à¦¾à¦° à¦à¦¨à¦¾à¦°à§à¦œà¦¿"
+        ? "%s | নূর সোলার এনার্জি"
         : "%s | Noor Solar Energy",
     },
     description: isBn
-      ? "à¦¬à¦¾à¦‚à¦²à¦¾à¦¦à§‡à¦¶à§‡ à¦¬à¦¾à¦£à¦¿à¦œà§à¦¯à¦¿à¦• à¦¸à§‹à¦²à¦¾à¦° à¦ªà§à¦¯à¦¾à¦¨à§‡à¦², LiFePO4 à¦¬à§à¦¯à¦¾à¦Ÿà¦¾à¦°à¦¿ à¦¸à§à¦Ÿà§‹à¦°à§‡à¦œ à¦à¦¬à¦‚ à¦¸à§‹à¦²à¦¾à¦° à¦‡à¦¨à¦­à¦¾à¦°à§à¦Ÿà¦¾à¦°à§‡à¦° à¦¸à¦°à¦¾à¦¸à¦°à¦¿ à¦†à¦®à¦¦à¦¾à¦¨à¦¿à¦•à¦¾à¦°à¦• à¦“ à¦ªà¦¾à¦‡à¦•à¦¾à¦°à¦¿ à¦¸à¦°à¦¬à¦°à¦¾à¦¹à¦•à¦¾à¦°à§€à¥¤"
-      : "Direct importer and bulk B2B wholesale supplier of commercial solar panels, LiFePO4 battery storage, and solar inverters in Bangladesh.",
+      ? "বাংলাদেশে বাণিজ্যিক সোলার প্যানেল, LiFePO4 লিথিয়াম ব্যাটারি ও অন-গ্রিড/হাইব্রিড সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী। কন্টেইনার সরবরাহ ও ওয়ারেন্টি।"
+      : "Direct importer and bulk B2B wholesale supplier of Tier-1 solar panels, LiFePO4 battery storage, and solar inverters in Bangladesh. Official warranties and container-scale supply.",
     metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? "/bn" : "/",
@@ -69,10 +69,10 @@ export async function generateMetadata({
     },
     openGraph: {
       title: isBn
-        ? "à¦¨à§‚à¦° à¦¸à§‹à¦²à¦¾à¦° à¦à¦¨à¦¾à¦°à§à¦œà¦¿ â€” à¦¸à§‹à¦²à¦¾à¦° à¦ªà§à¦¯à¦¾à¦¨à§‡à¦², à¦¬à§à¦¯à¦¾à¦Ÿà¦¾à¦°à¦¿ à¦“ à¦‡à¦¨à¦­à¦¾à¦°à§à¦Ÿà¦¾à¦° à¦ªà¦¾à¦‡à¦•à¦¾à¦°à¦¿ à¦¸à¦°à¦¬à¦°à¦¾à¦¹à¦•à¦¾à¦°à§€"
-        : "Noor Solar Energy â€” Solar Panels, Batteries & Inverters Wholesale",
+        ? "সোলার প্যানেল সরবরাহকারী বাংলাদেশ | সোলার ব্যাটারি ও ইনভার্টার পাইকারি — নূর সোলার এনার্জি"
+        : "Solar Panel Supplier Bangladesh | Solar Battery & Inverter Wholesale — Noor Solar Energy",
       description: isBn
-        ? "à¦¬à¦¾à¦‚à¦²à¦¾à¦¦à§‡à¦¶à§‡ à¦¬à¦¾à¦£à¦¿à¦œà§à¦¯à¦¿à¦• à¦¸à§‹à¦²à¦¾à¦° à¦ªà§à¦¯à¦¾à¦¨à§‡à¦², LiFePO4 à¦¬à§à¦¯à¦¾à¦Ÿà¦¾à¦°à¦¿ à¦¸à§à¦Ÿà§‹à¦°à§‡à¦œ à¦à¦¬à¦‚ à¦¸à§‹à¦²à¦¾à¦° à¦‡à¦¨à¦­à¦¾à¦°à§à¦Ÿà¦¾à¦°à§‡à¦° à¦¸à¦°à¦¾à¦¸à¦°à¦¿ à¦†à¦®à¦¦à¦¾à¦¨à¦¿à¦•à¦¾à¦°à¦• à¦“ à¦ªà¦¾à¦‡à¦•à¦¾à¦°à¦¿ à¦¸à¦°à¦¬à¦°à¦¾à¦¹à¦•à¦¾à¦°à§€à¥¤"
+        ? "বাংলাদেশে বাণিজ্যিক সোলার প্যানেল, LiFePO4 ব্যাটারি স্টোরেজ এবং সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
         : "Direct importer and bulk B2B wholesale supplier of commercial solar panels, LiFePO4 battery storage, and solar inverters in Bangladesh.",
       type: "website",
       locale: isBn ? "bn_BD" : "en_US",
@@ -81,10 +81,10 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: isBn
-        ? "à¦¨à§‚à¦° à¦¸à§‹à¦²à¦¾à¦° à¦à¦¨à¦¾à¦°à§à¦œà¦¿ â€” à¦¸à§‹à¦²à¦¾à¦° à¦ªà§à¦¯à¦¾à¦¨à§‡à¦², à¦¬à§à¦¯à¦¾à¦Ÿà¦¾à¦°à¦¿ à¦“ à¦‡à¦¨à¦­à¦¾à¦°à§à¦Ÿà¦¾à¦° à¦ªà¦¾à¦‡à¦•à¦¾à¦°à¦¿ à¦¸à¦°à¦¬à¦°à¦¾à¦¹à¦•à¦¾à¦°à§€"
-        : "Noor Solar Energy â€” Solar Panels, Batteries & Inverters Wholesale",
+        ? "সোলার প্যানেল সরবরাহকারী বাংলাদেশ | সোলার ব্যাটারি ও ইনভার্টার পাইকারি — নূর সোলার এনার্জি"
+        : "Solar Panel Supplier Bangladesh | Solar Battery & Inverter Wholesale — Noor Solar Energy",
       description: isBn
-        ? "à¦¬à¦¾à¦‚à¦²à¦¾à¦¦à§‡à¦¶à§‡ à¦¬à¦¾à¦£à¦¿à¦œà§à¦¯à¦¿à¦• à¦¸à§‹à¦²à¦¾à¦° à¦ªà§à¦¯à¦¾à¦¨à§‡à¦², LiFePO4 à¦¬à§à¦¯à¦¾à¦Ÿà¦¾à¦°à¦¿ à¦¸à§à¦Ÿà§‹à¦°à§‡à¦œ à¦à¦¬à¦‚ à¦¸à§‹à¦²à¦¾à¦° à¦‡à¦¨à¦­à¦¾à¦°à§à¦Ÿà¦¾à¦°à§‡à¦° à¦¸à¦°à¦¾à¦¸à¦°à¦¿ à¦†à¦®à¦¦à¦¾à¦¨à¦¿à¦•à¦¾à¦°à¦• à¦“ à¦ªà¦¾à¦‡à¦•à¦¾à¦°à¦¿ à¦¸à¦°à¦¬à¦°à¦¾à¦¹à¦•à¦¾à¦°à§€à¥¤"
+        ? "বাংলাদেশে বাণিজ্যিক সোলার প্যানেল, LiFePO4 ব্যাটারি স্টোরেজ এবং সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
         : "Direct importer and bulk B2B wholesale supplier of commercial solar panels, LiFePO4 battery storage, and solar inverters in Bangladesh.",
       images: ["/opengraph-image.png"],
     },
@@ -118,7 +118,6 @@ export default async function LocaleLayout({
     hasVisibleBlogPosts(),
   ]);
 
-  const isBn = locale === "bn";
   const fontClasses = `${scoutieSans.variable} ${tiroBangla.variable} ${inter.variable} ${jetbrainsMono.variable}`;
 
   return (

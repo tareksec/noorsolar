@@ -31,6 +31,7 @@ import { FeaturedProducts } from "@/components/sections/featured-products";
 import { RecentDeals } from "@/components/sections/recent-deals";
 import { BuyerSegmentation } from "@/components/sections/buyer-segmentation";
 import { HomeContactBanner } from "@/components/sections/home-contact-banner";
+import { HomepageSeoContent } from "@/components/sections/homepage-seo-content";
 import { SITE_URL } from "@/lib/site-config";
 
 export const revalidate = 60; // On-demand or 60s cache revalidation
@@ -50,11 +51,11 @@ export async function generateMetadata({
 
   return {
     title: isBn
-      ? "নূর সোলার এনার্জি — সোলার প্যানেল, ব্যাটারি ও ইনভার্টার পাইকারি সরবরাহকারী"
-      : "Noor Solar Energy — Solar Panels, Batteries & Inverters Wholesale",
+      ? "সোলার প্যানেল সরবরাহকারী বাংলাদেশ | সোলার ব্যাটারি ও ইনভার্টার পাইকারি — নূর সোলার এনার্জি"
+      : "Solar Panel Supplier Bangladesh | Solar Battery & Inverter Wholesale — Noor Solar Energy",
     description: isBn
-      ? "বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন সোলার প্যানেল, লিথিয়াম-আয়ন ব্যাটারি এবং হাইব্রিড সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
-      : "Direct importer and bulk supplier of high-efficiency solar panels, Lithium-ion batteries, and hybrid solar inverters in Bangladesh.",
+      ? "বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন N-Type TOPCon সোলার প্যানেল, LiFePO4 লিথিয়াম ব্যাটারি এবং হাইব্রিড সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
+      : "Direct importer and bulk supplier of high-efficiency N-Type TOPCon solar panels, LiFePO4 lithium batteries, and hybrid solar inverters in Bangladesh.",
     metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? "/bn" : "/",
@@ -66,8 +67,8 @@ export async function generateMetadata({
     },
     openGraph: {
       title: isBn
-        ? "নূর সোলার এনার্জি — ইন্ডাস্ট্রিয়াল সোলার প্যানেল, ব্যাটারি ও ইনভার্টার"
-        : "Noor Solar Energy — Industrial Solar Panels, Storage & Inverters",
+        ? "সোলার প্যানেল সরবরাহকারী বাংলাদেশ | সোলার ব্যাটারি ও ইনভার্টার পাইকারি — নূর সোলার এনার্জি"
+        : "Solar Panel Supplier Bangladesh | Solar Battery & Inverter Wholesale — Noor Solar Energy",
       description: isBn
         ? "বাংলাদেশে কন্টেইনার-স্কেল পাইকারি সরবরাহকারী: কমার্শিয়াল সোলার প্যানেল, LiFePO4 ব্যাটারি ও ইনভার্টার।"
         : "Direct importer and container-scale wholesale supplier of commercial-grade solar panels, LiFePO4 batteries, and inverters in Bangladesh.",
@@ -152,9 +153,30 @@ export default async function HomePage({
     ...(verifiedSameAs.length > 0 ? { sameAs: verifiedSameAs } : {}),
   };
 
+  const webSiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Noor Solar Energy",
+    alternateName: "নূর সোলার এনার্জি",
+    url: siteUrl,
+    description: "Direct importer & wholesale bulk supplier of commercial solar panels, LiFePO4 batteries, and inverters in Bangladesh.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${siteUrl}/products?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <>
-      {/* Schema.org Organization Structured Data */}
+      {/* Schema.org WebSite & Organization Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
@@ -217,6 +239,9 @@ export default async function HomePage({
 
       {/* 9. Verified Project Supply References (cleanly hidden if database has no published projects) */}
       <ProjectsShowcase projects={projects} locale={locale} />
+
+      {/* 10. Comprehensive Topical Authority SEO Section: Who We Are, Products We Supply, Who We Serve, FAQ */}
+      <HomepageSeoContent locale={locale} />
 
       {/* Below-the-fold Animated Sections (Dynamic Client-Side Only to keep initial JS bundle small) */}
       <DynamicHomeSections
