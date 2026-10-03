@@ -32,12 +32,11 @@ export async function generateMetadata({
 
   return {
     title: isBn
-      ? "সোলার ইকুইপমেন্ট পাইকারি ক্যাটালগ বাংলাদেশ — নূর সোলার এনার্জি"
-      : "Solar Equipment Catalog Bangladesh | Wholesale Panels, Batteries & Inverters — Noor Solar Energy",
+      ? "সোলার ইকুইপমেন্ট ক্যাটালগ — নূর সোলার এনার্জি"
+      : "Solar Equipment Catalog — Noor Solar Energy",
     description: isBn
-      ? "বাণিজ্যিক ও শিল্প প্রকল্পের জন্য সরাসরি আমদানিকৃত Tier-1 সোলার প্যানেল, LiFePO4 লিথিয়াম ব্যাটারি এবং ইনভার্টারের পূর্ণাঙ্গ পাইকারি ক্যাটালগ।"
-      : "Wholesale B2B catalog of Tier-1 N-Type TOPCon solar panels, LiFePO4 battery storage, and commercial inverters in Bangladesh.",
-    metadataBase: new URL(siteUrl),
+      ? "বাণিজ্যিক ও শিল্প প্রকল্পের জন্য সরাসরি আমদানিকৃত সোলার প্যানেল, LiFePO4 ব্যাটারি এবং ইনভার্টারের পাইকারি ক্যাটালগ।"
+      : "Bulk B2B catalog of direct-imported solar panels, LiFePO4 battery storage, and commercial inverters in Bangladesh.",
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/products` : `${siteUrl}/products`,
       languages: {

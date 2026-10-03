@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { prefersReducedMotion } from "@/lib/motion";
 import { Reveal } from "@/components/ui/reveal";
+import { Link } from "@/i18n/routing";
 
 export function TestimonialsSection({
   testimonials,
@@ -81,7 +82,7 @@ export function TestimonialsSection({
               </p>
 
               {/* Navigation Arrows & Dot Indicators */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 flex-wrap">
                 <div className="flex items-center gap-2">
                   <button
                     onClick={prevSlide}
@@ -119,10 +120,21 @@ export function TestimonialsSection({
                   ))}
                 </div>
               </div>
+
+              {/* View All Reviews Button */}
+              <div className="mt-8">
+                <Link
+                  href="/reviews"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white hover:bg-[#074031] text-[#074031] hover:text-white border border-[#DCE4E0] hover:border-[#074031] text-xs font-mono font-bold transition-all shadow-xs group cursor-pointer"
+                >
+                  <span>{isBn ? "সকল গ্রাহক মতামত দেখুন" : "View All Client Reviews"}</span>
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
             </div>
           </Reveal>
 
-          {/* Right Column: Crossfade Testimonial Slider */}
+          {/* Right Column: Crossfade Testimonial Slider Card */}
           <Reveal y={24} delay={0.15} duration={0.65} className="lg:col-span-7">
             <div
               onMouseEnter={() => setIsPaused(true)}
@@ -134,7 +146,10 @@ export function TestimonialsSection({
               aria-roledescription="carousel"
               aria-label={isBn ? "গ্রাহক মতামত স্লাইডার" : "Testimonial slider"}
             >
-              <div className="relative min-h-[320px] sm:min-h-[280px] bg-white rounded-[32px] p-8 sm:p-10 border border-[#DCE4E0] shadow-[0_16px_40px_-12px_rgba(7,64,49,0.06)] flex flex-col justify-between overflow-hidden">
+              <Link
+                href="/reviews"
+                className="relative min-h-[320px] sm:min-h-[280px] bg-white rounded-[32px] p-8 sm:p-10 border border-[#DCE4E0] hover:border-[#074031] shadow-[0_16px_40px_-12px_rgba(7,64,49,0.06)] hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden block group cursor-pointer"
+              >
                 {/* Quote Mark Watermark */}
                 <Quote className="absolute top-6 right-6 w-20 h-20 text-[#FEBE16]/20 pointer-events-none -rotate-12" />
 
@@ -153,36 +168,45 @@ export function TestimonialsSection({
                     </p>
 
                     {/* Author Profile */}
-                    <div className="flex items-center gap-4 pt-6 border-t border-[#DCE4E0]">
-                      <div className="relative w-12 h-12 rounded-full overflow-hidden bg-[#F1F4F1] border border-[#DCE4E0] shrink-0 flex items-center justify-center">
-                        {currentItem.photo ? (
-                          <Image
-                            src={currentItem.photo}
-                            alt={currentItem.authorName}
-                            fill
-                            sizes="48px"
-                            className="object-cover"
-                          />
-                        ) : (
-                          <span className="font-bold font-mono text-sm text-[#074031]">
-                            {currentItem.authorName.charAt(0).toUpperCase()}
-                          </span>
-                        )}
+                    <div className="flex items-center justify-between gap-4 pt-6 border-t border-[#DCE4E0]">
+                      <div className="flex items-center gap-4">
+                        <div className="relative w-12 h-12 rounded-full overflow-hidden bg-[#F1F4F1] border border-[#DCE4E0] shrink-0 flex items-center justify-center">
+                          {currentItem.photo ? (
+                            <Image
+                              src={currentItem.photo}
+                              alt={currentItem.authorName}
+                              fill
+                              sizes="48px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <span className="font-bold font-mono text-sm text-[#074031]">
+                              {currentItem.authorName.charAt(0).toUpperCase()}
+                            </span>
+                          )}
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-base text-[#074031]">
+                            {currentItem.authorName}
+                          </h3>
+                          {roleText && (
+                            <p className="text-xs font-mono text-[#62706A] mt-0.5">
+                              {roleText}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="font-bold text-base text-[#074031]">
-                          {currentItem.authorName}
-                        </h3>
-                        {roleText && (
-                          <p className="text-xs font-mono text-[#62706A] mt-0.5">
-                            {roleText}
-                          </p>
-                        )}
+
+                      <div className="flex items-center gap-1 text-[#074031] font-bold text-xs font-mono shrink-0 group-hover:translate-x-1 transition-transform">
+                        <span className="hidden sm:inline text-[#62706A] font-normal text-[11px]">
+                          {isBn ? "রিভিউ পেজ" : "Read all"}
+                        </span>
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </div>
                     </div>
                   </motion.div>
                 </AnimatePresence>
-              </div>
+              </Link>
             </div>
           </Reveal>
         </div>

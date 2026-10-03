@@ -8,13 +8,12 @@ import { getApprovedReviewsForProduct, isPublicReviewsEnabled } from "@/lib/data
 import { ProductCard } from "@/components/product/product-card";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductReviewsSection } from "@/components/product/product-reviews-section";
-import { ArrowUpRight, Box, Clock, Download, ShieldCheck, Award, FileText, FileCheck, Package, Truck, Headphones, Factory, Zap, HelpCircle, CheckCircle2, Building2, Tractor } from "lucide-react";
+import { ArrowUpRight, Box, Clock, Download, ShieldCheck, Award, FileText, FileCheck, Package, Truck, Headphones } from "lucide-react";
 import { parseProductDocuments } from "@/lib/product-documents";
 import { extractProductIdentity } from "@/lib/product-identity";
 import { extractProductLogistics } from "@/lib/product-logistics";
 import { extractProductWarranty } from "@/lib/product-warranty";
 import { SITE_URL } from "@/lib/site-config";
-import { Reveal, RevealGroup, RevealItem } from "@/components/ui/reveal";
 
 export const dynamic = "force-dynamic";
 
@@ -37,18 +36,19 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
   const { product } = data;
   const fallbackTitle = isBn
-    ? `${product.name} — বাংলাদেশে বাণিজ্যিক ও শিল্প সোলার প্রকল্পে পাইকারি সরবরাহ | নূর সোলার এনার্জি`
-    : `${product.name} for Commercial Solar Projects in Bangladesh | Noor Solar Energy`;
+    ? `${product.name} — নূর সোলার এনার্জি`
+    : `${product.name} — Noor Solar Energy`;
   const title = product.metaTitle || fallbackTitle;
-  const fallbackDesc = isBn
-    ? `বাংলাদেশে বাণিজ্যিক ও শিল্প প্রকল্পের জন্য সরাসরি আমদানিকৃত ${product.name}। টিয়ার-১ প্রস্তুতকারক ওয়ারেন্টি, কারখানা ফ্ল্যাশ টেস্ট রিপোর্ট ও দ্রুত ডেলিভারি সুবিধা।`
-    : `Direct-imported ${product.name} for commercial and industrial solar installations in Bangladesh. Complete technical specifications, Tier-1 manufacturer warranties, and wholesale container logistics.`;
-  const desc = product.metaDescription || product.shortDescription || fallbackDesc;
+  const desc =
+    product.metaDescription ||
+    product.shortDescription ||
+    (isBn
+      ? `${product.name}-এর কারিগরি স্পেসিফিকেশন ও পাইকারি সরবরাহ তথ্য। নূর সোলার এনার্জি থেকে সরাসরি আমদানি ও অফিসিয়াল ওয়ারেন্টি সহ ডেটাশিট সংগ্রহ করুন।`
+      : `Wholesale procurement specifications and technical details for ${product.name}. Direct import in Bangladesh by Noor Solar Energy.`);
 
   return {
     title,
     description: desc,
-    metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/product/${product.slug}` : `${siteUrl}/product/${product.slug}`,
       languages: {
@@ -172,99 +172,12 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       : {}),
   };
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: isBn ? "হোম" : "Home",
-        item: `${siteUrl}${isBn ? "/bn" : ""}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: isBn ? "পণ্যসমূহ" : "Products",
-        item: `${siteUrl}${isBn ? "/bn" : ""}/products`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: product.category.name,
-        item: `${siteUrl}${isBn ? "/bn" : ""}/category/${product.category.slug}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 4,
-        name: product.name,
-        item: productUrl,
-      },
-    ],
-  };
-
-  const productFaqs = [
-    {
-      q: isBn
-        ? `${product.name}-এর প্রধান অ্যাপ্লিকেশন ও ব্যবহারক্ষেত্র কী কী?`
-        : `What are the primary applications for ${product.name}?`,
-      a: isBn
-        ? "বাণিজ্যিক ও শিল্প কারখানার ছাদ, টেক্সটাইল ও গার্মেন্টস শেড, কৃষি সৌর সেচ এবং অন-গ্রিড/হাইব্রিড সৌর বিদ্যুৎ সিস্টেমে ব্যবহারের জন্য এই সরঞ্জাম বিশেষভাবে উপযোগী।"
-        : "Ideal for commercial & industrial factory rooftops, textile RMG facilities, agricultural solar irrigation, and commercial grid-tied/hybrid systems.",
-    },
-    {
-      q: isBn
-        ? "এই পণ্যের সাথে কি টেস্ট রিপোর্ট ও কারিগরি ডেটাশিট প্রদান করা হয়?"
-        : "Are factory flash test reports and datasheets included?",
-      a: isBn
-        ? "হ্যাঁ, নূর সোলার এনার্জি থেকে প্রতিটি চালানের সাথে অফিসিয়াল প্রস্তুতকারকের ফ্যাক্টরি টেস্ট রিপোর্ট, ফ্ল্যাশ টেস্ট স্পেক্স এবং ল্যাবরেটরি ডকুমেন্টেশন সরবরাহ করা হয়।"
-        : "Yes, official manufacturer laboratory flash test reports, technical datasheets, and compliance documentation are provided with every batch.",
-    },
-    {
-      q: isBn
-        ? "অফিসিয়াল ওয়ারেন্টি এবং লোকাল সার্ভিস সাপোর্ট কীভাবে কাজ করে?"
-        : "How does the warranty claim and local RMA support work?",
-      a: isBn
-        ? "পণ্যটিতে অফিসিয়াল প্রস্তুতকারক ওয়ারেন্টি রয়েছে এবং নূর সোলার এনার্জির ঢাকা টেকনিক্যাল ডেস্ক সরাসরি স্থানীয় RMA ও স্পেয়ার সমন্বয় নিশ্চিত করে।"
-        : "Backed by direct manufacturer warranties with full local RMA, inspection, and claims coordination managed by Noor Solar Energy's Dhaka technical center.",
-    },
-    {
-      q: isBn
-        ? "ন্যূনতম পাইকারি অর্ডার পরিমাণ (MOQ) এবং ডেলিভারি সময়সীমা কী?"
-        : "What is the MOQ and delivery timeline in Bangladesh?",
-      a: isBn
-        ? "রেডি স্টকের ক্ষেত্রে ঢাকা ডিপো থেকে ২৪-৪৮ ঘণ্টার মধ্যে সারা দেশে সরবরাহ করা হয়। বড় বাণিজ্যিক চালানের ক্ষেত্রে সরাসরি বন্দর থেকে সাইটে ট্রাক ডেলিভারি করা যায়।"
-        : "Warehouse in-stock inventory is dispatched within 24–48 hours nationwide. Container-scale orders are delivered directly from port to your project site.",
-    },
-  ];
-
-  const productFaqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: productFaqs.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: f.a,
-      },
-    })),
-  };
-
   return (
-    <div className="pt-24 pb-20 sm:pb-32 bg-[#F7F8F5] min-h-screen">
-      {/* Schema.org Product, Breadcrumb & FAQ Metadata */}
+    <div className="pt-8 md:pt-24 pb-20 sm:pb-32 bg-[#F7F8F5] min-h-screen">
+      {/* Schema.org Product Metadata */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productFaqJsonLd) }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -291,8 +204,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         </nav>
 
         {/* Product Details Hero Card */}
-        <Reveal y={24} duration={0.65}>
-          <div className="p-6 sm:p-10 lg:p-14 rounded-[36px] bg-white border border-[#DCE4E0] shadow-sm mb-12">
+        <div className="p-6 sm:p-10 lg:p-14 rounded-[36px] bg-white border border-[#DCE4E0] shadow-sm mb-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
             
             {/* Left: Product Images / Gallery */}
@@ -491,13 +403,12 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 </span>
               </div>
             </div>
+
           </div>
         </div>
-      </Reveal>
 
         {/* Detailed Description & Technical Specifications Table */}
-        <Reveal y={24} duration={0.65}>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-20">
           
           <div className="lg:col-span-5 flex flex-col gap-6">
             <div className="p-8 rounded-3xl bg-white border border-[#DCE4E0]">
@@ -850,120 +761,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               </div>
             )}
           </div>
+
         </div>
-      </Reveal>
 
-      {/* Applications & Recommended Use Cases */}
-      <Reveal y={24} duration={0.65}>
-        <div className="p-8 sm:p-10 rounded-3xl bg-white border border-[#DCE4E0] mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <span className="text-[11px] font-mono text-[#62706A] uppercase tracking-wider block mb-1">
-                {isBn ? "প্রস্তাবিত ব্যবহারক্ষেত্র" : "Recommended Use Cases"}
-              </span>
-              <h2 className="text-xl sm:text-2xl font-bold text-[#074031] tracking-tight">
-                {isBn ? `${product.name}-এর প্রধান অ্যাপ্লিকেশন` : `Applications & Project Fit`}
-              </h2>
-            </div>
-            <span className="text-xs font-mono text-[#074031] bg-[#F1F4F1] px-3 py-1 rounded-full border border-[#DCE4E0]">
-              {isBn ? "ইন্ডাস্ট্রিয়াল স্ট্যান্ডার্ড" : "Industrial Fit"}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 rounded-2xl bg-[#F7F8F5] border border-[#DCE4E0]">
-              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[#074031] mb-3">
-                <Factory className="w-4 h-4" />
-              </div>
-              <h3 className="text-sm font-bold text-[#074031] mb-1">
-                {isBn ? "টেক্সটাইল ও গার্মেন্টস (RMG)" : "Garments & Textiles"}
-              </h3>
-              <p className="text-xs text-[#62706A]">
-                {isBn
-                  ? "কারখানার সুবিশাল শেডে নেট-মিটারিং সোলার বিদ্যুৎ উৎপাদনে কার্যকর।"
-                  : "Optimized for factory shed rooftop arrays under net-metering schemes."}
-              </p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-[#F7F8F5] border border-[#DCE4E0]">
-              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[#074031] mb-3">
-                <Building2 className="w-4 h-4" />
-              </div>
-              <h3 className="text-sm font-bold text-[#074031] mb-1">
-                {isBn ? "বাণিজ্যিক ও কর্পোরেট ভবন" : "Commercial Buildings"}
-              </h3>
-              <p className="text-xs text-[#62706A]">
-                {isBn
-                  ? "অফিস, শপিং মল ও ডিপোতে নিরবচ্ছিন্ন ও সাশ্রয়ী পাওয়ার সমাধান।"
-                  : "Reliable daytime yield and peak grid tariff reduction for corporate hubs."}
-              </p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-[#F7F8F5] border border-[#DCE4E0]">
-              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[#074031] mb-3">
-                <Tractor className="w-4 h-4" />
-              </div>
-              <h3 className="text-sm font-bold text-[#074031] mb-1">
-                {isBn ? "কৃষি ও সোলার সেচ" : "Agro & Solar Irrigation"}
-              </h3>
-              <p className="text-xs text-[#62706A]">
-                {isBn
-                  ? "সোলার পাম্প ও ডেইরি ফার্মে ব্যয়বহুল ডিজেল জেনারেটর পরিহারের উপায়।"
-                  : "Clean off-grid power displacing expensive diesel generator pumping."}
-              </p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-[#F7F8F5] border border-[#DCE4E0]">
-              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[#074031] mb-3">
-                <Zap className="w-4 h-4" />
-              </div>
-              <h3 className="text-sm font-bold text-[#074031] mb-1">
-                {isBn ? "অন-গ্রিড ও হাইব্রিড ব্যাকআপ" : "Grid-Tied & Hybrid BESS"}
-              </h3>
-              <p className="text-xs text-[#62706A]">
-                {isBn
-                  ? "উচ্চ ভোল্টেজ গ্রিড সংযোগ ও ব্যাটারি স্টোরেজ সিস্টেমের সাথে সামঞ্জস্যপূর্ণ।"
-                  : "Seamless synchronization with commercial inverters and storage banks."}
-              </p>
-            </div>
-          </div>
-        </div>
-      </Reveal>
-
-      {/* Product FAQ Section */}
-      <Reveal y={24} duration={0.65}>
-        <div className="p-8 sm:p-10 rounded-3xl bg-white border border-[#DCE4E0] mb-8">
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#F1F4F1] text-[11px] font-mono text-[#074031] w-fit mb-3 border border-[#DCE4E0]">
-            <HelpCircle className="w-3.5 h-3.5 text-[#FEBE16]" />
-            <span>{isBn ? "প্রোডাক্ট প্রশ্নোত্তর" : "Product FAQ"}</span>
-          </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-[#074031] mb-6">
-            {isBn ? `${product.name} সম্পর্কিত সাধারণ প্রশ্ন` : `Questions About ${product.name}`}
-          </h2>
-
-          <div className="space-y-3">
-            {productFaqs.map((faq, idx) => (
-              <details
-                key={idx}
-                className="group p-4 rounded-2xl bg-[#F7F8F5] border border-[#DCE4E0] open:bg-white transition-colors"
-              >
-                <summary className="flex items-center justify-between cursor-pointer font-bold text-xs sm:text-sm text-[#074031] list-none select-none">
-                  <span>{faq.q}</span>
-                  <span className="w-6 h-6 rounded-full bg-white group-open:bg-[#074031] group-open:text-white border border-[#DCE4E0] flex items-center justify-center text-xs font-mono shrink-0 ml-3 transition-colors">
-                    +
-                  </span>
-                </summary>
-                <p className="mt-3 text-xs text-[#62706A] leading-relaxed pt-2 border-t border-[#DCE4E0]">
-                  {faq.a}
-                </p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </Reveal>
-
-      {/* Customer Reviews Section */}
-      <Reveal y={24} duration={0.65}>
+        {/* Customer Reviews Section */}
         <ProductReviewsSection
           productId={product.id}
           productName={product.name}
@@ -972,12 +773,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           averageRating={averageRating}
           publicSubmissionEnabled={publicReviewsEnabled}
         />
-      </Reveal>
 
-      {/* Related Products from Same Category */}
-      {related.length > 0 && (
-        <div className="mt-12">
-          <Reveal y={18} duration={0.6}>
+        {/* Related Products from Same Category */}
+        {related.length > 0 && (
+          <div>
             <div className="flex items-center justify-between mb-8">
               <div>
                 <span className="text-xs font-mono uppercase text-[#62706A] block mb-1">
@@ -994,17 +793,14 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 {isBn ? "সম্পূর্ণ ক্যাটাগরি দেখুন" : "View Category"}
               </Link>
             </div>
-          </Reveal>
 
-          <RevealGroup staggerDelay={0.08} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {related.map((relProduct) => (
-              <RevealItem key={relProduct.id} className="h-full">
-                <ProductCard product={relProduct} />
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </div>
-      )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {related.map((relProduct) => (
+                <ProductCard key={relProduct.id} product={relProduct} />
+              ))}
+            </div>
+          </div>
+        )}
 
       </div>
     </div>

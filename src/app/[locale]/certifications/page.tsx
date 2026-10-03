@@ -44,7 +44,6 @@ export async function generateMetadata({ params }: CertificationsPageProps): Pro
     description: isBn
       ? "বাংলাদেশ সাসটেইনেবল অ্যান্ড রিনিউয়েবল এনার্জি অ্যাসোসিয়েশন (BSREA) সদস্যপদ, আমদানি নথিপত্র এবং বাণিজ্যিক সোলার ইকুইপমেন্টের মান নিয়ন্ত্রণ সনদ।"
       : "Official BSREA industry association membership and commercial compliance documentation for Noor Solar Energy.",
-    metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/certifications` : `${siteUrl}/certifications`,
       languages: {
@@ -92,7 +91,7 @@ export default async function CertificationsPage({ params }: CertificationsPageP
   const isBn = locale === "bn";
 
   return (
-    <div className="pt-28 sm:pt-36 pb-24 bg-[#F7F8F5] min-h-screen">
+    <div className="pt-8 md:pt-36 pb-24 bg-[#F7F8F5] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Navigation Breadcrumb */}

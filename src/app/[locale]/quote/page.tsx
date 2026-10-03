@@ -45,7 +45,6 @@ export async function generateMetadata({ params }: QuotePageProps): Promise<Meta
     description: isBn
       ? "বাসাবাড়ি, বাণিজ্যিক ভবন বা শিল্প প্রতিষ্ঠানের জন্য কাস্টমাইজড সোলার কোটেশন ও পাইকারি মূল্য জানতে অনলাইনে অনুরোধ পাঠান।"
       : "Tell us about your energy needs and get a tailored solar quotation for residential, commercial rooftop, or industrial solar projects in Bangladesh.",
-    metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/quote` : `${siteUrl}/quote`,
       languages: {
@@ -100,7 +99,7 @@ export default async function QuotePage({ params }: QuotePageProps) {
   };
 
   return (
-    <div className="pt-28 sm:pt-36 pb-20 bg-[#F7F8F5] min-h-screen text-[#17251F]">
+    <div className="pt-8 md:pt-36 pb-20 bg-[#F7F8F5] min-h-screen text-[#17251F]">
       {/* Schema.org Structured Data */}
       <script
         type="application/ld+json"

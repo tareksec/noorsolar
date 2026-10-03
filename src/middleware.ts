@@ -10,7 +10,7 @@ const encodedKey = new TextEncoder().encode(secretKey);
 
 const handleI18nRouting = createMiddleware(routing);
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Protect /admin routes (except /admin/login)
@@ -30,6 +30,7 @@ export async function proxy(request: NextRequest) {
       return NextResponse.next();
     } catch {
       const loginUrl = new URL("/admin/login", request.url);
+      loginUrl.searchParams.set("from", pathname);
       return NextResponse.redirect(loginUrl);
     }
   }
@@ -47,8 +48,7 @@ export async function proxy(request: NextRequest) {
   return handleI18nRouting(request);
 }
 
-// Next.js 16 supports either named export proxy or default export
-export default proxy;
+export default middleware;
 
 export const config = {
   // Match all request paths except:

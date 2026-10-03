@@ -29,11 +29,11 @@ export async function generateMetadata({
 
   return {
     title: isBn
-      ? "সোলার প্যানেল গাইড ও কারিগরি ব্লগ বাংলাদেশ — নূর সোলার এনার্জি"
-      : "Solar Guides & Commercial Procurement Insights Bangladesh — Noor Solar Energy",
+      ? "বাণিজ্যিক সোলার প্রকিউরমেন্ট ও কারিগরি গাইড — নূর সোলার এনার্জি"
+      : "Commercial Solar Knowledge & Procurement Insights — Noor Solar Energy",
     description: isBn
-      ? "বাংলাদেশে বাণিজ্যিক ও শিল্প সোলার প্রকল্প, TOPCon বনাম PERC প্যানেল বিশ্লেষণ, LiFePO4 ব্যাটারি ও ইনভার্টার প্রকিউরমেন্ট গাইড।"
-      : "Technical guides, TOPCon vs PERC comparisons, LiFePO4 battery benchmarks, and procurement insights for commercial solar in Bangladesh.",
+      ? "বাংলাদেশে বাণিজ্যিক ও শিল্প সোলার প্রকল্প, ইনভার্টার সাইজিং এবং প্রকিউরমেন্ট গাইড।"
+      : "Technical guides, equipment selection benchmarks, and procurement insights for commercial solar EPCs and industrial developers in Bangladesh.",
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/blog` : `${siteUrl}/blog`,
       languages: {
@@ -42,7 +42,6 @@ export async function generateMetadata({
         "x-default": `${siteUrl}/blog`,
       },
     },
-    metadataBase: new URL(siteUrl),
     openGraph: {
       title: isBn
         ? "বাণিজ্যিক সোলার প্রকিউরমেন্ট ও কারিগরি গাইড — নূর সোলার এনার্জি"
@@ -94,7 +93,7 @@ export default async function BlogIndexPage({ params, searchParams }: BlogIndexP
   ];
 
   return (
-    <div className="pt-24 pb-20 sm:pb-32 bg-[#F7F8F5] min-h-screen">
+    <div className="pt-8 md:pt-24 pb-20 sm:pb-32 bg-[#F7F8F5] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">

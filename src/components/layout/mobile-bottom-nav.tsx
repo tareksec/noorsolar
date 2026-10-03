@@ -9,6 +9,7 @@ import {
   BadgePercent,
   Newspaper,
   Phone,
+  MessageCircle,
 } from "lucide-react";
 import { GlassDock, type DockItem } from "@/components/ui/glass-dock";
 
@@ -26,6 +27,8 @@ export function MobileBottomNav() {
     }
   };
 
+  const whatsappUrl =
+    `https://wa.me/8801884611888?text=${encodeURIComponent(isBn ? "আসসালামু আলাইকুম নূর সোলার এনার্জি, আমি সোলার সামগ্রী ও পাইকারি মূল্য সম্পর্কে জানতে চাই।" : "Hello Noor Solar Energy, I would like to inquire about solar equipment and bulk pricing.")}`;
   const items: DockItem[] = useMemo(
     () => [
       { title: isBn ? "হোম" : "Home", icon: Home, onClick: () => go("/") },
@@ -48,6 +51,13 @@ export function MobileBottomNav() {
         title: isBn ? "যোগাযোগ" : "Contact",
         icon: Phone,
         onClick: () => go("/contact"),
+      },
+      {
+        title: "WhatsApp",
+        icon: MessageCircle,
+        onClick: () => {
+          window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+        },
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,11 +89,11 @@ export function MobileBottomNav() {
       aria-label={isBn ? "মোবাইল নেভিগেশন" : "Mobile navigation"}
       className="pointer-events-none fixed inset-x-0 bottom-[calc(0.75rem+env(safe-area-inset-bottom,0px))] z-40 flex justify-center px-4 lg:hidden"
     >
-      <div className="pointer-events-auto">
+      <div className="pointer-events-auto origin-bottom max-[360px]:scale-90">
         <GlassDock
           items={items}
           activeIndex={activeIndex}
-          dockClassName="rounded-full border-[#DCE4E0] bg-white/85 px-5 py-3 shadow-[0_12px_32px_rgba(7,64,49,0.18)]"
+          dockClassName="mobile-dock gap-2.5 rounded-full px-3 py-3"
         />
       </div>
     </nav>

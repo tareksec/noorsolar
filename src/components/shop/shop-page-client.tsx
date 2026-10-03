@@ -292,6 +292,15 @@ export function ShopPageClient({
       image: "/demo/inverter-30kw-ongrid-front.svg",
       alt: "Solar Accessories",
     },
+    {
+      id: "portable-power-stations",
+      slug: "portable-power-stations",
+      badge: isBn ? "নতুন" : "HOT NEW",
+      badgeColor: "bg-[#074031] text-[#FEBE16] font-bold shadow-xs",
+      title: isBn ? "পোর্টেবল পাওয়ার" : "Portable Power",
+      image: "/photos/cat-portable-power-station.jpg",
+      alt: "Portable Power Station",
+    },
   ];
 
   return (
@@ -482,7 +491,7 @@ export function ShopPageClient({
             <span className="text-[11px] text-[#62706A] font-medium">{isBn ? "সর্ট:" : "Sort:"}</span>
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as "featured" | "price-asc" | "price-desc" | "name")}
               className="bg-transparent text-[#17251F] font-bold text-xs focus:outline-none cursor-pointer"
             >
               <option value="featured">{isBn ? "ফিচার্ড" : "Featured"}</option>
@@ -537,13 +546,13 @@ export function ShopPageClient({
                   className="group relative flex flex-col justify-between rounded-2xl bg-white border border-[#E2E7E2] p-2.5 shadow-[0_2px_10px_rgba(0,0,0,0.03)] hover:shadow-md transition-all cursor-pointer"
                 >
                   {/* Product Image Box */}
-                  <div className="relative w-full aspect-square rounded-xl bg-white border border-[#E8ECE9] p-2 mb-2 flex items-center justify-center overflow-hidden">
+                  <div className="relative w-full aspect-square rounded-xl bg-[#F4F6F4] p-2 mb-2 flex items-center justify-center overflow-hidden">
                     <Image
                       src={primaryImg}
                       alt={product.name}
                       fill
                       sizes="50vw"
-                      className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
+                      className="object-contain p-1.5 group-hover:scale-105 transition-transform duration-300"
                     />
 
                     {/* Status Badge */}
@@ -1151,7 +1160,7 @@ export function ShopPageClient({
                               e.stopPropagation();
                               router.push(`/product/${product.slug}`);
                             }}
-                            className="relative w-full h-44 rounded-2xl bg-white border border-[#E8ECE9] mb-4 flex items-center justify-center overflow-hidden cursor-pointer"
+                            className="relative w-full h-44 rounded-2xl bg-[#F1F4F1] border border-[#DCE4E0] mb-4 flex items-center justify-center overflow-hidden cursor-pointer"
                           >
                             <Link
                               href={`/product/${product.slug}`}

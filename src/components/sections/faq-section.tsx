@@ -55,7 +55,7 @@ export function FAQSection({ items, locale }: FAQSectionProps) {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[11px] font-mono text-[#17251F] mb-3 border border-[#DCE4E0]">
               <span className="w-2 h-2 rounded-full bg-[#FEBE16]"></span>
-              <span>{isBn ? "সাধারণ প্রশ্নোত্তর" : "Commercial Inquiries"}</span>
+              <span>{isBn ? "সহায়িকা ও পরামর্শ" : "Commercial Inquiries"}</span>
             </div>
             <h2 className="text-3xl font-bold tracking-tight text-[#074031]">
               {isBn ? "সচরাচর জিজ্ঞাসিত প্রশ্ন" : "Frequently Asked Questions"}

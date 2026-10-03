@@ -77,6 +77,20 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
         descriptionBn: "বাংলাদেশের শীর্ষস্থানীয় সোলার সরঞ্জাম আমদানিকারক",
       },
       {
+        name: "Projects & Proof",
+        nameBn: "প্রকল্প রেফারেন্স",
+        href: "/projects",
+        description: "Verified commercial rooftop & industrial MW references",
+        descriptionBn: "বাণিজ্যিক ছাদ ও শিল্প কারখানার বাস্তব প্রকল্প রেফারেন্স",
+      },
+      {
+        name: "Client Reviews",
+        nameBn: "গ্রাহক মতামত",
+        href: "/reviews",
+        description: "Verified testimonials from factory & commercial buyers",
+        descriptionBn: "বাণিজ্যিক ও শিল্প ক্রেতাদের বাস্তব অভিজ্ঞতা ও মূল্যায়ন",
+      },
+      {
         name: "Certifications",
         nameBn: "সার্টিফিকেশন ও অনুমোদন",
         href: "/certifications",
@@ -181,7 +195,7 @@ export function AnimatedNavFramer({
     setActiveDropdown(null);
   }
 
-  const isBn = currentLocale === "bn" || pathname.startsWith("/bn/") || pathname === "/bn";
+  const isBn = currentLocale === "bn" || (!pathname.startsWith("/en/") && pathname !== "/en");
 
   const defaultItems = [
     ...DEFAULT_NAV_ITEMS,
@@ -217,11 +231,17 @@ export function AnimatedNavFramer({
   const navItems = rawNavItems.map((item) => {
     let href = item.href;
     const name = isBn && item.nameBn ? item.nameBn : (isBn && BN_NAV_NAMES[item.name] ? BN_NAV_NAMES[item.name] : item.name);
-    if (isBn) {
+    if (!isBn) {
       if (href.startsWith("/#")) {
-        href = `/bn${href.slice(1)}`;
-      } else if (href.startsWith("/") && !href.startsWith("/bn")) {
-        href = `/bn${href}`;
+        href = `/en${href.slice(1)}`;
+      } else if (href.startsWith("/") && !href.startsWith("/en")) {
+        href = `/en${href}`;
+      }
+    } else {
+      if (href.startsWith("/bn/")) {
+        href = href.slice(3);
+      } else if (href === "/bn") {
+        href = "/";
       }
     }
 
@@ -229,11 +249,17 @@ export function AnimatedNavFramer({
       let childHref = child.href;
       const childName = isBn && child.nameBn ? child.nameBn : (isBn && BN_NAV_NAMES[child.name] ? BN_NAV_NAMES[child.name] : child.name);
       const childDesc = isBn && child.descriptionBn ? child.descriptionBn : child.description;
-      if (isBn) {
+      if (!isBn) {
         if (childHref.startsWith("/#")) {
-          childHref = `/bn${childHref.slice(1)}`;
-        } else if (childHref.startsWith("/") && !childHref.startsWith("/bn")) {
-          childHref = `/bn${childHref}`;
+          childHref = `/en${childHref.slice(1)}`;
+        } else if (childHref.startsWith("/") && !childHref.startsWith("/en")) {
+          childHref = `/en${childHref}`;
+        }
+      } else {
+        if (childHref.startsWith("/bn/")) {
+          childHref = childHref.slice(3);
+        } else if (childHref === "/bn") {
+          childHref = "/";
         }
       }
       return {
@@ -250,8 +276,10 @@ export function AnimatedNavFramer({
   const displayCtaText = isBn
     ? (ctaText === "Request a Quote" ? "কোটেশন নিন" : ctaText === "Contact Sales" || ctaText === "Book A Call" || !ctaText ? "যোগাযোগ করুন" : ctaText)
     : ctaText;
-  const finalCtaHref = isBn && !ctaHref.startsWith("/bn") ? `/bn${ctaHref}` : ctaHref;
-  const brandHref = isBn ? "/bn" : "/";
+  const finalCtaHref = isBn
+    ? (ctaHref.startsWith("/bn/") ? ctaHref.slice(3) : (ctaHref === "/bn" ? "/" : ctaHref))
+    : (!ctaHref.startsWith("/en") ? `/en${ctaHref}` : ctaHref);
+  const brandHref = isBn ? "/" : "/en";
 
   const { scrollY } = useScroll();
   const lastScrollY = React.useRef(0);
@@ -408,9 +436,9 @@ export function AnimatedNavFramer({
                 {/* Navigation Links (Desktop & Landscape) */}
                 <div className="flex items-center gap-1 lg:gap-2 pr-1 sm:pr-2">
                   {navItems.map((item) => {
-                    const isDirectActive = pathname === item.href || (item.href !== "/" && item.href !== "/bn" && pathname.startsWith(item.href));
+                    const isDirectActive = pathname === item.href || (item.href !== "/" && item.href !== "/en" && pathname.startsWith(item.href));
                     const isChildActive = item.children?.some(
-                      (c) => pathname === c.href || (c.href !== "/" && c.href !== "/bn" && pathname.startsWith(c.href))
+                      (c) => pathname === c.href || (c.href !== "/" && c.href !== "/en" && pathname.startsWith(c.href))
                     );
                     const isActive = isDirectActive || isChildActive;
                     const hasChildren = Boolean(item.children && item.children.length > 0);
@@ -550,7 +578,8 @@ export function AnimatedNavFramer({
                     <Link
                       href={finalCtaHref}
                       onClick={(e) => e.stopPropagation()}
-                      className="group inline-flex items-center min-h-[44px] gap-1.5 sm:gap-2 pl-3 sm:pl-4 pr-1.5 py-1.5 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] text-xs font-bold tracking-tight shadow-[0_4px_14px_rgba(254,190,22,0.35)] transition-all hover:scale-105 active:scale-95 whitespace-nowrap shrink-0"
+                      data-motion="button-slide"
+                      className="btn-slide-fill group inline-flex items-center min-h-[44px] gap-1.5 sm:gap-2 pl-3 sm:pl-4 pr-1.5 py-1.5 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] text-xs font-bold tracking-tight shadow-[0_4px_14px_rgba(254,190,22,0.35)] transition-all hover:scale-105 active:scale-95 whitespace-nowrap shrink-0"
                     >
                       <span>{displayCtaText}</span>
                       <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#052F25] flex items-center justify-center text-[#FEBE16] group-hover:translate-x-0.5 transition-transform shadow-2xs shrink-0">
@@ -658,9 +687,9 @@ export function AnimatedNavFramer({
 
             <div className="flex flex-col gap-2 pt-4 max-h-[calc(80vh-8rem)] overflow-y-auto no-scrollbar">
               {navItems.map((item, idx) => {
-                const isDirectActive = pathname === item.href || (item.href !== "/" && item.href !== "/bn" && pathname.startsWith(item.href));
+                const isDirectActive = pathname === item.href || (item.href !== "/" && item.href !== "/en" && pathname.startsWith(item.href));
                 const isChildActive = item.children?.some(
-                  (c) => pathname === c.href || (c.href !== "/" && c.href !== "/bn" && pathname.startsWith(c.href))
+                  (c) => pathname === c.href || (c.href !== "/" && c.href !== "/en" && pathname.startsWith(c.href))
                 );
                 const isActive = isDirectActive || isChildActive;
                 const hasChildren = Boolean(item.children && item.children.length > 0);
@@ -776,7 +805,8 @@ export function AnimatedNavFramer({
               <Link
                 href={finalCtaHref}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center gap-2 w-full min-h-[48px] py-3 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-sm shadow-md"
+                data-motion="button-slide"
+                className="btn-slide-fill flex items-center justify-center gap-2 w-full min-h-[48px] py-3 rounded-full bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25] font-bold text-sm shadow-md"
               >
                 <span>{displayCtaText}</span>
                 <ArrowRight className="w-4 h-4 stroke-[2.5]" />

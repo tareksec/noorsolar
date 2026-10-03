@@ -5,10 +5,35 @@ import { ContentTabs } from '@/components/admin/content-tabs';
 import { StatsClient } from '@/components/admin/content/stats-client';
 
 export default async function AdminStatsPage() {
-  const [items, summary] = await Promise.all([
-    db.stat.findMany({ orderBy: { sortOrder: 'asc' } }),
-    getLiveSampleContentSummary(),
-  ]);
+  const rawItems = await db.stat.findMany({ orderBy: { sortOrder: 'asc' } });
+
+  // Auto-deduplicate stats by label if any duplicate rows exist in database
+  const seenLabels = new Set<string>();
+  const duplicateIds: string[] = [];
+  const uniqueItems: typeof rawItems = [];
+
+  for (const item of rawItems) {
+    const key = item.label.trim().toLowerCase();
+    if (seenLabels.has(key)) {
+      duplicateIds.push(item.id);
+    } else {
+      seenLabels.add(key);
+      uniqueItems.push(item);
+    }
+  }
+
+  if (duplicateIds.length > 0) {
+    try {
+      await db.stat.deleteMany({
+        where: { id: { in: duplicateIds } },
+      });
+      console.log(`[AdminStatsPage] Automatically pruned ${duplicateIds.length} duplicate stat rows.`);
+    } catch (err) {
+      console.error('[AdminStatsPage] Failed to prune duplicate stats:', err);
+    }
+  }
+
+  const summary = await getLiveSampleContentSummary();
 
   return (
     <div className='space-y-6'>
@@ -21,7 +46,7 @@ export default async function AdminStatsPage() {
         </p>
       </div>
       <ContentTabs sampleCounts={summary} />
-      <StatsClient items={items} />
+      <StatsClient items={uniqueItems} />
     </div>
   );
 }

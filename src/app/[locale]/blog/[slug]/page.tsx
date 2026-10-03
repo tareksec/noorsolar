@@ -41,7 +41,6 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   return {
     title,
     description,
-    metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/blog/${post.slug}` : `${siteUrl}/blog/${post.slug}`,
       languages: {
@@ -74,25 +73,14 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
   }
 
   const { post, related } = data;
-  const isBn = locale === "bn";
 
-  // Schema.org Article JSON-LD (GEO & AI Engine Enhanced)
+  // Schema.org Article JSON-LD
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
     description: post.excerpt || post.title,
     image: post.coverImage ? [post.coverImage] : [],
-    inLanguage: isBn ? "bn-BD" : "en-US",
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${SITE_URL}${isBn ? "/bn" : ""}/blog/${post.slug}`,
-    },
-    spatialCoverage: {
-      "@type": "Place",
-      name: "Bangladesh",
-    },
-    keywords: post.tags || undefined,
     datePublished: post.publishedAt ? new Date(post.publishedAt).toISOString() : undefined,
     dateModified: new Date(post.updatedAt).toISOString(),
     author: {
@@ -110,41 +98,14 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
     },
   };
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: isBn ? "হোম" : "Home",
-        item: `${SITE_URL}${isBn ? "/bn" : ""}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: isBn ? "ব্লগ" : "Blog",
-        item: `${SITE_URL}${isBn ? "/bn" : ""}/blog`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: post.title,
-        item: `${SITE_URL}${isBn ? "/bn" : ""}/blog/${post.slug}`,
-      },
-    ],
-  };
+  const isBn = locale === "bn";
 
   return (
-    <div className="pt-24 pb-20 sm:pb-32 bg-[#F7F8F5] min-h-screen">
-      {/* Schema.org Article & Breadcrumb structured data */}
+    <div className="pt-8 md:pt-24 pb-20 sm:pb-32 bg-[#F7F8F5] min-h-screen">
+      {/* Schema.org Article structured data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

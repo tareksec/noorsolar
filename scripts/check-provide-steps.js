@@ -173,8 +173,70 @@ async function run() {
       `y0=${trace[0].y} y2=${trace[2].y}`
     );
 
+    // Exact regression: after 03 is committed, the release burst must not show 02.
+    const boundaryTrace = [];
+    await page.evaluate(() => {
+      const btns = [
+        ...document.querySelectorAll(
+          '#services-solutions button[aria-label^="Jump to step"]'
+        ),
+      ];
+      if (btns[0]) btns[0].click();
+    });
+    await sleep(800);
+    await enterZone(page);
+    await wheelBurst(page, Array(8).fill(400), 15);
+    await sleep(900);
+    await wheelBurst(page, Array(8).fill(400), 15);
+    await sleep(900);
+    for (const delta of Array(8).fill(400)) {
+      await page.mouse.wheel({ deltaY: delta });
+      await sleep(15);
+      boundaryTrace.push((await state(page)).step);
+    }
+    record(
+      "forward-boundary-no-bounce",
+      boundaryTrace[0] === "03 / 03" &&
+        boundaryTrace.every((step) => step !== "02 / 03"),
+      boundaryTrace.join(",")
+    );
+
+    // Repeat the boundary transition 15 times with alternating fast/slow bursts.
+    const repeatedBoundaryTraces = [];
+    for (let run = 0; run < 15; run++) {
+      await page.evaluate(() => {
+        const btns = [
+          ...document.querySelectorAll(
+            '#services-solutions button[aria-label^="Jump to step"]'
+          ),
+        ];
+        if (btns[0]) btns[0].click();
+      });
+      await sleep(500);
+      await enterZone(page);
+      const gap = run % 2 === 0 ? 15 : 90;
+      await wheelBurst(page, Array(8).fill(400), gap);
+      await sleep(900);
+      await wheelBurst(page, Array(8).fill(400), gap);
+      await sleep(900);
+      const releaseTrace = [];
+      for (const delta of Array(run % 2 === 0 ? 8 : 4).fill(400)) {
+        await page.mouse.wheel({ deltaY: delta });
+        await sleep(15);
+        releaseTrace.push((await state(page)).step);
+      }
+      repeatedBoundaryTraces.push(releaseTrace);
+    }
+    record(
+      "forward-boundary-no-bounce-15x",
+      repeatedBoundaryTraces.every(
+        (run) => run[0] === "03 / 03" && run.every((step) => step !== "02 / 03")
+      ),
+      repeatedBoundaryTraces.map((run) => run.join(",")).join(" | ")
+    );
+
     // 3. Reverse flick steps back exactly one step with the page pinned.
-    await sleep(1200);
+    await sleep(2200);
     s = await enterZone(page);
     const revZoneOk = s.step === "03 / 03" && inZone(s);
     record("reenter-zone", revZoneOk, JSON.stringify({ step: s.step, top: s.top }));
@@ -184,6 +246,15 @@ async function run() {
     s = await state(page);
     record("reverse-one-step", s.step === "02 / 03", `step=${s.step}`);
     record("reverse-page-pinned", Math.abs(s.y - yRev) <= 15, `dy=${s.y - yRev}`);
+    const yFirst = s.y;
+    await wheelBurst(page, Array(8).fill(-400), 15);
+    await sleep(850);
+    s = await state(page);
+    record("reverse-to-first", s.step === "01 / 03", `step=${s.step}`);
+    await wheelBurst(page, Array(8).fill(-400), 15);
+    await sleep(850);
+    s = await state(page);
+    record("reverse-boundary-releases", s.step === "01 / 03" && s.y < yFirst - 200, `step=${s.step} y=${s.y}`);
 
     // 4. Gentle trackpad micro-deltas inside one cooldown from step 01:
     // exactly one step with the page pinned.

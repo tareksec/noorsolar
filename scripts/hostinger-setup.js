@@ -49,6 +49,27 @@ function sanitizeDbUrl(raw) {
   return url;
 }
 
+if (!process.env.DATABASE_URL) {
+  const envCandidates = [
+    path.join(__dirname, "..", ".env"),
+    path.join(__dirname, "..", ".env.production"),
+    path.join(__dirname, "..", ".env.local"),
+  ];
+  for (const envFile of envCandidates) {
+    if (fs.existsSync(envFile)) {
+      try {
+        const text = fs.readFileSync(envFile, "utf8");
+        const match = text.match(/^\s*DATABASE_URL\s*=\s*(["']?)(.*?)\1\s*$/m);
+        if (match && match[2]) {
+          process.env.DATABASE_URL = match[2];
+          console.log(`📦 Loaded DATABASE_URL from ${path.basename(envFile)}`);
+          break;
+        }
+      } catch {}
+    }
+  }
+}
+
 if (process.env.DATABASE_URL) {
   process.env.DATABASE_URL = sanitizeDbUrl(process.env.DATABASE_URL);
 }
@@ -73,13 +94,13 @@ runCommand("npx prisma generate", "Generating Prisma Client");
 
 if (dbUrl && dbUrl.startsWith("mysql://")) {
   console.log("📦 Valid MySQL DATABASE_URL detected. Synchronizing schema to database...");
-  const pushed = runCommand("npx prisma db push --skip-generate --accept-data-loss", "Syncing database schema (prisma db push)");
+  const pushed = runCommand("npx prisma db push --skip-generate", "Syncing database schema (prisma db push)");
   if (pushed) {
     runCommand("npx tsx prisma/seed.ts", "Seeding database with categories, products, and admin");
   }
 } else {
   console.log("ℹ️ Using local SQLite database. Ensuring schema & seed...");
-  const pushed = runCommand("npx prisma db push --skip-generate --accept-data-loss", "Syncing SQLite database schema");
+  const pushed = runCommand("npx prisma db push --skip-generate", "Syncing SQLite database schema");
   if (pushed) {
     runCommand("npx tsx prisma/seed.ts", "Seeding database with categories, products, and admin");
   }

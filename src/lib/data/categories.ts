@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
+import { ensurePortableStationInDb, getFallbackDemoProducts } from "./products";
 
-const fallbackCategories = [
+export const fallbackCategories = [
   {
     id: "cat-panels",
     slug: "solar-panels",
@@ -38,16 +39,16 @@ const fallbackCategories = [
     _count: { products: 5 },
   },
   {
-    id: "cat-storage",
-    slug: "energy-storage",
-    name: "Solar Energy Storage",
-    nameBn: "সোলার এনার্জি স্টোরেজ",
-    description: "Commercial LiFePO4 battery systems and BESS solutions engineered for peak-shaving and uninterrupted solar backup.",
-    descriptionBn: "বাণিজ্যিক ও শিল্প প্রতিষ্ঠানে নিরবচ্ছিন্ন ব্যাকআপের জন্য উচ্চ-ক্ষমতার LiFePO4 ব্যাটারি ও BESS স্টোরেজ সমাধান।",
-    image: "/photos/cat-lithium-batteries.webp",
+    id: "cat-power-stations",
+    slug: "portable-power-stations",
+    name: "Portable Power Station",
+    nameBn: "পোর্টেবল পাওয়ার স্টেশন",
+    description: "High-capacity LiFePO4 portable power stations with pure sine wave AC output, fast solar recharge, and UPS backup.",
+    descriptionBn: "আউটডোর ও জরুরি ব্যাকআপের জন্য পিওর সাইন ওয়েভ এসি আউটপুট ও সোলার রিচার্জ সুবিধাযুক্ত LiFePO4 পোর্টেবল পাওয়ার স্টেশন।",
+    image: "/photos/cat-portable-power-station.jpg",
     sortOrder: 3,
     isActive: true,
-    _count: { products: 4 },
+    _count: { products: 1 },
   },
 ];
 
@@ -67,7 +68,25 @@ export async function getCategories(locale?: string) {
       },
     });
 
-    const activeCategories = categories.length > 0 ? categories : fallbackCategories;
+    let activeCategories = [...categories];
+
+    // Ensure all fallback categories (especially portable-power-stations) exist
+    for (const fb of fallbackCategories) {
+      if (!activeCategories.some((c) => c.slug === fb.slug)) {
+        activeCategories.push({
+          ...fb,
+          _count: { products: 1 },
+        } as unknown as (typeof categories)[0]);
+        // Trigger background DB auto-sync
+        ensurePortableStationInDb().catch(() => {});
+      }
+    }
+
+    if (activeCategories.length === 0) {
+      activeCategories = fallbackCategories as unknown as typeof categories;
+    } else {
+      activeCategories.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    }
 
     if (locale !== "bn") return activeCategories;
 
@@ -87,18 +106,10 @@ export async function getCategories(locale?: string) {
   }
 }
 
-
 export async function getCategoryBySlug(slug: string, locale?: string) {
-  const normalizedSlug =
-    slug === "solar-batteries"
-      ? "lithium-batteries"
-      : slug === "solar-energy-storage-system"
-      ? "energy-storage"
-      : slug;
-
   try {
     let category = await db.category.findUnique({
-      where: { slug: normalizedSlug, isActive: true },
+      where: { slug, isActive: true },
       include: {
         products: {
           where: { isActive: true },
@@ -111,37 +122,23 @@ export async function getCategoryBySlug(slug: string, locale?: string) {
       },
     });
 
-    if (!category && normalizedSlug === "energy-storage") {
-      const lithiumCat = await db.category.findUnique({
-        where: { slug: "lithium-batteries", isActive: true },
-        include: {
-          products: {
-            where: { isActive: true },
-            orderBy: { sortOrder: "asc" },
-            include: {
-              images: { orderBy: { sortOrder: "asc" } },
-              specs: { orderBy: { sortOrder: "asc" } },
-            },
-          },
-        },
-      });
-
-      if (lithiumCat) {
+    if (!category) {
+      const fbCat = fallbackCategories.find((c) => c.slug === slug);
+      if (fbCat) {
+        const catProducts = getFallbackDemoProducts().filter((p) => p.categoryId === slug);
         category = {
-          ...lithiumCat,
-          id: "cat-storage",
-          slug: "energy-storage",
-          name: "Solar Energy Storage",
-          nameBn: "সোলার এনার্জি স্টোরেজ",
-          description:
-            "High-capacity commercial LiFePO4 battery energy storage systems (BESS) for industrial peak shaving and backup in Bangladesh.",
-          descriptionBn:
-            "বাংলাদেশে শিল্প কারখানায় নিরবচ্ছিন্ন বিদ্যুৎ ও পিক শেভিংয়ের জন্য উচ্চ-ক্ষমতাসম্পন্ন LiFePO4 এনার্জি স্টোরেজ সিস্টেম (BESS)।",
-        };
+          ...fbCat,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          products: catProducts,
+        } as unknown as typeof category;
+        ensurePortableStationInDb().catch(() => {});
       }
     }
 
-    if (!category || locale !== "bn") return category;
+    if (!category) return null;
+
+    if (locale !== "bn") return category;
 
     return {
       ...category,
@@ -169,6 +166,40 @@ export async function getCategoryBySlug(slug: string, locale?: string) {
     };
   } catch (error) {
     console.warn(`getCategoryBySlug: failed to fetch slug ${slug}`, error);
+    const fbCat = fallbackCategories.find((c) => c.slug === slug);
+    if (fbCat) {
+      const catProducts = getFallbackDemoProducts().filter((p) => p.categoryId === slug);
+      const category = {
+        ...fbCat,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        products: catProducts,
+      };
+
+      if (locale !== "bn") return category;
+      return {
+        ...category,
+        name: category.nameBn?.trim() || category.name,
+        description: category.descriptionBn?.trim() || category.description,
+        products: category.products.map((p) => ({
+          ...p,
+          name: p.nameBn?.trim() || p.name,
+          shortDescription: p.shortDescriptionBn?.trim() || p.shortDescription,
+          description: p.descriptionBn?.trim() || p.description,
+          moq: p.moqBn?.trim() || p.moq,
+          leadTime: p.leadTimeBn?.trim() || p.leadTime,
+          images: p.images?.map((img) => ({
+            ...img,
+            alt: img.altBn?.trim() || img.alt,
+          })),
+          specs: p.specs?.map((s) => ({
+            ...s,
+            label: s.labelBn?.trim() || s.label,
+            value: s.valueBn?.trim() || s.value,
+          })),
+        })),
+      };
+    }
     return null;
   }
 }
