@@ -1,9 +1,6 @@
 "use client";
 
 import React from "react";
-import { usePathname } from "next/navigation";
-import { motion, useReducedMotion } from "motion/react";
-import { motionTokens } from "@/lib/motion";
 
 /**
  * Visual-only page transition wrapper (App Router).
@@ -18,22 +15,12 @@ import { motionTokens } from "@/lib/motion";
  * so incoming content appears instantly with zero animation.
  */
 export function RouteTransition({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const shouldReduceMotion = useReducedMotion();
-
   return (
-    <motion.div
-      key={pathname}
+    <div
       data-motion="route-transition"
-      initial={shouldReduceMotion ? false : { opacity: 0, y: motionTokens.distance.xs }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: motionTokens.duration.routeTransition,
-        ease: motionTokens.ease.expoOut,
-      }}
       className="w-full flex-grow flex flex-col"
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
