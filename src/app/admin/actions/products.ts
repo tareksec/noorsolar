@@ -6,7 +6,6 @@ import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { processAndSaveImage, processAndSavePdf, deleteUploadedFile, duplicateUploadedFile } from "@/lib/uploads";
 import { parseProductDocuments, encodeProductDocuments, ProductDocuments } from "@/lib/product-documents";
-import { sendProductUpdateToERP } from "@/lib/erp";
 
 async function extractAndSaveProductDocuments(
   formData: FormData,
@@ -249,23 +248,6 @@ export async function createProductAction(
     revalidatePublic("/products");
     revalidatePublic("/bn/products");
     revalidatePublic("/admin/products");
-    // Real-time sync newly created product to ERP
-    try {
-      await sendProductUpdateToERP({
-        id: created.id,
-        slug: created.slug,
-        name: created.name,
-        brand: created.brand,
-        model: created.model,
-        priceBdt: created.priceBdt,
-        stockStatus: created.stockStatus,
-        showPrice: created.showPrice,
-        erpProductId: created.erpProductId,
-      });
-    } catch (syncErr) {
-      console.warn("[ERP Sync] Failed to sync new product to ERP:", syncErr);
-    }
-
     return { success: true, productId: created.id };
   } catch (err: unknown) {
     console.error("Create product error:", err);
@@ -475,22 +457,6 @@ export async function updateProductAction(
     revalidatePublic(`/product/${slug}`);
     revalidatePublic(`/bn/product/${slug}`);
     revalidatePublic("/admin/products");
-
-    // Real-time sync updated product to ERP
-    try {
-      await sendProductUpdateToERP({
-        id,
-        slug,
-        name,
-        brand,
-        model,
-        priceBdt,
-        stockStatus,
-        showPrice,
-      });
-    } catch (syncErr) {
-      console.warn("[ERP Sync] Failed to sync updated product to ERP:", syncErr);
-    }
 
     return { success: true, productId: id };
   } catch (err: unknown) {

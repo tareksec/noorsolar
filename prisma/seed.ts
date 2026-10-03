@@ -3,19 +3,13 @@ import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
 import { defaultSiteConfig } from "../src/lib/site-config";
-import { sampleStats, sampleCertifications, samplePartners, sampleTestimonials, sampleFaqs, sampleProjects } from "./seed-content";
+import { sampleStats, sampleCertifications, samplePartners, sampleTestimonials, sampleFaqs } from "./seed-content";
 import { demoProducts } from "./seed-products";
 import { sampleBlogPosts } from "./seed-blog";
 
 const prisma = new PrismaClient();
 
-function getProductImagePath(slug: string, view: string, defaultSvg: string): string {
-  if (defaultSvg && !defaultSvg.endsWith(".svg")) {
-    const directPath = path.join(process.cwd(), "public", defaultSvg.replace(/^\//, ""));
-    if (fs.existsSync(directPath)) {
-      return defaultSvg;
-    }
-  }
+function getProductImagePath(slug: string, view: "front" | "angled" | "detail", defaultSvg: string): string {
   const photoExts = [".webp", ".jpg", ".jpeg", ".png"];
   for (const ext of photoExts) {
     const relPath = `/demo/products/${slug}-${view}${ext}`;
@@ -129,17 +123,6 @@ async function main() {
       image: "/photos/cat-solar-inverters.webp",
       sortOrder: 3,
     },
-    {
-      slug: "portable-power-stations",
-      name: "Portable Power Station",
-      nameBn: "পোর্টেবল পাওয়ার স্টেশন",
-      description:
-        "High-capacity LiFePO4 portable power stations with pure sine wave AC output, fast solar recharge, and UPS backup for emergency & mobile power.",
-      descriptionBn:
-        "আউটডোর ও জরুরি বিদ্যুৎ ব্যাকআপের জন্য পিওর সাইন ওয়েভ এসি আউটপুট ও সোলার রিচার্জ সুবিধাযুক্ত আধুনিক LiFePO4 পোর্টেবল পাওয়ার স্টেশন।",
-      image: "/photos/cat-portable-power-station.jpg",
-      sortOrder: 4,
-    },
   ];
 
   const categories: Record<string, string> = {};
@@ -216,8 +199,8 @@ async function main() {
         moqBn: (pRec.moqBn as string) || null,
         leadTime: p.leadTime,
         leadTimeBn: (pRec.leadTimeBn as string) || null,
-        priceBdt: typeof pRec.priceBdt === "number" ? (pRec.priceBdt as number) : null,
-        showPrice: typeof pRec.showPrice === "boolean" ? (pRec.showPrice as boolean) : false,
+        priceBdt: null,
+        showPrice: false,
         datasheetUrl: null,
         isFeatured: p.isFeatured,
         isActive: true,
@@ -231,10 +214,10 @@ async function main() {
     });
 
     // Images
-    const views = ["front", "angled", "detail", "compact", "showcase"] as const;
+    const views = ["front", "angled", "detail"] as const;
     for (let i = 0; i < p.images.length; i++) {
       const img = p.images[i] as { url: string; alt: string; altBn?: string | null; sortOrder: number };
-      const view = views[i] || `view-${i}`;
+      const view = views[i] || "front";
       const resolvedUrl = getProductImagePath(p.slug, view, img.url);
       await prisma.productImage.create({
         data: {
@@ -242,7 +225,7 @@ async function main() {
           url: resolvedUrl,
           alt: img.alt,
           altBn: img.altBn || null,
-          sortOrder: img.sortOrder ?? i,
+          sortOrder: img.sortOrder,
         },
       });
     }
@@ -264,94 +247,27 @@ async function main() {
   }
   console.log(`✓ Seeded ${demoProducts.length} demo products.`);
 
-  // 5. Seed Sample Trust Content (Idempotent: update if exists by unique natural key, create if missing)
+  // 5. Seed Sample Trust Content (all isSample=true)
   console.log("Seeding sample trust content (stats, certifications, partners, testimonials, FAQs)...");
   
   for (const stat of sampleStats) {
-    const existing = await prisma.stat.findFirst({
-      where: { label: stat.label },
-    });
-    if (existing) {
-      await prisma.stat.update({
-        where: { id: existing.id },
-        data: stat,
-      });
-    } else {
-      await prisma.stat.create({ data: stat });
-    }
-  }
-
-  // Deduplicate any existing duplicate stats
-  const allDbStats = await prisma.stat.findMany({ orderBy: { createdAt: "asc" } });
-  const seenStats = new Set<string>();
-  const duplicateStatIds: string[] = [];
-  for (const s of allDbStats) {
-    const key = s.label.trim().toLowerCase();
-    if (seenStats.has(key)) {
-      duplicateStatIds.push(s.id);
-    } else {
-      seenStats.add(key);
-    }
-  }
-  if (duplicateStatIds.length > 0) {
-    await prisma.stat.deleteMany({ where: { id: { in: duplicateStatIds } } });
-    console.log(`✓ Pruned ${duplicateStatIds.length} duplicate stats.`);
+    await prisma.stat.create({ data: stat });
   }
 
   for (const cert of sampleCertifications) {
-    const existing = await prisma.certification.findFirst({
-      where: { name: cert.name },
-    });
-    if (existing) {
-      await prisma.certification.update({
-        where: { id: existing.id },
-        data: cert,
-      });
-    } else {
-      await prisma.certification.create({ data: cert });
-    }
+    await prisma.certification.create({ data: cert });
   }
 
   for (const partner of samplePartners) {
-    const existing = await prisma.partner.findFirst({
-      where: { name: partner.name },
-    });
-    if (existing) {
-      await prisma.partner.update({
-        where: { id: existing.id },
-        data: partner,
-      });
-    } else {
-      await prisma.partner.create({ data: partner });
-    }
+    await prisma.partner.create({ data: partner });
   }
 
   for (const testimonial of sampleTestimonials) {
-    const existing = await prisma.testimonial.findFirst({
-      where: { authorName: testimonial.authorName },
-    });
-    if (existing) {
-      await prisma.testimonial.update({
-        where: { id: existing.id },
-        data: testimonial,
-      });
-    } else {
-      await prisma.testimonial.create({ data: testimonial });
-    }
+    await prisma.testimonial.create({ data: testimonial });
   }
 
   for (const faq of sampleFaqs) {
-    const existing = await prisma.faqItem.findFirst({
-      where: { question: faq.question },
-    });
-    if (existing) {
-      await prisma.faqItem.update({
-        where: { id: existing.id },
-        data: faq,
-      });
-    } else {
-      await prisma.faqItem.create({ data: faq });
-    }
+    await prisma.faqItem.create({ data: faq });
   }
 
   // 6. Seed Sample Educational Blog Posts (isSample=true, PUBLISHED)
@@ -364,17 +280,7 @@ async function main() {
     });
   }
 
-  // 7. Seed Verified Projects & Case Studies
-  console.log("Seeding verified project supply references...");
-  for (const project of sampleProjects) {
-    await prisma.project.upsert({
-      where: { slug: project.slug },
-      update: project,
-      create: project,
-    });
-  }
-
-  console.log("✓ Sample trust content, projects, and blog posts successfully seeded!");
+  console.log("✓ Sample trust content and blog posts successfully seeded!");
 }
 
 main()

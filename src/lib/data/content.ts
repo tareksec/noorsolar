@@ -39,7 +39,7 @@ function getFallbackStats(locale?: string): Stat[] {
       descriptionBn: s.descriptionBn ?? null,
       sortOrder: s.sortOrder ?? idx + 1,
       isActive: s.isActive ?? true,
-      isSample: false,
+      isSample: s.isSample ?? true,
       createdAt: new Date(),
       updatedAt: new Date(),
     }));
@@ -67,7 +67,7 @@ function getFallbackCertifications(locale?: string): Certification[] {
       image: c.image ?? null,
       sortOrder: c.sortOrder ?? idx + 1,
       isActive: c.isActive ?? true,
-      isSample: false,
+      isSample: c.isSample ?? true,
       createdAt: new Date(),
       updatedAt: new Date(),
     }));
@@ -90,7 +90,7 @@ function getFallbackPartners(): Partner[] {
     url: p.url ?? null,
     sortOrder: p.sortOrder ?? idx + 1,
     isActive: p.isActive ?? true,
-    isSample: false,
+    isSample: p.isSample ?? true,
     createdAt: new Date(),
     updatedAt: new Date(),
   }));
@@ -112,7 +112,7 @@ function getFallbackTestimonials(locale?: string): Testimonial[] {
       photo: t.photo ?? null,
       sortOrder: t.sortOrder ?? idx + 1,
       isActive: t.isActive ?? true,
-      isSample: false,
+      isSample: t.isSample ?? true,
       createdAt: new Date(),
       updatedAt: new Date(),
     }));
@@ -137,7 +137,7 @@ function getFallbackFaqs(locale?: string): FaqItem[] {
     answerBn: f.answerBn ?? null,
     sortOrder: f.sortOrder ?? idx + 1,
     isActive: f.isActive ?? true,
-    isSample: false,
+    isSample: f.isSample ?? true,
     createdAt: new Date(),
     updatedAt: new Date(),
   }));
@@ -166,7 +166,7 @@ export async function getStats(locale?: string): Promise<Stat[]> {
       (s) => !isUnverifiedExperienceClaim(s.label, s.description)
     );
 
-    if (validStats.length === 0) {
+    if (validStats.length === 0 && !shouldHideSample()) {
       return getFallbackStats(locale);
     }
 
@@ -220,7 +220,7 @@ export async function getCertifications(locale?: string): Promise<Certification[
       orderBy: { sortOrder: "asc" },
     });
 
-    if (certifications.length === 0) {
+    if (certifications.length === 0 && !shouldHideSample()) {
       return getFallbackCertifications(locale);
     }
 
@@ -263,7 +263,7 @@ export async function getPartners(): Promise<Partner[]> {
       orderBy: { sortOrder: "asc" },
     });
 
-    if (partners.length === 0) {
+    if (partners.length === 0 && !shouldHideSample()) {
       return getFallbackPartners();
     }
 
@@ -297,7 +297,7 @@ export async function getTestimonials(locale?: string): Promise<Testimonial[]> {
       orderBy: { sortOrder: "asc" },
     });
 
-    if (testimonials.length === 0) {
+    if (testimonials.length === 0 && !shouldHideSample()) {
       return getFallbackTestimonials(locale);
     }
 
@@ -339,7 +339,7 @@ export async function getFaqItems(locale?: string): Promise<FaqItem[]> {
       orderBy: { sortOrder: "asc" },
     });
 
-    if (items.length === 0) {
+    if (items.length === 0 && !shouldHideSample()) {
       return getFallbackFaqs(locale);
     }
 

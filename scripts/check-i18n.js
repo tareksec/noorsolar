@@ -335,11 +335,9 @@ async function verifyCrawledRoutes(firstProductSlug, firstBlogSlug) {
       const hasBengaliFont =
         computedFont.includes("Hind Siliguri") ||
         computedFont.includes("font-bengali") ||
-        computedFont.includes("Hind_Siliguri") ||
-        computedFont.includes("tiroBangla") ||
-        computedFont.includes("Tiro Bangla");
+        computedFont.includes("Hind_Siliguri");
       if (!hasBengaliFont) {
-        throw new Error(`Expected Bengali font (Tiro Bangla or Hind Siliguri) on body on ${route}, got: "${computedFont}"`);
+        throw new Error(`Expected Bengali font (Hind Siliguri) on body on ${route}, got: "${computedFont}"`);
       }
 
       // Check 4: No raw translation keys visible

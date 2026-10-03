@@ -49,7 +49,7 @@ export function CategoryDock({ locale }: CategoryDockProps) {
   const slides: EquipmentSlide[] = [
     {
       index: "01",
-      totalIndex: "01 / 04",
+      totalIndex: "01 / 03",
       categoryTitle: isBn ? "সোলার প্যানেল লাইনআপ" : "Solar Panel Lineup",
       categoryBadge: isBn ? "টায়ার-১ TOPCon মডিউল" : "Tier-1 TOPCon PV Panels",
       monthlyPerformance: "$8,8k",
@@ -70,7 +70,7 @@ export function CategoryDock({ locale }: CategoryDockProps) {
     },
     {
       index: "02",
-      totalIndex: "02 / 04",
+      totalIndex: "02 / 03",
       categoryTitle: isBn ? "কমার্শিয়াল ইনভার্টার" : "Commercial Inverters",
       categoryBadge: isBn ? "মাল্টি-MPPT গ্রিড টাই" : "Multi-MPPT Hybrid Inverter",
       monthlyPerformance: "$9,4k",
@@ -91,7 +91,7 @@ export function CategoryDock({ locale }: CategoryDockProps) {
     },
     {
       index: "03",
-      totalIndex: "03 / 04",
+      totalIndex: "03 / 03",
       categoryTitle: isBn ? "লিথিয়াম ব্যাটারি ESS" : "Lithium ESS Batteries",
       categoryBadge: isBn ? "LiFePO4 ডিপ সাইকেল" : "LiFePO4 Storage System",
       monthlyPerformance: "$7,9k",
@@ -109,27 +109,6 @@ export function CategoryDock({ locale }: CategoryDockProps) {
       thumbnails: ["/photos/cat-lithium-batteries.webp", "/photos/core-topic-battery.webp"],
       heroImage: "/photos/hero-solar-field.webp",
       link: isBn ? "/bn/category/lithium-batteries" : "/category/lithium-batteries",
-    },
-    {
-      index: "04",
-      totalIndex: "04 / 04",
-      categoryTitle: isBn ? "পোর্টেবল পাওয়ার স্টেশন" : "Portable Power Stations",
-      categoryBadge: isBn ? "LiFePO4 ফাস্ট সোলার রিচার্জ" : "LiFePO4 Solar Generator",
-      monthlyPerformance: "$12,5k",
-      monthlyPerformanceLabel: isBn ? "জরুরি ব্যাকআপ ও অফ-গ্রিড" : "Emergency backup & mobility",
-      utilizationRate: "$34,2k",
-      utilizationLabel: isBn ? "মোট ইউটিলাইজেশন রেট" : "Total Utilization rate",
-      chartData: [
-        { month: "Aug", barHeight: 45 },
-        { month: "Sep", barHeight: 62 },
-        { month: "Oct", barHeight: 88, isHighlight: true },
-        { month: "Nov", barHeight: 72 },
-        { month: "Dec", barHeight: 60 },
-      ],
-      linePoints: "16,40 56,26 96,10 136,24 176,38",
-      thumbnails: ["/photos/cat-portable-power-station.jpg", "/demo/products/portable-power-station-1000w-front.jpg"],
-      heroImage: "/photos/story-portable-power-station.jpg",
-      link: isBn ? "/bn/category/portable-power-stations" : "/category/portable-power-stations",
     },
   ];
 
@@ -480,7 +459,7 @@ export function CategoryDock({ locale }: CategoryDockProps) {
                 {/* 01 / 06 (or 01 / 03) */}
                 <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-neutral-500">
                   <span className="text-neutral-900">{currentSlide.index}</span>
-                  <span className="text-neutral-400">/ 0{slides.length}</span>
+                  <span className="text-neutral-400">/ 03</span>
                 </div>
 
                 {/* Navigation Buttons: < and > */}

@@ -94,25 +94,6 @@ const STORIES_EN: StoryItem[] = [
       "Seamless compatibility with leading lithium battery protocols",
     ],
   },
-  {
-    slug: "portable-power-stations",
-    kicker: "Mobile & Emergency Backup",
-    title: "LiFePO4 Portable Power Stations",
-    highlight: "Model NS-PPS-1000 • 1000W Pure Sine Wave / 1024Wh",
-    body: "Heavy-duty yet portable energy stations equipped with premium LiFePO4 cells, 1000W pure sine wave AC output, high-speed 400W MPPT solar recharge, and sub-20ms EPS automatic transfer for outdoor fieldwork, emergency backup, and commercial mobility.",
-    icon: Zap,
-    previewImage: "/demo/products/portable-power-station-1000w-front.jpg",
-    counters: [
-      { label: "Battery Capacity", value: 1024, prefix: "", suffix: " Wh", decimals: 0, subtext: "LiFePO4 3,000+ Cycles" },
-      { label: "AC Output", value: 1000, prefix: "", suffix: " W", decimals: 0, subtext: "2000W Peak Surge" },
-      { label: "Fast Solar Input", value: 400, prefix: "Up to ", suffix: " W", decimals: 0, subtext: "0-80% in 1.2 Hours" },
-    ],
-    bullets: [
-      "2x 230V AC pure sine wave sockets with smart overload protection",
-      "100W USB-C Power Delivery (PD) & multiple DC outputs",
-      "Safe-by-design intelligent Battery Management System (BMS)",
-    ],
-  },
 ];
 
 const STORIES_BN: StoryItem[] = [
@@ -171,25 +152,6 @@ const STORIES_BN: StoryItem[] = [
       "স্মার্ট স্ট্রিং মনিটরিং ও রিয়েল-টাইম ক্লাউড টেলিমেট্রি",
       "বিল্ট-ইন DC/AC Type II সার্জ অ্যারেস্টার সুরক্ষা",
       "জনপ্রিয় সব লিথিয়াম ব্যাটারি প্রটোকলের সাথে সরাসরি কানেক্টিভিটি",
-    ],
-  },
-  {
-    slug: "portable-power-stations",
-    kicker: "মোবাইল ও ইমার্জেন্সি ব্যাকআপ",
-    title: "LiFePO4 পোর্টেবল পাওয়ার স্টেশন",
-    highlight: "মডেল NS-PPS-1000 • ১০০০W পিওর সাইন ওয়েভ / ১০২৪Wh",
-    body: "অফ-গ্রিড ক্যাম্পিং, জরুরি বিদ্যুৎ ব্যাকআপ এবং ভ্রাম্যমাণ কাজের জন্য তৈরি নির্ভরযোগ্য পোর্টেবল পাওয়ার স্টেশন। এতে রয়েছে ৩,০০০+ সাইকেল সমৃদ্ধ LiFePO4 ব্যাটারি, ১০০০W এসি আউটপুট, ৪০০W পর্যন্ত হাই-স্পিড সোলার রিচার্জ এবং ২০ms ইউপিএস অটোমেটিক ট্রান্সফার সুবিধা।",
-    icon: Zap,
-    previewImage: "/demo/products/portable-power-station-1000w-front.jpg",
-    counters: [
-      { label: "ব্যাটারি ক্যাপাসিটি", value: 1024, prefix: "", suffix: " Wh", decimals: 0, subtext: "LiFePO4 ৩,০০০+ সাইকেল" },
-      { label: "রেটেড এসি আউটপুট", value: 1000, prefix: "", suffix: " W", decimals: 0, subtext: "২০০০W পিক সার্জ" },
-      { label: "সোলার ফাস্ট চার্জিং", value: 400, prefix: "সর্বোচ্চ ", suffix: " W", decimals: 0, subtext: "১.২ ঘণ্টায় ০-৮০% চার্জ" },
-    ],
-    bullets: [
-      "২টি ২৩০V পিওর সাইন ওয়েভ এসি সকেট ও ইন্টেলিজেন্ট ওভারলোড সুরক্ষা",
-      "১০০W USB-C পাওয়ার ডেলিভারি (PD) ও বহুমুখী ডিসি আউটপুট",
-      "ইন্টেলিজেন্ট মাল্টি-প্রটেকশন ব্যাটারি ম্যানেজমেন্ট সিস্টেম (BMS)",
     ],
   },
 ];
@@ -255,23 +217,6 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
       ctaBtn: "bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25]",
       indexPill: "bg-white/10 text-[#FEBE16] border border-white/15",
     },
-    {
-      // Card 4: Portable Power Stations (Modern Amber/Gold Accent Theme)
-      sectionBg: "bg-[#09221B] text-white",
-      gridColor: "bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)]",
-      roundedClass: "rounded-tr-2xl rounded-tl-2xl sm:rounded-tr-[40px] sm:rounded-tl-[40px]",
-      shadowClass: "shadow-[0_-30px_70px_rgba(0,0,0,0.55)]",
-      borderClass: "border-t border-[#FEBE16]/30",
-      tagBg: "bg-[#FEBE16]/20 text-[#FEBE16] border border-[#FEBE16]/40",
-      imageBorder: "border-[#FEBE16]/20 bg-white/5",
-      counterBg: "bg-white/[0.08] border border-[#FEBE16]/20 text-white",
-      counterSubtext: "text-[#FEBE16]/80",
-      bulletCheck: "bg-[#FEBE16] text-[#052F25]",
-      bulletText: "text-white/90",
-      bodyText: "text-white/80",
-      ctaBtn: "bg-[#FEBE16] hover:bg-[#E4A900] text-[#052F25]",
-      indexPill: "bg-[#FEBE16]/15 text-[#FEBE16] border border-[#FEBE16]/30",
-    },
   ];
 
   return (
@@ -301,7 +246,7 @@ export function CategoryStory({ locale }: CategoryStoryProps) {
                   <div className="inline-flex items-center gap-2 mb-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#FEBE16] animate-pulse" />
                     <span className="text-xs font-mono uppercase tracking-wider opacity-75">
-                      {isBn ? "প্রোডাক্ট স্টোরি • নূর সোলার লাইনআপ" : "Scroll Story • Noor Solar Lineup"}
+                      {isBn ? "প্রোডাক্ট স্টোরি • তিনটি মূল ক্যাটাগরি" : "Scroll Story • Three Core Categories"}
                     </span>
                   </div>
                   <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-tight">

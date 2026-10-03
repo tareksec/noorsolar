@@ -1,7 +1,23 @@
 import type { Metadata } from "next";
-import { inter, jetbrainsMono } from "@/lib/fonts";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "@/lib/env";
 import "../globals.css";
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+  weight: ["400", "500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  display: "swap",
+  preload: false,
+  weight: ["400", "500"],
+});
 
 export const metadata: Metadata = {
   title: "Admin Panel | Noor Solar Energy",

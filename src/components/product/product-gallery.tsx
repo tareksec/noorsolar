@@ -180,7 +180,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
     >
       {/* Main Image Frame */}
       <div
-        className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-[#F1F4F1] border border-[#DCE4E0] flex items-center justify-center p-4 group cursor-zoom-in select-none"
+        className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-white border border-[#E8ECE9] flex items-center justify-center p-4 group cursor-zoom-in select-none"
         onClick={() => setLightboxOpen(true)}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -200,7 +200,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               fill
               priority={activeIndex === 0}
               sizes="(max-width: 640px) 330px, (max-width: 1024px) 100vw, 50vw"
-              className="object-cover rounded-2xl"
+              className="object-contain rounded-2xl p-4"
             />
           </motion.div>
         </AnimatePresence>
@@ -263,7 +263,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                 aria-selected={isSelected}
                 aria-label={`Show image ${idx + 1} of ${displayImages.length}`}
                 onClick={() => setActiveIndex(idx)}
-                className={`relative w-20 h-20 rounded-2xl overflow-hidden bg-[#F1F4F1] border-2 shrink-0 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#FEBE16] ${
+                className={`relative w-20 h-20 rounded-2xl overflow-hidden bg-white border-2 shrink-0 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#FEBE16] ${
                   isSelected
                     ? "border-[#074031] ring-2 ring-[#FEBE16] scale-[1.02] shadow-sm"
                     : "border-transparent opacity-70 hover:opacity-100 hover:border-[#DCE4E0]"
@@ -273,7 +273,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                   src={img.url}
                   alt={img.alt || `${productName} thumbnail ${idx + 1}`}
                   fill
-                  className="object-cover"
+                  className="object-contain p-1.5"
                 />
               </button>
             );

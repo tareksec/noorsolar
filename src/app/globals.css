@@ -1,10 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
-
-:root {
-  --font-inter: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-jetbrains-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-}
 
 @theme {
   --font-display: "Outfit", system-ui, -apple-system, sans-serif;
@@ -72,18 +67,11 @@
   --ring: #074031;
 }
 
-html {
-  max-width: 100%;
-  overflow-x: clip;
-}
-
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-scoutie), var(--font-bengali), var(--font-sans);
-  max-width: 100%;
-  overflow-x: clip;
-  position: relative;
+  overflow-x: hidden;
 }
 
 html[lang="bn"] body,
@@ -303,13 +291,11 @@ html[lang="bn"],
   border-radius: inherit;
 }
 
-.btn-slide-fill:hover::before,
-.btn-slide-fill:focus-visible::before {
+.btn-slide-fill:hover::before {
   transform: translateY(0);
 }
 
-.btn-slide-fill:hover,
-.btn-slide-fill:focus-visible {
+.btn-slide-fill:hover {
   color: #FFFFFF;
 }
 
@@ -335,13 +321,11 @@ html[lang="bn"],
 }
 
 .btn-slide-fill:hover .btn-arrow-swap .arrow-primary,
-.btn-slide-fill:focus-visible .btn-arrow-swap .arrow-primary,
 .group:hover .btn-arrow-swap .arrow-primary {
   transform: translate(100%, -100%);
 }
 
 .btn-slide-fill:hover .btn-arrow-swap .arrow-secondary,
-.btn-slide-fill:focus-visible .btn-arrow-swap .arrow-secondary,
 .group:hover .btn-arrow-swap .arrow-secondary {
   transform: translate(0, 0);
 }
@@ -358,17 +342,6 @@ html[lang="bn"],
     animation: none !important;
     transform: none !important;
     transition: none !important;
-  }
-  .btn-slide-fill::before {
-    animation: none !important;
-    /* Park the fill off-screen: transform:none would leave it covering the button. */
-    transform: translateY(100%) !important;
-    transition: none !important;
-  }
-  /* No sweep under reduced motion: keep the instant color change readable. Without the dark fill, white text would sit on a light background. */
-  .btn-slide-fill:hover,
-  .btn-slide-fill:focus-visible {
-    color: inherit;
   }
 }
 
@@ -591,11 +564,3 @@ p, h1, h2, h3, h4, h5, h6, span, a, li {
   overflow-wrap: break-word;
 }
 
-/* Themed mobile glass dock - matches emerald + gold brand (top pill, footer card) */
-.mobile-dock {
-  background: linear-gradient(180deg, rgba(11, 81, 62, 0.94), rgba(5, 47, 37, 0.96));
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 12px 32px rgba(5, 47, 37, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-}

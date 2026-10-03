@@ -5,7 +5,6 @@ import { Prisma } from "@prisma/client";
 import { revalidatePublic } from "@/lib/revalidate";
 import { getSession } from "@/lib/auth";
 import { Download, Search } from "lucide-react";
-import { sendQuoteStatusUpdateToERP } from "@/lib/erp";
 
 async function updateQuoteStatus(formData: FormData) {
   "use server";
@@ -18,23 +17,10 @@ async function updateQuoteStatus(formData: FormData) {
   const note = formData.get("note") as string;
 
   if (id && status) {
-    const updated = await db.quoteRequest.update({
+    await db.quoteRequest.update({
       where: { id },
       data: { status, note: note || null },
     });
-
-    // Notify ERP in real-time
-    try {
-      await sendQuoteStatusUpdateToERP({
-        quoteId: updated.id,
-        erpQuoteId: updated.erpQuoteId,
-        status: updated.status,
-        note: updated.note,
-      });
-    } catch (syncErr) {
-      console.warn("[ERP Sync] Failed to update quote status in ERP:", syncErr);
-    }
-
     revalidatePublic("/admin/quotes");
     revalidatePublic("/admin");
   }
@@ -176,24 +162,6 @@ export default async function AdminQuotesPage({
                   >
                     {q.status}
                   </span>
-
-                  {/* ERP Status Badge */}
-                  {q.erpSyncStatus === "SYNCED" ? (
-                    <span
-                      className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800"
-                      title={q.erpSyncedAt ? `Synced at ${new Date(q.erpSyncedAt).toLocaleString()}` : "Synced with ERP"}
-                    >
-                      ERP Synced {q.erpQuoteId ? `(#${q.erpQuoteId})` : ""}
-                    </span>
-                  ) : q.erpSyncStatus === "FAILED" ? (
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-100 text-amber-800">
-                      ERP Sync Failed
-                    </span>
-                  ) : (
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-stone-100 text-stone-600">
-                      ERP Pending
-                    </span>
-                  )}
                 </div>
 
                 <span className="text-[11px] font-mono text-[#5C605C]">
@@ -248,23 +216,6 @@ export default async function AdminQuotesPage({
                   <span className="font-mono font-bold">Internal note: </span>
                   {q.note}
                 </p>
-              )}
-
-              {(q.erpTrackingStatus || q.trackingNumber) && (
-                <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-xs font-mono text-blue-900 flex flex-wrap items-center justify-between gap-2">
-                  {q.erpTrackingStatus && (
-                    <div>
-                      <span className="font-bold">ERP Tracking Status: </span>
-                      <span className="px-2 py-0.5 rounded bg-blue-100 font-semibold">{q.erpTrackingStatus}</span>
-                    </div>
-                  )}
-                  {q.trackingNumber && (
-                    <div>
-                      <span className="font-bold">Tracking / Waybill #: </span>
-                      <span className="font-bold">{q.trackingNumber}</span>
-                    </div>
-                  )}
-                </div>
               )}
 
               {/* Actions & Status Updates */}

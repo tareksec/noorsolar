@@ -5,34 +5,10 @@ import { ContentTabs } from '@/components/admin/content-tabs';
 import { PartnersClient } from '@/components/admin/content/partners-client';
 
 export default async function AdminPartnersPage() {
-  const rawItems = await db.partner.findMany({ orderBy: { sortOrder: 'asc' } });
-
-  const seenNames = new Set<string>();
-  const duplicateIds: string[] = [];
-  const uniqueItems: typeof rawItems = [];
-
-  for (const item of rawItems) {
-    const key = item.name.trim().toLowerCase();
-    if (seenNames.has(key)) {
-      duplicateIds.push(item.id);
-    } else {
-      seenNames.add(key);
-      uniqueItems.push(item);
-    }
-  }
-
-  if (duplicateIds.length > 0) {
-    try {
-      await db.partner.deleteMany({
-        where: { id: { in: duplicateIds } },
-      });
-      console.log(`[AdminPartnersPage] Pruned ${duplicateIds.length} duplicate partners.`);
-    } catch (err) {
-      console.error('[AdminPartnersPage] Failed to prune duplicate partners:', err);
-    }
-  }
-
-  const summary = await getLiveSampleContentSummary();
+  const [items, summary] = await Promise.all([
+    db.partner.findMany({ orderBy: { sortOrder: 'asc' } }),
+    getLiveSampleContentSummary(),
+  ]);
 
   return (
     <div className='space-y-6'>
@@ -45,7 +21,7 @@ export default async function AdminPartnersPage() {
         </p>
       </div>
       <ContentTabs sampleCounts={summary} />
-      <PartnersClient items={uniqueItems} />
+      <PartnersClient items={items} />
     </div>
   );
 }

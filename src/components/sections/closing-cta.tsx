@@ -5,7 +5,6 @@ import Image from "next/image";
 import { submitQuoteRequest, QuoteActionResult } from "@/app/actions/quote";
 import { MessageCircle, CheckCircle, Send, AlertCircle, Phone } from "lucide-react";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { Reveal } from "@/components/ui/reveal";
 import { PhotoReveal } from "@/components/ui/photo-reveal";
 import { prefersReducedMotion } from "@/lib/motion";
 import { useLocale } from "next-intl";
@@ -89,7 +88,7 @@ export function ClosingCTA({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
           {/* Left Summary & Contact Quick Links */}
-          <Reveal y={24} duration={0.65} className="lg:col-span-5">
+          <div className="lg:col-span-5">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#DCE4E0] text-xs font-mono text-[#17251F] mb-4">
               <span className="w-2 h-2 rounded-full bg-[#FEBE16]"></span>
               <span>{isBn ? "দ্রুত পাইকারি কোটেশন" : "Fast Wholesale Quotations"}</span>
@@ -159,10 +158,10 @@ export function ClosingCTA({
                 </span>
               </div>
             </PhotoReveal>
-          </Reveal>
+          </div>
 
           {/* Right Form Card */}
-          <Reveal y={24} delay={0.1} duration={0.65} className="lg:col-span-7">
+          <div className="lg:col-span-7">
             <div className="p-6 sm:p-10 rounded-[36px] bg-white border border-[#DCE4E0] shadow-[0_16px_36px_-10px_rgba(7,64,49,0.06)]">
               
               {state.success ? (
@@ -398,7 +397,7 @@ export function ClosingCTA({
               )}
 
             </div>
-          </Reveal>
+          </div>
 
         </div>
 
