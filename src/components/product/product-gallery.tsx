@@ -37,12 +37,15 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
   // Safety fallback if no images provided
   const displayImages =
     images.length > 0
-      ? images
+      ? images.map((img) => ({
+          ...img,
+          alt: img.alt || `${productName} — Solar Equipment Bangladesh`,
+        }))
       : [
           {
             id: "fallback",
             url: "/demo/category-panels.svg",
-            alt: productName,
+            alt: `${productName} — Solar Equipment Bangladesh`,
           },
         ];
 

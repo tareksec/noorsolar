@@ -44,6 +44,7 @@ export async function generateMetadata({ params }: CertificationsPageProps): Pro
     description: isBn
       ? "বাংলাদেশ সাসটেইনেবল অ্যান্ড রিনিউয়েবল এনার্জি অ্যাসোসিয়েশন (BSREA) সদস্যপদ, আমদানি নথিপত্র এবং বাণিজ্যিক সোলার ইকুইপমেন্টের মান নিয়ন্ত্রণ সনদ।"
       : "Official BSREA industry association membership and commercial compliance documentation for Noor Solar Energy.",
+    metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/certifications` : `${siteUrl}/certifications`,
       languages: {

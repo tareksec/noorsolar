@@ -78,7 +78,11 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   };
 
   const primaryImage = product.images[0]?.url || "/demo/category-panels.svg";
-  const primaryAlt = product.images[0]?.alt || product.name;
+  const primaryAlt =
+    product.images[0]?.alt ||
+    (isBn
+      ? `${product.name} — সোলার সরঞ্জাম বাংলাদেশ`
+      : `${product.name} — Solar Equipment Bangladesh`);
   const previewSpecs = product.specs.slice(0, 2);
 
   const getStockBadge = (status: string) => {

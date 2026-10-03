@@ -38,6 +38,7 @@ export async function generateMetadata({ params }: ContactPageProps): Promise<Me
     description: isBn
       ? "কন্টেইনার মূল্য, টেন্ডার স্পেসিফিকেশন এবং সেন্ট্রাল ডিপো থেকে ইকুইপমেন্ট সংগ্রহের জন্য নূর সোলার এনার্জি সেলস টিমের সাথে যোগাযোগ করুন।"
       : "Get in touch with Noor Solar Energy sales and logistics team for container pricing, tender specifications, and warehouse pickup.",
+    metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/contact` : `${siteUrl}/contact`,
       languages: {

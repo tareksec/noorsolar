@@ -41,6 +41,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   return {
     title,
     description,
+    metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/blog/${post.slug}` : `${siteUrl}/blog/${post.slug}`,
       languages: {
@@ -100,12 +101,41 @@ export default async function BlogPostDetailPage({ params }: BlogPostPageProps) 
 
   const isBn = locale === "bn";
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: isBn ? "হোম" : "Home",
+        item: `${SITE_URL}${isBn ? "/bn" : ""}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: isBn ? "ব্লগ" : "Blog",
+        item: `${SITE_URL}${isBn ? "/bn" : ""}/blog`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.title,
+        item: `${SITE_URL}${isBn ? "/bn" : ""}/blog/${post.slug}`,
+      },
+    ],
+  };
+
   return (
     <div className="pt-24 pb-20 sm:pb-32 bg-[#F7F8F5] min-h-screen">
-      {/* Schema.org Article structured data */}
+      {/* Schema.org Article & Breadcrumb structured data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

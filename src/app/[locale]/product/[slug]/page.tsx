@@ -8,7 +8,7 @@ import { getApprovedReviewsForProduct, isPublicReviewsEnabled } from "@/lib/data
 import { ProductCard } from "@/components/product/product-card";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductReviewsSection } from "@/components/product/product-reviews-section";
-import { ArrowUpRight, Box, Clock, Download, ShieldCheck, Award, FileText, FileCheck, Package, Truck, Headphones, Factory, Zap, HelpCircle, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight, Box, Clock, Download, ShieldCheck, Award, FileText, FileCheck, Package, Truck, Headphones, Factory, Zap, HelpCircle, CheckCircle2, Building2, Tractor } from "lucide-react";
 import { parseProductDocuments } from "@/lib/product-documents";
 import { extractProductIdentity } from "@/lib/product-identity";
 import { extractProductLogistics } from "@/lib/product-logistics";
@@ -48,6 +48,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   return {
     title,
     description: desc,
+    metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/product/${product.slug}` : `${siteUrl}/product/${product.slug}`,
       languages: {

@@ -43,14 +43,14 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.15",
+    "@tailwindcss/postcss": "^4.0.16",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9.15.0",
     "eslint-config-next": "^16.3.8",
-    "postcss": "^8.4.49",
+    "postcss": "^8.4.50",
     "prisma": "^6.4.1",
     "puppeteer-core": "^25.11.0",
     "tailwindcss": "^4",

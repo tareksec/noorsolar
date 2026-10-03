@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: AboutPageProps): Promise<Meta
     description: isBn
       ? "নূর সোলার এনার্জি সম্পর্কে জানুন — বাংলাদেশে সোলার প্যানেল, LiFePO4 ব্যাটারি এবং ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি B2B সরবরাহকারী।"
       : "Learn about Noor Solar Energy, direct importer and bulk B2B supplier of solar panels, lithium-ion batteries, and inverters in Bangladesh.",
+    metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/about` : `${siteUrl}/about`,
       languages: {

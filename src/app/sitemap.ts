@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next";
 import { db } from "@/lib/db";
 import { SITE_URL } from "@/lib/site-config";
+import { demoProducts } from "../../prisma/seed-products";
+import { sampleBlogPosts } from "../../prisma/seed-blog";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = SITE_URL;
@@ -12,12 +14,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/about",
     "/contact",
     "/certifications",
+    "/quote",
+    "/blog",
+    "/deals",
+    "/equipment",
   ];
 
   const now = new Date();
-
   const entries: MetadataRoute.Sitemap = [];
 
+  // Static Pages
   for (const path of staticPaths) {
     const enUrl = `${siteUrl}${path}`;
     const bnUrl = `${siteUrl}/bn${path}`;
@@ -52,11 +58,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
+  // Categories
   try {
-    const categories = await db.category.findMany({
-      where: { isActive: true },
-      select: { slug: true, updatedAt: true },
-    });
+    let categories: Array<{ slug: string; updatedAt: Date }> = [];
+    try {
+      categories = await db.category.findMany({
+        where: { isActive: true },
+        select: { slug: true, updatedAt: true },
+      });
+    } catch {
+      // DB offline fallback
+    }
+
+    if (categories.length === 0) {
+      categories = [
+        { slug: "solar-panels", updatedAt: now },
+        { slug: "lithium-batteries", updatedAt: now },
+        { slug: "solar-inverters", updatedAt: now },
+        { slug: "energy-storage", updatedAt: now },
+      ];
+    }
 
     for (const cat of categories) {
       const enUrl = `${siteUrl}/category/${cat.slug}`;
@@ -66,7 +87,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: enUrl,
         lastModified: cat.updatedAt,
         changeFrequency: "weekly",
-        priority: 0.8,
+        priority: 0.85,
         alternates: {
           languages: {
             en: enUrl,
@@ -80,7 +101,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: bnUrl,
         lastModified: cat.updatedAt,
         changeFrequency: "weekly",
-        priority: 0.8,
+        priority: 0.85,
         alternates: {
           languages: {
             en: enUrl,
@@ -91,10 +112,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     }
 
-    const products = await db.product.findMany({
-      where: { isActive: true },
-      select: { slug: true, updatedAt: true },
-    });
+    // Products
+    let products: Array<{ slug: string; updatedAt: Date }> = [];
+    try {
+      products = await db.product.findMany({
+        where: { isActive: true },
+        select: { slug: true, updatedAt: true },
+      });
+    } catch {
+      // DB offline fallback
+    }
+
+    if (products.length === 0) {
+      products = demoProducts.map((p) => ({
+        slug: p.slug,
+        updatedAt: now,
+      }));
+    }
 
     for (const prod of products) {
       const enUrl = `${siteUrl}/product/${prod.slug}`;
@@ -129,81 +163,63 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     }
 
-    // Blog posts
-    const blogPosts = await db.blogPost.findMany({
-      where: {
-        status: "PUBLISHED",
-        ...(hideSample ? { isSample: false } : {}),
-      },
-      select: { slug: true, updatedAt: true, contentBn: true },
-    });
+    // Blog Posts
+    let blogPosts: Array<{ slug: string; updatedAt: Date; contentBn?: string | null }> = [];
+    try {
+      blogPosts = await db.blogPost.findMany({
+        where: {
+          status: "PUBLISHED",
+          ...(hideSample ? { isSample: false } : {}),
+        },
+        select: { slug: true, updatedAt: true, contentBn: true },
+      });
+    } catch {
+      // DB offline fallback
+    }
 
-    if (blogPosts.length > 0) {
-      const enBlog = `${siteUrl}/blog`;
-      const bnBlog = `${siteUrl}/bn/blog`;
+    if (blogPosts.length === 0) {
+      blogPosts = sampleBlogPosts
+        .filter((p) => p.status === "PUBLISHED")
+        .map((p) => ({
+          slug: p.slug,
+          updatedAt: (p as unknown as { publishedAt?: Date }).publishedAt || now,
+          contentBn: p.contentBn,
+        }));
+    }
+
+    for (const post of blogPosts) {
+      const enPost = `${siteUrl}/blog/${post.slug}`;
+      const hasBn = !!post.contentBn?.trim();
+      const bnPost = `${siteUrl}/bn/blog/${post.slug}`;
 
       entries.push({
-        url: enBlog,
-        lastModified: now,
-        changeFrequency: "daily",
-        priority: 0.8,
+        url: enPost,
+        lastModified: post.updatedAt,
+        changeFrequency: "weekly",
+        priority: 0.75,
         alternates: {
           languages: {
-            en: enBlog,
-            bn: bnBlog,
-            "x-default": enBlog,
+            en: enPost,
+            ...(hasBn ? { bn: bnPost } : {}),
+            "x-default": enPost,
           },
         },
       });
 
-      entries.push({
-        url: bnBlog,
-        lastModified: now,
-        changeFrequency: "daily",
-        priority: 0.8,
-        alternates: {
-          languages: {
-            en: enBlog,
-            bn: bnBlog,
-            "x-default": enBlog,
-          },
-        },
-      });
-
-      for (const post of blogPosts) {
-        const enPost = `${siteUrl}/blog/${post.slug}`;
-        const hasBn = !!post.contentBn?.trim();
-        const bnPost = hasBn ? `${siteUrl}/bn/blog/${post.slug}` : bnBlog;
-
+      if (hasBn) {
         entries.push({
-          url: enPost,
+          url: bnPost,
           lastModified: post.updatedAt,
           changeFrequency: "weekly",
-          priority: 0.7,
+          priority: 0.75,
           alternates: {
             languages: {
               en: enPost,
-              ...(hasBn ? { bn: bnPost } : {}),
+              bn: bnPost,
               "x-default": enPost,
             },
           },
         });
-
-        if (hasBn) {
-          entries.push({
-            url: bnPost,
-            lastModified: post.updatedAt,
-            changeFrequency: "weekly",
-            priority: 0.7,
-            alternates: {
-              languages: {
-                en: enPost,
-                bn: bnPost,
-                "x-default": enPost,
-              },
-            },
-          });
-        }
       }
     }
 

@@ -191,6 +191,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   return {
     title: seo.title,
     description: seo.description,
+    metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/category/${category.slug}` : `${siteUrl}/category/${category.slug}`,
       languages: {

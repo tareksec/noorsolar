@@ -29,11 +29,11 @@ export async function generateMetadata({
 
   return {
     title: isBn
-      ? "বাণিজ্যিক সোলার প্রকিউরমেন্ট ও কারিগরি গাইড — নূর সোলার এনার্জি"
-      : "Commercial Solar Knowledge & Procurement Insights — Noor Solar Energy",
+      ? "সোলার প্যানেল গাইড ও কারিগরি ব্লগ বাংলাদেশ — নূর সোলার এনার্জি"
+      : "Solar Guides & Commercial Procurement Insights Bangladesh — Noor Solar Energy",
     description: isBn
-      ? "বাংলাদেশে বাণিজ্যিক ও শিল্প সোলার প্রকল্প, ইনভার্টার সাইজিং এবং প্রকিউরমেন্ট গাইড।"
-      : "Technical guides, equipment selection benchmarks, and procurement insights for commercial solar EPCs and industrial developers in Bangladesh.",
+      ? "বাংলাদেশে বাণিজ্যিক ও শিল্প সোলার প্রকল্প, TOPCon বনাম PERC প্যানেল বিশ্লেষণ, LiFePO4 ব্যাটারি ও ইনভার্টার প্রকিউরমেন্ট গাইড।"
+      : "Technical guides, TOPCon vs PERC comparisons, LiFePO4 battery benchmarks, and procurement insights for commercial solar in Bangladesh.",
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/blog` : `${siteUrl}/blog`,
       languages: {
@@ -42,6 +42,7 @@ export async function generateMetadata({
         "x-default": `${siteUrl}/blog`,
       },
     },
+    metadataBase: new URL(siteUrl),
     openGraph: {
       title: isBn
         ? "বাণিজ্যিক সোলার প্রকিউরমেন্ট ও কারিগরি গাইড — নূর সোলার এনার্জি"

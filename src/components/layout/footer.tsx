@@ -129,19 +129,20 @@ export function Footer({ settings, showBlog = false, locale }: FooterProps) {
   }>;
 
   const catalogLinks = [
-    { href: "/products?category=solar-panels", label: isBn ? "সোলার প্যানেল" : "Solar Panels" },
-    { href: "/products?category=lithium-batteries", label: isBn ? "লিথিয়াম ব্যাটারি" : "Lithium Batteries" },
-    { href: "/products?category=solar-inverters", label: isBn ? "সোলার ইনভার্টার" : "Solar Inverters" },
-    { href: "/products", label: isBn ? "সব প্রোডাক্ট" : "All Products" },
-    { href: "/quote", label: isBn ? "কোটেশন নিন" : "Request Quote" },
+    { href: "/category/solar-panels", label: isBn ? "সোলার প্যানেল বাংলাদেশ" : "Solar Panels Bangladesh" },
+    { href: "/category/lithium-batteries", label: isBn ? "LiFePO4 লিথিয়াম ব্যাটারি" : "LiFePO4 Solar Batteries" },
+    { href: "/category/solar-inverters", label: isBn ? "সোলার ইনভার্টার বাংলাদেশ" : "Solar Inverters Bangladesh" },
+    { href: "/category/energy-storage", label: isBn ? "এনার্জি স্টোরেজ (BESS)" : "Energy Storage (BESS)" },
+    { href: "/products", label: isBn ? "সব ইকুইপমেন্ট ক্যাটালগ" : "All Equipment Catalog" },
+    { href: "/quote", label: isBn ? "পাইকারি কোটেশন নিন" : "Request Wholesale Quote" },
   ];
 
   const companyLinks = [
-    { href: "/about", label: isBn ? "আমাদের সম্পর্কে" : "About" },
-    { href: "/contact", label: isBn ? "যোগাযোগ" : "Contact" },
-    { href: "/certifications", label: isBn ? "সার্টিফিকেশন" : "Certifications" },
+    { href: "/about", label: isBn ? "আমাদের সম্পর্কে" : "About Noor Solar" },
+    { href: "/contact", label: isBn ? "যোগাযোগ ও ডিপো" : "Contact & Depot" },
+    { href: "/certifications", label: isBn ? "BSREA সার্টিফিকেশন" : "Certifications" },
     { href: "/#faq", label: "FAQ" },
-    ...(showBlog ? [{ href: "/blog", label: isBn ? "ব্লগ" : "Blog" }] : []),
+    { href: "/blog", label: isBn ? "সোলার গাইড ও ব্লগ" : "Solar Guides & Blog" },
   ];
 
   return (
