@@ -8,9 +8,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { HeroTextReveal } from "@/components/ui/hero-text-reveal";
-import { FlipFadeText } from "@/components/ui/flip-fade-text";
-import { StaggerText } from "@/components/ui/stagger-text";
 
 // ================= CRISP WHITE ICONS FOR CIRCULAR CATEGORY BADGES =================
 function SolarPanelRoundIcon({ className = "w-5 h-5 text-white" }: { className?: string }) {
@@ -154,14 +151,12 @@ export function HeroSection({
             <span>{isBn ? "✨ সরাসরি আমদানিকারক • বিশ্বস্ত B2B সোলার পার্টনার" : "Direct B2B Solar Equipment Importer"}</span>
           </div>
 
-          {/* Headline with StaggerText */}
+          {/* Headline */}
           <h1
             data-motion="hero-headline"
             className="text-3xl sm:text-5xl lg:text-[3.8rem] xl:text-[4.3rem] font-bold tracking-tight text-white leading-[1.08] mb-5 text-center [text-shadow:_0_2px_12px_rgba(0,0,0,0.9),_0_4px_24px_rgba(0,0,0,0.85)]"
           >
-            <StaggerText delay={0.1} divideBy="word">
-              {resolvedHeadline}
-            </StaggerText>
+            {resolvedHeadline}
           </h1>
 
           {/* Subtitle */}
