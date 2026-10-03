@@ -1,55 +1,31 @@
-import localFont from "next/font/local";
-import { Inter, JetBrains_Mono } from "next/font/google";
+/**
+ * Font definitions for Noor Solar Energy.
+ * Loaded via CSS @font-face and Google Fonts (@import) in globals.css.
+ *
+ * This completely avoids next/font/local and next/font/google internal module resolution
+ * and PostCSS worker child process crashes (e.g. tirobangla_*.module.css, scoutiesans_*.module.css)
+ * under Turbopack in Next.js 16.
+ */
 
-export const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
-  weight: ["400", "500", "600", "700"],
-});
+export const inter = {
+  variable: "font-sans",
+  className: "font-sans",
+};
 
-export const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-  display: "swap",
-  preload: false,
-  weight: ["400", "500"],
-});
+export const jetbrainsMono = {
+  variable: "font-mono",
+  className: "font-mono",
+};
 
-// Scoutie Sans variable font from Google Fonts (weights 200..800, normal & italic)
-export const scoutieSans = localFont({
-  src: [
-    {
-      path: "../../public/fonts/ScoutieSans[wght].ttf",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/ScoutieSans-Italic[wght].ttf",
-      style: "italic",
-    },
-  ],
-  variable: "--font-scoutie",
-  display: "swap",
-});
+export const scoutieSans = {
+  variable: "font-display",
+  className: "font-display",
+};
 
-// Official Tiro Bangla font from Google Fonts (normal & italic) - Default Bangla Font
-export const tiroBangla = localFont({
-  src: [
-    {
-      path: "../../public/fonts/TiroBangla-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/TiroBangla-Italic.ttf",
-      weight: "400",
-      style: "italic",
-    },
-  ],
-  variable: "--font-bengali",
-  display: "swap",
-});
+export const tiroBangla = {
+  variable: "font-bengali",
+  className: "font-bengali",
+};
 
 // Backward compatibility alias for legacy imports
 export const hindSiliguri = tiroBangla;

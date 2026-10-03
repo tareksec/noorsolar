@@ -52,6 +52,9 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "25mb",
     },
   },
+  webpack: (config) => {
+    return config;
+  },
   async redirects() {
     return [
       {

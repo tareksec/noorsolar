@@ -39,15 +39,47 @@ export async function generateMetadata({
   return {
     title: {
       default: isBn
-        ? "সোলার প্যানেল সরবরাহকারী বাংলাদেশ | সোলার ব্যাটারি ও ইনভার্টার পাইকারি — নূর সোলার এনার্জি"
+        ? "সোলার প্যানেল সরবরাহকারী বাংলাদেশ | সোলার প্যানেল এর দাম ২০২৬ ও পাইকারি সোলার ইকুইপমেন্ট — নূর সোলার এনার্জি"
         : "Solar Panel Supplier Bangladesh | Solar Battery & Inverter Wholesale — Noor Solar Energy",
       template: isBn
         ? "%s | নূর সোলার এনার্জি"
         : "%s | Noor Solar Energy",
     },
     description: isBn
-      ? "বাংলাদেশে বাণিজ্যিক সোলার প্যানেল, LiFePO4 লিথিয়াম ব্যাটারি ও অন-গ্রিড/হাইব্রিড সোলার ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী। কন্টেইনার সরবরাহ ও ওয়ারেন্টি।"
+      ? "বাংলাদেশে বাণিজ্যিক সোলার প্যানেল, সোলার প্যাকেজ ও ফুল সেট, LiFePO4 লিথিয়াম ব্যাটারি ও ইনভার্টারের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী।"
       : "Direct importer and bulk B2B wholesale supplier of Tier-1 solar panels, LiFePO4 battery storage, and solar inverters in Bangladesh. Official warranties and container-scale supply.",
+    keywords: isBn
+      ? [
+          "সোলার প্যানেল সরবরাহকারী বাংলাদেশ",
+          "সোলার প্যানেল এর দাম 2026",
+          "সোলার প্যানেল প্রাইস ইন বাংলাদেশ",
+          "সোলার প্যানেল ফুল সেট",
+          "সোলার প্যানেল প্যাকেজ",
+          "২০০ ওয়াট সোলার প্যানেলের দাম কত",
+          "১০০০ ওয়াট সোলার প্যানেলের দাম কত",
+          "সোলার ব্যাটারি সরবরাহকারী বাংলাদেশ",
+          "সোলার ইনভার্টার সরবরাহকারী বাংলাদেশ",
+          "LiFePO4 ব্যাটারি বাংলাদেশ",
+          "ইন্ডাস্ট্রিয়াল সোলার সলিউশন বাংলাদেশ",
+          "নূর সোলার এনার্জি",
+          "Noor Solar Energy",
+        ]
+      : [
+          "solar panel supplier Bangladesh",
+          "solar equipment supplier Bangladesh",
+          "solar panel wholesale Bangladesh",
+          "solar inverter supplier Bangladesh",
+          "LiFePO4 battery supplier Bangladesh",
+          "solar battery supplier Bangladesh",
+          "solar energy solutions Bangladesh",
+          "commercial solar supplier Bangladesh",
+          "TOPCon solar panel Bangladesh",
+          "industrial solar solution Bangladesh",
+          "solar solution for factory Bangladesh",
+          "solar EPC supplier Bangladesh",
+          "solar panel price in Bangladesh 2026",
+          "Noor Solar Energy",
+        ],
     metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? "/bn" : "/",

@@ -15,6 +15,9 @@ import {
   ArrowRight,
   HelpCircle,
   Award,
+  Zap,
+  Calculator,
+  Tag,
 } from "lucide-react";
 
 interface HomepageSeoContentProps {
@@ -94,7 +97,82 @@ export function HomepageSeoContent({ locale }: HomepageSeoContentProps) {
     },
   ];
 
+  const packagesList = [
+    {
+      capacity: isBn ? "২০০ ওয়াট সোলার প্যানেল" : "200 Watt Solar Panel Setup",
+      subtitle: isBn ? "মৌলিক ডিসি লোড ও ছোট ব্যাকআপ" : "Basic DC Lighting & Rural Backup",
+      priceEst: isBn ? "৳১৫,০০০ – ৳২২,০০০ (আনুমানিক সেট)" : "~15,000 – 22,000 BDT (Est.)",
+      specs: isBn
+        ? ["২০০W মনো/পলিক্রিস্টালাইন প্যানেল", "১২V সোলার চার্জ কন্ট্রোলার", "ছোট ডিসি ব্যাটারি ও ওয়্যারিং কিট", "লাইট ও ডিসি ফ্যান চালানোর উপযোগী"]
+        : ["200W Mono/Poly PV module", "12V PWM solar charge controller", "Small DC battery & wiring kit", "Runs 2-3 DC lights and 1 DC fan"],
+      note: isBn ? "বাসাবাড়ির ছোট লোডের জন্য জনপ্রিয়" : "Ideal for small rural home lighting",
+      badge: isBn ? "ছোট লোড" : "Small DC Kit",
+    },
+    {
+      capacity: isBn ? "১০০০ ওয়াট (১kW) সোলার ফুল সেট" : "1000 Watt (1 kW) Solar Full Set",
+      subtitle: isBn ? "বাসাবাড়ি ও দোকানের সম্পূর্ণ সিস্টেম" : "Complete Off-Grid / Hybrid Home System",
+      priceEst: isBn ? "৳৭৫,০০০ – ৳১,১৫,০০০ (সম্পূর্ণ প্যাকেজ)" : "~75,000 – 115,000 BDT (Turnkey)",
+      specs: isBn
+        ? ["১০০০W N-Type / মনো প্যানেল সেট", "১kW – ১.৫kVA পিউর সাইন ওয়েভ ইনভার্টার", "১০০Ah-২০০Ah লিথিয়াম বা টিউবুলার ব্যাটারি", "টিভি, ফ্যান, লাইট ও রাউটার ব্যাকআপ"]
+        : ["1000W N-Type / Mono module array", "1kW - 1.5kVA Pure Sine Wave Inverter", "100Ah-200Ah Lithium / Tubular battery", "Runs lights, fans, TV, computer & WiFi"],
+      note: isBn ? "লোডশেডিংমুক্ত নির্ভরযোগ্য বিদ্যুৎ" : "Uninterrupted daily power backup",
+      badge: isBn ? "সর্বাধিক জনপ্রিয়" : "Best Seller",
+    },
+    {
+      capacity: isBn ? "৩kW থেকে ৫kW বাণিজ্যিক প্যাকেজ" : "3 kW to 5 kW Commercial Hybrid Set",
+      subtitle: isBn ? "অফিস, ক্লিনিক ও বাণিজ্যিক ফ্লোর" : "Offices, Clinics & Duplex Residences",
+      priceEst: isBn ? "৳২,৮০,০০০ – ৳৪,৫০,০০০ (হাইব্রিড স্টোরেজ)" : "~280,000 – 450,000 BDT (Hybrid)",
+      specs: isBn
+        ? ["৫kW N-Type TOPCon হাই-এফিশিয়েন্সি প্যানেল", "৫kW থ্রি-ফেজ/সিঙ্গেল-ফেজ হাইব্রিড ইনভার্টার", "৫.১২kWh LiFePO4 লিথিয়াম ব্যাটারি মডিউল", "এসি, ফ্রিজ ও মোটর চালানোর সক্ষমতা"]
+        : ["5kW N-Type TOPCon high-yield array", "5kW Hybrid Inverter with Net-Metering", "5.12kWh LiFePO4 rack battery", "Powers AC, refrigerators, pumps & lights"],
+      note: isBn ? "নেট-মিটারিং ও ব্যাটারি ব্যাকআপ সমন্বয়" : "Net-metering + battery storage",
+      badge: isBn ? "হাইব্রিড প্রিমিয়াম" : "Hybrid Storage",
+    },
+    {
+      capacity: isBn ? "১০kW থেকে ৫০০+ kW শিল্প কারখানা সলিউশন" : "10 kW to 500+ kW Industrial Rooftop",
+      subtitle: isBn ? "গার্মেন্টস, টেক্সটাইল ও কোল্ড স্টোরেজ" : "Textile, RMG Factories & Warehouses",
+      priceEst: isBn ? "৳৩৬ – ৳৪৪ / ওয়াট (পাইকারি কন্টেইনার রেট)" : "~36 – 44 BDT/Watt (Bulk Container Rate)",
+      specs: isBn
+        ? ["টিয়ার-১ ৫৮০W-৬২০W বাইফেসিয়াল প্যানেল", "৫০kW-১০০kW থ্রি-ফেজ অন-গ্রিড ইনভার্টার", "অ্যালুমিনিয়াম সাইক্লোন-রেটেড স্ট্রাকচার", "নেট মিটারিং অনুমোদন ও ৩-৪ বছরে ROI"]
+        : ["Tier-1 580W-620W Bifacial modules", "50kW-100kW 3-Phase On-Grid Inverters", "Heavy-duty aluminum mounting rails", "Full Net-metering approval & 3-4 yr ROI"],
+      note: isBn ? "বিদ্যুৎ বিল ৩০-৪০% সাশ্রয়" : "Saves 30-40% on grid power bill",
+      badge: isBn ? "শিল্প গ্রেড B2B" : "Industrial B2B",
+    },
+  ];
+
   const faqs = [
+    {
+      q: isBn
+        ? "সোলার প্যানেল এর দাম ২০২৬ সালে বাংলাদেশে কেমন (Solar Panel Price in Bangladesh 2026)?"
+        : "What is the expected solar panel price in Bangladesh in 2026?",
+      a: isBn
+        ? "২০২৬ সালে বাংলাদেশে আন্তর্জাতিক টিয়ার-১ N-Type TOPCon সোলার প্যানেলের পাইকারি মূল্য প্রতি ওয়াট সাধারণত ৩৬ থেকে ৪৪ টাকার মধ্যে (আমদানি শুল্ক, ডলারের বিনিময় হার এবং ক্রয়ের ভলিউমের ওপর নির্ভরশীল)। রিটেইলে ছোট সাইজের প্যানেল প্রতি ওয়াট ৪৫-৫৫ টাকা হতে পারে, তবে বাণিজ্যিক ছাদ ও মেগাওয়াট স্কেল শিল্প প্রজেক্টে নূর সোলার সরাসরি কারখানা ও কন্টেইনার রেটে ইকুইপমেন্ট সরবরাহ করে।"
+        : "In 2026, wholesale commercial Tier-1 N-Type TOPCon solar panels in Bangladesh typically range from 36 to 44 BDT per watt depending on import tariffs, foreign exchange rates, and order volume. Retail small panels may sell higher, but commercial and industrial buyers access bulk container-level pricing through Noor Solar.",
+    },
+    {
+      q: isBn
+        ? "১০০০ ওয়াট এবং ২০০ ওয়াট সোলার প্যানেল ফুল সেট প্যাকেজের আনুমানিক খরচ কত?"
+        : "What is the estimated cost of a 1000W or 200W solar panel full set package?",
+      a: isBn
+        ? "২০০ ওয়াট সাধারণ সেটআপে একটি ২০০W প্যানেল, চার্জ কন্ট্রোলার ও ছোট ব্যাটারি মিলিয়ে আনুমানিক ১৫,০০০ থেকে ২২,০০০ টাকার মধ্যে হতে পারে। অপরদিকে ১০০০ ওয়াট (১ কিলোওয়াট) সোলার প্যানেল ফুল সেট প্যাকেজে উচ্চ-দক্ষতাসম্পন্ন প্যানেল, লিথিয়াম ব্যাটারি (বা টিউবুলার ব্যাটারি), পিউর সাইন ওয়েভ ইনভার্টার ও স্ট্রাকচার সহ আনুমানিক ৭৫,০০০ থেকে ১,১৫,০০০ টাকার মতো খরচ হয়।"
+        : "A basic 200W solar kit (panel, charge controller, small battery) typically ranges between 15,000 to 22,000 BDT for small DC loads. A complete 1000W (1 kWp) solar full-set package with high-efficiency modules, LiFePO4 battery storage, pure sine wave inverter, and mounting hardware costs approximately 75,000 to 115,000 BDT depending on battery chemistry and backup capacity.",
+    },
+    {
+      q: isBn
+        ? "ওয়ালটন বা সুপার স্টার সোলার প্যানেলের সাথে আন্তর্জাতিক টিয়ার-১ TOPCon প্যানেলের পার্থক্য কী?"
+        : "How do local retail brands like Walton or Super Star compare with international Tier-1 TOPCon modules?",
+      a: isBn
+        ? "ওয়ালটন বা সুপার স্টার প্যানেলগুলো সাধারণত স্থানীয় গৃহস্থালী ছোটখাটো চাহিদা (যেমন লাইট, ফ্যান বা ছোট ব্যাটারি চার্জিং)-র জন্য রিটেইল মার্কেটে পাওয়া যায়। কিন্তু বড় বাণিজ্যিক ছাদ, গার্মেন্টস ফ্যাক্টরি, রাইস মিল বা অন-গ্রিড নেট মিটারিং প্রজেক্টে প্রয়োজন আন্তর্জাতিকভাবে স্বীকৃত BloombergNEF টিয়ার-১ N-Type TOPCon বাইফেসিয়াল প্যানেল (যেমন Jinko, JA, Longi বা Trina গ্রেড)। এতে সেল এফিশিয়েন্সি ২২.৬%+ এবং ৩০ বছরের লিনিয়ার পাওয়ার গ্যারান্টি পাওয়া যায়, যা সিস্টেমের বিদ্যুৎ উৎপাদন সর্বোচ্চ রাখে এবং বাণিজ্যিক বিনিয়োগ ৩-৪ বছরে ফেরত আনে।"
+        : "Domestic brands cater primarily to small household DC lighting and fan systems. For industrial rooftops, factories, commercial buildings, and net-metered EPC projects, BloombergNEF Tier-1 N-Type TOPCon bifacial modules are standard worldwide. They deliver over 22.6% cell efficiency, certified 30-year performance warranties, and significantly higher kWh generation under extreme tropical heat.",
+    },
+    {
+      q: isBn
+        ? "সোলার প্যানেল ফুল সেট বা প্যাকেজে কী কী যন্ত্রপাতি থাকা আবশ্যক?"
+        : "What components are included in a complete turnkey solar panel package?",
+      a: isBn
+        ? "একটি পরিপূর্ণ সোলার প্যাকেজে থাকে: ১) টিয়ার-১ মনো বাইফেসিয়াল সোলার প্যানেল, ২) অন-গ্রিড বা হাইব্রিড স্মার্ট ইনভার্টার, ৩) এনার্জি স্টোরেজের জন্য LiFePO4 লিথিয়াম ব্যাটারি, ৪) ১৪০+ কিমি/ঘণ্টা ঝড় সহনশীল অ্যালুমিনিয়াম মাউন্টিং স্ট্রাকচার, ৫) TÜV সার্টিফায়েড ডিসি/এসি ক্যাবল, এবং ৬) সার্জ প্রোটেক্টর, ডিসি এমসিবি ও আর্থিং কিট।"
+        : "A comprehensive solar package includes: 1) Tier-1 Mono Bifacial PV modules, 2) On-Grid or Hybrid Smart Inverter, 3) Optional LiFePO4 battery storage, 4) Cyclone-rated aluminum mounting rails and clamps, 5) Certified solar DC/AC cables, and 6) DC breaker switchgear, lightning surge protection, and earthing system.",
+    },
     {
       q: isBn
         ? "TOPCon এবং সাধারণ PERC সোলার প্যানেলের মধ্যে পার্থক্য কী?"
@@ -333,6 +411,110 @@ export function HomepageSeoContent({ locale }: HomepageSeoContentProps) {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#074031] text-white text-xs font-bold hover:bg-[#0B513E] transition-colors"
             >
               <span>{isBn ? "প্রজেক্ট কোটেশন পাঠান" : "Request Project Consultation"}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+
+        {/* ================= PART 3.5: SOLAR PACKAGES, FULL SET & 2026 PRICE OVERVIEW ================= */}
+        <div className="mb-20 sm:mb-28">
+          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F1F4F1] border border-[#DCE4E0] text-xs font-mono text-[#074031] mb-3">
+              <Tag className="w-3.5 h-3.5 text-[#FEBE16]" />
+              <span className="font-semibold">
+                {isBn ? "সোলার প্যানেল প্যাকেজ ও প্রাইস ইন বাংলাদেশ ২০২৬" : "Solar Packages & 2026 Price Guide"}
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#074031]">
+              {isBn
+                ? "সোলার প্যানেল এর দাম ২০২৬ ও ফুল সেট প্যাকেজ নির্দেশিকা"
+                : "Solar Panel Price in Bangladesh 2026: Full Set & Capacity Breakdown"}
+            </h2>
+            <p className="text-sm sm:text-base text-[#62706A] mt-3">
+              {isBn
+                ? "২০০ ওয়াট মৌলিক ডিসি সেটআপ থেকে শুরু করে ১০০০ ওয়াট (১kW) হোম সিস্টেম এবং শিল্প কারখানার মেগাওয়াট স্কেল প্রজেক্ট—প্রয়োজন অনুযায়ী সঠিক ক্যাপাসিটি ও আনুমানিক খরচের ধারণা।"
+                : "From 200W DC emergency kits to 1000W residential turnkey setups and megawatt-scale industrial rooftops—transparent capacity and pricing insights."}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {packagesList.map((pkg, idx) => (
+              <div
+                key={idx}
+                className="p-6 rounded-3xl bg-[#F7F8F5] border border-[#DCE4E0] hover:border-[#074031]/30 flex flex-col justify-between transition-all group shadow-2xs hover:shadow-md"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-white border border-[#DCE4E0] text-[#074031]">
+                      {pkg.badge}
+                    </span>
+                    <Zap className="w-4 h-4 text-[#FEBE16]" />
+                  </div>
+
+                  <h3 className="text-base font-bold text-[#074031] mb-1">
+                    {pkg.capacity}
+                  </h3>
+                  <p className="text-xs text-[#62706A] mb-4">
+                    {pkg.subtitle}
+                  </p>
+
+                  <div className="p-3 rounded-2xl bg-white border border-[#DCE4E0] mb-4">
+                    <span className="text-[10px] font-mono text-[#62706A] uppercase tracking-wider block">
+                      {isBn ? "বাজেট / মূল্যসীমা" : "Estimated Cost"}
+                    </span>
+                    <span className="text-xs sm:text-sm font-bold text-[#074031]">
+                      {pkg.priceEst}
+                    </span>
+                  </div>
+
+                  <ul className="space-y-2 mb-6">
+                    {pkg.specs.map((spec, sIdx) => (
+                      <li key={sIdx} className="flex items-start gap-2 text-xs text-[#62706A]">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#074031] shrink-0 mt-0.5" />
+                        <span>{spec}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="pt-4 border-t border-[#DCE4E0]/80">
+                  <p className="text-[11px] font-medium text-[#17251F] mb-3">
+                    {pkg.note}
+                  </p>
+                  <Link
+                    href="/quote"
+                    className="inline-flex items-center justify-center w-full gap-2 px-4 py-2 rounded-xl bg-white hover:bg-[#074031] hover:text-white border border-[#DCE4E0] text-xs font-mono font-bold text-[#074031] transition-colors"
+                  >
+                    <span>{isBn ? "কোটেশন রিকোয়েস্ট" : "Request Pricing"}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Educational Brand Comparison & Commercial Importer Value Proposition */}
+          <div className="p-6 sm:p-8 rounded-3xl bg-[#F7F8F5] border border-[#DCE4E0] flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="space-y-2 max-w-3xl">
+              <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#074031]">
+                <Calculator className="w-4 h-4 text-[#FEBE16]" />
+                <span>
+                  {isBn
+                    ? "লোকাল রিটেইল প্যানেল বনাম টিয়ার-১ N-Type TOPCon প্যানেলের বিশ্লেষণ"
+                    : "Domestic Retail Modules vs. Tier-1 N-Type TOPCon Comparison"}
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-[#62706A] leading-relaxed">
+                {isBn
+                  ? "ওয়ালটন বা সুপার স্টারের মতো স্থানীয় ব্র্যান্ডগুলো ছোট গৃহস্থালী লাইটিংয়ে ব্যবহার হলেও কারখানা ও বাণিজ্যিক প্রকল্পে আন্তর্জাতিক টিয়ার-১ (BloombergNEF) বাইফেসিয়াল TOPCon প্যানেল অপরিহার্য। নূর সোলার সরাসরি আমদানি করায় কোনো মধ্যস্বত্বভোগী কমিশন ছাড়া সর্বনিম্ন পাইকারি মূল্যে ৩০ বছরের লিনিয়ার পারফরম্যান্স ওয়ারেন্টি নিশ্চিত করা সম্ভব হয়।"
+                  : "While local domestic brands serve standard household DC light loads, commercial rooftops, textile mills, and utility-scale projects strictly mandate BloombergNEF Tier-1 N-Type TOPCon bifacial modules. Noor Solar imports directly from global manufacturers to supply certified high-yield modules at direct container wholesale rates with 30-year linear performance warranties."}
+              </p>
+            </div>
+            <Link
+              href="/blog/solar-panel-buying-guide-bangladesh"
+              className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#074031] text-white text-xs font-bold hover:bg-[#0B513E] transition-colors shadow-xs"
+            >
+              <span>{isBn ? "সোলার বায়িং গাইড পড়ুন" : "Read Solar Buying Guide"}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>

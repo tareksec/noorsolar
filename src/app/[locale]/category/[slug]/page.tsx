@@ -56,31 +56,92 @@ function getCategorySeoMeta(slug: string, isBn: boolean, categoryName: string, c
   if (s.includes("panel")) {
     return {
       title: isBn
-        ? "সোলার প্যানেল সরবরাহকারী বাংলাদেশ | এন-টাইপ TOPCon সোলার প্যানেল — নূর সোলার এনার্জি"
-        : "Solar Panel Supplier Bangladesh | Tier 1 N-Type TOPCon Panels — Noor Solar Energy",
+        ? "সোলার প্যানেল সরবরাহকারী বাংলাদেশ | সোলার প্যানেল এর দাম ২০২৬ ও পাইকারি TOPCon — নূর সোলার এনার্জি"
+        : "Solar Panel Supplier Bangladesh | Solar Panel Wholesale & Tier 1 TOPCon — Noor Solar Energy",
       description: isBn
-        ? "বাংলাদেশে উচ্চ-দক্ষতাসম্পন্ন এন-টাইপ TOPCon ও বাইফেসিয়াল মনোক্রিস্টালাইন সোলার প্যানেলের সরাসরি আমদানিকারক ও পাইকারি সরবরাহকারী। ৩০ বছরের লিনিয়ার পারফরম্যান্স ওয়ারেন্টি ও দ্রুত ডেলিভারি।"
+        ? "বাংলাদেশে বাণিজ্যিক ও শিল্প কারখানার জন্য উচ্চ-দক্ষতাসম্পন্ন N-Type TOPCon ও বাইফেসিয়াল সোলার প্যানেল সরবরাহকারী। সোলার প্যানেল এর দাম ২০২৬, ফুল সেট ও পাইকারি কন্টেইনার রেট।"
         : "Direct importer & wholesale bulk supplier of Tier-1 N-Type TOPCon and bifacial solar panels in Bangladesh. Pallet and container delivery with 30-year performance warranties.",
+      keywords: isBn
+        ? [
+            "সোলার প্যানেল সরবরাহকারী বাংলাদেশ",
+            "সোলার প্যানেল পাইকারি বাংলাদেশ",
+            "সোলার প্যানেল এর দাম 2026",
+            "সোলার প্যানেল প্রাইস ইন বাংলাদেশ",
+            "সোলার প্যানেল ফুল সেট",
+            "সোলার প্যানেল প্যাকেজ",
+            "২০০ ওয়াট সোলার প্যানেলের দাম কত",
+            "১০০০ ওয়াট সোলার প্যানেলের দাম কত",
+            "TOPCon সোলার প্যানেল বাংলাদেশ",
+            "নূর সোলার এনার্জি",
+          ]
+        : [
+            "solar panel supplier Bangladesh",
+            "solar panel wholesale Bangladesh",
+            "N Type solar panel Bangladesh",
+            "TOPCon solar panel Bangladesh",
+            "bifacial solar panel supplier Bangladesh",
+            "550W solar panel Bangladesh",
+            "600W solar panel supplier",
+            "commercial solar system Bangladesh",
+            "industrial solar solution Bangladesh",
+            "Noor Solar Energy",
+          ],
     };
   }
   if (s.includes("batter") || s.includes("lithium")) {
     return {
       title: isBn
-        ? "LiFePO4 ব্যাটারি সরবরাহকারী বাংলাদেশ | সোলার লিথিয়াম ব্যাটারি স্টোরেজ — নূর সোলার এনার্জি"
+        ? "LiFePO4 ব্যাটারি সরবরাহকারী বাংলাদেশ | সোলার লিথিয়াম ব্যাটারি পাইকারি — নূর সোলার এনার্জি"
         : "LiFePO4 Battery Supplier Bangladesh | Solar Lithium Storage — Noor Solar Energy",
       description: isBn
         ? "বাংলাদেশে বাণিজ্যিক ও শিল্প সোলার প্রকল্পে LiFePO4 লিথিয়াম ব্যাটারি সরবরাহকারী। ৬,০০০+ সাইকেল লাইফ, ইন্টেলিজেন্ট BMS সুরক্ষা এবং ৫-১০ বছরের অফিসিয়াল ওয়ারেন্টি।"
         : "Direct bulk supplier of commercial LiFePO4 lithium batteries in Bangladesh. 6,000+ deep cycles, rack-mounted modular storage, and smart BMS battery management.",
+      keywords: isBn
+        ? [
+            "LiFePO4 ব্যাটারি সরবরাহকারী বাংলাদেশ",
+            "সোলার ব্যাটারি সরবরাহকারী বাংলাদেশ",
+            "লিথিয়াম সোলার ব্যাটারি বাংলাদেশ",
+            "সোলার এনার্জি স্টোরেজ সিস্টেম বাংলাদেশ",
+            "সোলার ব্যাটারির দাম",
+            "নূর সোলার এনার্জি",
+          ]
+        : [
+            "LiFePO4 battery supplier Bangladesh",
+            "solar battery supplier Bangladesh",
+            "lithium solar battery Bangladesh",
+            "solar energy storage system Bangladesh",
+            "lithium battery supplier Bangladesh",
+            "rack mount solar battery",
+            "Noor Solar Energy",
+          ],
     };
   }
   if (s.includes("inverter")) {
     return {
       title: isBn
-        ? "সোলার ইনভার্টার সরবরাহকারী বাংলাদেশ | অন-গ্রিড ও হাইব্রিড ইনভার্টার — নূর সোলার এনার্জি"
+        ? "সোলার ইনভার্টার সরবরাহকারী বাংলাদেশ | অন-গ্রিড ও হাইব্রিড ইনভার্টার পাইকারি — নূর সোলার এনার্জি"
         : "Solar Inverter Supplier Bangladesh | Hybrid & On-Grid Inverters — Noor Solar Energy",
       description: isBn
         ? "বাংলাদেশে বাণিজ্যিক ও শিল্প কারখানার জন্য অন-গ্রিড ও হাইব্রিড সোলার ইনভার্টার পাইকারি সরবরাহকারী। থ্রি-ফেজ, উচ্চ তাপমাত্রা সহনশীলতা ও নেট-মিটারিং সাপোর্ট।"
         : "Industrial three-phase grid-tied and hybrid solar inverters in Bangladesh. Engineered for tropical ambient temperatures, IP66 protection, and net-metering compliance.",
+      keywords: isBn
+        ? [
+            "সোলার ইনভার্টার সরবরাহকারী বাংলাদেশ",
+            "অন-গ্রিড সোলার ইনভার্টার",
+            "হাইব্রিড সোলার ইনভার্টার বাংলাদেশ",
+            "সোলার ইনভার্টার পাইকারি",
+            "ইন্ডাস্ট্রিয়াল ইনভার্টার",
+            "নূর সোলার এনার্জি",
+          ]
+        : [
+            "solar inverter supplier Bangladesh",
+            "solar inverter wholesale Bangladesh",
+            "hybrid solar inverter Bangladesh",
+            "off grid solar inverter Bangladesh",
+            "industrial solar inverter Bangladesh",
+            "commercial string inverter Bangladesh",
+            "Noor Solar Energy",
+          ],
     };
   }
   if (s.includes("storage") || s.includes("bess")) {
@@ -91,6 +152,20 @@ function getCategorySeoMeta(slug: string, isBn: boolean, categoryName: string, c
       description: isBn
         ? "বাংলাদেশে কারখানার নিরবচ্ছিন্ন ব্যাকআপ ও পিক-শেভিংয়ের জন্য বাণিজ্যিক সোলার এনার্জি স্টোরেজ সিস্টেম (BESS) সরবরাহ। উচ্চ ভোল্টেজ LiFePO4 মডুলার সমাধান।"
         : "Industrial battery energy storage systems (BESS) and commercial solar storage solutions in Bangladesh for peak shaving and reliable factory power backup.",
+      keywords: isBn
+        ? [
+            "সোলার এনার্জি স্টোরেজ সিস্টেম বাংলাদেশ",
+            "বাণিজ্যিক ও শিল্প BESS",
+            "শিল্প কারখানা ব্যাকআপ সলিউশন",
+            "নূর সোলার এনার্জি",
+          ]
+        : [
+            "solar energy storage system Bangladesh",
+            "commercial BESS Bangladesh",
+            "industrial solar storage solution",
+            "high voltage battery storage",
+            "Noor Solar Energy",
+          ],
     };
   }
 
@@ -103,6 +178,7 @@ function getCategorySeoMeta(slug: string, isBn: boolean, categoryName: string, c
       (isBn
         ? `বাংলাদেশে বাণিজ্যিক ও শিল্প প্রকল্পের জন্য সরাসরি আমদানিকৃত ${categoryName}-এর স্পেসিফিকেশন ও পাইকারি সরবরাহ তালিকা।`
         : `Direct-imported commercial ${categoryName} available for wholesale and container supply in Bangladesh.`),
+    keywords: [categoryName, "Noor Solar Energy", "Bangladesh"],
   };
 }
 
@@ -191,6 +267,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   return {
     title: seo.title,
     description: seo.description,
+    keywords: seo.keywords,
     metadataBase: new URL(siteUrl),
     alternates: {
       canonical: isBn ? `${siteUrl}/bn/category/${category.slug}` : `${siteUrl}/category/${category.slug}`,
